@@ -6,3 +6,4 @@ node_modules
 /coverage
 /types
 pnpm-lock.yaml
+bun.lock

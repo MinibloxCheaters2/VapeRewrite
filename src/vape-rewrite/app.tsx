@@ -29,6 +29,13 @@ function Counter() {
 // Inject CSS
 GM_addStyle(globalCss);
 
+// we have to inject early in order to modify the script, and the script is in the `<head>`, so it will execute before us if we use document-body or document-load.
+if (document.body === null) {
+  await new Promise<void>(res => {
+    document.addEventListener("DOMContentLoaded", () => res());
+  });
+}
+
 // Let's create a movable panel using @violentmonkey/ui
 const panel = getPanel({
   theme: 'dark',
@@ -36,6 +43,7 @@ const panel = getPanel({
   // Otherwise, it is roughly the same as `GM_addStyle(stylesheet)`.
   style: stylesheet,
 });
+
 Object.assign(panel.wrapper.style, {
   top: '10vh',
   left: '10vw',

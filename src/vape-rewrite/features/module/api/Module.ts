@@ -26,7 +26,7 @@ export default abstract class Mod {
    * Do NOT override this, override {@link onEnable} instead
    * This registers the module and calls {@link onEnable}.
    */
-  protected onEnableInternal(): void {
+  private onEnableInternal(): void {
     Bus.registerSubscriber(this);
     this.onEnable();
   }
@@ -35,28 +35,30 @@ export default abstract class Mod {
    * Do NOT override this, override {@link onEnable} instead.
    * This deregisters the module and calls {@link onDisable}.
    */
-  protected onDisableInternal(): void {
+  private onDisableInternal(): void {
     Bus.unregisterSubscriber(this);
     this.onDisable();
   }
 
   /** Called when the module is enabled. */
-  public onEnable(): void {
+  protected onEnable(): void {
   }
 
   /** Called when the module is disabled. */
-  public onDisable(): void {
+  protected onDisable(): void {
   }
 
   /** Toggles this module without sending a notification. */
   public toggleSilently(): void {
     this.enabled = !this.enabled;
   }
+
   /** Toggles this module and sends a notification. */
   public toggle() {
     this.toggleSilently();
     // TODO: implement toggle notifications and dynamic island stuff here
   }
+
   set enabled(value: boolean) {
     this.state = value;
     if (value) {
@@ -65,6 +67,7 @@ export default abstract class Mod {
       this.onDisableInternal();
     }
   }
+
   get enabled(): boolean {
     return this.state;
   }
