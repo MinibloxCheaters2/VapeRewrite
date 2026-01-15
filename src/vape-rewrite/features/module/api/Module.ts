@@ -20,7 +20,7 @@ export default abstract class Mod {
    * ! ONLY use this for toggling the state internally,
    * this won't subscribe or unsubscribe the events
    */
-  public state: boolean;
+  private state: boolean;
 
   /**
    * Do NOT override this, override {@link onEnable} instead
@@ -54,8 +54,9 @@ export default abstract class Mod {
   }
 
   /** Toggles this module and sends a notification. */
-  public toggle() {
+  public toggle(): void {
     this.toggleSilently();
+    console.info(`${this.name} Toggled ${this.enabled ? "ON" : "OFF"}!`);
     // TODO: implement toggle notifications and dynamic island stuff here
   }
 
