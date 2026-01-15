@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name        epaV Rewrite
-// @namespace   https://b.ab/
-// @description This is a userscript.
+// @name        Vape Rewrite
+// @namespace   https://codeberg.org/Miniblox
+// @description The Vape UserScript, but rewritten.
 // @license     AGPL-3.0-or-later
 // @match       https://miniblox.io/*
 // @match       https://miniblox.org/*
