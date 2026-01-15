@@ -28,6 +28,10 @@ export const REPLACEMENTS: Replacements = {
 			document.dispatchEvent(DOMContentLoaded_event);
 		}, 0);`,
     shift: Shift.AFTER
+  },
+  'this.game.unleash.isEnabled("disable-ads")': {
+    replacement: 'true',
+    shift: Shift.REPLACE
   }
 };
 

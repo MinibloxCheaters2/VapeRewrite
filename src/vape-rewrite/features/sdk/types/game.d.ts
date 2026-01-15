@@ -16,7 +16,7 @@ export enum ConnectionState {
 export class Game {
   player: ClientEntityPlayer;
   controller: PlayerController;
-  tickLoop: number;
+  // tickLoop: number;
   gameScene: Scene;
   world: ClientWorld;
   playerList: PlayerList;

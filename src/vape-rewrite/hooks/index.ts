@@ -1,4 +1,5 @@
 import modifyCode from "./replacement";
+import "./hide";
 
 async function execute(src: string, oldScript?: HTMLScriptElement) {
   if (oldScript) oldScript.type = "javascript/blocked";

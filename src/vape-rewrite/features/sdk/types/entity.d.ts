@@ -161,8 +161,6 @@ declare class EntityPlayer extends EntityLivingBase {
   inventoryManager: unknown;
   fireTick: number;
   constructor(profile: Profile, world: World);
-  entityInit(): void;
-  applyEntityAttributes(): void;
   isAdmin(): boolean;
   getItemInUse(): ItemStack;
   getItemInUseCount(): number;
@@ -201,17 +199,13 @@ declare class EntityPlayer extends EntityLivingBase {
   addExperienceLevel(h: unknown): void;
   update(): void;
   setCurrentItemOrArmor(h: unknown, p: unknown): void;
-  damageArmor(h: unknown): void;
   preparePlayerToSpawn(): void;
-  damageEntity(h: unknown, p: unknown): void;
   setGamemode(gameMode: GameMode): boolean;
   displayGUIChest(chest: BlockChest): void;
   displayGui(h: IInterface): void;
   openEditSign(sign: TileEntitySign): void;
   closeScreen(): void;
-  updateRidden(): void;
   openEditCommandBlock(h: CommandBlockLogic): void;
-  isMovementBlocked(): boolean;
   dropItemForPlayer(h: unknown, p?: boolean): unknown;
   dropItem(h: unknown, p: unknown, g: unknown, y?: boolean): unknown;
   joinEntityItemWithWorld(e: Entity): void;
@@ -219,7 +213,6 @@ declare class EntityPlayer extends EntityLivingBase {
   getToolDigEfficiency(h: unknown): unknown;
   addExhaustion(h: unknown): void;
   getFoodStats(): FoodStats;
-  getHurtSound(): string;
   canEat(h: unknown): boolean;
   shouldHeal(): boolean;
   setItemInUse(h: unknown, p: unknown): void;
@@ -234,19 +227,16 @@ declare class EntityPlayer extends EntityLivingBase {
   onItemUseFinish(): void;
   handleStatusUpdate(h: unknown): void;
   setAbsorptionAmount(h: unknown): void;
-  playSound(h: unknown, p: unknown, g: unknown): void;
   sendMessage(h: unknown, p: unknown): void;
   isPlayerSleeping(): boolean;
   isPlayerFullyAsleep(): boolean;
   getSleepTimer(): number;
-  getBedLocation(): unknown;
+  getBedLocation(): Vector3;
   isSpawnForced(): boolean;
   setSpawnPoint(h: unknown, p: unknown): void;
   wakeUpPlayer(h: unknown, p: unknown, g: unknown): void;
   trySleep(h: unknown): 0 | 4 | 3 | 2 | 5;
   isSpectator(): boolean;
-  writeEntityToNBT(nbt: unknown): void;
-  readEntityFromNBT(nbt: unknown): void;
   getCurrentEquippedItem(): ItemStack | null;
   interactFirst(h: unknown): boolean;
   interactWith(h: unknown): boolean;
@@ -279,7 +269,6 @@ declare class EntityLivingBase extends Entity {
 
   constructor(world: World);
   onKillCommand(): void;
-  entityInit(): void;
   applyEntityAttributes(): void;
   getEntityAttribute(h: unknown): unknown;
   getAttributeMap(): AttributeMap;
@@ -313,7 +302,6 @@ declare class EntityLivingBase extends Entity {
   updateEntityActionState(): void;
   renderBrokenItemStack(h: unknown): void;
   update(): void;
-  updateRidden(): void;
   dismountEntity(_: unknown): void;
   setPositionAndRotation2(
     x: number,
@@ -326,7 +314,7 @@ declare class EntityLivingBase extends Entity {
   onLivingUpdate(): void;
   moveEntityWithHeading(strafe: number, forward: number): void;
   getAIMoveSpeed(): number;
-  setAIMoveSpeed(h: unknown): void;
+  setAIMoveSpeed(speed: number): void;
   attackEntityAsMob(h: unknown): boolean;
   getEquipmentInSlot(h: unknown): void;
   getTotalArmorValue(): number;
@@ -357,11 +345,9 @@ declare class EntityLivingBase extends Entity {
   addRandomDrop(): void;
   dropFewItems(h: unknown, p: unknown): void;
   canDropLoot(): boolean;
-  getInventory(): Inventory | null;
+  getInventory(): Inventory;
   getSoundVolume(): number;
   kill(): void;
-  writeEntityToNBT(h: unknown): void;
-  readEntityFromNBT(h: unknown): void;
   handleStatusUpdate(h: unknown): void;
   updatePotionEffects(): void;
   updatePotionMetadata(): void;
@@ -498,8 +484,9 @@ declare class Entity {
   getRotationYawHead(): number;
   setSize(width: number, height: number): void;
   setVelocity(x: number, y: number, z: number): void;
-  setPositionAndUpdate(u: unknown, h: unknown, p: unknown): void;
-  setPosition(xOrVec: number | Vector3, y: number, z: number): void;
+  setPositionAndUpdate(x: number, y: number, z: number): void;
+  setPosition(vec: Vector3): void;
+  setPosition(x: number, y: number, z: number): void;
   setPositionAndRotation(
     x: number,
     y: number,
@@ -525,7 +512,7 @@ declare class Entity {
     pitch?: number,
   ): void;
   offsetBBox(offset: Vector3): this["boundingBox"];
-  setEntityBoundingBox(aabb: AxisAlignedBB): void;
+  setEntityBoundingBox(box: AxisAlignedBB): void;
   resetPositionToBB(): void;
   getEyeHeight(): number;
   getPartialTicks(): number;
@@ -548,7 +535,11 @@ declare class Entity {
     pos: Vector3;
     onGround: boolean;
   };
-  fromJSON(u: unknown): void;
+  fromJSON(u: {
+    id: number;
+    pos: Vector3;
+    onGround: boolean;
+  }): void;
   testSneaking(u: unknown, h: unknown): void;
   testStepUp(u: unknown, h: unknown, p: unknown): boolean;
   handleWaterMovement(): boolean;
@@ -566,16 +557,16 @@ declare class Entity {
   getLadderSpeed(): 0.2 | 0.3;
   canTriggerWalking(): boolean;
   isOffsetPositionInLiquid(u: unknown, h: unknown, p: unknown): boolean;
-  isLiquidPresentInAABB(u: unknown): boolean;
-  moveFlying(u: unknown, h: unknown, p: unknown): void;
+  isLiquidPresentInAABB(u: AxisAlignedBB): boolean;
+  moveFlying(dX: number, dY: number, dZ: number): void;
   moveEntity(dX: number, dY: number, dZ: number): void;
-  playSound(x: unknown, y: unknown, z: unknown): void;
+  playSound(x: number, y: number, z: number): void;
   applyEntityCollision(entity: Entity): void;
   addVelocity(x: number, y: number, z: number): void;
   dealFireDamage(damage: number): void;
-  setFire(u: unknown): void;
+  setFire(ticks: number): void;
   doBlockCollisions(): void;
-  isOpenBlockSpace(u: unknown): boolean;
+  isOpenBlockSpace(u: Vector3): boolean;
   isEntityInsideOpaqueBlock(): boolean;
   isInsideOfMaterial(u: unknown): boolean;
   pushOutOfBlocks(x: number, y: number, z: number): boolean;
@@ -628,8 +619,8 @@ declare class Entity {
   getDistance(x: number, y: number, z: number): number;
   resetHeight(): void;
   getMaxFallHeight(): number;
-  writeEntityToNBT(u: unknown): void;
-  readEntityFromNBT(u: unknown): void;
+  writeEntityToNBT(nbt: unknown): void;
+  readEntityFromNBT(nbt: unknown): void;
   writeToNBT(u: unknown): void;
   getCollisionBorderSize(): number;
   readFromNBT(u: unknown): void;
@@ -648,7 +639,7 @@ declare class Entity {
 
 declare class EntityArrow extends Entity {
   type: "arrow";
-  identifier: /*EntityName*/ unknown;
+  identifier: EntityName;
   shootingEntity: Entity;
   lastPos: Vector3;
   lastVel: Vector3;
