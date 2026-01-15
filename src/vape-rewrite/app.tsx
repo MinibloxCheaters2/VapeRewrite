@@ -5,8 +5,10 @@ import globalCss from './style.css';
 // CSS modules
 import { stylesheet } from './style.module.css';
 import { ParentProps } from 'solid-js';
+import ModuleManager from './features/module/api/ModuleManager';
 
-const ACCENT_COLOR = "#3cff00ff";
+
+const ACCENT_COLOR = "#0b8405";
 
 function Module(props: ParentProps<{ enabled?: boolean; name: string; bind?: string }>) {
   const enabled = props.enabled ?? false;
@@ -31,24 +33,32 @@ function Module(props: ParentProps<{ enabled?: boolean; name: string; bind?: str
         >
           {bind}
         </p>
-      ) : (
-        <img
-          style={{ "margin-left": "auto" }}
-          src={GM_getResourceURL("bind")}
-          loading="lazy"
-          alt="Click to bind"
-        />
-      )}
+      ) :
+        <button style={{ background: "none", border: "none", cursor: "pointer" }}>
+          <img
+            style={{ "margin-left": "auto" }}
+            src={GM_getResourceURL("bind")}
+            loading="lazy"
+            alt="Click to bind"
+          />
+        </button>
+      }
     </div>
   );
 }
 
+function Spacer(props: ParentProps<{ size: string }>) {
+  return <div style={`height: ${props.size}`}></div>
+}
+
 function ClickGUIPanel() {
   return <div>
-    <Module name='Disabled'></Module>
-    <Module enabled name='Enabled'></Module>
-    <Module enabled name='Enabled + bound' bind='x'></Module>
-    <Module name='Bound' bind='x'></Module>
+    {
+      ModuleManager.modules.map((m, i) => <div>
+        <Module name={m.name} enabled={m.enabled} />
+        {i >= ModuleManager.modules.length - 1 ? undefined : <Spacer size={"4px"}></Spacer>}
+      </div>)
+    }
   </div>;
 }
 
@@ -77,6 +87,12 @@ const panel = getPanel({
 Object.assign(panel.wrapper.style, {
   top: '10vh',
   left: '10vw',
+});
+panel.wrapper.addEventListener("mousedown", () => {
+  panel.wrapper.style.cursor = "grabbing";
+});
+panel.wrapper.addEventListener("mouseup", () => {
+  panel.wrapper.style.cursor = "auto";
 });
 panel.setMovable(true);
 panel.show();
