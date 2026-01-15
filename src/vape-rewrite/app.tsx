@@ -1,30 +1,37 @@
-import { createSignal } from 'solid-js';
 import { render } from 'solid-js/web';
-import { getPanel, showToast } from '@violentmonkey/ui';
+import { getPanel } from '@violentmonkey/ui';
 // global CSS
 import globalCss from './style.css';
 // CSS modules
-import styles, { stylesheet } from './style.module.css';
+import { stylesheet } from './style.module.css';
+import { ParentProps } from 'solid-js';
 
-function Counter() {
-  const [getCount, setCount] = createSignal(0);
-  const handleAmazing = () => {
-    setCount((count) => count + 1);
-    showToast('Amazing + 1', { theme: 'dark' });
-  };
-  return (
-    <div>
-      <button class={styles.plus1} onClick={handleAmazing}>
-        Amazing+1
-      </button>
-      <p>Drag me</p>
-      <p>
-        <span class={styles.count}>{getCount()}</span> people think this is
-        amazing.
-      </p>
-    </div>
-  );
+const ACCENT_COLOR = "#3cff00ff";
+
+function Module(props: ParentProps<{ enabled?: boolean, name: string, bind?: string }>) {
+  const enabled = props.enabled ?? false;
+  const { name, bind } = props;
+  return <div style={`background-color: ${enabled ? ACCENT_COLOR : "#120707ff"}`}>
+    <div>{name}</div>
+    {bind !== undefined
+      ? <p aria-details={`${name} is bound to ${bind}`}>{bind}</p>
+      : <img src={GM_getResourceURL("bind")} loading="lazy" alt="Click to bind" />
+    }
+  </div>;
 }
+
+function ClickGUIPanel() {
+  return <div>
+    <Module name='Disabled'></Module>
+    <Module enabled name='Enabled'></Module>
+    <Module enabled name='Enabled + bound' bind='x'></Module>
+    <Module name='Bound' bind='x'></Module>
+  </div>;
+}
+
+// function ClickGUI() {
+//   return <></>;
+// }
 
 // Inject CSS
 GM_addStyle(globalCss);
@@ -50,4 +57,4 @@ Object.assign(panel.wrapper.style, {
 });
 panel.setMovable(true);
 panel.show();
-render(Counter, panel.body);
+render(ClickGUIPanel, panel.body);
