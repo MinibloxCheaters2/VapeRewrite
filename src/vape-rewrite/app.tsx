@@ -8,16 +8,39 @@ import { ParentProps } from 'solid-js';
 
 const ACCENT_COLOR = "#3cff00ff";
 
-function Module(props: ParentProps<{ enabled?: boolean, name: string, bind?: string }>) {
+function Module(props: ParentProps<{ enabled?: boolean; name: string; bind?: string }>) {
   const enabled = props.enabled ?? false;
   const { name, bind } = props;
-  return <div style={`background-color: ${enabled ? ACCENT_COLOR : "#120707ff"}`}>
-    <div>{name}</div>
-    {bind !== undefined
-      ? <p aria-details={`${name} is bound to ${bind}`}>{bind}</p>
-      : <img src={GM_getResourceURL("bind")} loading="lazy" alt="Click to bind" />
-    }
-  </div>;
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        "align-items": "center",
+        gap: "0.5rem",
+        padding: "0.5rem 0.75rem",
+        "background-color": enabled ? ACCENT_COLOR : "#120707ff",
+      }}
+    >
+      <div>{name}</div>
+
+      {bind !== undefined ? (
+        <p
+          style={{ "margin-left": "auto" }}
+          aria-details={`${name} is bound to ${bind}`}
+        >
+          {bind}
+        </p>
+      ) : (
+        <img
+          style={{ "margin-left": "auto" }}
+          src={GM_getResourceURL("bind")}
+          loading="lazy"
+          alt="Click to bind"
+        />
+      )}
+    </div>
+  );
 }
 
 function ClickGUIPanel() {
