@@ -56,7 +56,6 @@ export default abstract class Mod {
   /** Toggles this module and sends a notification. */
   public toggle(): void {
     this.toggleSilently();
-    console.info(`${this.name} Toggled ${this.enabled ? "ON" : "OFF"}!`);
     // TODO: implement toggle notifications and dynamic island stuff here
   }
 

@@ -1,4 +1,4 @@
-export const DUMPS = {
+export default {
   moveStrafe: /strafe: *this\.([a-zA-Z]*)/m,
   moveForward: /forward: *this\.([a-zA-Z]*)/m,
   keyPressedPlayer:
@@ -27,17 +27,3 @@ export const DUMPS = {
   materialTransparentWorld:
     /this\.([a-zA-Z]*) *= *this\.materialTransparent\.clone\(/,
 };
-
-// pasted from Llama 3.3 70B on DuckDuckGo
-export default function getMappings(text: string) {
-  const matches: { [name: string]: string } = {};
-  for (const [name, regex] of Object.entries(DUMPS)) {
-    const match = text.match(regex);
-    if (match !== null && match[1] !== undefined) {
-      matches[name] = match[1];
-    } else {
-      console.warn(`Unmapped: ${name}`);
-    }
-  }
-  return matches;
-}

@@ -1,13 +1,14 @@
+import logger from "../../../utils/loggers";
 import Mod, { Category } from "../api/Module";
 
 export default class Test extends Mod {
   public name = "Test";
   public category = Category.SILLY;
   public onEnable(): void {
-    console.log("Enabled!");
+    logger.debug("Test module enabled!");
   }
 
   public onDisable(): void {
-    console.log("Disabled!");
+    logger.debug("Test module disabled!");
   }
 }

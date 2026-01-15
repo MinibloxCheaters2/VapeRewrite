@@ -1,4 +1,5 @@
 import { LOG_STORE_NAME, NO_STORE_NAME_RANDOMIZATION } from "./debugControls";
+import logger from "./vape-rewrite/utils/loggers";
 
 function generateSecureRandomString(length: number): string {
   const array = new Uint8Array(length);
@@ -20,8 +21,8 @@ function getRandomIntInclusive(min: number, max: number) {
 
 export const storeName = NO_STORE_NAME_RANDOMIZATION ? "VapeStore" : generateSecureRandomString(Math.min(getRandomIntInclusive(4, 9)));
 
-if (NO_STORE_NAME_RANDOMIZATION) console.warn("[Vape Rewrite] Store name randomization disabled, only disable store name randomization for debugging or development purposes!");
-if (LOG_STORE_NAME) console.log(`[Vape Rewrite] Store name is ${storeName}`);
+if (NO_STORE_NAME_RANDOMIZATION) logger.warn("Store name randomization disabled, only disable store name randomization for debugging or development purposes!");
+if (LOG_STORE_NAME) logger.info(`Store name is ${storeName}`);
 
 export const vapeName = "Vape Rewrite".split("")
   .map(value => ({ value, sort: getRandomIntInclusive(1, 3) }))

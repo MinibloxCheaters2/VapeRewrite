@@ -1,7 +1,8 @@
 // the idea of this hook is to move some of the symbols into the window object so we can get them.
 
 import { CHECK_UNMATCHED_DUMPS, CHECK_UNMATCHED_REPLACEMENTS, LOG_APPLYING_REPLACEMENTS } from "../../debugControls";
-import { DUMPS } from "./dump";
+import logger from "../utils/loggers";
+import DUMPS from "./dump";
 
 /** Where should we place the code, or should we replace the entire match with that code? */
 enum Shift {
@@ -57,17 +58,17 @@ export default function modifyCode(code: string): string {
 
   if (CHECK_UNMATCHED_DUMPS) {
     const unmatchedDumps = Object.entries(DUMPS).filter(e => code.match(e[1]) === undefined);
-    if (unmatchedDumps.length > 0) console.warn("Unmatched dumps:", unmatchedDumps);
+    if (unmatchedDumps.length > 0) logger.warn("Unmatched dumps:", unmatchedDumps);
   }
 
   if (CHECK_UNMATCHED_REPLACEMENTS) {
     const unmatchedReplacements = Object.entries(REPLACEMENTS).filter(r => !modified.includes(r[0]));
-    if (unmatchedReplacements.length > 0) console.warn("Unmatched replacements:", unmatchedReplacements);
+    if (unmatchedReplacements.length > 0) logger.warn("Unmatched replacements:", unmatchedReplacements);
   }
 
 
   for (const [replacement, code] of Object.entries(REPLACEMENTS)) {
-    if (LOG_APPLYING_REPLACEMENTS) console.info(`Applying replacement: ${replacement}`);
+    if (LOG_APPLYING_REPLACEMENTS) logger.info(`Applying replacement: ${replacement}`);
     modified = modified.replace(
       replacement,
       handleReplacement(replacement, code)
