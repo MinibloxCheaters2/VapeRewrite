@@ -70,6 +70,11 @@ export default class StoreInterop {
       importConfig: ConfigHandler.importConfig
     } satisfies Store;
   }
+  public static initIfRequired() {
+    if (typeof unsafeWindow[storeName] !== "object") {
+      this.initStore();
+    }
+  }
   public static get store(): Store {
     if (typeof unsafeWindow[storeName] !== "object") {
       this.initStore();
@@ -77,3 +82,6 @@ export default class StoreInterop {
     return unsafeWindow[storeName] ??= {};
   }
 }
+
+StoreInterop.initIfRequired();
+

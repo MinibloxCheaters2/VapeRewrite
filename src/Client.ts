@@ -1,3 +1,5 @@
+import { LOG_STORE_NAME, NO_STORE_NAME_RANDOMIZATION } from "./debugControls";
+
 function generateSecureRandomString(length: number): string {
   const array = new Uint8Array(length);
   crypto.getRandomValues(array);
@@ -16,7 +18,10 @@ function getRandomIntInclusive(min: number, max: number) {
   return Math.floor(randomNumber * (ma - mi + 1)) + mi;
 }
 
-export const storeName = generateSecureRandomString(Math.min(getRandomIntInclusive(4, 9)));
+export const storeName = NO_STORE_NAME_RANDOMIZATION ? "VapeStore" : generateSecureRandomString(Math.min(getRandomIntInclusive(4, 9)));
+
+if (NO_STORE_NAME_RANDOMIZATION) console.warn("Store name randomization disabled, only disable store name randomization for debugging or development purposes!");
+if (LOG_STORE_NAME) console.log(`Store name is ${storeName}`);
 
 export const vapeName = "Vape Rewrite".split("")
   .map(value => ({ value, sort: getRandomIntInclusive(1, 3) }))

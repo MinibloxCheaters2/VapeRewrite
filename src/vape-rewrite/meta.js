@@ -15,8 +15,7 @@
 // @version     process.env.VERSION
 // @author      process.env.AUTHOR
 // @require     https://cdn.jsdelivr.net/npm/@violentmonkey/dom@2
-// @require     https://cdn.jsdelivr.net/npm/@violentmonkey/ui@0.7
-// @top-level-await
+// @require     https://github.com/6x68/vm-ui/releases/download/v0.9.7-1/index.js
 // @run-at      document-start
 // ==/UserScript==
 

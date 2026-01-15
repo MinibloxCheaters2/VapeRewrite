@@ -1,3 +1,4 @@
+import Test from "../impl/Test.js";
 import Mod, { Category } from "./Module.js";
 
 /** some basic predicates for finding modules */
@@ -20,7 +21,7 @@ export default class ModuleManager {
   }
 
   public static readonly modules: Mod[] = [
-    // TODO: modules
+    new Test()
   ] as const;
 
   public static findModule(
