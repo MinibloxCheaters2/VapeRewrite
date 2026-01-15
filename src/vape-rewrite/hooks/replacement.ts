@@ -55,9 +55,8 @@ export default function modifyCode(code: string): string {
 		}
 	}
 
-  // TODO: unmatched dumps logging is buggy
   if (CHECK_UNMATCHED_DUMPS) {
-    const unmatchedDumps = Object.entries(DUMPS).filter(e => !code.match(e[1]));
+    const unmatchedDumps = Object.entries(DUMPS).filter(e => code.match(e[1]) === undefined);
     if (unmatchedDumps.length > 0) console.warn("Unmatched dumps:", unmatchedDumps);
   }
 
