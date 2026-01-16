@@ -15,7 +15,7 @@ export const REPLACEMENTS: Replacements = {
     shift: Shift.REPLACE
   },
   'static sendPacket(u){': {
-    replacement: `window["${storeName}"].`,
+    replacement: `window["${storeName}"].exposed.emitEvent("sendPacket", window["${storeName}"].exposed.newCancelableWrapper(u));`,
     shift: Shift.AFTER
   }
 };

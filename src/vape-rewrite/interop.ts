@@ -1,7 +1,10 @@
 import { storeName } from "../Client";
 import Bus from "./Bus";
 import ClientEvents from "./event/api/Events";
+import exposed from "./hooks/exposed";
+
 export interface Store {
+  exposed: typeof exposed;
   emitEvent<E extends keyof ClientEvents>(event: E, ...payload: ClientEvents[E] extends void ? [] : [ClientEvents[E]]): void;
   /** Saves this config to a config named {@link name} */
   saveConfig(name: string): Promise<void>;
@@ -69,6 +72,7 @@ export default class StoreInterop {
   /** DO NOT CALL THIS IF THE STORE IS ALREADY AN OBJECT. */
   private static initStore() {
     unsafeWindow[storeName] = {
+      exposed,
       saveConfig: ConfigHandler.saveConfig,
       loadConfig: ConfigHandler.loadConfig,
       exportConfig: ConfigHandler.exportConfig,

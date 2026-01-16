@@ -1,6 +1,6 @@
 export default class CancelableWrapper<T> {
-  #canceled: boolean;
-  public data: T;
+  #canceled: boolean = false;
+  constructor(public data: T) {}
   cancel() {
     this.#canceled = true;
   }
