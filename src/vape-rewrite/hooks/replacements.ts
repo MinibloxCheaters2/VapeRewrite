@@ -67,8 +67,5 @@ clientVersion: VERSION$1
       replacement: replacementWorldTypes,
       shift: Shift.REPLACE,
     }],
-
-
-
   ],
 );
