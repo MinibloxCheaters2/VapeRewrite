@@ -4,7 +4,7 @@
  * @module
  */
 
-import { Replacement, Shift } from "../../replacementTypes";
+import { Shift, SingleReplacement } from "../../replacementTypes";
 
 
 const FLAGS_TO_FORCE_ENABLE = [
@@ -27,7 +27,7 @@ const FLAGS_TO_FORCE_ENABLE = [
   //#endregion
 ];
 
-export const FORCE_ENABLE_REPLACEMENT: [RegExp, Replacement] = [new RegExp(`index_browserExports\\.useFlag\\("${FLAGS_TO_FORCE_ENABLE.join("|")}"\\)`), {
+export const FORCE_ENABLE_REPLACEMENT: SingleReplacement = [new RegExp(`index_browserExports\\.useFlag\\("${FLAGS_TO_FORCE_ENABLE.join("|")}"\\)`), {
   replacement: "true",
   shift: Shift.REPLACE
 }];

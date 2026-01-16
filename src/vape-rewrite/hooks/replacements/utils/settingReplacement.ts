@@ -1,8 +1,6 @@
-/* eslint-disable */
-import { storeName } from "../../../../Client";
-import { Replacement, Shift } from "../../replacementTypes";
+import { Shift, SingleReplacement } from "../../replacementTypes";
 
-export const SHOW_USERNAMES_WITH_HIDDEN_CHARS: [RegExp, Replacement] = [
+export const SHOW_USERNAMES_WITH_HIDDEN_CHARS: SingleReplacement = [
     /function\s+stripCrazyGamesSuffix\s*\(\w+\)\s*\{[\s\S]*?return[\s\S]*?\}/g,
     {
         replacement: `function stripCrazyGamesSuffix(m) { return m; }`,
@@ -38,23 +36,23 @@ const auraReplacements = `}), jsxRuntimeExports.jsx(ToggleButton, {
 		}), jsxRuntimeExports.jsx(ToggleButton, {
 			option: Options$1.trailAll`;
 
-export const EXTRA_OPTIONS: [RegExp, Replacement] = [
-    /var\s+_+\w+\s*;\s*let\s+Options\$1\s*=\s*\(_+\w+\s*=\s*class\s*\{[\s\S]*?\}\s*\,[\s\S]*?\)\s*;/g,
+export const EXTRA_OPTIONS: SingleReplacement = [
+    /var\s+_+\w+\s*;\s*let\s+Options\$1\s*=\s*\(_+\w+\s*=\s*class\s*\{[\s\S]*?\}\s*,[\s\S]*?\)\s*;/g,
     {
         replacement: optionsReplacement,
         shift: Shift.REPLACE,
     },
 ];
 
-export const YOU_HAVE_AURA_MODE: [RegExp, Replacement] = [
-    /}\s*\)\s*\,\s*jsxRuntimeExports\.jsx\s*\(\s*ToggleButton\s*\,\s*\{\s*option:\s*Options\$1\.fog/g,
+export const YOU_HAVE_AURA_MODE: SingleReplacement = [
+    /}\s*\)\s*,\s*jsxRuntimeExports\.jsx\s*\(\s*ToggleButton\s*,\s*\{\s*option:\s*Options\$1\.fog/g,
     {
         replacement: auraReplacements,
         shift: Shift.REPLACE,
     },
 ];
 
-export const ENABLE_CHUNK_CULLING_SETTING: [RegExp, Replacement] = [
+export const ENABLE_CHUNK_CULLING_SETTING: SingleReplacement = [
     /CHUNK_UNLOADS_PER_TICK\s*\)/g,
     {
         replacement: "Options$1.cullChunks.value?CHUNK_UNLOADS_PER_TICK:0)",
@@ -62,16 +60,16 @@ export const ENABLE_CHUNK_CULLING_SETTING: [RegExp, Replacement] = [
     },
 ];
 
-export const SHOW_CLOUDS_SETTING: [RegExp, Replacement] = [
-    /I\s*\(\s*this\s*\,\s*["']generate["']\s*\)\s*;\s*I\s*\(\s*this\s*,\s*["']showClouds["']\s*\)\s*;/g,
+export const SHOW_CLOUDS_SETTING: SingleReplacement = [
+    /I\s*\(\s*this\s*,\s*["']generate["']\s*\)\s*;\s*I\s*\(\s*this\s*,\s*["']showClouds["']\s*\)\s*;/g,
     {
-        replacements: `I(this, "generate",Options$1.clouds.value);
+        replacement: `I(this, "generate",Options$1.clouds.value);
 		I(this, "showClouds",Options$1.clouds.value);`,
         shift: Shift.REPLACE,
     },
 ];
 
-export const SHOW_CLOUDS_UPDATE_SETTING: [RegExp, Replacement] = [
+export const SHOW_CLOUDS_UPDATE_SETTING: SingleReplacement = [
     /this\.generate\s*==\s*this\.showClouds/g,
     {
         replacement: `this.showClouds = Options$1.clouds.value; this.generate == this.showClouds`,
@@ -79,7 +77,7 @@ export const SHOW_CLOUDS_UPDATE_SETTING: [RegExp, Replacement] = [
     }
 ];
 
-export const GENERATE_CLOUDS_REPLACEMENT: [RegExp, Replacement] = [
+export const GENERATE_CLOUDS_REPLACEMENT: SingleReplacement = [
     /generateClouds\s*\(\s*\w+\s*\)\s*\{\s*for[\s\S]*?;/g,
     {
         replacement:`generateClouds(u) {
@@ -108,7 +106,7 @@ const trailAuraReplacement = `class EffectsManager {
 	}
 }`
 
-export const TRAIL_AURA_REPLACEMENT: [RegExp, Replacement] = [
+export const TRAIL_AURA_REPLACEMENT: SingleReplacement = [
     /class\sEffectsManager\s*\{[\s\S]*?\}\s*\}/g,
     {
         replacement: trailAuraReplacement,
@@ -497,7 +495,7 @@ const leaderboardDEVreplacement = `Leaderboards = () => {
 	},`
 
 
-export const ADVANCED_BROWSE_PLANETS_MODAL: [RegExp, Replacement] = [
+export const ADVANCED_BROWSE_PLANETS_MODAL: SingleReplacement = [
     /BrowsePlanetsModal\s*=\s*\w+\s*=>\s*\{[\s\S]*?\)\s*\)\s*\}\s*\)\s*\]\s*\}\s*\)\s*\]\s*\}\s*\)\s*\]\s*\}\s*\)\s*\}\s*,/g,
     {
         replacement: browsePlanetsModalReplacement,
@@ -505,7 +503,7 @@ export const ADVANCED_BROWSE_PLANETS_MODAL: [RegExp, Replacement] = [
     }
 ]
 
-export const PLANET_MODEL_EACH_PANEL: [RegExp, Replacement] = [
+export const PLANET_MODEL_EACH_PANEL: SingleReplacement = [
     /const PlanetItem\s*=\s*\w+\s*=>\s*\{[\s\S]*?\}\)\]\s*\}\)\]\s*\}\s*\)\s*\}\s*\)\s*\}\s*,/g,
     {
         replacement: planetModelEachPanelReplacement,
@@ -513,7 +511,7 @@ export const PLANET_MODEL_EACH_PANEL: [RegExp, Replacement] = [
     }
 ]
 
-export const DEVELOPER_LEADERBOARD: [RegExp, Replacement] = [
+export const DEVELOPER_LEADERBOARD: SingleReplacement = [
     /Leaderboards\s*=\s*\(\s*\)\s*=>\s*\{[\s\S]*?\}\s*\)\s*\]\s*\}\s*\)\s*\]\s*\}\s*\)\s*\]\s*\}\s*\)\s*\]\s*\}\s*\)\s*\}\s*\)\s*\}\s*\)\s*\}\s*,/g,
     {
         replacement: leaderboardDEVreplacement,
@@ -535,7 +533,7 @@ const modeStatsReplacement = `modeStats = {
 		blockhunt: [StatType.WINS, StatType.LOSSES],
 	},`;
 
-export const STATISTICS_MODE_STATS_REPLACEMENT: [RegExp, Replacement] = [
+export const STATISTICS_MODE_STATS_REPLACEMENT: SingleReplacement = [
     /modeStats\s*=\s*\{[\s\S]*?\}\s*,/g,
     {
         replacement: modeStatsReplacement,

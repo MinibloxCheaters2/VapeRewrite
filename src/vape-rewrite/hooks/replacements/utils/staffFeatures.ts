@@ -1,4 +1,4 @@
-import { Shift } from "../../replacementTypes";
+import { Shift, SingleReplacement } from "../../replacementTypes";
 
 const replacementWorldTypes = `availableWorldTypes = {
 		[GameModeId.SURVIVAL]: [WorldGenerationType.NORMAL, WorldGenerationType.SKYBLOCK, WorldGenerationType.ONEBLOCK, WorldGenerationType.FLAT, WorldGenerationType.VOID, WorldGenerationType.DEBUG],
@@ -8,7 +8,7 @@ const replacementWorldTypes = `availableWorldTypes = {
 
 
 const STAFF_RANK = "1000";
-export const FORCE_ENABLE_RANK_GIFTING = [
+export const FORCE_ENABLE_RANK_GIFTING: SingleReplacement = [
     'jsxRuntimeExports.jsx("option",{value:"legend",children:"Legend"})',
     {
         replacement:
@@ -17,7 +17,7 @@ export const FORCE_ENABLE_RANK_GIFTING = [
     },
 ];
 
-export const ENABLE_ALL_WORLD_TYPES = [
+export const ENABLE_ALL_WORLD_TYPES: SingleReplacement = [
     /availableWorldTypes\s*=\s*\{[\s\S]*?\}\s*,/g,
     {
         replacement: replacementWorldTypes,
@@ -25,14 +25,14 @@ export const ENABLE_ALL_WORLD_TYPES = [
     },
 ];
 
-export const STAFF_PROFILE_SET = [
+export const STAFF_PROFILE_SET: SingleReplacement = [
     "getRankLevel(player.profile.rank)",
     {
         replacement: STAFF_RANK,
         shift: Shift.REPLACE,
     },
 ];
-export const STAFF_PRIVATE_WORLD_BYPASS = [
+export const STAFF_PRIVATE_WORLD_BYPASS: SingleReplacement = [
     /altDown\s*&&\s*getRankLevel\([\s\S]*?\)/g,
     {
         replacement: `altDown && ${STAFF_RANK}`,

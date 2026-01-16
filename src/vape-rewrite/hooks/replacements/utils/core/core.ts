@@ -1,7 +1,7 @@
 import { storeName } from "../../../../../Client";
-import { Replacement, Shift } from "../../../replacementTypes";
+import { MultipleReplacements, Shift } from "../../../replacementTypes";
 
-export const CORE_REPLACEMENTS: [string | RegExp, Replacement][] = [
+export const CORE_REPLACEMENTS: MultipleReplacements = [
   ['document.addEventListener("DOMContentLoaded",startGame,!1);', {
     replacement: `setTimeout(function() {
         const DOMContentLoaded_event = document.createEvent("Event");
@@ -39,12 +39,12 @@ export const CORE_REPLACEMENTS: [string | RegExp, Replacement][] = [
     shift: Shift.AFTER,
   }],
 
-  ['updatePlayerMoveState(),this.isUsingItem()',{
+  ['updatePlayerMoveState(),this.isUsingItem()', {
     replacement: `updatePlayerMoveState(),(this.isUsingItem() && false)`,
     shift: Shift.REPLACE
   }],
 
-  ["S&&!this.isUsingItem()",{
+  ["S&&!this.isUsingItem()", {
     replacement: 'S&&!(this.isUsingItem() && false)',
     shift: Shift.REPLACE
   }]

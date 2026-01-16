@@ -1,6 +1,4 @@
-/* eslint-disable */
-import { storeName } from "../../../../Client";
-import { Replacement, Shift } from "../replacementTypes";
+import { Replacement } from "../replacementTypes";
 import {
   ENABLE_ALL_WORLD_TYPES,
   FORCE_ENABLE_RANK_GIFTING,
@@ -31,9 +29,7 @@ export const REPLACEMENTS = new Map<string | RegExp, Replacement>(
   [
     ...CORE_REPLACEMENTS,
     // enable all game modes and disable ads
-    ...FORCE_ENABLE_REPLACEMENT,
-    
-
+    FORCE_ENABLE_REPLACEMENT,
 
     // Enable all ranks gifting
     FORCE_ENABLE_RANK_GIFTING,
@@ -43,7 +39,6 @@ export const REPLACEMENTS = new Map<string | RegExp, Replacement>(
 
     // Enable Staff Profile Set
     STAFF_PROFILE_SET,
-
 
     // Enable Moderator-Private-World Bypass (altDown)
     STAFF_PRIVATE_WORLD_BYPASS,

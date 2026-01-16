@@ -12,3 +12,5 @@ export interface Replacement {
 }
 
 export type Replacements = Map<string | RegExp, Replacement>;
+export type SingleReplacement = [string | RegExp, Replacement];
+export type MultipleReplacements = SingleReplacement[];
