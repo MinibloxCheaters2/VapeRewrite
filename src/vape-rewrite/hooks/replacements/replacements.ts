@@ -8,6 +8,27 @@ const replacementWorldTypes = `availableWorldTypes = {
 		[GameModeId.ADVENTURE]: [WorldGenerationType.NORMAL, WorldGenerationType.FLAT, WorldGenerationType.VOID, WorldGenerationType.SKYBLOCK, WorldGenerationType.ONEBLOCK, WorldGenerationType.DEBUG]
 	},`;
 
+
+const FLAGS_TO_FORCE_ENABLE = [
+  // Disables... ads.
+  "disable-ads",
+  //#region Enable all mini games
+  "skywars",
+  "spleef",
+  "eggwars",
+  "eggwars2",
+  "eggwars3",
+  "eggwars4",
+  "kitpvp",
+  "pvp",
+  "duels_bridge",
+  "oitq",
+  "blockhunt",
+  "murder",
+  "blitzbuild"
+  //#endregion
+];
+
 export const REPLACEMENTS = new Map<string | RegExp, Replacement>(
   [
     ['document.addEventListener("DOMContentLoaded",startGame,!1);', {
@@ -17,11 +38,6 @@ export const REPLACEMENTS = new Map<string | RegExp, Replacement>(
 			document.dispatchEvent(DOMContentLoaded_event);
 		}, 0);`,
       shift: Shift.AFTER,
-    }],
-
-    ['this.game.unleash.isEnabled("disable-ads")', {
-      replacement: "true",
-      shift: Shift.REPLACE,
     }],
 
     [
@@ -51,7 +67,7 @@ clientVersion: VERSION$1
       shift: Shift.AFTER,
     }],
     // enable all game modes
-    [/index_browserExports\.useFlag\("[^"]+"\)/g, {
+    [new RegExp(`index_browserExports\\.useFlag\\("${FLAGS_TO_FORCE_ENABLE.join("|")}"\\)`), {
       replacement: "true",
       shift: Shift.REPLACE
     }],
