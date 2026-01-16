@@ -51,9 +51,9 @@ clientVersion: VERSION$1
       shift: Shift.AFTER,
     }],
     // enable all game modes
-    [/index_browserExports\.useFlag("[^"]+")/g, {
+    [/index_browserExports\.useFlag\("[^"]+"\)/g, {
       replacement: "true",
-      shift: Shift.REPLACE,
+      shift: Shift.REPLACE
     }],
     // Enable all ranks gifting
     ['jsxRuntimeExports.jsx("option",{value:"legend",children:"Legend"})', {
@@ -69,6 +69,6 @@ clientVersion: VERSION$1
     }],
 
 
-    
+
   ],
 );
