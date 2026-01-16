@@ -18,6 +18,9 @@ function handleReplacement(original: string, { replacement, shift }: Replacement
   }
 }
 
+function matches(code: string, match: string | RegExp): boolean {
+  return typeof match === "string" ? code.includes(match) : code.match(match) !== undefined;
+}
 
 export default function modifyCode(code: string): string {
   let modified = code;
@@ -25,28 +28,28 @@ export default function modifyCode(code: string): string {
   for (const [name, regex] of Object.entries(DUMPS)) {
     const matched = modified.match(regex);
     if (matched) {
-      for (let [, { replacement }] of Object.entries(REPLACEMENTS)) {
+      for (let [, { replacement }] of REPLACEMENTS.entries()) {
         replacement = replacement.replaceAll(name, matched[1]);
       }
     }
   }
 
   if (CHECK_UNMATCHED_DUMPS) {
-    const unmatchedDumps = Object.entries(DUMPS).filter(e => code.match(e[1]) === undefined);
+    const unmatchedDumps = Object.values(DUMPS).filter(e => code.match(e) === undefined);
     if (unmatchedDumps.length > 0) logger.warn("Unmatched dumps:", unmatchedDumps);
   }
 
   if (CHECK_UNMATCHED_REPLACEMENTS) {
-    const unmatchedReplacements = Object.entries(REPLACEMENTS).filter(r => !modified.includes(r[0]));
+    const unmatchedReplacements = Array.from(REPLACEMENTS.keys()).filter(r => !matches(modified, r));
     if (unmatchedReplacements.length > 0) logger.warn("Unmatched replacements:", unmatchedReplacements);
   }
 
 
-  for (const [replacement, code] of Object.entries(REPLACEMENTS)) {
+  for (const [replacement, code] of Array.from(REPLACEMENTS.entries())) {
     if (LOG_APPLYING_REPLACEMENTS) logger.info(`Applying replacement: ${replacement}`);
     modified = modified.replace(
       replacement,
-      handleReplacement(replacement, code)
+      (original) => handleReplacement(original, code)
     );
     // note: 2nd occurrence is usually inside a string in a varible called "jsContent".
   }

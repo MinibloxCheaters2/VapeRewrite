@@ -11,6 +11,4 @@ export interface Replacement {
   shift: Shift;
 }
 
-export interface Replacements {
-  [key: string]: Replacement;
-}
+export type Replacements = Map<string | RegExp, Replacement>;
