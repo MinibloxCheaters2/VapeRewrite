@@ -1,5 +1,4 @@
-import { storeName } from "../../../../Client";
-import { Replacement, Shift } from "../../replacementTypes";
+import { Shift } from "../../replacementTypes";
 
 const replacementWorldTypes = `availableWorldTypes = {
 		[GameModeId.SURVIVAL]: [WorldGenerationType.NORMAL, WorldGenerationType.SKYBLOCK, WorldGenerationType.ONEBLOCK, WorldGenerationType.FLAT, WorldGenerationType.VOID, WorldGenerationType.DEBUG],
@@ -29,14 +28,14 @@ export const ENABLE_ALL_WORLD_TYPES = [
 export const STAFF_PROFILE_SET = [
     "getRankLevel(player.profile.rank)",
     {
-        replacement: HIGHLEVEL_RANK,
+        replacement: STAFF_RANK,
         shift: Shift.REPLACE,
     },
 ];
 export const STAFF_PRIVATE_WORLD_BYPASS = [
     /altDown\s*&&\s*getRankLevel\([\s\S]*?\)/g,
     {
-        replacement: "altDown && " + STAFF_RANK,
+        replacement: `altDown && ${STAFF_RANK}`,
         shift: Shift.REPLACE,
     },
 ];
