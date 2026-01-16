@@ -1,15 +1,5 @@
 import Bus from "../../../Bus";
-
-export enum Category {
-  COMBAT,
-  VISUAL,
-  MOVEMENT,
-  PLAYER,
-  WORLD,
-  SILLY,
-  EXPLOIT,
-  MISC,
-}
+import { Category } from "./Category";
 
 export default abstract class Mod {
   /** The name of this module. */

@@ -19,6 +19,13 @@
 // @require     https://cdn.jsdelivr.net/npm/@violentmonkey/dom@2
 // @require     https://github.com/6x68/vm-ui/releases/download/v0.9.7-1/index.js
 // @resource    bind https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/bind.png
+// @resource    combat https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/categories/combat.png
+// @resource    minigames https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/categories/minigames.png
+// @resource    profiles https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/profiles.png
+// @resource    utility https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/categories/utility.png
+// @resource    inventory https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/categories/inventory.png
+// @resource    render https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/categories/render.png
+// @resource    world https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/categories/world.png
 // @run-at      document-start
 // ==/UserScript==
 
