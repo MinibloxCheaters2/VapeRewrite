@@ -69,6 +69,8 @@ clientVersion: VERSION$1
     shift: Shift.AFTER
   },
 
+  // Auto Respawn
 
   
+
 };
