@@ -55,11 +55,6 @@ const categoryDataSet: Record<Category, CategoryData> = {
   }
 };
 
-export const categoryInfoSet: Record<Category, CategoryInfo> = Object.fromEntries(Object.entries(categoryDataSet).map(([k, v]) => {
-  const c = Category[k];
-  return [c, new CategoryInfo(v)];
-}));
-
 export class CategoryInfo {
   public constructor(public data: CategoryData) { }
   public static for(c: Category): CategoryInfo {
@@ -70,3 +65,7 @@ export class CategoryInfo {
   }
 }
 
+export const categoryInfoSet: Record<Category, CategoryInfo> = Object.fromEntries(Object.entries(categoryDataSet).map(([k, v]) => {
+  const c = Category[k];
+  return [c, new CategoryInfo(v)];
+}));
