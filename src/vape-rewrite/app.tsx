@@ -107,5 +107,23 @@ panel.show();
 
 // Render modules for each category
 for (const [cat, info] of Object.entries(categoryInfoSet)) {
-  render(() => CategoryPanel(Category[cat], info), panel.body);
+  // Create a movable panel using @violentmonkey/ui
+  const categoryPanel = getPanel({
+    theme: 'dark',
+    style: stylesheet,
+  });
+
+  Object.assign(categoryPanel.wrapper.style, {
+    top: '10vh',
+    left: '10vw',
+  });
+  categoryPanel.wrapper.addEventListener("mousedown", () => {
+    categoryPanel.wrapper.style.cursor = "grabbing";
+  });
+  categoryPanel.wrapper.addEventListener("mouseup", () => {
+    categoryPanel.wrapper.style.cursor = "auto";
+  });
+  categoryPanel.setMovable(true);
+  categoryPanel.show();
+  render(() => CategoryPanel(cat as unknown as Category, info), categoryPanel.body);
 }

@@ -20,6 +20,7 @@
 // @require     https://github.com/6x68/vm-ui/releases/download/v0.9.7-1/index.js
 // @resource    bind https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/bind.png
 // @resource    combat https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/categories/combat.png
+// @resource    blatant https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/categories/blatant.png
 // @resource    minigames https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/categories/minigames.png
 // @resource    profiles https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/profiles.png
 // @resource    utility https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/categories/utility.png

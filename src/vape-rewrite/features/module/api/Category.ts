@@ -1,8 +1,9 @@
+import logger from "../../../utils/loggers";
+
 export enum Category {
   COMBAT,
-  VISUAL,
-  MOVEMENT,
-  PLAYER,
+  RENDER,
+  BLATANT,
   WORLD,
   MINIGAMES,
   INVENTORY,
@@ -25,17 +26,17 @@ const categoryDataSet: Record<Category, CategoryData> = {
     icon: "combat",
     name: "Combat"
   },
-  [Category.VISUAL]: {
-    icon: "visual",
-    name: "Visual"
+  [Category.RENDER]: {
+    icon: "render",
+    name: "Render"
   },
-  [Category.MOVEMENT]: {
-    icon: "movement",
-    name: "Movement"
+  [Category.BLATANT]: {
+    icon: "blatant",
+    name: "Blatant"
   },
-  [Category.PLAYER]: {
-    icon: "player",
-    name: "Player"
+  [Category.WORLD]: {
+    icon: "world",
+    name: "World"
   },
   [Category.MINIGAMES]: {
     icon: "minigames",
@@ -48,12 +49,8 @@ const categoryDataSet: Record<Category, CategoryData> = {
   [Category.UTILITY]: {
     icon: "utility",
     name: "Utility"
-  },
-  [Category.WORLD]: {
-    icon: "world",
-    name: "World"
   }
-};
+} as const;
 
 export class CategoryInfo {
   public constructor(public data: CategoryData) { }
@@ -61,7 +58,9 @@ export class CategoryInfo {
     return categoryInfoSet[c] ??= new CategoryInfo(categoryDataSet[c]);
   }
   get iconURL(): string {
-    return GM_getResourceURL(this.data.icon);
+    const rURL = GM_getResourceURL(this.data.icon);
+    logger.debug(`Icon ID for ${this.data.name} = ${this.data.icon} -> ${rURL}`);
+    return rURL;
   }
 }
 
