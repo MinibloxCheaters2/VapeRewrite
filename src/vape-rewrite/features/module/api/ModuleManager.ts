@@ -1,3 +1,4 @@
+import AntiBan from "../impl/AntiBan.js";
 import Test from "../impl/Test.js";
 import Mod, { Category } from "./Module.js";
 
@@ -15,13 +16,15 @@ export const P = {
 export default class ModuleManager {
   // only important ish modules (ones that will get referenced in other modules)
   // should be as a variable instead of in the array
+  public static antiBan = new AntiBan();
 
   constructor() {
     throw new Error("everything in module manager is static lol");
   }
 
   public static readonly modules: Mod[] = [
-    new Test()
+    new Test(),
+    this.antiBan
   ] as const;
 
   public static findModule(
