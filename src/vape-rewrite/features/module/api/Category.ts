@@ -1,5 +1,3 @@
-import logger from "../../../utils/loggers";
-
 export enum Category {
   COMBAT,
   RENDER,
@@ -53,14 +51,13 @@ const categoryDataSet: Record<Category, CategoryData> = {
 } as const;
 
 export class CategoryInfo {
+  #cachedIconURL?: string;
   public constructor(public data: CategoryData) { }
   public static for(c: Category): CategoryInfo {
     return categoryInfoSet[c] ??= new CategoryInfo(categoryDataSet[c]);
   }
   get iconURL(): string {
-    const rURL = GM_getResourceURL(this.data.icon);
-    logger.debug(`Icon ID for ${this.data.name} = ${this.data.icon} -> ${rURL}`);
-    return rURL;
+    return this.#cachedIconURL ??= GM_getResourceURL(this.data.icon);
   }
 }
 
