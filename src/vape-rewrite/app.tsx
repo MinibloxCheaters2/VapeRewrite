@@ -76,39 +76,36 @@ function CategoryPanel(category: Category, info: CategoryInfo) {
   </div>;
 }
 
-// Wrap all top-level await code in async IIFE
-(async () => {
-  // Inject global CSS
-  GM_addStyle(globalCss);
+// Inject global CSS
+GM_addStyle(globalCss);
 
-  // Wait for DOMContentLoaded if body doesn't exist yet
-  if (document.body === null) {
-    await new Promise<void>(res => {
-      document.addEventListener("DOMContentLoaded", () => res());
-    });
-  }
+// Wait for DOMContentLoaded if body doesn't exist yet
+if (document.body === null) {
+  await new Promise<void>(res => {
+    document.addEventListener("DOMContentLoaded", () => res());
+  });
+}
 
-  // Create a movable panel using @violentmonkey/ui
-  const panel = getPanel({
-    theme: 'dark',
-    style: stylesheet,
-  });
+// Create a movable panel using @violentmonkey/ui
+const panel = getPanel({
+  theme: 'dark',
+  style: stylesheet,
+});
 
-  Object.assign(panel.wrapper.style, {
-    top: '10vh',
-    left: '10vw',
-  });
-  panel.wrapper.addEventListener("mousedown", () => {
-    panel.wrapper.style.cursor = "grabbing";
-  });
-  panel.wrapper.addEventListener("mouseup", () => {
-    panel.wrapper.style.cursor = "auto";
-  });
-  panel.setMovable(true);
-  panel.show();
+Object.assign(panel.wrapper.style, {
+  top: '10vh',
+  left: '10vw',
+});
+panel.wrapper.addEventListener("mousedown", () => {
+  panel.wrapper.style.cursor = "grabbing";
+});
+panel.wrapper.addEventListener("mouseup", () => {
+  panel.wrapper.style.cursor = "auto";
+});
+panel.setMovable(true);
+panel.show();
 
-  // Render modules for each category
-  for (const [cat, info] of Object.entries(categoryInfoSet)) {
-    render(() => CategoryPanel(Category[cat], info), panel.body);
-  }
-})();
+// Render modules for each category
+for (const [cat, info] of Object.entries(categoryInfoSet)) {
+  render(() => CategoryPanel(Category[cat], info), panel.body);
+}

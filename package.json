@@ -22,7 +22,7 @@
     "@babel/runtime": "^7.28",
     "@violentmonkey/dom": "^2.2",
     "@violentmonkey/ui": "^0.7",
-    "rollup": "^4.55.1",
+    "rollup": "../gh/rollup-iife-tla/",
     "solid-js": "^1.9"
   },
   "devDependencies": {
@@ -36,7 +36,7 @@
     "@rollup/plugin-commonjs": "^29.0",
     "@rollup/plugin-json": "^6.1",
     "@rollup/plugin-node-resolve": "^16.0",
-    "@rollup/plugin-replace": "^6.0.2",
+    "@rollup/plugin-replace": "^6.0",
     "@rollup/plugin-terser": "^0.4",
     "@types/eslint": "^9.6",
     "@types/three": "^0.158.3",
@@ -60,7 +60,7 @@
     "prettier": "^3.4",
     "read-package-up": "^12.0",
     "rollup-plugin-postcss": "^4.0",
-    "rollup-plugin-userscript": "^1.1.0",
+    "rollup-plugin-userscript": "^1.1",
     "typescript": "^5.9",
     "typescript-eslint": "^8.53",
     "unocss": "^66.6"
