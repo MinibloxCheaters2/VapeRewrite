@@ -1,8 +1,8 @@
 import { storeName } from "../Client";
-
+import Bus from "./Bus";
+import ClientEvents from "./event/api/Events";
 export interface Store {
-  /** all the patch callbacks */
-  patchCallbacks: Record<string, (...args: unknown[]) => void>;
+  emitEvent<E extends keyof ClientEvents>(event: E, ...payload: ClientEvents[E] extends void ? [] : [ClientEvents[E]]): void;
   /** Saves this config to a config named {@link name} */
   saveConfig(name: string): Promise<void>;
   /** Loads a config named {@link switched}, or the current config's name if not specified. */
@@ -59,15 +59,21 @@ class ConfigHandler {
   }
 }
 
+export class EventBusInterop {
+  public static emitEvent<E extends keyof ClientEvents>(event: E, ...payload: ClientEvents[E] extends void ? [] : [ClientEvents[E]]) {
+    Bus.emit(event, ...payload);
+  }
+}
+
 export default class StoreInterop {
   /** DO NOT CALL THIS IF THE STORE IS ALREADY AN OBJECT. */
   private static initStore() {
     unsafeWindow[storeName] = {
-      patchCallbacks: {},
       saveConfig: ConfigHandler.saveConfig,
       loadConfig: ConfigHandler.loadConfig,
       exportConfig: ConfigHandler.exportConfig,
-      importConfig: ConfigHandler.importConfig
+      importConfig: ConfigHandler.importConfig,
+      emitEvent: EventBusInterop.emitEvent
     } satisfies Store;
   }
   public static initIfRequired() {

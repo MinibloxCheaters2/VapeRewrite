@@ -3,37 +3,8 @@
 import { CHECK_UNMATCHED_DUMPS, CHECK_UNMATCHED_REPLACEMENTS, LOG_APPLYING_REPLACEMENTS } from "../../debugControls";
 import logger from "../utils/loggers";
 import DUMPS from "./dump";
-
-/** Where should we place the code, or should we replace the entire match with that code? */
-enum Shift {
-  BEFORE,
-  REPLACE,
-  AFTER
-}
-
-interface Replacement {
-  replacement: string;
-  shift: Shift;
-}
-
-interface Replacements {
-  [key: string]: Replacement;
-}
-
-export const REPLACEMENTS: Replacements = {
-  'document.addEventListener("DOMContentLoaded",startGame,!1);': {
-    replacement: `setTimeout(function() {
-			const DOMContentLoaded_event = document.createEvent("Event");
-			DOMContentLoaded_event.initEvent("DOMContentLoaded", true, true);
-			document.dispatchEvent(DOMContentLoaded_event);
-		}, 0);`,
-    shift: Shift.AFTER
-  },
-  'this.game.unleash.isEnabled("disable-ads")': {
-    replacement: 'true',
-    shift: Shift.REPLACE
-  }
-};
+import { REPLACEMENTS } from "./replacements";
+import { Replacement, Shift } from "./replacementTypes";
 
 function handleReplacement(original: string, {replacement, shift}: Replacement): string {
   switch (shift) {
