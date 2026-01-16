@@ -6,7 +6,7 @@ import DUMPS from "./dump";
 import { REPLACEMENTS } from "./replacements";
 import { Replacement, Shift } from "./replacementTypes";
 
-function handleReplacement(original: string, {replacement, shift}: Replacement): string {
+function handleReplacement(original: string, { replacement, shift }: Replacement): string {
   switch (shift) {
     case Shift.BEFORE:
       return `${replacement}${original}`;
@@ -22,14 +22,14 @@ function handleReplacement(original: string, {replacement, shift}: Replacement):
 export default function modifyCode(code: string): string {
   let modified = code;
 
-	for (const [name, regex] of Object.entries(DUMPS)) {
-		const matched = modified.match(regex);
-		if (matched) {
-			for (let [, {replacement}] of Object.entries(REPLACEMENTS)) {
-				replacement = replacement.replaceAll(name, matched[1]);
-			}
-		}
-	}
+  for (const [name, regex] of Object.entries(DUMPS)) {
+    const matched = modified.match(regex);
+    if (matched) {
+      for (let [, { replacement }] of Object.entries(REPLACEMENTS)) {
+        replacement = replacement.replaceAll(name, matched[1]);
+      }
+    }
+  }
 
   if (CHECK_UNMATCHED_DUMPS) {
     const unmatchedDumps = Object.entries(DUMPS).filter(e => code.match(e[1]) === undefined);
@@ -48,8 +48,7 @@ export default function modifyCode(code: string): string {
       replacement,
       handleReplacement(replacement, code)
     );
-    // TODO: handle the 2nd occurrence, which inside a string in a varible called "jsContent".
-    // (screw you vector)
+    // note: 2nd occurrence is usually inside a string in a varible called "jsContent".
   }
   return modified;
 }
