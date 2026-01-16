@@ -69,6 +69,17 @@ clientVersion: VERSION$1
     }],
 
 
-    
+    // Enable Moderator-Only Features
+    ['getRankLevel(player.profile.rank)',{
+      replacement: '1000',
+      shift: Shift.REPLACE,
+    }],
+
+    // Enable Moderator-Private-World Bypass (altDown)
+    [/altDown\s*&&\s*getRankLevel\([\s\S]*?\)/g,{
+      replacement: 'altDown && 1000',
+      shift: Shift.REPLACE,
+    }]
+
   ],
 );
