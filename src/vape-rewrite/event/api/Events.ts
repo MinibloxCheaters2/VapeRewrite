@@ -1,7 +1,7 @@
 import { C2SPacket, S2CPacket } from "../../features/sdk/types/packetTypes";
 import CancelableWrapper from "./CancelableWrapper";
 
-interface ClientEvents {
+type ClientEvents = {
   tick: void;
   render: void;
   sendPacket: CancelableWrapper<C2SPacket>;
