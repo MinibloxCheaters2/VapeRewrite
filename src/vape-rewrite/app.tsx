@@ -62,7 +62,16 @@ function Spacer(props: ParentProps<{ size: string }>) {
 
 function CategoryPanel(category: Category, info: CategoryInfo) {
   return <div>
-    <img src={info.iconURL} loading='lazy' />
+    <div
+      style={{
+        display: "flex",
+        "align-items": "center",
+        gap: "0.5rem",
+        padding: "0.5rem 0.75rem"
+      }}>
+      <img src={info.iconURL} loading='lazy' />
+      <div>{info.data.name}</div>
+    </div>
     <div>
       {
         ModuleManager.findModules(P.byCategory(category)).map((m, i) => {
@@ -86,25 +95,6 @@ if (document.body === null) {
   });
 }
 
-// Create a movable panel using @violentmonkey/ui
-const panel = getPanel({
-  theme: 'dark',
-  style: stylesheet,
-});
-
-Object.assign(panel.wrapper.style, {
-  top: '10vh',
-  left: '10vw',
-});
-panel.wrapper.addEventListener("mousedown", () => {
-  panel.wrapper.style.cursor = "grabbing";
-});
-panel.wrapper.addEventListener("mouseup", () => {
-  panel.wrapper.style.cursor = "auto";
-});
-panel.setMovable(true);
-panel.show();
-
 // Render modules for each category
 for (const [cat, info] of Object.entries(categoryInfoSet)) {
   // Create a movable panel using @violentmonkey/ui
@@ -114,8 +104,8 @@ for (const [cat, info] of Object.entries(categoryInfoSet)) {
   });
 
   Object.assign(categoryPanel.wrapper.style, {
-    top: '10vh',
-    left: '10vw',
+    top: '67vh',
+    left: '67vw',
   });
   categoryPanel.wrapper.addEventListener("mousedown", () => {
     categoryPanel.wrapper.style.cursor = "grabbing";
@@ -127,3 +117,4 @@ for (const [cat, info] of Object.entries(categoryInfoSet)) {
   categoryPanel.show();
   render(() => CategoryPanel(cat as unknown as Category, info), categoryPanel.body);
 }
+
