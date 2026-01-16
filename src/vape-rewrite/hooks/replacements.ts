@@ -23,7 +23,7 @@ export const REPLACEMENTS: Replacements = {
     '})']: {
     replacement: `new SPacketLoginStart({
 requestedUuid: undefined,
-session: (window["${storeName}"].exposed.antiBan.enabled
+session: (window["${storeName}"].exposed.moduleManager.antiBan.enabled
 	? ""
 	: (localStorage.getItem(SESSION_TOKEN_KEY) ?? "")),
 hydration: "0",

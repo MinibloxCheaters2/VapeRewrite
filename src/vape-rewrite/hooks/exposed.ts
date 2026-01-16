@@ -15,8 +15,8 @@ export default {
   emitEvent<E extends keyof ClientEvents>(event: E, ...payload: ClientEvents[E] extends void ? [] : [ClientEvents[E]]) {
     Bus.emit(event, ...payload);
   },
-  get antiBan() {
-    return ModuleManager.antiBan;
+  get moduleManager() {
+    return ModuleManager;
   }
   // isModuleToggled(name: string): boolean {
   //   return ModuleManager.findModule(P.byName(name)).enabled;
