@@ -1,13 +1,13 @@
 import { storeName } from "../../../Client";
 import { Replacement, Shift } from "../replacementTypes";
+import {
+  ENABLE_ALL_WORLD_TYPES,
+  FORCE_ENABLE_RANK_GIFTING,
+  STAFF_PRIVATE_WORLD_BYPASS,
+  STAFF_PROFILE_SET,
+} from "./utils/staffFeatures";
 
 // an interesting note, remove the type parameters (<string | RegExp, Replacement>) and then TypeScript starts complaining about types not being the same.
-const replacementWorldTypes = `availableWorldTypes = {
-		[GameModeId.SURVIVAL]: [WorldGenerationType.NORMAL, WorldGenerationType.SKYBLOCK, WorldGenerationType.ONEBLOCK, WorldGenerationType.FLAT, WorldGenerationType.VOID, WorldGenerationType.DEBUG],
-		[GameModeId.CREATIVE]: [WorldGenerationType.NORMAL, WorldGenerationType.FLAT, WorldGenerationType.VOID, WorldGenerationType.SKYBLOCK, WorldGenerationType.ONEBLOCK, WorldGenerationType.DEBUG],
-		[GameModeId.ADVENTURE]: [WorldGenerationType.NORMAL, WorldGenerationType.FLAT, WorldGenerationType.VOID, WorldGenerationType.SKYBLOCK, WorldGenerationType.ONEBLOCK, WorldGenerationType.DEBUG]
-	},`;
-
 
 const FLAGS_TO_FORCE_ENABLE = [
   // Disables... ads.
@@ -25,7 +25,7 @@ const FLAGS_TO_FORCE_ENABLE = [
   "oitq",
   "blockhunt",
   "murder",
-  "blitzbuild"
+  "blitzbuild",
   //#endregion
 ];
 
@@ -67,35 +67,28 @@ clientVersion: VERSION$1
       shift: Shift.AFTER,
     }],
     // enable all game modes
-    [new RegExp(`index_browserExports\\.useFlag\\("${FLAGS_TO_FORCE_ENABLE.join("|")}"\\)`), {
-      replacement: "true",
-      shift: Shift.REPLACE
-    }],
+    [
+      new RegExp(
+        `index_browserExports\\.useFlag\\("${
+          FLAGS_TO_FORCE_ENABLE.join("|")
+        }"\\)`,
+      ),
+      {
+        replacement: "true",
+        shift: Shift.REPLACE,
+      },
+    ],
     // Enable all ranks gifting
-    ['jsxRuntimeExports.jsx("option",{value:"legend",children:"Legend"})', {
-      replacement:
-        `,jsxRuntimeExports.jsx("option", { value: "immortal", children: "Immortal" })`,
-      shift: Shift.AFTER,
-    }],
+    FORCE_ENABLE_RANK_GIFTING,
 
     // Enable Debug World Type
-    [/availableWorldTypes\s*=\s*\{[\s\S]*?\}\s*,/g, {
-      replacement: replacementWorldTypes,
-      shift: Shift.REPLACE,
-    }],
+    ENABLE_ALL_WORLD_TYPES,
 
+    // Enable Staff Profile Set
+    STAFF_PROFILE_SET,
 
-    // Enable Moderator-Only Features
-    ['getRankLevel(player.profile.rank)',{
-      replacement: '1000',
-      shift: Shift.REPLACE,
-    }],
 
     // Enable Moderator-Private-World Bypass (altDown)
-    [/altDown\s*&&\s*getRankLevel\([\s\S]*?\)/g,{
-      replacement: 'altDown && 1000',
-      shift: Shift.REPLACE,
-    }]
-
+    STAFF_PRIVATE_WORLD_BYPASS,
   ],
 );
