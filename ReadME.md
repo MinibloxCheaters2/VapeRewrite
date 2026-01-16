@@ -36,16 +36,15 @@ Simply put:
 
 Once I get to a point where I am ready to experiment with new things,
 I will most likely try to use wang's hooking method to make a new "hooking backend" that partially supports developer console injection.
-Another one, we might not even need to replace our hooking method for supporting developer console injection, we could be able to do:
+Another one, we might not even need to replace our hooking method for supporting developer console injection, we could:
 
 - Remove the entirety of the page and replace it with an iframe to Miniblox, which then we change up the scripts. (likely buggy, will 99%. likely work)
-- Remove the Miniblox main script, and then re-add it. (probably will spam errors, 30%. might work)
 
 And more, if I think.
 
 ## Development
 
-``` sh
+``` shell
 # Compile and watch
 $ npm run dev
 
