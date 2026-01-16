@@ -1,4 +1,4 @@
-import { storeName } from "../../../Client";
+import { storeName } from "../../../../Client";
 import { Replacement, Shift } from "../replacementTypes";
 import {
   ENABLE_ALL_WORLD_TYPES,
@@ -6,78 +6,34 @@ import {
   STAFF_PRIVATE_WORLD_BYPASS,
   STAFF_PROFILE_SET,
 } from "./utils/staffFeatures";
-
+import { FORCE_UNLEASH_FLAGS } from "./utils/unleashFlags/unleashFlags";
+import { CORE_REPLACEMENTS } from "./utils/core/core";
+import {
+  SHOW_USERNAMES_WITH_HIDDEN_CHARS,
+  SHOW_CLOUDS_SETTING,
+  SHOW_CLOUDS_UPDATE_SETTING,
+  EXTRA_OPTIONS,
+  YOU_HAVE_AURA_MODE,
+  ENABLE_CHUNK_CULLING_SETTING,
+  GENERATE_CLOUDS_REPLACEMENT,
+  TRAIL_AURA_REPLACEMENT,
+  ADVANCED_BROWSE_PLANETS_MODAL,
+  PLANET_MODEL_EACH_PANEL,
+  DEVELOPER_LEADERBOARD,
+  STATISTICS_MODE_STATS_REPLACEMENT
+} from "./utils/settingReplacement"
 // an interesting note, remove the type parameters (<string | RegExp, Replacement>) and then TypeScript starts complaining about types not being the same.
 
-const FLAGS_TO_FORCE_ENABLE = [
-  // Disables... ads.
-  "disable-ads",
-  //#region Enable all mini games
-  "skywars",
-  "spleef",
-  "eggwars",
-  "eggwars2",
-  "eggwars3",
-  "eggwars4",
-  "kitpvp",
-  "pvp",
-  "duels_bridge",
-  "oitq",
-  "blockhunt",
-  "murder",
-  "blitzbuild",
-  //#endregion
-];
+
 
 export const REPLACEMENTS = new Map<string | RegExp, Replacement>(
   [
-    ['document.addEventListener("DOMContentLoaded",startGame,!1);', {
-      replacement: `setTimeout(function() {
-			const DOMContentLoaded_event = document.createEvent("Event");
-			DOMContentLoaded_event.initEvent("DOMContentLoaded", true, true);
-			document.dispatchEvent(DOMContentLoaded_event);
-		}, 0);`,
-      shift: Shift.AFTER,
-    }],
+    ...CORE_REPLACEMENTS,
+    // enable all game modes and disable ads
+    ...FORCE_UNLEASH_FLAGS,
+    
 
-    [
-      "new SPacketLoginStart({" +
-      "requestedUuid:localStorage.getItem(REQUESTED_UUID_KEY)??void 0," +
-      'session:localStorage.getItem(SESSION_TOKEN_KEY)??"",' +
-      'hydration:localStorage.getItem("hydration")??"0",' +
-      'metricsId:localStorage.getItem("metrics_id")??"",' +
-      "clientVersion:VERSION$1" +
-      "})",
-      {
-        replacement: `new SPacketLoginStart({
-requestedUuid: undefined,
-session: (window["${storeName}"].exposed.moduleManager.antiBan.enabled
-	? ""
-	: (localStorage.getItem(SESSION_TOKEN_KEY) ?? "")),
-hydration: "0",
-metricsId: uuid$1(),
-clientVersion: VERSION$1
-})`,
-        shift: Shift.REPLACE,
-      },
-    ],
-    ["static sendPacket(u){", {
-      replacement:
-        `window["${storeName}"].exposed.emitEvent("sendPacket", window["${storeName}"].exposed.newCancelableWrapper(u));`,
-      shift: Shift.AFTER,
-    }],
-    // enable all game modes
-    [
-      new RegExp(
-        `index_browserExports\\.useFlag\\("${
-          FLAGS_TO_FORCE_ENABLE.join("|")
-        }"\\)`,
-      ),
-      {
-        replacement: "true",
-        shift: Shift.REPLACE,
-      },
-    ],
+
     // Enable all ranks gifting
     FORCE_ENABLE_RANK_GIFTING,
 
@@ -90,5 +46,28 @@ clientVersion: VERSION$1
 
     // Enable Moderator-Private-World Bypass (altDown)
     STAFF_PRIVATE_WORLD_BYPASS,
+    // Statistics replacements
+    STATISTICS_MODE_STATS_REPLACEMENT,
+    // Extra Options
+    EXTRA_OPTIONS,
+    // Show Usernames with Hidden Characters
+    SHOW_USERNAMES_WITH_HIDDEN_CHARS,
+    // Show Clouds Setting
+    SHOW_CLOUDS_SETTING,
+    SHOW_CLOUDS_UPDATE_SETTING,
+    // You Have Aura Mode
+    YOU_HAVE_AURA_MODE,
+    // Enable Chunk Culling Setting
+    ENABLE_CHUNK_CULLING_SETTING,
+    // Generate Clouds Replacement
+    GENERATE_CLOUDS_REPLACEMENT,
+    // Trail Aura Replacement
+    TRAIL_AURA_REPLACEMENT,
+    // Advanced Browse Planets Modal
+    ADVANCED_BROWSE_PLANETS_MODAL,
+    // Planet Model Each Panel
+    PLANET_MODEL_EACH_PANEL,
+    // Developer Leaderboard
+    DEVELOPER_LEADERBOARD
   ],
 );

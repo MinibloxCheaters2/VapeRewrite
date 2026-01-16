@@ -1,5 +1,5 @@
-import { storeName } from "../../../Client";
-import { Replacement, Shift } from "../replacementTypes";
+import { storeName } from "../../../../../Client";
+import { Replacement, Shift } from "../ ../replacementTypes";
 
 export const CORE_REPLACEMENTS: [string | RegExp, Replacement][] = [
   ['document.addEventListener("DOMContentLoaded",startGame,!1);', {

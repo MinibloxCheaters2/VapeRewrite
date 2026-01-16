@@ -18,7 +18,7 @@ export default {
   get moduleManager() {
     return ModuleManager;
   }
-  // isModuleToggled(name: string): boolean {
-  //   return ModuleManager.findModule(P.byName(name)).enabled;
-  // }
+   //isModuleToggled(name: string): boolean {
+   //  return ModuleManager.findModule(P.byName(name)).enabled;
+   //}
 }
