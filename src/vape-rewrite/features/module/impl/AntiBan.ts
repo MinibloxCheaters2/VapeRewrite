@@ -5,7 +5,7 @@ export default class AntiBan extends Mod {
   name = "AntiBan";
   category = Category.PLAYER;
   // TODO(AntiBan): implement account gen functionality
-  public static getToken(): string {
+  public static async getToken(): Promise<string> {
     return "";
   }
 }

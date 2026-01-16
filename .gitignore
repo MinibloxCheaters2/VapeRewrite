@@ -7,3 +7,4 @@ node_modules
 /types
 pnpm-lock.yaml
 bun.lock
+package-lock.json

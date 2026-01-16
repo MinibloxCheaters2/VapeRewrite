@@ -9,7 +9,6 @@ import { readPackageUp } from "read-package-up";
 import { defineConfig } from "rollup";
 import postcssPlugin from "rollup-plugin-postcss";
 import userscript from "rollup-plugin-userscript";
-import obfuscator from 'rollup-plugin-obfuscator';
 
 const { packageJson } = await readPackageUp();
 const extensions = [".ts", ".tsx", ".mjs", ".js", ".jsx"];
@@ -50,32 +49,6 @@ export default defineConfig(
       jsonPlugin(),
       process.env.NODE_ENV === "production"
         ? terser({ ecma: 2020, ie8: false })
-        : undefined,
-      process.env.NODE_ENV === "obfusproduction"
-        ? obfuscator({
-          exclude: /solid-js|@violentmonkey/,
-
-            options:{
-              compact: true,
-              controlFlowFlattening: true,
-              controlFlowFlatteningThreshold: 0.6,
-              numbersToExpressions: true,
-              deadCodeInjection: true,
-              deadCodeInjectionThreshold: 0.05,
-              simplify: false,
-              selfDefending: false,
-              target: 'browser',
-              stringArray: true,
-              stringArrayThreshold: 0.5,
-              stringArrayWrappersParametersMaxCount: 2,
-              stringArrayWrappersChainedCalls: true,
-              stringArrayShuffle: true,
-              stringArrayIndexShift: true,
-              renameGlobals: false,
-              debugProtection: false,
-              stringArrayRotate: true
-            }
-        })
         : undefined,
       userscript((meta) => {
         const newMeta = meta

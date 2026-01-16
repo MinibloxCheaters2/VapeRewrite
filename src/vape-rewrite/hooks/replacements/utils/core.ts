@@ -1,5 +1,5 @@
-import { storeName } from "../../../../../Client";
-import { MultipleReplacements, Shift } from "../../../replacementTypes";
+import { storeName } from "../../../../Client";
+import { MultipleReplacements, Shift } from "../../replacementTypes";
 
 export const CORE_REPLACEMENTS: MultipleReplacements = [
   ['document.addEventListener("DOMContentLoaded",startGame,!1);', {
@@ -23,7 +23,7 @@ export const CORE_REPLACEMENTS: MultipleReplacements = [
       replacement: `new SPacketLoginStart({
   requestedUuid: undefined,
   session: (window["${storeName}"].exposed.moduleManager.antiBan.enabled
-    ? ""
+    ? await window["${storeName}"].exposed.moduleManager.antiBan.getToken()
     : (localStorage.getItem(SESSION_TOKEN_KEY) ?? "")),
   hydration: "0",
   metricsId: uuid$1(),
@@ -37,16 +37,6 @@ export const CORE_REPLACEMENTS: MultipleReplacements = [
     replacement:
       `window["${storeName}"].exposed.emitEvent("sendPacket", window["${storeName}"].exposed.newCancelableWrapper(u));`,
     shift: Shift.AFTER,
-  }],
-
-  ['updatePlayerMoveState(),this.isUsingItem()', {
-    replacement: `updatePlayerMoveState(),(this.isUsingItem() && false)`,
-    shift: Shift.REPLACE
-  }],
-
-  ["S&&!this.isUsingItem()", {
-    replacement: 'S&&!(this.isUsingItem() && false)',
-    shift: Shift.REPLACE
   }]
 ];
 
