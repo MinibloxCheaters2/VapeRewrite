@@ -1,5 +1,5 @@
-import { storeName } from "../../Client";
-import { Replacement, Shift } from "./replacementTypes";
+import { storeName } from "../../../Client";
+import { Replacement, Shift } from "../replacementTypes";
 
 // an interesting note, remove the type parameters (<string | RegExp, Replacement>) and then TypeScript starts complaining about types not being the same.
 const replacementWorldTypes = `availableWorldTypes = {

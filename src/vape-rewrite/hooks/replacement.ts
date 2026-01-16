@@ -3,7 +3,7 @@
 import { CHECK_UNMATCHED_DUMPS, CHECK_UNMATCHED_REPLACEMENTS, LOG_APPLYING_REPLACEMENTS } from "../../debugControls";
 import logger from "../utils/loggers";
 import DUMPS from "./dump";
-import { REPLACEMENTS } from "./replacements";
+import { REPLACEMENTS } from "./replacements/replacements.ts";
 import { Replacement, Shift } from "./replacementTypes";
 
 function handleReplacement(original: string, { replacement, shift }: Replacement): string {
