@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { storeName } from "../../../../Client";
 import { Replacement, Shift } from "../replacementTypes";
 import {
@@ -6,7 +7,7 @@ import {
   STAFF_PRIVATE_WORLD_BYPASS,
   STAFF_PROFILE_SET,
 } from "./utils/staffFeatures";
-import { FORCE_UNLEASH_FLAGS } from "./utils/unleashFlags/unleashFlags";
+import { FORCE_ENABLE_REPLACEMENT } from "./utils/flags";
 import { CORE_REPLACEMENTS } from "./utils/core/core";
 import {
   SHOW_USERNAMES_WITH_HIDDEN_CHARS,
@@ -30,7 +31,7 @@ export const REPLACEMENTS = new Map<string | RegExp, Replacement>(
   [
     ...CORE_REPLACEMENTS,
     // enable all game modes and disable ads
-    ...FORCE_UNLEASH_FLAGS,
+    ...FORCE_ENABLE_REPLACEMENT,
     
 
 

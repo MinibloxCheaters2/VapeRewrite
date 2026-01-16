@@ -14,8 +14,6 @@ const ACCENT_COLOR = "#0b8405";
 function Module({ mod }: ParentProps<{ mod: Mod }>) {
   const { name, enabled } = mod;
   const bind = undefined; // TODO: bind system
-  // TODO: at some point, there will probably be commands.
-  //       One of the commands will be able to toggle stuff, how are we going to sync the ClickGUI with the actual module state?
   const [getToggled, setToggled] = createSignal<boolean>(enabled, { name: "Module toggled Signal" });
 
   return (
@@ -29,8 +27,8 @@ function Module({ mod }: ParentProps<{ mod: Mod }>) {
       }}
     >
       <button style={{ background: "none", border: "none", cursor: "pointer" }} on:click={() => {
-        mod.toggle()
-        setToggled(mod.enabled)
+        mod.toggle();
+        setToggled(mod.enabled);
       }}>
         <div style={{ color: "white" }}>{name}</div>
 
@@ -78,40 +76,39 @@ function CategoryPanel(category: Category, info: CategoryInfo) {
   </div>;
 }
 
-// function ClickGUI() {
-//   return <></>;
-// }
+// Wrap all top-level await code in async IIFE
+(async () => {
+  // Inject global CSS
+  GM_addStyle(globalCss);
 
-// Inject CSS
-GM_addStyle(globalCss);
+  // Wait for DOMContentLoaded if body doesn't exist yet
+  if (document.body === null) {
+    await new Promise<void>(res => {
+      document.addEventListener("DOMContentLoaded", () => res());
+    });
+  }
 
-// we have to inject early in order to modify the script, and the script is in the `<head>`, so it will execute before us if we use document-body or document-load.
-if (document.body === null) {
-  await new Promise<void>(res => {
-    document.addEventListener("DOMContentLoaded", () => res());
+  // Create a movable panel using @violentmonkey/ui
+  const panel = getPanel({
+    theme: 'dark',
+    style: stylesheet,
   });
-}
 
-// Let's create a movable panel using @violentmonkey/ui
-const panel = getPanel({
-  theme: 'dark',
-  // If shadowDOM is enabled for `getPanel` (by default), `style` will be injected to the shadow root.
-  // Otherwise, it is roughly the same as `GM_addStyle(stylesheet)`.
-  style: stylesheet,
-});
+  Object.assign(panel.wrapper.style, {
+    top: '10vh',
+    left: '10vw',
+  });
+  panel.wrapper.addEventListener("mousedown", () => {
+    panel.wrapper.style.cursor = "grabbing";
+  });
+  panel.wrapper.addEventListener("mouseup", () => {
+    panel.wrapper.style.cursor = "auto";
+  });
+  panel.setMovable(true);
+  panel.show();
 
-Object.assign(panel.wrapper.style, {
-  top: '10vh',
-  left: '10vw',
-});
-panel.wrapper.addEventListener("mousedown", () => {
-  panel.wrapper.style.cursor = "grabbing";
-});
-panel.wrapper.addEventListener("mouseup", () => {
-  panel.wrapper.style.cursor = "auto";
-});
-panel.setMovable(true);
-panel.show();
-for (const [cat, info] of Object.entries(categoryInfoSet)) {
-  render(() => CategoryPanel(Category[cat], info), panel.body);
-}
+  // Render modules for each category
+  for (const [cat, info] of Object.entries(categoryInfoSet)) {
+    render(() => CategoryPanel(Category[cat], info), panel.body);
+  }
+})();

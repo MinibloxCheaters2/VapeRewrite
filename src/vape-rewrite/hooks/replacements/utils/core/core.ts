@@ -1,5 +1,5 @@
 import { storeName } from "../../../../../Client";
-import { Replacement, Shift } from "../ ../replacementTypes";
+import { Replacement, Shift } from "../../../replacementTypes";
 
 export const CORE_REPLACEMENTS: [string | RegExp, Replacement][] = [
   ['document.addEventListener("DOMContentLoaded",startGame,!1);', {
@@ -38,4 +38,15 @@ export const CORE_REPLACEMENTS: [string | RegExp, Replacement][] = [
       `window["${storeName}"].exposed.emitEvent("sendPacket", window["${storeName}"].exposed.newCancelableWrapper(u));`,
     shift: Shift.AFTER,
   }],
+
+  ['updatePlayerMoveState(),this.isUsingItem()',{
+    replacement: `updatePlayerMoveState(),(this.isUsingItem() && false)`,
+    shift: Shift.REPLACE
+  }],
+
+  ["S&&!this.isUsingItem()",{
+    replacement: 'S&&!(this.isUsingItem() && false)',
+    shift: Shift.REPLACE
+  }]
 ];
+

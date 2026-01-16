@@ -4,7 +4,7 @@
  * @module
  */
 
-import { Replacement, Shift } from "../replacementTypes";
+import { Replacement, Shift } from "../../replacementTypes";
 
 
 const FLAGS_TO_FORCE_ENABLE = [

@@ -1,5 +1,6 @@
+/* eslint-disable */
 import { storeName } from "../../../../Client";
-import { Replacement, Shift } from "../replacementTypes";
+import { Replacement, Shift } from "../../replacementTypes";
 
 export const SHOW_USERNAMES_WITH_HIDDEN_CHARS: [RegExp, Replacement] = [
     /function\s+stripCrazyGamesSuffix\s*\(\w+\)\s*\{[\s\S]*?return[\s\S]*?\}/g,
@@ -82,7 +83,7 @@ export const GENERATE_CLOUDS_REPLACEMENT: [RegExp, Replacement] = [
     /generateClouds\s*\(\s*\w+\s*\)\s*\{\s*for[\s\S]*?;/g,
     {
         replacement:`generateClouds(u) {
-		for (const h of this.clouds) this.gameScene.scene.remove(h), h.visible = Options$1.clouds.value;`
+		for (const h of this.clouds) this.gameScene.scene.remove(h), h.visible = Options$1.clouds.value;`,
         shift: Shift.REPLACE,
     }
 ]
@@ -505,7 +506,7 @@ export const ADVANCED_BROWSE_PLANETS_MODAL: [RegExp, Replacement] = [
 ]
 
 export const PLANET_MODEL_EACH_PANEL: [RegExp, Replacement] = [
-    /const PlanetItem\s*=\s*\w+\s*=>\s*\{[\s\S]*?\}\)\]\s*\}\)\]\s*\}\s*\)\s*\}\s*\)\s*\}\s*,/g.
+    /const PlanetItem\s*=\s*\w+\s*=>\s*\{[\s\S]*?\}\)\]\s*\}\)\]\s*\}\s*\)\s*\}\s*\)\s*\}\s*,/g,
     {
         replacement: planetModelEachPanelReplacement,
         shift: Shift.REPLACE,
@@ -539,5 +540,5 @@ export const STATISTICS_MODE_STATS_REPLACEMENT: [RegExp, Replacement] = [
     {
         replacement: modeStatsReplacement,
         shift: Shift.REPLACE,
-    }
-]
+    },
+];
