@@ -5,9 +5,9 @@ import globalCss from './style.css';
 // CSS modules
 import { stylesheet } from './style.module.css';
 import { createSignal, ParentProps } from 'solid-js';
-import ModuleManager from './features/module/api/ModuleManager';
+import ModuleManager, { P } from './features/module/api/ModuleManager';
 import Mod from './features/module/api/Module';
-
+import Category, { CategoryInfo, categoryInfoSet } from './features/module/api/Category';
 
 const ACCENT_COLOR = "#0b8405";
 
@@ -62,16 +62,19 @@ function Spacer(props: ParentProps<{ size: string }>) {
   return <div style={`height: ${props.size}`}></div>
 }
 
-function ClickGUIPanel() {
+function CategoryPanel(category: Category, info: CategoryInfo) {
   return <div>
-    {
-      ModuleManager.modules.map((m, i) => {
-        return <div>
-          <Module mod={m}></Module>
-          {i >= ModuleManager.modules.length - 1 ? undefined : <Spacer size={"4px"}></Spacer>}
-        </div>;
-      })
-    }
+    <img src={info.iconURL} loading='lazy' />
+    <div>
+      {
+        ModuleManager.findModules(P.byCategory(category)).map((m, i) => {
+          return <div>
+            <Module mod={m}></Module>
+            {i >= ModuleManager.modules.length - 1 ? undefined : <Spacer size={"4px"}></Spacer>}
+          </div>;
+        })
+      }
+    </div>
   </div>;
 }
 
@@ -109,4 +112,6 @@ panel.wrapper.addEventListener("mouseup", () => {
 });
 panel.setMovable(true);
 panel.show();
-render(ClickGUIPanel, panel.body);
+for (const [cat, info] of Object.entries(categoryInfoSet)) {
+  render(() => CategoryPanel(Category[cat], info), panel.body);
+}
