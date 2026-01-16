@@ -16,38 +16,55 @@ export interface Store {
   importConfig(): Promise<void>;
 };
 
-class Config {
-  public name: string;
+export class ModuleConfig {
+  // TODO: module settings
+  constructor(public toggled: boolean/*, settings: Setting[]*/) {}
+}
 
-  serialize(): string {
-    return JSON.stringify({
-      // TODO: serialization...
-    });
+export class Config {
+  public constructor(
+    /** a map of module name -> module config */
+    public modules: Record<string, ModuleConfig>
+  ) {}
+
+  public serialize(): string {
+    return JSON.stringify(this.modules);
   }
-  static deserialize(json: string): Config {
-    // TODO: deserialization
-    const data = JSON.parse(json);
-    // TODO: this intentionally will never execute,
-    //       it's just a template for later actually implementing deserializing configs.
-    if (Math.random() > 1) {
-      console.log(data);
-    }
-    return new Config();
+
+  public static deserialize(name: string, json: string): Config {
+    const data: Record</* module name*/string, ModuleConfig> = JSON.parse(json);
+    return new Config(data);
+  }
+}
+
+export class NamedConfig extends Config {
+  public constructor(
+    /** the name of the config */
+    public name: string,
+    /** a map of module name -> module config */
+    public modules: Record<string, ModuleConfig>
+  ) {
+    super(modules);
+  }
+
+  public static deserialize(name: string, json: string): NamedConfig {
+    const data: Record</* module name*/string, ModuleConfig> = JSON.parse(json);
+    return new NamedConfig(name, data);
   }
 }
 
 function configKey(n: string): string { return `vapeConfig${n}` }
 
 class ConfigHandler {
-  public static loadedConfig: Config;
+  public static loadedConfig: NamedConfig;
   /** Saves this config to a config named {@link name} */
   public static async saveConfig(name: string): Promise<void> {
     GM_setValue(configKey(name), this.loadedConfig.serialize());
   }
   /** Loads a config named {@link name}, or the current config's name if not specified. */
   public static async loadConfig(name: string = this.loadedConfig.name): Promise<void> {
-    const cfg = GM_getValue(configKey(name),  this.loadedConfig.serialize());
-    this.loadedConfig = Config.deserialize(cfg);
+    const cfg = GM_getValue(configKey(name), this.loadedConfig.serialize());
+    this.loadedConfig = NamedConfig.deserialize(name, cfg);
   }
   /** exports the currently loaded config to the clipboard */
   public static exportConfig(): void {
