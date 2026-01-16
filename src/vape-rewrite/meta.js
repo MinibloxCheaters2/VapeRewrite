@@ -9,7 +9,7 @@
 // @match       https://bloxbattles.io/*
 // @match       https://blockcraft.victorwei.com/*
 // @match       https://blockcraft.online/*
-// @icon        https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/favicon.png
+// @icon        https://miniblox.io/favicon.png
 // @grant       GM_addStyle
 // @grant       GM_getValue
 // @grant       GM_setValue
