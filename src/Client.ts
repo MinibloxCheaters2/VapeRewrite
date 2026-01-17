@@ -19,7 +19,7 @@ function randomIntInclusive(min: number, max: number) {
   return Math.floor(randomNumber * (ma - mi + 1)) + mi;
 }
 
-export const storeName = NO_STORE_NAME_RANDOMIZATION ? "VapeStore" : randomString(Math.min(randomIntInclusive(4, 9)))+ "_miniblox.io." + randomString(Math.min(randomIntInclusive(4, 9)))+ "_sendPacket()";
+export const storeName = NO_STORE_NAME_RANDOMIZATION ? "VapeStore" : randomString(Math.min(randomIntInclusive(4, 9)))+ "_miniblox.io." + randomString(Math.min(randomIntInclusive(4, 9)))+ "_sendPacket()" + "._8wekyb3d8bbwe";
 
 if (NO_STORE_NAME_RANDOMIZATION) logger.warn("Store name randomization disabled, only disable store name randomization for debugging or development purposes!");
 if (LOG_STORE_NAME) logger.info(`Store name is ${storeName}`);
