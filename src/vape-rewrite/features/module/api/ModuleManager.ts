@@ -6,6 +6,7 @@ import NoSlow from "../impl/blatant/NoSlow.js";
 import Phase from "../impl/blatant/Phase.js";
 import Scaffold from "../impl/blatant/Scaffold.js";
 import AutoRespawn from "../impl/utility/AutoRespawn.js";
+import FilterBypass from "../impl/utility/FilterBypass.js";
 
 /** some basic predicates for finding modules */
 export const P = {
@@ -34,7 +35,8 @@ export default class ModuleManager {
     this.antiBan,
     this.noSlow,
     this.phase,
-    new Scaffold()
+    new Scaffold(),
+    new FilterBypass()
   ] as const;
 
   public static findModule(
