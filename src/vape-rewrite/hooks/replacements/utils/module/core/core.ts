@@ -35,7 +35,7 @@ export const CORE_REPLACEMENTS: MultipleReplacements = [
 
   ["static sendPacket(u){", {
     replacement:
-      `console.log("packet");`,
+      `${EXPOSED}.emitEvent("sendPacket", ${EXPOSED}.newCancelableWrapper(u));`,
     shift: Shift.AFTER,
   }]
 ];

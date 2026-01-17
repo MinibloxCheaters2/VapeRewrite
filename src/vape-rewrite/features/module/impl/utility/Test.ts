@@ -15,11 +15,13 @@ export default class Test extends Mod {
   }
 
   @Subscribe("tick")
-  private onTick() {}
+  private onTick() {
+    logger.debug("Hello");
+  }
 
   @Subscribe("sendPacket")
   private onSendPacket(packet: CancelableWrapper<C2SPacket>) {
-    logger.debug("niggalink packet sent: ", packet);
+    logger.debug("packet sent: ", packet);
   }
 
   public onDisable(): void {
