@@ -99,45 +99,35 @@ if (document.body === null) {
 }
 
 let catIdx = 0;
-const PER_CATEGORY_SPACING = 12;
-const LEFT_START_POS = -2;
 // let lastLength = 0;
 
-const osc = new OffscreenCanvas(420, 420);
-
-function measureText(text: string, font: string): TextMetrics {
-  const ctx = osc.getContext("2d");
-  ctx.font = font;
-  return ctx.measureText(text);
-}
-
-function getCssStyle(element: Element, prop: string) {
-  return window.getComputedStyle(element, null).getPropertyValue(prop);
-}
-
-function getCanvasFont(el = document.body) {
-  const fontWeight = getCssStyle(el, "font-weight") ?? "normal";
-  const fontSize = getCssStyle(el, "font-size") ?? "16px";
-  const fontFamily = getCssStyle(el, "font-family") ?? "Times New Roman";
-
-  return `${fontWeight} ${fontSize} ${fontFamily}`;
-}
+const priority = {
+  combat: 2,
+  blatant: 3,
+  render: 4,
+  utility: 5,
+  world: 6,
+  inventory: 7,
+  minigames: 8,
+} as const;
 
 // Render modules for each category
-for (const [cat, info] of Object.entries(categoryInfoSet)) {
+for (const [cat, info] of Object.entries(categoryInfoSet).sort(([an], [bn]) => {
+  return (priority[an] ?? 99) - (priority[bn] ?? 99);
+})) {
   // Create a movable panel using @violentmonkey/ui
   const categoryPanel = getPanel({
     theme: 'dark',
     style: stylesheet,
   });
 
-  const font = getCanvasFont(categoryPanel.wrapper);
-  const tl = measureText(info.data.name, font);
   // lastLength = tl.width;
+  const left = 4 + catIdx++ % 8 * 138;
+  const top = 60 + (catIdx > 6 ? 360 : 0);
 
   Object.assign(categoryPanel.wrapper.style, {
-    top: "7vh",
-    left: `${LEFT_START_POS + (catIdx++ * PER_CATEGORY_SPACING) + (tl.width/2)}vw`,
+    top: `${top}px`,
+    left: `${left}px`,
   });
 
   categoryPanel.wrapper.addEventListener("mousedown", () => {

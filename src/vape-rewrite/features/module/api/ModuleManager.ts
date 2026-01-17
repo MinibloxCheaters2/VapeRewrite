@@ -1,7 +1,11 @@
-import AntiBan from "../impl/AntiBan.js";
-import Test from "../impl/Test.js";
+import AntiBan from "../impl/blatant/AntiBan.js";
+import Test from "../impl/utility/Test.js";
 import Mod from "./Module.js";
 import Category from "./Category.js";
+import NoSlow from "../impl/blatant/NoSlow.js";
+import Phase from "../impl/blatant/Phase.js";
+import Scaffold from "../impl/blatant/Scaffold.js";
+import AutoRespawn from "../impl/utility/AutoRespawn.js";
 
 /** some basic predicates for finding modules */
 export const P = {
@@ -24,7 +28,11 @@ export default class ModuleManager {
 
   public static readonly modules: Mod[] = [
     new Test(),
-    this.antiBan
+    new AutoRespawn(),
+    this.antiBan,
+    new NoSlow(),
+    new Phase(),
+    new Scaffold()
   ] as const;
 
   public static findModule(
