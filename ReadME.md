@@ -42,10 +42,6 @@ Another one, we might not even need to replace our hooking method for supporting
 
 And more, if I think.
 
-## devlogs:
-
-note - go to todo and please port my newfound flight bypass to it ;D
-
 ## Development
 
 ``` shell
