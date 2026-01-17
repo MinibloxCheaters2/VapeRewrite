@@ -17,11 +17,11 @@ export default {
   },
   get moduleManager() {
     return ModuleManager;
-  }
+  },
   get dump() {
     return dump;
   }
-   //isModuleToggled(name: string): boolean {
-   //  return ModuleManager.findModule(P.byName(name)).enabled;
-   //}
+  //isModuleToggled(name: string): boolean {
+  //  return ModuleManager.findModule(P.byName(name)).enabled;
+  //}
 }
