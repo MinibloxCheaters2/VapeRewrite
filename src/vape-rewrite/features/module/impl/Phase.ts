@@ -9,4 +9,5 @@ export default class AutoRespawn extends Mod {
 
   public onDisable(): void {
   }
+  // All functionality will be in hooking-replacements
 }

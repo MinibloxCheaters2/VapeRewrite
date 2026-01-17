@@ -1,4 +1,4 @@
-import { MultipleReplacements, Shift } from "../../replacementTypes";
+import { MultipleReplacements, Shift } from "../../../replacementTypes";
 
 export const NOSLOW_REPLACEMENTS: MultipleReplacements = [
   ['updatePlayerMoveState(),this.isUsingItem()', {

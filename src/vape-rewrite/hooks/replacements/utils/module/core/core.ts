@@ -1,5 +1,5 @@
-import { storeName } from "../../../../Client";
-import { MultipleReplacements, Shift } from "../../replacementTypes";
+import { storeName } from "../../../../../../Client";
+import { MultipleReplacements, Shift } from "../../../../replacementTypes";
 
 export const CORE_REPLACEMENTS: MultipleReplacements = [
   ['document.addEventListener("DOMContentLoaded",startGame,!1);', {

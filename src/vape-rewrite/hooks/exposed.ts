@@ -8,6 +8,7 @@ import CancelableWrapper from "../event/api/CancelableWrapper";
 import ClientEvents from "../event/api/Events";
 import ModuleManager from "../features/module/api/ModuleManager";
 
+
 export default {
   newCancelableWrapper<T>(data: T): CancelableWrapper<T> {
     return new CancelableWrapper(data);

@@ -6,7 +6,7 @@ import {
   STAFF_PROFILE_SET,
 } from "./utils/staffFeatures";
 import { FORCE_ENABLE_REPLACEMENT } from "./utils/flags";
-import { CORE_REPLACEMENTS } from "./utils/core";
+import { CORE_REPLACEMENTS } from "./utils/modules/core/core";
 import {
   SHOW_USERNAMES_WITH_HIDDEN_CHARS,
   SHOW_CLOUDS_SETTING,
@@ -21,7 +21,7 @@ import {
   DEVELOPER_LEADERBOARD,
   STATISTICS_MODE_STATS_REPLACEMENT
 } from "./utils/settingReplacement"
-import { NOSLOW_REPLACEMENTS } from "./utils/noslow";
+import { NOSLOW_REPLACEMENTS } from "./utils/modeules/noslow";
 // an interesting note, remove the type parameters (<string | RegExp, Replacement>) and then TypeScript starts complaining about types not being the same.
 
 
