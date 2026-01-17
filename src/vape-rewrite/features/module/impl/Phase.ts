@@ -4,10 +4,5 @@ import Mod from "../api/Module";
 export default class AutoRespawn extends Mod {
   public name = "Phase";
   public category = Category.UTILITY;
-  public onEnable(): void {
-  }
-
-  public onDisable(): void {
-  }
   // All functionality will be in hooking-replacements
 }
