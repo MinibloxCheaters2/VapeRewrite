@@ -14,24 +14,24 @@ export default class AntiBan extends Mod {
   category = Category.BLATANT;
 
   // TODO: replace this with settings stuff when settings are implemented
-  static get accGenIntegrationEnabled(): boolean {
+  get accGenIntegrationEnabled(): boolean {
     return true;
   }
 
   // TODO: replace this with settings stuff when settings are implemented
-  static get apiServerLocation(): URL {
+  get apiServerLocation(): URL {
     return new URL("http://localhost:3785/");
   }
 
-  static get generateMinibloxAccountEndpoint(): URL {
+  get generateMinibloxAccountEndpoint(): URL {
     return new URL("/v1/generate/miniblox", this.apiServerLocation);
   }
 
-  static get v1TestEndpoint(): URL {
+  get v1TestEndpoint(): URL {
     return new URL("/v1/test", this.apiServerLocation);
   }
 
-  private static async isAPIServerOnline(): Promise<boolean> {
+  private async isAPIServerOnline(): Promise<boolean> {
     return fetch(this.v1TestEndpoint, {
       method: "HEAD"
     }).then(() => true).catch(e => {
@@ -41,7 +41,7 @@ export default class AntiBan extends Mod {
   }
 
   /** note: it's recommended to default to a guest account if this fails or the API server is offline. */
-  private static async generateAccount(): Promise<AccountData> {
+  private async generateAccount(): Promise<AccountData> {
     const r = await fetch(this.generateMinibloxAccountEndpoint);
     if (!r.ok) {
       throw new Error("Failed to generate account, check API server logs!");
@@ -50,7 +50,7 @@ export default class AntiBan extends Mod {
   }
 
   // TODO(AntiBan): implement account gen functionality
-  public static async getToken(): Promise<string> {
+  public async getToken(): Promise<string> {
     if (this.accGenIntegrationEnabled && this.apiServerLocation && await this.isAPIServerOnline()) {
       const acc = this.generateAccount().then(r => r.session).catch(e => {
         logger.error("Failed to create an account:", e);
