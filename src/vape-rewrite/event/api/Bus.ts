@@ -89,17 +89,12 @@ export function Subscribe<K extends keyof ClientEvents, A = ClientEvents[K]>(
 ) {
   return function (
     target: unknown,
-    propertyKey: string,
-    descriptor: TypedPropertyDescriptor<
-      A extends void ? () => void : (payload: ClientEvents[K]) => void
-    >,
+    propertyKey: ClassMethodDecoratorContext<unknown, A extends void ? () => void : (e: A) => void> & { name: string; }
   ) {
     // Store subscriptions directly on the prototype (no metadata needed)
     const subscriptions: Subscription<ClientEvents>[] =
       (target as Idk<Record<string, unknown>>).__subscriptions ||
       ((target as Idk<Record<string, unknown>>).__subscriptions = []);
-    subscriptions.push({ event, method: propertyKey });
-
-    return descriptor;
+    subscriptions.push({ event, method: propertyKey.name });
   };
 }
