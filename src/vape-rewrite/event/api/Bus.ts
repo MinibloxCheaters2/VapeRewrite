@@ -57,9 +57,7 @@ export default class EventBus<Events extends Record<string, unknown>> {
   registerSubscriber<T>(instance: T) {
     // Access subscriptions from the prototype
     const proto = instance as Idk<Record<string, unknown>>;
-    console.info("prototype of instance =", proto);
     const subscriptions: Subscription<Events>[] = proto.__subscriptions;
-    console.info("subscriptions =", subscriptions);
     if (subscriptions) {
       for (const sub of subscriptions) {
         const handler = instance[sub.method].bind(instance);
@@ -68,7 +66,6 @@ export default class EventBus<Events extends Record<string, unknown>> {
           event: sub.event,
           handler,
         });
-        console.info(`this.on(${sub}.${sub.event as string}, ${handler})`);
         this.on(sub.event as keyof Events, handler);
       }
     }
