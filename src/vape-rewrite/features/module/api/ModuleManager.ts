@@ -21,6 +21,8 @@ export default class ModuleManager {
   // only important ish modules (ones that will get referenced in other modules)
   // should be as a variable instead of in the array
   public static antiBan = new AntiBan();
+  public static noSlow = new NoSlow();
+  public static phase = new Phase();
 
   constructor() {
     throw new Error("everything in module manager is static lol");
@@ -30,8 +32,8 @@ export default class ModuleManager {
     new Test(),
     new AutoRespawn(),
     this.antiBan,
-    new NoSlow(),
-    new Phase(),
+    this.noSlow,
+    this.phase,
     new Scaffold()
   ] as const;
 

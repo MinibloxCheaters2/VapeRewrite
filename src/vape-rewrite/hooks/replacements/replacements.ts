@@ -22,10 +22,8 @@ import {
   STATISTICS_MODE_STATS_REPLACEMENT
 } from "./utils/settingReplacement"
 import { NOSLOW_REPLACEMENTS } from "./utils/module/noslow";
+
 // an interesting note, remove the type parameters (<string | RegExp, Replacement>) and then TypeScript starts complaining about types not being the same.
-
-
-
 export const REPLACEMENTS = new Map<string | RegExp, Replacement>(
   [
     ...CORE_REPLACEMENTS,
