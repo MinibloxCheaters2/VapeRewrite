@@ -31,7 +31,7 @@ export default defineConfig(
             import.meta.resolve("@babel/plugin-transform-runtime"),
             {
               useESModules: true,
-              version: "^7.5.0", // see https://github.com/babel/babel/issues/10261#issuecomment-514687857
+              version: "^7.28.6", // see https://github.com/babel/babel/issues/10261#issuecomment-514687857
             },
           ],
         ],
@@ -73,6 +73,11 @@ export default defineConfig(
   })),
 );
 
+/**
+ *
+ * @param {((string | (id: string) => boolean) | RegExp)[]} externals
+ * @returns {import("rollup").IsExternal}
+ */
 function defineExternal(externals) {
   return (id) =>
     externals.some((pattern) => {
