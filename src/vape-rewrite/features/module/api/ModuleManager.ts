@@ -1,6 +1,7 @@
 import AntiBan from "../impl/AntiBan.js";
 import Test from "../impl/Test.js";
-import Mod, { Category } from "./Module.js";
+import Mod from "./Module.js";
+import Category from "./Category.js";
 
 /** some basic predicates for finding modules */
 export const P = {
@@ -9,8 +10,7 @@ export const P = {
   /** filters to find a specific module in the same state (mod.enabled === enabled) */
   byEnabled: (enabled: boolean) => (module: Mod) => module.enabled === enabled,
   /** filters to find a specific module by its category */
-  byCategory: (category: Category) => (module: Mod) =>
-    module.category === category,
+  byCategory: (category: Category) => (module: Mod) => module.category === category,
 };
 
 export default class ModuleManager {

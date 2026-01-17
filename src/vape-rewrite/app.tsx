@@ -8,6 +8,7 @@ import { createSignal, ParentProps } from 'solid-js';
 import ModuleManager, { P } from './features/module/api/ModuleManager';
 import Mod from './features/module/api/Module';
 import Category, { CategoryInfo, categoryInfoSet } from './features/module/api/Category';
+import logger from './utils/loggers';
 
 const ACCENT_COLOR = "#0b8405";
 
@@ -60,7 +61,9 @@ function Spacer(props: ParentProps<{ size: string }>) {
   return <div style={`height: ${props.size}`}></div>
 }
 
-function CategoryPanel(category: Category, info: CategoryInfo) {
+function CategoryPanel(category: string, info: CategoryInfo) {
+  const mods = ModuleManager.findModules(P.byCategory(Category[category]));
+  logger.info(`Found mods in ${category}: ${mods}`);
   return <div>
     <div
       style={{
@@ -74,7 +77,7 @@ function CategoryPanel(category: Category, info: CategoryInfo) {
     </div>
     <div>
       {
-        ModuleManager.findModules(P.byCategory(category)).map((m, i) => {
+        mods.map((m, i) => {
           return <div>
             <Module mod={m}></Module>
             {i >= ModuleManager.modules.length - 1 ? undefined : <Spacer size={"4px"}></Spacer>}
@@ -95,6 +98,31 @@ if (document.body === null) {
   });
 }
 
+let catIdx = 0;
+const PER_CATEGORY_SPACING = 12;
+const LEFT_START_POS = -2;
+// let lastLength = 0;
+
+const osc = new OffscreenCanvas(420, 420);
+
+function measureText(text: string, font: string): TextMetrics {
+  const ctx = osc.getContext("2d");
+  ctx.font = font;
+  return ctx.measureText(text);
+}
+
+function getCssStyle(element: Element, prop: string) {
+  return window.getComputedStyle(element, null).getPropertyValue(prop);
+}
+
+function getCanvasFont(el = document.body) {
+  const fontWeight = getCssStyle(el, "font-weight") ?? "normal";
+  const fontSize = getCssStyle(el, "font-size") ?? "16px";
+  const fontFamily = getCssStyle(el, "font-family") ?? "Times New Roman";
+
+  return `${fontWeight} ${fontSize} ${fontFamily}`;
+}
+
 // Render modules for each category
 for (const [cat, info] of Object.entries(categoryInfoSet)) {
   // Create a movable panel using @violentmonkey/ui
@@ -103,10 +131,15 @@ for (const [cat, info] of Object.entries(categoryInfoSet)) {
     style: stylesheet,
   });
 
+  const font = getCanvasFont(categoryPanel.wrapper);
+  const tl = measureText(info.data.name, font);
+  // lastLength = tl.width;
+
   Object.assign(categoryPanel.wrapper.style, {
-    top: '67vh',
-    left: '67vw',
+    top: "7vh",
+    left: `${LEFT_START_POS + (catIdx++ * PER_CATEGORY_SPACING) + (tl.width/2)}vw`,
   });
+
   categoryPanel.wrapper.addEventListener("mousedown", () => {
     categoryPanel.wrapper.style.cursor = "grabbing";
   });
@@ -115,6 +148,6 @@ for (const [cat, info] of Object.entries(categoryInfoSet)) {
   });
   categoryPanel.setMovable(true);
   categoryPanel.show();
-  render(() => CategoryPanel(cat as unknown as Category, info), categoryPanel.body);
+  render(() => CategoryPanel(cat, info), categoryPanel.body);
 }
 
