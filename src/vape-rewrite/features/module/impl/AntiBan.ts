@@ -15,7 +15,7 @@ export default class AntiBan extends Mod {
 
   // TODO: replace this with settings stuff when settings are implemented
   get accGenIntegrationEnabled(): boolean {
-    return true;
+    return false;
   }
 
   // TODO: replace this with settings stuff when settings are implemented
