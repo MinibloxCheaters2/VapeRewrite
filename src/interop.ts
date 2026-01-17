@@ -1,4 +1,4 @@
-import { storeName } from "../Client";
+import { storeName } from "./Client";
 import Bus from "./Bus";
 import ClientEvents from "./event/api/Events";
 import exposed from "./hooks/exposed";

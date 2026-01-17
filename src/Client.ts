@@ -1,5 +1,5 @@
 import { LOG_STORE_NAME, NO_STORE_NAME_RANDOMIZATION } from "./debugControls";
-import logger from "./vape-rewrite/utils/loggers";
+import logger from "./utils/loggers";
 
 function randomString(length: number): string {
   const array = new Uint8Array(length);

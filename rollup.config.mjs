@@ -15,7 +15,7 @@ const extensions = [".ts", ".tsx", ".mjs", ".js", ".jsx"];
 
 export default defineConfig(
   Object.entries({
-    "vape-rewrite": "src/vape-rewrite/index.ts",
+    "vape-rewrite": "src/index.ts",
   }).map(([name, entry]) => ({
     input: entry,
     plugins: [

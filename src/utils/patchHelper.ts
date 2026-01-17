@@ -1,4 +1,4 @@
-import { storeName } from "../../Client";
+import { storeName } from "../Client";
 
 export const STORE = `window["${storeName}"]`;
 export const EXPOSED = `${STORE}.exposed`;
