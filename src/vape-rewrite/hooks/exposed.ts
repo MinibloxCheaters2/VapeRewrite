@@ -7,8 +7,7 @@ import Bus from "../Bus";
 import CancelableWrapper from "../event/api/CancelableWrapper";
 import ClientEvents from "../event/api/Events";
 import ModuleManager from "../features/module/api/ModuleManager";
-
-
+import dump from "./dump"
 export default {
   newCancelableWrapper<T>(data: T): CancelableWrapper<T> {
     return new CancelableWrapper(data);
@@ -18,6 +17,9 @@ export default {
   },
   get moduleManager() {
     return ModuleManager;
+  }
+  get dump() {
+    return dump;
   }
    //isModuleToggled(name: string): boolean {
    //  return ModuleManager.findModule(P.byName(name)).enabled;

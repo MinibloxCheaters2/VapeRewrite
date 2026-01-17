@@ -15,7 +15,7 @@ export const PHASE_REPLACEMENTS: MultipleReplacements = [
     [
         `calculateYOffset(A,this.getEntityBoundingBox(),g.y)`,
         {
-            replacement: ` ${moduleAccess}.phase.enabled && !${moduleAccess}.scaffold.enabled && keyPressedDump("shift") ? g.y : calculateYOffset(A,this.getEntityBoundingBox(),g.y)`,
+            replacement: ` ${moduleAccess}.phase.enabled && !${moduleAccess}.scaffold.enabled && window["${storeName}"].exposed.dump.keyPressedPlayer("shift") ? g.y : calculateYOffset(A,this.getEntityBoundingBox(),g.y)`,
             shift: Shift.REPLACE,
 
         }
@@ -32,7 +32,7 @@ export const PHASE_REPLACEMENTS: MultipleReplacements = [
     [
         `pushOutOfBlocks(u,h,p){`,
         {
-            replacement: `if (enabledModules["Phase"]) return;`,
+            replacement: `if (${moduleAccess}.phase.enabled) return;`,
             shift: Shift.AFTER,
         }
     ]
