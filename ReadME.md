@@ -1,6 +1,6 @@
 # Vape Rewrite
 
-A new UserScript for Vape! This time, I'm not slacking.
+A new UserScript for Vape! This time, I'm not slacking (neither am i :D).
 I hope that, **until I finish this**, I will not be maintaining Vape OR Impact **anymore** (other than VERY MINOR changes).
 
 ## Roadmap
