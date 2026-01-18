@@ -1,7 +1,7 @@
 import { MOD_MANAGER } from "../../../../utils/patchHelper";
 import { type MultipleReplacements, Shift } from "../../../replacementTypes";
 
-const NOSLOW = `${MOD_MANAGER}.moduleManager.noSlow`;
+const NOSLOW = `${MOD_MANAGER}.noSlow`;
 
 export const NOSLOW_REPLACEMENTS: MultipleReplacements = [
 	[
