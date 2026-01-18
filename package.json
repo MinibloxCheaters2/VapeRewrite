@@ -1,78 +1,78 @@
 {
-  "name": "vaperewrite",
-  "version": "0.0.0",
-  "description": "",
-  "author": "datamodel",
-  "license": "AGPL-3.0-only",
-  "private": true,
-  "engines": {
-    "node": ">=18"
-  },
-  "scripts": {
-    "dev": "rollup -wc",
-    "clean": "del-cli dist",
-    "lint": "eslint",
-    "lint:fix": "eslint --fix",
-    "ci": "run-s lint",
-    "build:js": "rollup -c",
-    "build": "cross-env NODE_ENV=production run-s ci clean build:js",
-    "devbuild": "run-s clean dev"
-  },
-  "dependencies": {
-    "@babel/runtime": "^7.28",
-    "@violentmonkey/dom": "^2.2",
-    "@violentmonkey/ui": "^0.7",
-    "rollup": "../gh/rollup-iife-tla/",
-    "solid-js": "^1.9"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.28",
-    "@babel/plugin-transform-react-jsx": "^7.28",
-    "@babel/plugin-transform-runtime": "^7.28",
-    "@babel/preset-env": "^7.28",
-    "@babel/preset-typescript": "^7.28",
-    "@rollup/plugin-alias": "^6.0",
-    "@rollup/plugin-babel": "^6.1",
-    "@rollup/plugin-commonjs": "^29.0",
-    "@rollup/plugin-json": "^6.1",
-    "@rollup/plugin-node-resolve": "^16.0",
-    "@rollup/plugin-replace": "^6.0",
-    "@rollup/plugin-terser": "^0.4",
-    "@types/eslint": "^9.6",
-    "@types/three": "^0.158.3",
-    "@typescript-eslint/eslint-plugin": "^8.53",
-    "@typescript-eslint/parser": "^8.53",
-    "@unocss/postcss": "^66.6.0",
-    "@violentmonkey/types": "^0.3",
-    "autoprefixer": "^10.4",
-    "babel-preset-solid": "^1.9",
-    "commander": "^14.0",
-    "cross-env": "^10.1",
-    "del-cli": "^7.0",
-    "eslint": "^9.39",
-    "eslint-config-prettier": "^10.1",
-    "globals": "^17.0",
-    "lint-staged": "^16.2",
-    "npm-run-all": "^4.1.5",
-    "postcss": "^8.4",
-    "postcss-calc": "^10.0",
-    "postcss-nested": "^7.0",
-    "prettier": "^3.4",
-    "read-package-up": "^12.0",
-    "rollup-plugin-postcss": "^4.0",
-    "rollup-plugin-userscript": "^1.1",
-    "typescript": "^5.9",
-    "typescript-eslint": "^8.53",
-    "unocss": "^66.6",
-    "@babel/plugin-proposal-decorators": "^7.28"
-  },
-  "lint-staged": {
-    "*.{ts,tsx}": [
-      "eslint --fix",
-      "prettier --write"
-    ],
-    "*.css": [
-      "prettier --write"
-    ]
-  }
+	"name": "vaperewrite",
+	"version": "0.0.0",
+	"description": "",
+	"author": "datamodel",
+	"license": "AGPL-3.0-only",
+	"private": true,
+	"engines": {
+		"node": ">=18"
+	},
+	"scripts": {
+		"dev": "rollup -wc",
+		"clean": "del-cli dist",
+		"lint": "eslint",
+		"lint:fix": "eslint --fix",
+		"ci": "run-s lint",
+		"build:js": "rollup -c",
+		"build": "cross-env NODE_ENV=production run-s ci clean build:js",
+		"devbuild": "run-s clean dev"
+	},
+	"dependencies": {
+		"@babel/runtime": "^7.28",
+		"@violentmonkey/dom": "^2.2",
+		"@violentmonkey/ui": "^0.7",
+		"rollup": "../gh/rollup-iife-tla/",
+		"solid-js": "^1.9"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.28",
+		"@babel/plugin-transform-react-jsx": "^7.28",
+		"@babel/plugin-transform-runtime": "^7.28",
+		"@babel/preset-env": "^7.28",
+		"@babel/preset-typescript": "^7.28",
+		"@rollup/plugin-alias": "^6.0",
+		"@rollup/plugin-babel": "^6.1",
+		"@rollup/plugin-commonjs": "^29.0",
+		"@rollup/plugin-json": "^6.1",
+		"@rollup/plugin-node-resolve": "^16.0",
+		"@rollup/plugin-replace": "^6.0",
+		"@rollup/plugin-terser": "^0.4",
+		"@types/eslint": "^9.6",
+		"@types/three": "^0.158.3",
+		"@typescript-eslint/eslint-plugin": "^8.53",
+		"@typescript-eslint/parser": "^8.53",
+		"@unocss/postcss": "^66.6.0",
+		"@violentmonkey/types": "^0.3",
+		"autoprefixer": "^10.4",
+		"babel-preset-solid": "^1.9",
+		"commander": "^14.0",
+		"cross-env": "^10.1",
+		"del-cli": "^7.0",
+		"eslint": "^9.39",
+		"eslint-config-prettier": "^10.1",
+		"globals": "^17.0",
+		"lint-staged": "^16.2",
+		"npm-run-all": "^4.1.5",
+		"postcss": "^8.4",
+		"postcss-calc": "^10.0",
+		"postcss-nested": "^7.0",
+		"prettier": "^3.4",
+		"read-package-up": "^12.0",
+		"rollup-plugin-postcss": "^4.0",
+		"rollup-plugin-userscript": "^1.1",
+		"typescript": "^5.9",
+		"typescript-eslint": "^8.53",
+		"unocss": "^66.6",
+		"@babel/plugin-proposal-decorators": "^7.28"
+	},
+	"lint-staged": {
+		"*.{ts,tsx}": [
+			"eslint --fix",
+			"prettier --write"
+		],
+		"*.css": [
+			"prettier --write"
+		]
+	}
 }

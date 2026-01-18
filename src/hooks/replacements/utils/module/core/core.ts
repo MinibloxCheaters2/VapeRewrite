@@ -1,26 +1,29 @@
 import { EXPOSED } from "../../../../../utils/patchHelper";
-import { MultipleReplacements, Shift } from "../../../../replacementTypes";
+import { type MultipleReplacements, Shift } from "../../../../replacementTypes";
 
 export const CORE_REPLACEMENTS: MultipleReplacements = [
-  ['document.addEventListener("DOMContentLoaded",startGame,!1);', {
-    replacement: `setTimeout(function() {
+	[
+		'document.addEventListener("DOMContentLoaded",startGame,!1);',
+		{
+			replacement: `setTimeout(function() {
         const DOMContentLoaded_event = document.createEvent("Event");
         DOMContentLoaded_event.initEvent("DOMContentLoaded", true, true);
         document.dispatchEvent(DOMContentLoaded_event);
       }, 0);`,
-    shift: Shift.AFTER,
-  }],
+			shift: Shift.AFTER,
+		},
+	],
 
-  [
-    "new SPacketLoginStart({" +
-    "requestedUuid:localStorage.getItem(REQUESTED_UUID_KEY)??void 0," +
-    'session:localStorage.getItem(SESSION_TOKEN_KEY)??"",' +
-    'hydration:localStorage.getItem("hydration")??"0",' +
-    'metricsId:localStorage.getItem("metrics_id")??"",' +
-    "clientVersion:VERSION$1" +
-    "})",
-    {
-      replacement: `new SPacketLoginStart({
+	[
+		"new SPacketLoginStart({" +
+			"requestedUuid:localStorage.getItem(REQUESTED_UUID_KEY)??void 0," +
+			'session:localStorage.getItem(SESSION_TOKEN_KEY)??"",' +
+			'hydration:localStorage.getItem("hydration")??"0",' +
+			'metricsId:localStorage.getItem("metrics_id")??"",' +
+			"clientVersion:VERSION$1" +
+			"})",
+		{
+			replacement: `new SPacketLoginStart({
   requestedUuid: undefined,
   session: (${EXPOSED}.moduleManager.antiBan.enabled
     ? await ${EXPOSED}.moduleManager.antiBan.getToken()
@@ -29,14 +32,15 @@ export const CORE_REPLACEMENTS: MultipleReplacements = [
   metricsId: uuid$1(),
   clientVersion: VERSION$1
   })`,
-      shift: Shift.REPLACE,
-    },
-  ],
+			shift: Shift.REPLACE,
+		},
+	],
 
-  ["static sendPacket(u){", {
-    replacement:
-      `${EXPOSED}.emitEvent("sendPacket", ${EXPOSED}.newCancelableWrapper(u));`,
-    shift: Shift.AFTER,
-  }]
+	[
+		"static sendPacket(u){",
+		{
+			replacement: `${EXPOSED}.emitEvent("sendPacket", ${EXPOSED}.newCancelableWrapper(u));`,
+			shift: Shift.AFTER,
+		},
+	],
 ];
-

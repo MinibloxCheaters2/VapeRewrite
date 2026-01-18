@@ -4,7 +4,6 @@
  * @module
  */
 
-
 //#region Store system
 /** Logs store names into the console. */
 export const LOG_STORE_NAME = true;

@@ -1,3 +1,1 @@
-declare class PlayerController {
-
-}
+declare class PlayerController {}

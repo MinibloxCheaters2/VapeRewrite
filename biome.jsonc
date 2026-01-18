@@ -1,0 +1,13 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.3.11/schema.json",
+	"formatter": {
+		"indentStyle": "tab",
+		"useEditorconfig": true
+	},
+	"vcs": {
+		"useIgnoreFile": true
+	},
+	"files": {
+		"includes": ["src/*"]
+	}
+}

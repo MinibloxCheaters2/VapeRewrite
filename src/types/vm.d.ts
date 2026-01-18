@@ -1,1 +1,1 @@
-import '@violentmonkey/types';
+import "@violentmonkey/types";

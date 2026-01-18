@@ -5,23 +5,26 @@
 
 import Bus from "../Bus";
 import CancelableWrapper from "../event/api/CancelableWrapper";
-import ClientEvents from "../event/api/Events";
+import type ClientEvents from "../event/api/Events";
 import ModuleManager from "../features/module/api/ModuleManager";
-import dump from "./dump"
+import dump from "./dump";
 export default {
-  newCancelableWrapper<T>(data: T): CancelableWrapper<T> {
-    return new CancelableWrapper(data);
-  },
-  emitEvent<E extends keyof ClientEvents>(event: E, ...payload: ClientEvents[E] extends void ? [] : [ClientEvents[E]]) {
-    Bus.emit(event, ...payload);
-  },
-  get moduleManager() {
-    return ModuleManager;
-  },
-  get dump() {
-    return dump;
-  }
-  //isModuleToggled(name: string): boolean {
-  //  return ModuleManager.findModule(P.byName(name)).enabled;
-  //}
-}
+	newCancelableWrapper<T>(data: T): CancelableWrapper<T> {
+		return new CancelableWrapper(data);
+	},
+	emitEvent<E extends keyof ClientEvents>(
+		event: E,
+		...payload: ClientEvents[E] extends void ? [] : [ClientEvents[E]]
+	) {
+		Bus.emit(event, ...payload);
+	},
+	get moduleManager() {
+		return ModuleManager;
+	},
+	get dump() {
+		return dump;
+	},
+	//isModuleToggled(name: string): boolean {
+	//  return ModuleManager.findModule(P.byName(name)).enabled;
+	//}
+};

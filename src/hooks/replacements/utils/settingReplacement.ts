@@ -1,11 +1,11 @@
-import { Shift, SingleReplacement } from "../../replacementTypes";
+import { Shift, type SingleReplacement } from "../../replacementTypes";
 
 export const SHOW_USERNAMES_WITH_HIDDEN_CHARS: SingleReplacement = [
-    /function\s+stripCrazyGamesSuffix\s*\(\w+\)\s*\{[\s\S]*?return[\s\S]*?\}/g,
-    {
-        replacement: `function stripCrazyGamesSuffix(m) { return m; }`,
-        shift: Shift.REPLACE,
-    },
+	/function\s+stripCrazyGamesSuffix\s*\(\w+\)\s*\{[\s\S]*?return[\s\S]*?\}/g,
+	{
+		replacement: `function stripCrazyGamesSuffix(m) { return m; }`,
+		shift: Shift.REPLACE,
+	},
 ];
 
 const optionsReplacement = `var _n;
@@ -37,54 +37,54 @@ const auraReplacements = `}), jsxRuntimeExports.jsx(ToggleButton, {
 			option: Options$1.trailAll`;
 
 export const EXTRA_OPTIONS: SingleReplacement = [
-    /var\s+_+\w+\s*;\s*let\s+Options\$1\s*=\s*\(_+\w+\s*=\s*class\s*\{[\s\S]*?\}\s*,[\s\S]*?\)\s*;/g,
-    {
-        replacement: optionsReplacement,
-        shift: Shift.REPLACE,
-    },
+	/var\s+_+\w+\s*;\s*let\s+Options\$1\s*=\s*\(_+\w+\s*=\s*class\s*\{[\s\S]*?\}\s*,[\s\S]*?\)\s*;/g,
+	{
+		replacement: optionsReplacement,
+		shift: Shift.REPLACE,
+	},
 ];
 
 export const YOU_HAVE_AURA_MODE: SingleReplacement = [
-    /}\s*\)\s*,\s*jsxRuntimeExports\.jsx\s*\(\s*ToggleButton\s*,\s*\{\s*option:\s*Options\$1\.fog/g,
-    {
-        replacement: auraReplacements,
-        shift: Shift.REPLACE,
-    },
+	/}\s*\)\s*,\s*jsxRuntimeExports\.jsx\s*\(\s*ToggleButton\s*,\s*\{\s*option:\s*Options\$1\.fog/g,
+	{
+		replacement: auraReplacements,
+		shift: Shift.REPLACE,
+	},
 ];
 
 export const ENABLE_CHUNK_CULLING_SETTING: SingleReplacement = [
-    /CHUNK_UNLOADS_PER_TICK\s*\)/g,
-    {
-        replacement: "Options$1.cullChunks.value?CHUNK_UNLOADS_PER_TICK:0)",
-        shift: Shift.REPLACE,
-    },
+	/CHUNK_UNLOADS_PER_TICK\s*\)/g,
+	{
+		replacement: "Options$1.cullChunks.value?CHUNK_UNLOADS_PER_TICK:0)",
+		shift: Shift.REPLACE,
+	},
 ];
 
 export const SHOW_CLOUDS_SETTING: SingleReplacement = [
-    /I\s*\(\s*this\s*,\s*["']generate["']\s*\)\s*;\s*I\s*\(\s*this\s*,\s*["']showClouds["']\s*\)\s*;/g,
-    {
-        replacement: `I(this, "generate",Options$1.clouds.value);
+	/I\s*\(\s*this\s*,\s*["']generate["']\s*\)\s*;\s*I\s*\(\s*this\s*,\s*["']showClouds["']\s*\)\s*;/g,
+	{
+		replacement: `I(this, "generate",Options$1.clouds.value);
 		I(this, "showClouds",Options$1.clouds.value);`,
-        shift: Shift.REPLACE,
-    },
+		shift: Shift.REPLACE,
+	},
 ];
 
 export const SHOW_CLOUDS_UPDATE_SETTING: SingleReplacement = [
-    /this\.generate\s*==\s*this\.showClouds/g,
-    {
-        replacement: `this.showClouds = Options$1.clouds.value; this.generate == this.showClouds`,
-        shift: Shift.REPLACE,
-    }
+	/this\.generate\s*==\s*this\.showClouds/g,
+	{
+		replacement: `this.showClouds = Options$1.clouds.value; this.generate == this.showClouds`,
+		shift: Shift.REPLACE,
+	},
 ];
 
 export const GENERATE_CLOUDS_REPLACEMENT: SingleReplacement = [
-    /generateClouds\s*\(\s*\w+\s*\)\s*\{\s*for[\s\S]*?;/g,
-    {
-        replacement:`generateClouds(u) {
+	/generateClouds\s*\(\s*\w+\s*\)\s*\{\s*for[\s\S]*?;/g,
+	{
+		replacement: `generateClouds(u) {
 		for (const h of this.clouds) this.gameScene.scene.remove(h), h.visible = Options$1.clouds.value;`,
-        shift: Shift.REPLACE,
-    }
-]
+		shift: Shift.REPLACE,
+	},
+];
 
 const trailAuraReplacement = `class EffectsManager {
 	constructor(u, h) {
@@ -104,14 +104,14 @@ const trailAuraReplacement = `class EffectsManager {
 		var u, h;
 		(u = Options$1.aura.value != "None" && (Options$1.auraAll.value || this.world.game.player.socketId == this.player.profile.uuid)? AURAS[Options$1.aura.value.toLowerCase()]: AURAS[this.player.profile.effects.aura]) == null || u.effect.update(this.world, this.player), (h = Options$1.trail.value != "None" && (Options$1.trailAll.value || this.world.game.player.socketId == this.player.profile.uuid)? TRAILS[Options$1.trail.value.toLowerCase()]: TRAILS[this.player.profile.effects.trail]) == null || h.effect.update(this.world, this.player)
 	}
-}`
+}`;
 
 export const TRAIL_AURA_REPLACEMENT: SingleReplacement = [
-    /class\sEffectsManager\s*\{[\s\S]*?\}\s*\}/g,
-    {
-        replacement: trailAuraReplacement,
-        shift: Shift.REPLACE,
-    }
+	/class\sEffectsManager\s*\{[\s\S]*?\}\s*\}/g,
+	{
+		replacement: trailAuraReplacement,
+		shift: Shift.REPLACE,
+	},
 ];
 
 const browsePlanetsModalReplacement = `BrowsePlanetsModal = m => {
@@ -492,32 +492,31 @@ const leaderboardDEVreplacement = `Leaderboards = () => {
 				})
 			})
 		})
-	},`
-
+	},`;
 
 export const ADVANCED_BROWSE_PLANETS_MODAL: SingleReplacement = [
-    /BrowsePlanetsModal\s*=\s*\w+\s*=>\s*\{[\s\S]*?\)\s*\)\s*\}\s*\)\s*\]\s*\}\s*\)\s*\]\s*\}\s*\)\s*\]\s*\}\s*\)\s*\}\s*,/g,
-    {
-        replacement: browsePlanetsModalReplacement,
-        shift: Shift.REPLACE,
-    }
-]
+	/BrowsePlanetsModal\s*=\s*\w+\s*=>\s*\{[\s\S]*?\)\s*\)\s*\}\s*\)\s*\]\s*\}\s*\)\s*\]\s*\}\s*\)\s*\]\s*\}\s*\)\s*\}\s*,/g,
+	{
+		replacement: browsePlanetsModalReplacement,
+		shift: Shift.REPLACE,
+	},
+];
 
 export const PLANET_MODEL_EACH_PANEL: SingleReplacement = [
-    /const PlanetItem\s*=\s*\w+\s*=>\s*\{[\s\S]*?\}\)\]\s*\}\)\]\s*\}\s*\)\s*\}\s*\)\s*\}\s*,/g,
-    {
-        replacement: planetModelEachPanelReplacement,
-        shift: Shift.REPLACE,
-    }
-]
+	/const PlanetItem\s*=\s*\w+\s*=>\s*\{[\s\S]*?\}\)\]\s*\}\)\]\s*\}\s*\)\s*\}\s*\)\s*\}\s*,/g,
+	{
+		replacement: planetModelEachPanelReplacement,
+		shift: Shift.REPLACE,
+	},
+];
 
 export const DEVELOPER_LEADERBOARD: SingleReplacement = [
-    /Leaderboards\s*=\s*\(\s*\)\s*=>\s*\{[\s\S]*?\}\s*\)\s*\]\s*\}\s*\)\s*\]\s*\}\s*\)\s*\]\s*\}\s*\)\s*\]\s*\}\s*\)\s*\}\s*\)\s*\}\s*\)\s*\}\s*,/g,
-    {
-        replacement: leaderboardDEVreplacement,
-        shift: Shift.REPLACE,
-    }
-]
+	/Leaderboards\s*=\s*\(\s*\)\s*=>\s*\{[\s\S]*?\}\s*\)\s*\]\s*\}\s*\)\s*\]\s*\}\s*\)\s*\]\s*\}\s*\)\s*\]\s*\}\s*\)\s*\}\s*\)\s*\}\s*\)\s*\}\s*,/g,
+	{
+		replacement: leaderboardDEVreplacement,
+		shift: Shift.REPLACE,
+	},
+];
 const modeStatsReplacement = `modeStats = {
 		kitpvp: [StatType.KILLS, StatType.DEATHS, StatType.KILLSTREAK],
 		skywars: [StatType.WINS, StatType.KILLS, StatType.DEATHS, StatType.LOSSES],
@@ -534,9 +533,9 @@ const modeStatsReplacement = `modeStats = {
 	},`;
 
 export const STATISTICS_MODE_STATS_REPLACEMENT: SingleReplacement = [
-    /modeStats\s*=\s*\{[\s\S]*?\}\s*,/g,
-    {
-        replacement: modeStatsReplacement,
-        shift: Shift.REPLACE,
-    },
+	/modeStats\s*=\s*\{[\s\S]*?\}\s*,/g,
+	{
+		replacement: modeStatsReplacement,
+		shift: Shift.REPLACE,
+	},
 ];
