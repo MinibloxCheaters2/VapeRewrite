@@ -1,5 +1,5 @@
-import { storeName } from "./Client";
 import Bus from "./Bus";
+import { storeName } from "./Client";
 import type ClientEvents from "./event/api/Events";
 import exposed from "./hooks/exposed";
 
@@ -22,14 +22,14 @@ export interface Store {
 
 export class ModuleConfig {
 	// TODO: module settings
-	constructor(public toggled: boolean /*, settings: Setting[]*/) { }
+	constructor(public toggled: boolean /*, settings: Setting[]*/) {}
 }
 
 export class Config {
 	public constructor(
 		/** a map of module name -> module config */
 		public modules: Record<string, ModuleConfig>,
-	) { }
+	) {}
 
 	public serialize(): string {
 		return JSON.stringify(this.modules);
@@ -63,16 +63,13 @@ function configKey(n: string): string {
 	return `vapeConfig${n}`;
 }
 
-
 let loadedConfig: NamedConfig;
 /** Saves this config to a config named {@link name} */
 async function saveConfig(name: string): Promise<void> {
 	GM_setValue(configKey(name), loadedConfig.serialize());
 }
 /** Loads a config named {@link name}, or the current config's name if not specified. */
-async function loadConfig(
-	name: string = loadedConfig.name,
-): Promise<void> {
+async function loadConfig(name: string = loadedConfig.name): Promise<void> {
 	const cfg = GM_getValue(configKey(name), loadedConfig.serialize());
 	loadedConfig = NamedConfig.deserialize(name, cfg);
 }
@@ -124,7 +121,7 @@ const StoreInterop = {
 		}
 		unsafeWindow[storeName] ??= {};
 		return unsafeWindow[storeName];
-	}
+	},
 } as const;
 
 export default StoreInterop;
