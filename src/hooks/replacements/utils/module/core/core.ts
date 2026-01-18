@@ -1,4 +1,4 @@
-import { storeName } from "../../../../../../Client";
+import { EXPOSED } from "../../../../../utils/patchHelper";
 import { MultipleReplacements, Shift } from "../../../../replacementTypes";
 
 export const CORE_REPLACEMENTS: MultipleReplacements = [
@@ -22,8 +22,8 @@ export const CORE_REPLACEMENTS: MultipleReplacements = [
     {
       replacement: `new SPacketLoginStart({
   requestedUuid: undefined,
-  session: (window["${storeName}"].exposed.moduleManager.antiBan.enabled
-    ? await window["${storeName}"].exposed.moduleManager.antiBan.getToken()
+  session: (${EXPOSED}.moduleManager.antiBan.enabled
+    ? await ${EXPOSED}.moduleManager.antiBan.getToken()
     : (localStorage.getItem(SESSION_TOKEN_KEY) ?? "")),
   hydration: "0",
   metricsId: uuid$1(),
@@ -35,7 +35,7 @@ export const CORE_REPLACEMENTS: MultipleReplacements = [
 
   ["static sendPacket(u){", {
     replacement:
-      `window["${storeName}"].exposed.emitEvent("sendPacket", window["${storeName}"].exposed.newCancelableWrapper(u));`,
+      `${EXPOSED}.emitEvent("sendPacket", ${EXPOSED}.newCancelableWrapper(u));`,
     shift: Shift.AFTER,
   }]
 ];

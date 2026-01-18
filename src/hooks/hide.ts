@@ -3,7 +3,7 @@
  * @module
  */
 
-import { storeName } from "../../Client";
+import { storeName } from "../Client";
 
 function replaceAndCopyFunction<OP, OR>(oldFunc: (...args: OP[]) => OR, newFunc: (r: OR) => OR) {
 	return new Proxy(oldFunc, {

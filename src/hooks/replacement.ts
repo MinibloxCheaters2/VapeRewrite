@@ -1,9 +1,9 @@
 // the idea of this hook is to move some of the symbols into the window object so we can get them.
 
-import { CHECK_UNMATCHED_DUMPS, CHECK_UNMATCHED_REPLACEMENTS, LOG_APPLYING_REPLACEMENTS } from "../../debugControls";
+import { CHECK_UNMATCHED_DUMPS, CHECK_UNMATCHED_REPLACEMENTS, LOG_APPLYING_REPLACEMENTS } from "../debugControls";
 import logger from "../utils/loggers";
 import DUMPS from "./dump";
-import { REPLACEMENTS } from "./replacements/replacements.ts";
+import { REPLACEMENTS } from "./replacements/replacements";
 import { Replacement, Shift } from "./replacementTypes";
 
 function handleReplacement(original: string, { replacement, shift }: Replacement): string {

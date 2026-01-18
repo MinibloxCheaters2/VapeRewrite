@@ -1,5 +1,5 @@
 import { LOG_STORE_NAME, NO_STORE_NAME_RANDOMIZATION } from "./debugControls";
-import logger from "./vape-rewrite/utils/loggers";
+import logger from "./utils/loggers";
 
 function randomString(length: number): string {
   const array = new Uint8Array(length);
@@ -19,7 +19,7 @@ function randomIntInclusive(min: number, max: number) {
   return Math.floor(randomNumber * (ma - mi + 1)) + mi;
 }
 
-export const storeName = NO_STORE_NAME_RANDOMIZATION ? "VapeStore" : randomString(Math.min(randomIntInclusive(4, 9)))+ "_miniblox.io." + randomString(Math.min(randomIntInclusive(4, 9)))+ "_sendPacket()" + "._8wekyb3d8bbwe";
+export const storeName = NO_STORE_NAME_RANDOMIZATION ? "VapeStore" : randomString(Math.min(randomIntInclusive(4, 9)));
 
 if (NO_STORE_NAME_RANDOMIZATION) logger.warn("Store name randomization disabled, only disable store name randomization for debugging or development purposes!");
 if (LOG_STORE_NAME) logger.info(`Store name is ${storeName}`);

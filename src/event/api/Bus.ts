@@ -56,11 +56,11 @@ export default class EventBus<Events extends Record<string, unknown>> {
 
   registerSubscriber<T>(instance: T) {
     // Access subscriptions from the prototype
-    const proto = Object.getPrototypeOf(instance);
+    const proto = instance as Idk<Record<string, unknown>>;
     const subscriptions: Subscription<Events>[] = proto.__subscriptions;
     if (subscriptions) {
       for (const sub of subscriptions) {
-        const handler = (instance as unknown)[sub.method].bind(instance);
+        const handler = instance[sub.method].bind(instance);
         const inst = instance as Idk<Events>;
         (inst.__handlers || (inst.__handlers = [])).push({
           event: sub.event,
@@ -70,7 +70,7 @@ export default class EventBus<Events extends Record<string, unknown>> {
       }
     }
   }
-  public unregisterSubscriber(instance: unknown) {
+  public unregisterSubscriber<T>(instance: T) {
     const inst = instance as Idk<Events>;
     const handlers = inst.__handlers;
     if (handlers) {
@@ -84,22 +84,25 @@ export default class EventBus<Events extends Record<string, unknown>> {
 
 export type Subscription<E> = { event: keyof E; method: string };
 
-export function Subscribe<K extends keyof ClientEvents, A = ClientEvents[K]>(
+export function Subscribe<K extends keyof ClientEvents>(
   event: K,
 ) {
-  return function (
-    target: unknown,
-    propertyKey: string,
-    descriptor: TypedPropertyDescriptor<
-      A extends void ? () => void : (payload: ClientEvents[K]) => void
-    >,
+  return function <
+    A extends ClientEvents[K]
+  >(
+    _target: unknown,
+    mdc: ClassMethodDecoratorContext<
+      unknown,
+      A extends void ? () => void : (e: A) => void
+    > & { name: string }
   ) {
-    // Store subscriptions directly on the prototype (no metadata needed)
-    const subscriptions: Subscription<ClientEvents>[] =
-      (target as Idk<Record<string, unknown>>).__subscriptions ||
-      ((target as Idk<Record<string, unknown>>).__subscriptions = []);
-    subscriptions.push({ event, method: propertyKey });
+    mdc.addInitializer(function () {
+      const t = this as Idk<Record<string, unknown>>;
 
-    return descriptor;
+      const subscriptions: Subscription<ClientEvents>[] =
+        t.__subscriptions ??= [];
+
+      subscriptions.push({ event, method: mdc.name });
+    });
   };
 }

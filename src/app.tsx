@@ -8,6 +8,7 @@ import { createSignal, ParentProps } from 'solid-js';
 import ModuleManager, { P } from './features/module/api/ModuleManager';
 import Mod from './features/module/api/Module';
 import Category, { CategoryInfo, categoryInfoSet } from './features/module/api/Category';
+import logger from './utils/loggers';
 
 const ACCENT_COLOR = "#0b8405";
 
@@ -60,7 +61,9 @@ function Spacer(props: ParentProps<{ size: string }>) {
   return <div style={`height: ${props.size}`}></div>
 }
 
-function CategoryPanel(category: Category, info: CategoryInfo) {
+function CategoryPanel(category: string, info: CategoryInfo) {
+  const mods = ModuleManager.findModules(P.byCategory(Category[category]));
+  logger.info(`Found mods in ${category}: ${mods}`);
   return <div>
     <div
       style={{
@@ -74,7 +77,7 @@ function CategoryPanel(category: Category, info: CategoryInfo) {
     </div>
     <div>
       {
-        ModuleManager.findModules(P.byCategory(category)).map((m, i) => {
+        mods.map((m, i) => {
           return <div>
             <Module mod={m}></Module>
             {i >= ModuleManager.modules.length - 1 ? undefined : <Spacer size={"4px"}></Spacer>}
@@ -95,18 +98,38 @@ if (document.body === null) {
   });
 }
 
+let catIdx = 0;
+// let lastLength = 0;
+
+const priority = {
+  combat: 2,
+  blatant: 3,
+  render: 4,
+  utility: 5,
+  world: 6,
+  inventory: 7,
+  minigames: 8,
+} as const;
+
 // Render modules for each category
-for (const [cat, info] of Object.entries(categoryInfoSet)) {
+for (const [cat, info] of Object.entries(categoryInfoSet).sort(([an], [bn]) => {
+  return (priority[an] ?? 99) - (priority[bn] ?? 99);
+})) {
   // Create a movable panel using @violentmonkey/ui
   const categoryPanel = getPanel({
     theme: 'dark',
     style: stylesheet,
   });
 
+  // lastLength = tl.width;
+  const left = 4 + catIdx++ % 8 * 138;
+  const top = 60 + (catIdx > 6 ? 360 : 0);
+
   Object.assign(categoryPanel.wrapper.style, {
-    top: '67vh',
-    left: '67vw',
+    top: `${top}px`,
+    left: `${left}px`,
   });
+
   categoryPanel.wrapper.addEventListener("mousedown", () => {
     categoryPanel.wrapper.style.cursor = "grabbing";
   });
@@ -115,6 +138,6 @@ for (const [cat, info] of Object.entries(categoryInfoSet)) {
   });
   categoryPanel.setMovable(true);
   categoryPanel.show();
-  render(() => CategoryPanel(cat as unknown as Category, info), categoryPanel.body);
+  render(() => CategoryPanel(cat, info), categoryPanel.body);
 }
 
