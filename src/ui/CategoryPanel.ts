@@ -1,6 +1,5 @@
 import { render } from "solid-js/web";
 import { getPanel } from "@violentmonkey/ui";
-import { stylesheet } from "../style.module.css";
 import { categoryInfoSet } from "../features/module/api/Category";
 import CategoryUI from "./components/CategoryComponent";
 
@@ -21,7 +20,6 @@ for (const [cat, info] of Object.entries(categoryInfoSet).sort(([an], [bn]) => {
 })) {
 	const categoryPanel = getPanel({
 		theme: "dark",
-		style: stylesheet,
 	});
 
 	const left = 4 + (catIdx++ % 8) * 138;

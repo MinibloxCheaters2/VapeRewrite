@@ -17,7 +17,7 @@
 // @version     process.env.VERSION
 // @author      process.env.AUTHOR
 // @require     https://cdn.jsdelivr.net/npm/@violentmonkey/dom@2
-// @require     https://github.com/6x68/vm-ui/releases/download/v0.9.7-1/index.js
+// @require     https://github.com/6x68/vm-ui/releases/download/v0.9.8-2/index.js
 // @resource    bind https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/bind.png
 // @resource    combat https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/categories/combat.png
 // @resource    blatant https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/categories/blatant.png
