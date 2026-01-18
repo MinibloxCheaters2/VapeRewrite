@@ -7,7 +7,14 @@ import Bus from "../Bus";
 import CancelableWrapper from "../event/api/CancelableWrapper";
 import type ClientEvents from "../event/api/Events";
 import ModuleManager from "../features/module/api/ModuleManager";
+import { ClientSocket } from "../features/sdk/types/clientSocket";
 import dump from "./dump";
+
+/**  */
+export interface ExposedFromGame {
+	ClientSocket: typeof ClientSocket;
+}
+
 export default {
 	newCancelableWrapper<T>(data: T): CancelableWrapper<T> {
 		return new CancelableWrapper(data);
