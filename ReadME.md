@@ -46,11 +46,11 @@ And more, if I think.
 
 ``` shell
 # Compile and watch
-$ npm run dev
+$ bun run dev
 
 # Build script
-$ npm run build
+$ bun run build
 
 # Lint
-$ npm run lint
+$ bun run lint
 ```
