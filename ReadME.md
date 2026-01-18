@@ -1,6 +1,6 @@
 # Vape Rewrite
 
-A new UserScript for Vape! This time, I'm not slacking (neither am i :D).
+A new UserScript for Vape! This time, I'm not slacking.
 I hope that, **until I finish this**, I will not be maintaining Vape OR Impact **anymore** (other than VERY MINOR changes).
 
 ## Roadmap
@@ -48,7 +48,7 @@ And more, if I think.
 # Compile and watch
 $ bun run dev
 
-# Build script
+# Build script (also minifies the code)
 $ bun run build
 
 # Lint

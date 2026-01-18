@@ -1,3 +1,6 @@
+import { C2SPacket } from "./packetTypes";
+import type { Socket } from "socket.io-client";
+
 export declare interface EventMap {
 	disconnect: string;
 	CPacketAnimation: CPacketAnimation;
@@ -64,7 +67,7 @@ export declare interface EventMap {
 }
 
 export declare class ClientSocket {
-	socket;
+	socket: Socket;
 	disconnectMessage?: string;
 	/**
 	 * @param url server URI/URL
