@@ -32,8 +32,8 @@ export default function Profiles() {
 				{configs.map((cfg) => (
 					<option value={cfg}>{cfg}</option>
 				))}
-				<button type="submit">Do it.</button>
 			</select>
+			<button type="submit">Do it.</button>
 		</div>
 	);
 }
