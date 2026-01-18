@@ -1,11 +1,13 @@
-import { EXPOSED } from "../../../../utils/patchHelper";
+import { MOD_MANAGER } from "../../../../utils/patchHelper";
 import { type MultipleReplacements, Shift } from "../../../replacementTypes";
+
+const NOSLOW = `${MOD_MANAGER}.moduleManager.noSlow`;
 
 export const NOSLOW_REPLACEMENTS: MultipleReplacements = [
 	[
 		"updatePlayerMoveState(),this.isUsingItem()",
 		{
-			replacement: `updatePlayerMoveState(),(this.isUsingItem() && !${EXPOSED}.moduleManager.noSlow.enabled)`,
+			replacement: `updatePlayerMoveState(),(this.isUsingItem() && !${NOSLOW}.enabled)`,
 			shift: Shift.REPLACE,
 		},
 	],
@@ -13,7 +15,7 @@ export const NOSLOW_REPLACEMENTS: MultipleReplacements = [
 	[
 		"S&&!this.isUsingItem()",
 		{
-			replacement: `S&&!(this.isUsingItem() && !${EXPOSED}.moduleManager.noSlow.enabled)`,
+			replacement: `S&&!(this.isUsingItem() && !${NOSLOW}.enabled)`,
 			shift: Shift.REPLACE,
 		},
 	],

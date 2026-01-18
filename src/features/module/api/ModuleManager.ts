@@ -26,6 +26,7 @@ export default class ModuleManager {
 	public static antiBan = new AntiBan();
 	public static noSlow = new NoSlow();
 	public static phase = new Phase();
+	public static scaffold = new Scaffold();
 
 	constructor() {
 		throw new Error("everything in module manager is static lol");
@@ -37,7 +38,7 @@ export default class ModuleManager {
 		this.antiBan,
 		this.noSlow,
 		this.phase,
-		new Scaffold(),
+		this.scaffold,
 		new FilterBypass(),
 	] as const;
 

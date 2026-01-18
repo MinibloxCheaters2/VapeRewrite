@@ -1,7 +1,8 @@
 import { type MultipleReplacements, Shift } from "../../../replacementTypes";
-import { EXPOSED, MOD_MANAGER } from "../../../../utils/patchHelper";
+import { DMP, MOD_MANAGER } from "../../../../utils/patchHelper";
 
 const PHASE = `${MOD_MANAGER}.phase`;
+const SCAFFOLD = `${MOD_MANAGER}.scaffold`;
 
 export const PHASE_REPLACEMENTS: MultipleReplacements = [
 	[
@@ -11,11 +12,16 @@ export const PHASE_REPLACEMENTS: MultipleReplacements = [
 			shift: Shift.REPLACE,
 		},
 	],
-	// replace keypresseddump with smth later
+
 	[
 		`calculateYOffset(A,this.getEntityBoundingBox(),g.y)`,
 		{
-			replacement: ` ${PHASE}.enabled && !${MOD_MANAGER}.scaffold.enabled && ${EXPOSED}.dump.keyPressedPlayer("shift") ? g.y : calculateYOffset(A,this.getEntityBoundingBox(),g.y)`,
+			replacement: `${PHASE}.enabled
+				&& !${SCAFFOLD}.enabled
+				&& ${DMP("keyPressedPlayer")}("Shift")
+					? g.y
+					: calculateYOffset(A,this.getEntityBoundingBox(),g.y)
+				`,
 			shift: Shift.REPLACE,
 		},
 	],
