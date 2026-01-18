@@ -3,10 +3,10 @@ import { MultipleReplacements, Shift } from "../../../../replacementTypes";
 
 export const EXPOSE_REPLACEMENTS: MultipleReplacements = [
 	[
-		/let ClientSocket=[a-z|A-z|A-Z]+;/,
+		"//# sourceMappingURL=index-",
 		{
-			replacement: `${EXPOSE_AS("ClientSocket", "ClientSocket")};`,
-			shift: Shift.AFTER,
-		},
+			replacement: `${EXPOSE_AS("run", "((fn, ...args) => fn(t => eval(t), ...args));")}`,
+			shift: Shift.BEFORE
+		}
 	],
 ];
