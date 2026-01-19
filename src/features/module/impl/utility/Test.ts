@@ -5,6 +5,7 @@ import Mod from "../../api/Module";
 export default class Test extends Mod {
 	public name = "Test";
 	public category = Category.UTILITY;
+	public commandID = "test";
 	public onEnable(): void {
 		logger.debug("Test module enabled!");
 	}

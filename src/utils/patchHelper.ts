@@ -5,6 +5,7 @@ import { ExposedFromGame } from "../hooks/exposed";
 export const STORE = `window["${storeName}"]` as const;
 export const EXPOSED = `${STORE}.exposed` as const;
 export const MOD_MANAGER = `${EXPOSED}.moduleManager` as const;
+export const COMMAND_MANAGER = `${EXPOSED}.commandManager` as const;
 export const FG_EXPOSED = `${STORE}.fgExposed`;
 /** makes a string that accesses a dump */
 export function DMP<T extends keyof typeof dump>(n: T) { return `${EXPOSED}.dump.${n}` as const }

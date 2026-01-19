@@ -8,6 +8,7 @@ import CancelableWrapper from "../event/api/CancelableWrapper";
 import type ClientEvents from "../event/api/Events";
 import ModuleManager from "../features/module/api/ModuleManager";
 import dump from "./dump";
+import CommandManager from "../features/commands/api/CommandManager";
 
 /** functions exposed by patches that modify the game script */
 export interface ExposedFromGame {
@@ -46,4 +47,7 @@ export default {
 	//isModuleToggled(name: string): boolean {
 	//  return ModuleManager.findModule(P.byName(name)).enabled;
 	//}
+	get commandManager() {
+		return CommandManager;
+	}
 };
