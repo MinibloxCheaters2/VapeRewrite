@@ -6,7 +6,6 @@ index 9777692..5c7e67d 100644
          this.ast.render(source, options);
          source.trim();
          const { usesTopLevelAwait } = this.astContext;
-# allow top-level await to be used in IIFE
 -        if (usesTopLevelAwait && options.format !== 'es' && options.format !== 'system') {
 +        if (usesTopLevelAwait && options.format !== 'es' && options.format !== 'system' && options.format !== 'iife') {
              return error(logInvalidFormatForTopLevelAwait(this.id, options.format));
@@ -29,7 +28,6 @@ index 0bf341d..84200dc 100644
      const interopBlock = getInteropBlock(dependencies, interop, externalLiveBindings, freeze, symbols, accessedGlobals, t, snippets);
      magicString.prepend(`${intro}${interopBlock}`);
      let wrapperIntro = `(${getNonArrowFunctionIntro(parameters, {
-# only async when we use top-level await
 -        isAsync: false,
 +        isAsync: usesTopLevelAwait,
          name: null
@@ -39,7 +37,6 @@ index 0bf341d..84200dc 100644
          this.ast.render(source, options);
          source.trim();
          const { usesTopLevelAwait } = this.astContext;
-# allow top-level await to be used in IIFE (CommonJS patch version)
 -        if (usesTopLevelAwait && options.format !== 'es' && options.format !== 'system') {
 +        if (usesTopLevelAwait && options.format !== 'es' && options.format !== 'system' && options.format !== 'iife') {
              return parseAst_js.error(parseAst_js.logInvalidFormatForTopLevelAwait(this.id, options.format));
