@@ -1,12 +1,6 @@
-import Bus from "../../../Bus";
+/**
+ * Imports all the commands so they actually get included in the bundle.
+ * @module
+ */
 
-import type Command from "./Command";
-
-export default class CommandManager {
-
-    constructor() {
-        throw new Error("everything in command manager is static lol");
-    }
-
-
-}
+import "../impl/Toggle.ts";

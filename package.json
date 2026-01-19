@@ -23,6 +23,7 @@
 		"@babel/runtime": "^7.28.6",
 		"@violentmonkey/dom": "^2.2.1",
 		"@violentmonkey/ui": "^0.7.9",
+		"brigadier-ts": "^1.4.1",
 		"rollup": "^4.55.2",
 		"solid-js": "^1.9.10"
 	},

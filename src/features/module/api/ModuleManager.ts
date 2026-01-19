@@ -42,6 +42,8 @@ export default class ModuleManager {
 		new FilterBypass(),
 	] as const;
 
+	public static readonly moduleNames: string[] = this.modules.map(m => m.name);
+
 	public static findModule(
 		predicate: (module: Mod) => boolean,
 	): Mod | undefined {

@@ -1,0 +1,27 @@
+import { ArgumentType, CommandContext, CommandErrorType, StringReader, Suggestions, SuggestionsBuilder } from "brigadier-ts";
+import ModuleManager, { P } from "../../../module/api/ModuleManager";
+import Mod from "../../../module/api/Module";
+
+export const MODULE_NOT_FOUND = new CommandErrorType(found => `Module "${found}" not found`);
+
+export default class ModuleArgumentType extends ArgumentType<Mod> {
+
+	listSuggestions(context: CommandContext<unknown>, builder: SuggestionsBuilder): Promise<Suggestions> {
+		const suggestions = ModuleManager.moduleNames.filter(m => m.toLowerCase().startsWith(builder.getRemaining().toLowerCase()));
+		for (const suggestion of suggestions) {
+			builder.suggest(suggestion);
+		}
+		return builder.buildPromise();
+	}
+
+	parse(reader: StringReader): Mod {
+		const start = reader.getCursor();
+		const name = reader.getString();
+		const mod = ModuleManager.findModule(P.byName(name));
+		if (mod === undefined) {
+			reader.setCursor(start);
+			throw MODULE_NOT_FOUND.createWithContext(reader, name);
+		};
+		return mod;
+	}
+}

@@ -7,7 +7,7 @@ import Bus from "../Bus";
 import CancelableWrapper from "../event/api/CancelableWrapper";
 import type ClientEvents from "../event/api/Events";
 import ModuleManager from "../features/module/api/ModuleManager";
-import CommandManager from "../features/commands/api/CommandManager";
+import CommandManager from "../features/commands/api/CommandDispatcher";
 import { MATCHED_DUMPS } from "./replacement";
 
 /** functions exposed by patches that modify the game script */
