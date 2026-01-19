@@ -16,13 +16,14 @@
 		"ci": "run-s lint",
 		"build:js": "rollup -c",
 		"build": "cross-env NODE_ENV=production run-s ci clean build:js",
-		"devbuild": "run-s clean dev"
+		"devbuild": "run-s clean dev",
+		"postinstall": "patch-package"
 	},
 	"dependencies": {
 		"@babel/runtime": "^7.28",
 		"@violentmonkey/dom": "^2.2",
 		"@violentmonkey/ui": "^0.7",
-		"rollup": "../gh/rollup-iife-tla/",
+		"rollup": "^4.55",
 		"solid-js": "^1.9"
 	},
 	"devDependencies": {
@@ -65,7 +66,8 @@
 		"typescript-eslint": "^8.53",
 		"unocss": "^66.6",
 		"@babel/plugin-proposal-decorators": "^7.28",
-		"socket.io-client": "^4.8"
+		"socket.io-client": "^4.8",
+		"patch-package": "^8.0"
 	},
 	"lint-staged": {
 		"*.{ts,tsx}": [

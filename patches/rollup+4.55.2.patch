@@ -1,0 +1,47 @@
+diff --git a/node_modules/rollup/dist/es/shared/node-entry.js b/node_modules/rollup/dist/es/shared/node-entry.js
+index 9777692..5c7e67d 100644
+--- a/node_modules/rollup/dist/es/shared/node-entry.js
++++ b/node_modules/rollup/dist/es/shared/node-entry.js
+@@ -17336,7 +17336,7 @@ class Module {
+         this.ast.render(source, options);
+         source.trim();
+         const { usesTopLevelAwait } = this.astContext;
+# allow top-level await to be used in IIFE
+-        if (usesTopLevelAwait && options.format !== 'es' && options.format !== 'system') {
++        if (usesTopLevelAwait && options.format !== 'es' && options.format !== 'system' && options.format !== 'iife') {
+             return error(logInvalidFormatForTopLevelAwait(this.id, options.format));
+         }
+         return { source, usesTopLevelAwait };
+diff --git a/node_modules/rollup/dist/shared/rollup.js b/node_modules/rollup/dist/shared/rollup.js
+index 0bf341d..84200dc 100644
+--- a/node_modules/rollup/dist/shared/rollup.js
++++ b/node_modules/rollup/dist/shared/rollup.js
+@@ -12591,7 +12591,7 @@ function trimEmptyImports(dependencies) {
+     return [];
+ }
+
+-function iife(magicString, { accessedGlobals, dependencies, exports: exports$1, hasDefaultExport, hasExports, indent: t, intro, namedExportsMode, log, outro, snippets }, { compact, esModule, extend, freeze, externalLiveBindings, reexportProtoFromExternal, globals, interop, name, generatedCode: { symbols }, strict }) {
++function iife(magicString, { accessedGlobals, dependencies, exports: exports$1, hasDefaultExport, hasExports, indent: t, intro, namedExportsMode, log, outro, snippets, usesTopLevelAwait }, { compact, esModule, extend, freeze, externalLiveBindings, reexportProtoFromExternal, globals, interop, name, generatedCode: { symbols }, strict }) {
+     const { _, getNonArrowFunctionIntro, getPropertyAccess, n } = snippets;
+     const isNamespaced = name && name.includes('.');
+     const useVariableAssignment = !extend && !isNamespaced;
+@@ -12619,7 +12619,7 @@ function iife(magicString, { accessedGlobals, dependencies, exports: exports$1,
+     const interopBlock = getInteropBlock(dependencies, interop, externalLiveBindings, freeze, symbols, accessedGlobals, t, snippets);
+     magicString.prepend(`${intro}${interopBlock}`);
+     let wrapperIntro = `(${getNonArrowFunctionIntro(parameters, {
+# only async when we use top-level await
+-        isAsync: false,
++        isAsync: usesTopLevelAwait,
+         name: null
+     })}{${n}${useStrict}${n}`;
+     if (hasExports) {
+@@ -18939,7 +18939,7 @@ class Module {
+         this.ast.render(source, options);
+         source.trim();
+         const { usesTopLevelAwait } = this.astContext;
+# allow top-level await to be used in IIFE (CommonJS patch version)
+-        if (usesTopLevelAwait && options.format !== 'es' && options.format !== 'system') {
++        if (usesTopLevelAwait && options.format !== 'es' && options.format !== 'system' && options.format !== 'iife') {
+             return parseAst_js.error(parseAst_js.logInvalidFormatForTopLevelAwait(this.id, options.format));
+         }
+         return { source, usesTopLevelAwait };
