@@ -1,4 +1,4 @@
-export default {
+const DUMP_REGEXES = {
 	moveStrafe: /strafe: *this\.([a-zA-Z]*)/m,
 	moveForward: /forward: *this\.([a-zA-Z]*)/m,
 	keyPressedPlayer:
@@ -27,3 +27,7 @@ export default {
 	materialTransparentWorld:
 		/this\.([a-zA-Z]*) *= *this\.materialTransparent\.clone\(/,
 };
+
+export type DumpKey = keyof typeof DUMP_REGEXES;
+
+export default DUMP_REGEXES;

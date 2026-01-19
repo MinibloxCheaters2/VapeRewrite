@@ -6,7 +6,7 @@ import {
 	LOG_APPLYING_REPLACEMENTS,
 } from "../debugControls";
 import logger from "../utils/loggers";
-import DUMPS from "./dump";
+import DUMPS, { DumpKey } from "./dump";
 import { REPLACEMENTS } from "./replacements/replacements";
 import { type Replacement, Shift } from "./replacementTypes";
 
@@ -31,12 +31,18 @@ function matches(code: string, match: string | RegExp): boolean {
 		: code.match(match) !== undefined;
 }
 
+type DumpKey2Name = Record<DumpKey, string | undefined>;
+
+export let MATCHED_DUMPS: DumpKey2Name;
+
 export default function modifyCode(code: string): string {
+	MATCHED_DUMPS ??= {} as DumpKey2Name;
 	let modified = code;
 
 	for (const [name, regex] of Object.entries(DUMPS)) {
 		const matched = modified.match(regex);
-		if (matched) {
+		if (matched?.[1]) {
+			MATCHED_DUMPS[name] = matched[1];
 			for (let [, { replacement }] of REPLACEMENTS.entries()) {
 				replacement = replacement.replaceAll(name, matched[1]);
 			}
