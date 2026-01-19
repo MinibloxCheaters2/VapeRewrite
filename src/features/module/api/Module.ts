@@ -6,13 +6,6 @@ export default abstract class Mod {
 	public abstract name: string;
 	/** What category this module is in */
 	public abstract category: Category;
-	/** 
-	 * For toggling the module on or off
-	 * via the enableCommandPrefix.
-	*/
-
-	public abstract commandID?: string;
-
 
 	/**
 	 * ! ONLY use this for toggling the state internally,
