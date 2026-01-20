@@ -10,7 +10,7 @@ export const LOG_STORE_NAME = true;
 /** Disables store name randomization. This makes Vape 20x easier to detect, so please don't toggle it. */
 export const NO_STORE_NAME_RANDOMIZATION = false;
 //#endregion
-//#region Replacement / dump system
+//#region Replacement system
 /** Checks for unmatched replacements, and if found, logs the unmatched replacements into the console */
 export const CHECK_UNMATCHED_REPLACEMENTS = true;
 /** Checks for unmatched dumps, and if found, logs the unmatched dumps into the console. */
