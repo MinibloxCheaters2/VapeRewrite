@@ -23,6 +23,7 @@ import {
 } from "./utils/settingReplacement";
 import { NOSLOW_REPLACEMENTS } from "./utils/module/noslow";
 import { EXPOSE_REPLACEMENTS } from "./utils/module/core/expose";
+import { FIREREMOVER_REPLACEMENTS } from "./utils/module/fireBeGone";
 
 // an interesting note, remove the type parameters (<string | RegExp, Replacement>) and then TypeScript starts complaining about types not being the same.
 export const REPLACEMENTS = new Map<string | RegExp, Replacement>([
@@ -65,5 +66,6 @@ export const REPLACEMENTS = new Map<string | RegExp, Replacement>([
 	// Developer Leaderboard
 	DEVELOPER_LEADERBOARD,
 	...NOSLOW_REPLACEMENTS,
-	...EXPOSE_REPLACEMENTS
+	...EXPOSE_REPLACEMENTS,
+	...FIREREMOVER_REPLACEMENTS
 ]);

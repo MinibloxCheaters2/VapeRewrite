@@ -1,6 +1,5 @@
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
-import game from "../../../sdk/api/game";
 import Refs from "../../../sdk/api/refs";
 
 export default class NoCLIP extends Mod {
