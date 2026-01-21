@@ -25,10 +25,12 @@
 		"@wq2/ui": "^0.10.1",
 		"brigadier-ts": "^1.4.1",
 		"rollup": "^4.55.2",
-		"solid-js": "^1.9.10"
+		"solid-js": "^1.9.10",
+		"typescript-eslint": "^8.53.1"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.28.6",
+		"@babel/plugin-proposal-decorators": "^7.28.6",
 		"@babel/plugin-transform-react-jsx": "^7.28.6",
 		"@babel/plugin-transform-runtime": "^7.28.5",
 		"@babel/preset-env": "^7.28.6",
@@ -54,17 +56,16 @@
 		"globals": "^17.0.0",
 		"lint-staged": "^16.2.7",
 		"npm-run-all": "^4.1.5",
+		"patch-package": "^8.0.1",
 		"postcss": "^8.5.6",
 		"postcss-calc": "^10.1.1",
 		"postcss-nested": "^7.0.2",
 		"read-package-up": "^12.0.0",
 		"rollup-plugin-postcss": "^4.0.2",
 		"rollup-plugin-userscript": "^1.1.0",
-		"typescript": "^5.9.3",
-		"unocss": "^66.6.0",
-		"@babel/plugin-proposal-decorators": "^7.28.6",
 		"socket.io-client": "^4.8.3",
-		"patch-package": "^8.0.1"
+		"typescript": "^5.9.3",
+		"unocss": "^66.6.0"
 	},
 	"lint-staged": {
 		"*.{ts,tsx}": [
