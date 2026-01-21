@@ -1,3 +1,3 @@
-import StoreInterop from "../interop";
+import Interop from "../exposedO";
 
-export const runOnBridge = StoreInterop.store.fgExposed.run;
+export const runOnBridge = Interop.store.run;

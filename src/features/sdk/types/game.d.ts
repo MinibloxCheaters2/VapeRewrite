@@ -1,7 +1,8 @@
 import type { Scene } from "three/src/Three.js";
-import type { ClientEntityPlayer } from "./entity.ts";
+import type { ClientEntityPlayer } from "./entity.d.ts";
 import "./packet.d.ts";
 import type { ClientWorld } from "./world";
+import { Chat } from "./chat.d.ts";
 
 export enum ConnectionState {
 	IDK = 0,

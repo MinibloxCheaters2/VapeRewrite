@@ -26,12 +26,11 @@ import {
 	Profile,
 	TileEntitySign,
 } from "./undefined";
-import { Box3Helper, Vector3 } from "three/src/Three.Core.js";
+import { Box3Helper, Vector3, Group, Mesh, Object3D, Quaternion } from "three";
 import World from "./world";
 import { BlockPos } from "./blockpos";
 import { AxisAlignedBB } from "./aliases";
 import { EnumFacing } from "./math/facing";
-import { Group, Mesh, Object3D, Quaternion } from "three/src/Three.js";
 import { DamageSource } from "./damageSource";
 
 declare enum Perspective {

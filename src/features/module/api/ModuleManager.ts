@@ -9,6 +9,7 @@ import AutoRespawn from "../impl/utility/AutoRespawn.js";
 import FilterBypass from "../impl/utility/FilterBypass.js";
 import AirJump from "../impl/blatant/AirJump.js";
 import NoCLIP from "../impl/blatant/NoCLIP.js";
+import InfiniteFly from "../impl/blatant/InfiniteFly.js";
 
 /** some basic predicates for finding modules */
 export const P = {
@@ -45,6 +46,7 @@ export default class ModuleManager {
 		this.airJump,
 		this.noClip,
 		new FilterBypass(),
+		new InfiniteFly()
 	] as const;
 
 	public static readonly moduleNames: string[] = this.modules.map(m => m.name);

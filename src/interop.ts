@@ -1,13 +1,11 @@
 import Bus from "./Bus";
 import { storeName } from "./Client";
 import type ClientEvents from "./event/api/Events";
-import exposed, { type ExposedFromGame } from "./hooks/exposed";
+import exposed from "./hooks/exposed";
 
 export interface Store {
 	/** Objects exposed from this client to the replacements */
 	exposed: typeof exposed;
-	/** Objects exposed from the replacements to this client */
-	fgExposed: ExposedFromGame;
 	emitEvent<E extends keyof ClientEvents>(
 		event: E,
 		...payload: ClientEvents[E] extends void ? [] : [ClientEvents[E]]
@@ -105,7 +103,6 @@ const StoreInterop = {
 	initStore() {
 		unsafeWindow[storeName] = {
 			exposed,
-			fgExposed: {} as ExposedFromGame,
 			saveConfig,
 			loadConfig,
 			exportConfig,
