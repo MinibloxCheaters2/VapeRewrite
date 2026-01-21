@@ -7,6 +7,8 @@ import Phase from "../impl/blatant/Phase.js";
 import Scaffold from "../impl/blatant/Scaffold.js";
 import AutoRespawn from "../impl/utility/AutoRespawn.js";
 import FilterBypass from "../impl/utility/FilterBypass.js";
+import AirJump from "../impl/blatant/AirJump.js";
+import NoCLIP from "../impl/blatant/NoCLIP.js";
 
 /** some basic predicates for finding modules */
 export const P = {
@@ -27,7 +29,8 @@ export default class ModuleManager {
 	public static noSlow = new NoSlow();
 	public static phase = new Phase();
 	public static scaffold = new Scaffold();
-
+	public static airJump = new AirJump();
+	public static noClip = new NoCLIP();
 	constructor() {
 		throw new Error("everything in module manager is static lol");
 	}
@@ -39,6 +42,8 @@ export default class ModuleManager {
 		this.noSlow,
 		this.phase,
 		this.scaffold,
+		this.airJump,
+		this.noClip,
 		new FilterBypass(),
 	] as const;
 

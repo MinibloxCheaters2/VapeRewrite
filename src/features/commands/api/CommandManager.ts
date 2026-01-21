@@ -4,3 +4,4 @@
  */
 
 import "../impl/Toggle.ts";
+import "../impl/Damage.ts"
