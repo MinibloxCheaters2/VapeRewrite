@@ -5,7 +5,7 @@ import Refs from "../../../utils/refs";
 dispatcher.register(literal("damage")
     .then(argument("amount", new FloatArgumentType())
     .executes(async e => {
-        const amount = e.get("amount") as number;
+        const amount = e.get<number>("amount");
 		for (let i = 1; i < amount; i++) {
             Refs.game.controller.objectMouseOver.hitVec = Refs.player.pos.clone();
             Refs.game.controller.attackEntity(Refs.player);

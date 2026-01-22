@@ -7,7 +7,6 @@ import Bus from "../../Bus";
 import { COMMAND_PREFIX } from "../../Client";
 import { Subscribe } from "../../event/api/Bus";
 import CancelableWrapper from "../../event/api/CancelableWrapper";
-import logger from "../../utils/loggers";
 import PacketRefs from "../../utils/packetRefs";
 import Refs from "../../utils/refs";
 import { C2SPacket } from "../sdk/types/packetTypes";
@@ -35,17 +34,13 @@ export default new class CommandListener {
 				});
 				return;
 			}
-			const lol = await dispatcher.execute(r, null);
-			Refs.game.chat.addChat({
-				text: `Useless ahh number thing: ${lol}`
-			});
+			await dispatcher.execute(r, null);
 		}
 		if (packet instanceof PacketRefs.getRef("SPacketTabComplete") && CommandListener.isCommand(packet.message)) {
 			wrap.cancel();
 			const removedPrefix = packet.message.slice(COMMAND_PREFIX.length);
     		const r = await dispatcher.parse(removedPrefix, null);
 			const suggestions = await dispatcher.getCompletionSuggestions(r);
-			logger.debug("Suggestions:", suggestions);
 			const applied = suggestions.getList().map(s => {
 				const words = removedPrefix.split(" ");
 				const last = words[words.length - 1];
