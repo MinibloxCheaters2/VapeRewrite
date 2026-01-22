@@ -1,8 +1,26 @@
 diff --git a/node_modules/rollup/dist/es/shared/node-entry.js b/node_modules/rollup/dist/es/shared/node-entry.js
-index 9777692..5c7e67d 100644
+index c7898dc..52a1e0f 100644
 --- a/node_modules/rollup/dist/es/shared/node-entry.js
 +++ b/node_modules/rollup/dist/es/shared/node-entry.js
-@@ -17336,7 +17336,7 @@ class Module {
+@@ -8818,7 +8818,7 @@ function trimEmptyImports(dependencies) {
+     return [];
+ }
+ 
+-function iife(magicString, { accessedGlobals, dependencies, exports: exports$1, hasDefaultExport, hasExports, indent: t, intro, namedExportsMode, log, outro, snippets }, { compact, esModule, extend, freeze, externalLiveBindings, reexportProtoFromExternal, globals, interop, name, generatedCode: { symbols }, strict }) {
++function iife(magicString, { accessedGlobals, dependencies, exports: exports$1, hasDefaultExport, hasExports, indent: t, intro, namedExportsMode, log, outro, snippets, usesTopLevelAwait }, { compact, esModule, extend, freeze, externalLiveBindings, reexportProtoFromExternal, globals, interop, name, generatedCode: { symbols }, strict }) {
+     const { _, getNonArrowFunctionIntro, getPropertyAccess, n } = snippets;
+     const isNamespaced = name && name.includes('.');
+     const useVariableAssignment = !extend && !isNamespaced;
+@@ -8846,7 +8846,7 @@ function iife(magicString, { accessedGlobals, dependencies, exports: exports$1,
+     const interopBlock = getInteropBlock(dependencies, interop, externalLiveBindings, freeze, symbols, accessedGlobals, t, snippets);
+     magicString.prepend(`${intro}${interopBlock}`);
+     let wrapperIntro = `(${getNonArrowFunctionIntro(parameters, {
+-        isAsync: false,
++        isAsync: usesTopLevelAwait,
+         name: null
+     })}{${n}${useStrict}${n}`;
+     if (hasExports) {
+@@ -17309,7 +17309,7 @@ class Module {
          this.ast.render(source, options);
          source.trim();
          const { usesTopLevelAwait } = this.astContext;
@@ -12,19 +30,19 @@ index 9777692..5c7e67d 100644
          }
          return { source, usesTopLevelAwait };
 diff --git a/node_modules/rollup/dist/shared/rollup.js b/node_modules/rollup/dist/shared/rollup.js
-index 0bf341d..84200dc 100644
+index 4e5ac44..89f75c2 100644
 --- a/node_modules/rollup/dist/shared/rollup.js
 +++ b/node_modules/rollup/dist/shared/rollup.js
-@@ -12591,7 +12591,7 @@ function trimEmptyImports(dependencies) {
+@@ -12595,7 +12595,7 @@ function trimEmptyImports(dependencies) {
      return [];
  }
-
+ 
 -function iife(magicString, { accessedGlobals, dependencies, exports: exports$1, hasDefaultExport, hasExports, indent: t, intro, namedExportsMode, log, outro, snippets }, { compact, esModule, extend, freeze, externalLiveBindings, reexportProtoFromExternal, globals, interop, name, generatedCode: { symbols }, strict }) {
 +function iife(magicString, { accessedGlobals, dependencies, exports: exports$1, hasDefaultExport, hasExports, indent: t, intro, namedExportsMode, log, outro, snippets, usesTopLevelAwait }, { compact, esModule, extend, freeze, externalLiveBindings, reexportProtoFromExternal, globals, interop, name, generatedCode: { symbols }, strict }) {
      const { _, getNonArrowFunctionIntro, getPropertyAccess, n } = snippets;
      const isNamespaced = name && name.includes('.');
      const useVariableAssignment = !extend && !isNamespaced;
-@@ -12619,7 +12619,7 @@ function iife(magicString, { accessedGlobals, dependencies, exports: exports$1,
+@@ -12623,7 +12623,7 @@ function iife(magicString, { accessedGlobals, dependencies, exports: exports$1,
      const interopBlock = getInteropBlock(dependencies, interop, externalLiveBindings, freeze, symbols, accessedGlobals, t, snippets);
      magicString.prepend(`${intro}${interopBlock}`);
      let wrapperIntro = `(${getNonArrowFunctionIntro(parameters, {
@@ -33,7 +51,7 @@ index 0bf341d..84200dc 100644
          name: null
      })}{${n}${useStrict}${n}`;
      if (hasExports) {
-@@ -18939,7 +18939,7 @@ class Module {
+@@ -18912,7 +18912,7 @@ class Module {
          this.ast.render(source, options);
          source.trim();
          const { usesTopLevelAwait } = this.astContext;

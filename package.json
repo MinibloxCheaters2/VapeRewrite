@@ -23,8 +23,8 @@
 		"@babel/runtime": "^7.28.6",
 		"@violentmonkey/dom": "^2.2.1",
 		"@wq2/ui": "^0.10.1",
-		"@wq2/brigadier-ts": "^1.0.2",
-		"rollup": "^4.55.3",
+		"@wq2/brigadier-ts": "^1.0.3",
+		"rollup": "4.56.0",
 		"solid-js": "^1.9.10",
 		"typescript-eslint": "^8.53.1"
 	},
