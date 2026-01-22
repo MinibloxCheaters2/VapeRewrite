@@ -1,4 +1,4 @@
-import { CommandDispatcher } from "brigadier-ts";
+import { CommandDispatcher } from "@wq2/brigadier-ts";
 
 
 export class CommandSource {

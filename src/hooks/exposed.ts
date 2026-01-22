@@ -7,7 +7,7 @@ import Bus from "../Bus";
 import CancelableWrapper from "../event/api/CancelableWrapper";
 import type ClientEvents from "../event/api/Events";
 import ModuleManager from "../features/module/api/ModuleManager";
-import CommandManager from "../features/commands/api/CommandDispatcher";
+import dispatcher from "../features/commands/api/CommandDispatcher";
 import { MATCHED_DUMPS } from "./replacement";
 
 /** functions exposed by patches that modify the game script */
@@ -44,10 +44,24 @@ export default {
 	get dump() {
 		return MATCHED_DUMPS;
 	},
-	//isModuleToggled(name: string): boolean {
-	//  return ModuleManager.findModule(P.byName(name)).enabled;
-	//}
+	async getFeedback(command: string): Promise<string> {
+		const parseResults = await dispatcher.parse(command, null);
+		const suggestions = await dispatcher.getCompletionSuggestions(parseResults);
+		if (suggestions.getList().length > 0) {
+			const s = suggestions.getList()[0];
+			return command + " >> S " + s.getText() + " (" + s.getRange().getStart() + ", " + s.getRange().getEnd() + ")";
+		}
+		if (parseResults.getErrors().size > 0) {
+			return command + " >> " + parseResults.getErrors().values().next().value.message;
+		}
+		const usage = await dispatcher.getAllUsage(parseResults.getContext().getRootNode(), null, false);
+		if (usage.length > 0) {
+			return command + " >> U " + usage[0];
+		}
+		return command;
+	},
+
 	get commandManager() {
-		return CommandManager;
+		return dispatcher;
 	}
 };

@@ -1,3 +1,5 @@
+import { CPacketTabComplete } from "./packets";
+
 export declare interface ChatData {
 	text?: string;
 	id?: string;
@@ -17,4 +19,5 @@ export declare interface ChatLog extends ChatData {
 export declare class Chat {
 	log: ChatLog[];
 	addChat(data: ChatData): void;
+	autoCompleteReceived(packet: CPacketTabComplete): void;
 }

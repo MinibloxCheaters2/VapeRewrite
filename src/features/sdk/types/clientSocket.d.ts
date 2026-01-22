@@ -67,8 +67,8 @@ export declare interface EventMap {
 }
 
 export declare class ClientSocket {
-	socket: Socket;
-	disconnectMessage?: string;
+	static socket: Socket;
+	static disconnectMessage?: string;
 	/**
 	 * @param url server URI/URL
 	 * @param path defaults to `/socket.io`

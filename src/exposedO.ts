@@ -29,8 +29,11 @@ const Interop = {
 		unsafeWindow[fgExposedName] ??= {};
 		return unsafeWindow[fgExposedName];
 	},
+	get run(): ExposedFromGame["run"] {
+		return Interop.store.run;
+	}
 } as const;
 
-export default Interop;
-
 Interop.initIfRequired();
+
+export default Interop;

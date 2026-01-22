@@ -1,15 +1,14 @@
-import { argument, literal, FloatArgumentType } from "brigadier-ts";
+import { argument, literal, FloatArgumentType } from "@wq2/brigadier-ts";
 import dispatcher from "../api/CommandDispatcher";
-import Refs from "../../sdk/api/refs";
+import Refs from "../../../utils/refs";
 
 dispatcher.register(literal("damage")
     .then(argument("amount", new FloatArgumentType()))
-    .executes(e => {
+    .executes(async e => {
         const amount = e.get("amount") as number;
-        Array.from({length: amount}).forEach(() => {
+		for (let i = 1; i < amount; i++) {
             Refs.game.controller.objectMouseOver.hitVec = Refs.player.pos.clone();
             Refs.game.controller.attack();
-        });
-        return 0;
+		}
     })
 )

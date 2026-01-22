@@ -39,7 +39,11 @@ export const CORE_REPLACEMENTS: MultipleReplacements = [
 	[
 		"static sendPacket(u){",
 		{
-			replacement: `${EXPOSED}.emitEvent("sendPacket", ${EXPOSED}.newCancelableWrapper(u));`,
+			replacement: `const cWrap = ${EXPOSED}.newCancelableWrapper(u);
+${EXPOSED}.emitEvent("sendPacket", cWrap);
+if (cWrap.canceled)
+	return;
+`,
 			shift: Shift.AFTER,
 		},
 	],

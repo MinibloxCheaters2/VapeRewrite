@@ -4,4 +4,5 @@
  */
 
 import "../impl/Toggle.ts";
-import "../impl/Damage.ts"
+import "../impl/Damage.ts";
+import "../impl/Testing.ts";
