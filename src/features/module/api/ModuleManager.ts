@@ -8,6 +8,7 @@ import Scaffold from "../impl/blatant/Scaffold.js";
 import AutoRespawn from "../impl/utility/AutoRespawn.js";
 import FilterBypass from "../impl/utility/FilterBypass.js";
 import InfiniteFly from "../impl/blatant/InfiniteFly.js";
+import ServerCrasher from "../impl/utility/ServerCrasher.js";
 
 /** some basic predicates for finding modules */
 export const P = {
@@ -41,7 +42,8 @@ export default class ModuleManager {
 		this.phase,
 		this.scaffold,
 		new FilterBypass(),
-		new InfiniteFly()
+		new InfiniteFly(),
+		new ServerCrasher()
 	] as const;
 
 	public static readonly moduleNames: string[] = this.modules.map(m => m.name);

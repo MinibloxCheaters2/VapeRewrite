@@ -3,6 +3,7 @@ import type { ClientEntityPlayer } from "./entity.d.ts";
 import "./packet.d.ts";
 import type { ClientWorld } from "./world";
 import { Chat } from "./chat.d.ts";
+import { PlayerController } from "./controller.js";
 
 export enum ConnectionState {
 	IDK = 0,

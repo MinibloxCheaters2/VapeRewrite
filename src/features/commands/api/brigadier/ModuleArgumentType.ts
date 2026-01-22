@@ -9,10 +9,11 @@ export default class ModuleArgumentType extends ArgumentType<Mod> {
 
 	listSuggestions(_context: CommandContext<unknown>, builder: SuggestionsBuilder): Promise<Suggestions> {
 		const suggestions = ModuleManager.moduleNames.filter(m => m.toLowerCase().startsWith(builder.getRemaining().toLowerCase()));
+		let b = builder;
 		for (const suggestion of suggestions) {
-			builder.suggest(suggestion);
+			b = b.suggest(suggestion);
 		}
-		return builder.buildPromise();
+		return b.buildPromise();
 	}
 
 	parse(reader: StringReader): Mod {

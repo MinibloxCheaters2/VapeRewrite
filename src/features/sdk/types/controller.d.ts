@@ -23,7 +23,7 @@ declare class PlayerController {
     onStoppedUsingItem(u: any): void;
     select(): void;
     punch(): boolean | undefined;
-    attackEntity(u: Entity): void;
+    attackEntity(e: Entity): void;
     interactWithEntitySendPacket(u: any, h: any): boolean;
     findHotbarSlotForPickBlock(u: PBItemStack): number;
     getTargetedBlockCoords(): BlockPos;
