@@ -26,6 +26,7 @@ import {
 import { NOSLOW_REPLACEMENTS } from "./utils/module/noslow";
 import { EXPOSE_REPLACEMENTS } from "./utils/module/core/expose";
 import { TICK_LOOP_REPLACEMENT } from "./utils/module/core/tickLoop";
+import { PACKET_RECV_HOOK } from "./utils/module/core/packetRecv";
 
 // an interesting note, remove the type parameters (<string | RegExp, Replacement>) and then TypeScript starts complaining about types not being the same.
 export const REPLACEMENTS = new Map<string | RegExp, Replacement>([
@@ -75,5 +76,6 @@ export const REPLACEMENTS = new Map<string | RegExp, Replacement>([
 	["autoClickerDectectOnClick(game),", {
 		replacement: "",
 shift: Shift.REPLACE
-	}]
+	}],
+	PACKET_RECV_HOOK
 ]);

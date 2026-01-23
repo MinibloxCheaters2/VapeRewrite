@@ -67,6 +67,8 @@ export default class KillAura extends Mod {
 				z: hitVec.z
 			})
 		}));
+		const d = MATCHED_DUMPS.attackTargetEntityWithCurrentItem as "attack";
+		player[d](e);
 	}
 
 	@Subscribe("tick")

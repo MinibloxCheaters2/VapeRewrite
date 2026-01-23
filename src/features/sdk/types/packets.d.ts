@@ -242,7 +242,7 @@ export declare class CPacketExplosion extends Message {
 	pos: PBFloatVector3;
 	strength: number;
 	blocks: PBBlockPos[];
-	playerPos: PBFloatVector3;
+	playerPos?: PBFloatVector3;
 }
 export declare class PBCosmetics extends Message {
 	skin: string;

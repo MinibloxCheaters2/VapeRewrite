@@ -5,8 +5,7 @@ type ClientEvents = {
 	tick: void;
 	render: void;
 	sendPacket: CancelableWrapper<C2SPacket>;
-	// TODO: should it be possible to cancel S2C packets?
-	receivePacket: S2CPacket;
+	receivePacket: CancelableWrapper<S2CPacket>;
 };
 
 export default ClientEvents;

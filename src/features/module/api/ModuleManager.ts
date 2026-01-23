@@ -11,6 +11,7 @@ import InfiniteFly from "../impl/blatant/InfiniteFly.js";
 import ServerCrasher from "../impl/utility/ServerCrasher.js";
 import KillAura from "../impl/blatant/KillAura.js";
 import NoFall from "../impl/world/NoFall.js";
+import Velocity from "../impl/combat/Velocity.js";
 
 /** some basic predicates for finding modules */
 export const P = {
@@ -46,7 +47,8 @@ export default class ModuleManager {
 		new FilterBypass(),
 		new InfiniteFly(),
 		new ServerCrasher(),
-		new KillAura()/*,
+		new KillAura(),
+		new Velocity()/*,
 		new NoFall()*/
 	] as const;
 

@@ -1,6 +1,9 @@
+import { Vector3 } from "three";
 import { BlockPos } from "./blockpos";
-import { Entity } from "./entity";
+import { Entity, EntityLivingBase, EntityPlayer } from "./entity";
 import { PBItemStack, SPacketEnchantItem } from "./packets";
+import World from "./world";
+import { Item } from "./undefined";
 
 export declare class PlayerControllerMP {
 	lastSentSlot: number;
@@ -26,9 +29,10 @@ export declare class PlayerController {
     leftClick(u: boolean): void;
     middleClick(u: boolean): void;
     rightClickMouse(): void;
-    onPlayerRightClick(u: any, h: any, p: any, g: any, y: any, x: any): any;
-    sendUseItem(u: any, h: any, p: any): boolean;
-    windowClick(u: any, h: any, p: any, g: any, y: any): any;
+    onPlayerRightClick(e: EntityPlayer, world: World, item: Item, pos: Vector3, placeSide: any, hitVec: Vector3): any;
+    sendUseItem(plr: EntityLivingBase, h: any, p: any): boolean;
+	/** **IMPORTANT**: USE DUMPS */
+    windowClick(windowID: number, slotID: number, button: number, mode: number, player: EntityPlayer): any;
     onStoppedUsingItem(u: any): void;
     select(): void;
     punch(): boolean | undefined;
