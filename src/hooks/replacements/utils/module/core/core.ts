@@ -47,4 +47,8 @@ if (cWrap.canceled)
 			shift: Shift.AFTER,
 		},
 	],
+	    ["autoClickerDectectOnClick(game),", {
+        replacement: "",
+shift: Shift.REPLACE
+    }],
 ];
