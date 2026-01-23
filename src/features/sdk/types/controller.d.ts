@@ -1,8 +1,17 @@
 import { BlockPos } from "./blockpos";
 import { Entity } from "./entity";
-import { PBItemStack } from "./packets";
+import { PBItemStack, SPacketEnchantItem } from "./packets";
 
-declare class PlayerController {
+export declare class PlayerControllerMP {
+	lastSentSlot: number;
+	isHittingBlock: boolean;
+	/** IMPORTANT: USE DUMPS */
+    syncItem(): void;
+    func_181040_m(): this["isHittingBlock"];
+    sendEnchantPacket(windowId: string, button: number): void;
+}
+
+export declare class PlayerController {
     prevBlock: undefined;
     lastBreakSoundPlay: number;
     key: {

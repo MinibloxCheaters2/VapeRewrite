@@ -1,6 +1,6 @@
 const DUMP_REGEXES = {
-	moveForward: /this\.([a-zA-Z]+)=\([a-zA-Z]+\.right/m,
-	moveStrafe: /this\.([a-zA-Z]+)=\([a-zA-Z]+\.(up|down)/m,
+	moveForward: /this\.([a-zA-Z]+)=\([a-zA-Z]+\.(up|down)/m,
+	moveStrafe: /this\.([a-zA-Z]+)=\([a-zA-Z]+\.right/m,
 	keyPressedPlayer:
 		/function\s+([a-zA-Z]*)\(([a-zA-Z]*)\)\s*\{\n*\s*return\s+keyPressed/m,
 	// World#getLivingEntityCount

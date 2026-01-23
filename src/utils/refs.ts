@@ -7,6 +7,7 @@ import { ClientSocket } from "../features/sdk/types/clientSocket";
 import { PBVector3 } from "../features/sdk/types/packets";
 import { BlockPos } from "../features/sdk/types/blockpos";
 import { EnumFacing } from "../features/sdk/types/math/facing";
+import { PlayerControllerMP } from "../features/sdk/types/controller";
 
 class Refs {
 	// all of these variables are just for caching.
@@ -20,10 +21,16 @@ class Refs {
 	static #EnumFacing: typeof EnumFacing;
 	// TODO: ts like really annoying so uh maybe a better solution?
 	static #EntityPlayer: typeof EntityPlayer;
+	// for PlayerController, use `game.controller`
+	static #playerControllerMP: PlayerControllerMP;
 
 	static #initOrR<T>(field: T, initializer: () => T) {
 		field ??= initializer();
 		return field;
+	}
+
+	static get playerControllerMP() {
+		return this.#initOrR(this.#playerControllerMP, () => Interop.run(e => e<PlayerControllerMP>("playerControllerMP")));
 	}
 
 	static get Vec3() {
