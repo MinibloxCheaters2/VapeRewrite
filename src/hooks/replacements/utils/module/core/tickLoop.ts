@@ -2,13 +2,13 @@ import { EXPOSED } from "../../../../../utils/patchHelper";
 import { Shift, SingleReplacement } from "../../../../replacementTypes";
 
 export const TICK_LOOP_REPLACEMENT: SingleReplacement = [
-	"+=h*y+u*x",
+	"fixedUpdate(){game.world.",
 	{
 		replacement: `
-if (this == player) {
+fixedUpdate() {
 	${EXPOSED}.emitEvent("tick");
-}
+	game.world.
 `,
-	shift: Shift.AFTER
+	shift: Shift.REPLACE
 	}
 ];

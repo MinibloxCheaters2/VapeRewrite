@@ -33,7 +33,7 @@ Classic PvP, and OITQ use the new ac, everything else is using the old ac)`
 		player.motion.x = dir.x;
 		player.motion.z = dir.z;
 		const goUp = isKeyDown("space");
-		const goDown = isKeyDown("shift");
+		const goDown = isKeyDown("alt");
 		this.ticks++;
 		if (goUp || goDown) {
 			player.motion.y = goUp ? this.verticalSpeed : -this.verticalSpeed;
