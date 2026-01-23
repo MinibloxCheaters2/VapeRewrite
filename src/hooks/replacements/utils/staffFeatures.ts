@@ -58,6 +58,6 @@ export const STAFF_DETECTION: SingleReplacement = [
 			});
 		}
 	`,
-		shift: Shift.BEFORE,
+		shift: Shift.AFTER,
 	}
 ]
