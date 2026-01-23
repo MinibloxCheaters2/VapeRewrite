@@ -1,31 +1,31 @@
 const DUMP_REGEXES = {
-	moveStrafe: /strafe: *this\.([a-zA-Z]*)/m,
-	moveForward: /forward: *this\.([a-zA-Z]*)/m,
+	moveForward: /this\.([a-zA-Z]+)=\([a-zA-Z]+\.right/m,
+	moveStrafe: /this\.([a-zA-Z]+)=\([a-zA-Z]+\.(up|down)/m,
 	keyPressedPlayer:
-		/function ([a-zA-Z]*)\(([a-zA-Z]*)\) \{\n\t*return keyPressed/m,
+		/function\s+([a-zA-Z]*)\(([a-zA-Z]*)\)\s*\{\n*\s*return\s+keyPressed/m,
 	// World#getLivingEntityCount
 	entities:
-		/this\.([a-zA-Z]*)\.values\(\)\) [a-zA-Z]* instanceof EntityLiving/m,
+		/this\.([a-zA-Z]*)\.values\(\)\)\s*[a-zA-Z]* instanceof EntityLiving/m,
+	// PlayerControllerMP#updateMouseOver
 	isInvisible:
-		/[a-zA-Z]+\.([a-zA-Z]*)\(\)\) &&\n\t*\([a-zA-Z]* = new [a-zA-Z]*\(/m,
-	attackTargetEntityWithCurrentItem:
-		/hitVec.z,\n\t*\}\),\n\t*\}\),\n\t*\),\n\t*player.([a-zA-Z]*)\(/m,
-	lastReportedYaw: /this\.([a-zA-Z]*) *= *this\.yaw\),\n*\t*\(this\.last/m,
+		/\.mode\.isSpectator\(\)\s*\|\|\s*w\.([a-zA-Z]*)\(\)/m,
+	attackTargetEntityWithCurrentItem: /hitVec.z\}\)\}\)\),player\.([a-zA-Z]*)/,
+	lastReportedYaw: /this\.([a-zA-Z]*)=this\.yaw,this\.last/m,
 	windowClick: /([a-zA-Z]*)\(this\.inventorySlots\.windowId/m,
 	damageReduceAmount:
-		/ItemArmor && \([a-zA-Z]+ \+= [a-zA-Z]*\.item\.([a-zA-Z]*)/,
-	playerController: /const ([a-zA-Z]*) *= *new *PlayerController\(/,
-	boxGeometry: /w = new Mesh\(\n\t*new ([a-zA-Z]*)\(1, 1, 1\),/m,
+		/ItemArmor\s*&&\s*\([a-zA-Z]+\s*\+=\s*[a-zA-Z]*\.item\.([a-zA-Z]*)/,
+	playerController: /const ([a-zA-Z]*)\s*=\s*new\s+PlayerController,/,
+	boxGeometry: /w\s*=\s*new\s+Mesh\s*\(new ([a-zA-Z]*)\(1/m,
 	// playerControllerMP
-	syncItem: /([a-zA-Z]*)\(\),\n\t*ClientSocket\.sendPacket/m,
+	syncItem: /([a-zA-Z]*)\(\),\n*\s*ClientSocket\.sendPacket/m,
 	// GLTF manager
-	gltfManager: /([a-zA-Z]*)("|'|`), new GLTFManager/,
-	AxisAlignedBoundingBox: /this\.boundingBox *= *new *([a-zA-Z]*)/m,
-	loadModels: /loadTextures\(\),*\n\t*this\.[a-zA-Z]*\.([a-zA-Z]*)\(\)/m,
+	gltfManager: /([a-zA-Z]*)("|'|`),\s*new GLTFManager/,
+	AxisAlignedBoundingBox: /this\.boundingBox\s*=\s*new\s+([a-zA-Z]*)/m,
+	loadModels: /loadTextures\(\),*\n*\s*this\.[a-zA-Z]*\.([a-zA-Z]*)\(\)/m,
 	// Shader Manager
 	addShaderToMaterialWorld: /ShaderManager\.([a-zA-Z]*)\(this\.materialWorld/,
 	materialTransparentWorld:
-		/this\.([a-zA-Z]*) *= *this\.materialTransparent\.clone\(/,
+		/this\.([a-zA-Z]*)\s*=\s*this\.materialTransparent\.clone\(/,
 };
 
 export type DumpKey = keyof typeof DUMP_REGEXES;

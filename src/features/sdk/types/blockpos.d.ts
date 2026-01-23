@@ -8,6 +8,7 @@ export declare class PBBlockPos {
 }
 
 export declare class BlockPos {
+	toProto(): PBBlockPos;
 	static readonly ORIGIN: BlockPos;
 	x: number;
 	y: number;

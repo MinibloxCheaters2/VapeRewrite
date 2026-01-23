@@ -59,6 +59,7 @@ declare class ClientEntityPlayer extends PlayerMovement {
 	lastHeadInBlock: Block | null;
 	biome: string;
 	lastReportedPos: Vector3;
+	/** **IMPORTANT**: USE DUMPS */
 	lastReportedYaw: number;
 	lastReportedPitch: number;
 	serverSneakState: boolean;
@@ -176,6 +177,7 @@ declare class EntityPlayer extends EntityLivingBase {
 	getEquipmentInSlot(h: unknown): unknown;
 	onDeath(attackingPlayer: Entity): void;
 	isSprinting(): boolean;
+	/** **IMPORTANT**: USE DUMPS */
 	attack(e: Entity): void;
 	hasInferniumArmor(): boolean;
 	onCriticalHit(entity: Entity): void;
@@ -583,7 +585,7 @@ declare class Entity {
 	onChunkLoad(): void;
 	dropItem2(u: unknown, h: unknown): unknown;
 	dropItemWithOffset(u: unknown, h: unknown, p: number): unknown;
-	getDistanceSqToEntity(u: unknown): unknown;
+	getDistanceSqToEntity(u: Entity): number;
 	setSprinting(sprinting: boolean): void;
 	isSprinting(): boolean;
 	isInvisible(): boolean;
@@ -595,7 +597,7 @@ declare class Entity {
 	setInvisible(invisible: boolean): void;
 	entityDropItem(stack: ItemStack, offsetY: number): EntityItem;
 	doesEntityNotTriggerPressurePlate(): boolean;
-	getHorizontalFacing(): unknown;
+	getHorizontalFacing(): EnumFacing;
 	getPosition(): BlockPos;
 	getExplosionResistance(
 		u: unknown,

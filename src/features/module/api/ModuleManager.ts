@@ -1,4 +1,4 @@
-import AntiBan from "../impl/blatant/AntiBan.js";
+import AntiBan from "../impl/utility/AntiBan.js";
 import Test from "../impl/utility/Test.js";
 import type Mod from "./Module.js";
 import type Category from "./Category.js";
@@ -9,6 +9,7 @@ import AutoRespawn from "../impl/utility/AutoRespawn.js";
 import FilterBypass from "../impl/utility/FilterBypass.js";
 import InfiniteFly from "../impl/blatant/InfiniteFly.js";
 import ServerCrasher from "../impl/utility/ServerCrasher.js";
+import KillAura from "../impl/blatant/KillAura.js";
 
 /** some basic predicates for finding modules */
 export const P = {
@@ -43,7 +44,8 @@ export default class ModuleManager {
 		this.scaffold,
 		new FilterBypass(),
 		new InfiniteFly(),
-		new ServerCrasher()
+		new ServerCrasher(),
+		new KillAura()
 	] as const;
 
 	public static readonly moduleNames: string[] = this.modules.map(m => m.name);

@@ -41,24 +41,9 @@ export default {
 	get moduleManager() {
 		return ModuleManager;
 	},
+
 	get dump() {
 		return MATCHED_DUMPS;
-	},
-	async getFeedback(command: string): Promise<string> {
-		const parseResults = await dispatcher.parse(command, null);
-		const suggestions = await dispatcher.getCompletionSuggestions(parseResults);
-		if (suggestions.getList().length > 0) {
-			const s = suggestions.getList()[0];
-			return command + " >> S " + s.getText() + " (" + s.getRange().getStart() + ", " + s.getRange().getEnd() + ")";
-		}
-		if (parseResults.getErrors().size > 0) {
-			return command + " >> " + parseResults.getErrors().values().next().value.message;
-		}
-		const usage = await dispatcher.getAllUsage(parseResults.getContext().getRootNode(), null, false);
-		if (usage.length > 0) {
-			return command + " >> U " + usage[0];
-		}
-		return command;
 	},
 
 	get commandManager() {

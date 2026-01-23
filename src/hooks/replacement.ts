@@ -46,15 +46,9 @@ export default function modifyCode(code: string): string {
 			for (let [, { replacement }] of REPLACEMENTS.entries()) {
 				replacement = replacement.replaceAll(name, matched[1]);
 			}
+		} else if (CHECK_UNMATCHED_DUMPS) {
+			logger.warn(`Unmatched dump: ${name} with regex`, regex);
 		}
-	}
-
-	if (CHECK_UNMATCHED_DUMPS) {
-		const unmatchedDumps = Object.values(DUMPS).filter(
-			(e) => code.match(e) === undefined,
-		);
-		if (unmatchedDumps.length > 0)
-			logger.warn("Unmatched dumps:", unmatchedDumps);
 	}
 
 	if (CHECK_UNMATCHED_REPLACEMENTS) {

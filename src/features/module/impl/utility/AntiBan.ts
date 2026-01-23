@@ -11,7 +11,7 @@ const GUEST_TOKEN = "";
 
 export default class AntiBan extends Mod {
 	name = "AntiBan";
-	category = Category.BLATANT;
+	category = Category.UTILITY;
 
 	// TODO: replace this with settings stuff when settings are implemented
 	get accGenIntegrationEnabled(): boolean {

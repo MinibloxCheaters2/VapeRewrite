@@ -1,5 +1,9 @@
 import { S2CPacket } from "./packetTypes";
 
+export class Message {
+	constructor(j?: object);
+}
+
 export declare class SPacketLoginStart extends Message {
 	session?: string;
 	hydration?: string;
@@ -26,13 +30,13 @@ export declare class PBBlockPos extends Message {
 	z: number;
 }
 
-export declare class PBVector3 {
+export declare class PBVector3 extends Message {
 	x: number;
 	y: number;
 	z: number;
 }
 
-export declare class PBFloatVector3 {
+export declare class PBFloatVector3 extends Message {
 	x: number;
 	y: number;
 	z: number;
