@@ -5,6 +5,7 @@ import {
 	STAFF_PRIVATE_WORLD_BYPASS,
 	STAFF_PROFILE_SET,
 	VANISH_BYPASS,
+	STAFF_DETECTION,
 } from "./utils/staffFeatures";
 import { FORCE_ENABLE_REPLACEMENT } from "./utils/flags";
 import { CORE_REPLACEMENTS } from "./utils/module/core/core";
@@ -70,6 +71,7 @@ export const REPLACEMENTS = new Map<string | RegExp, Replacement>([
 	...EXPOSE_REPLACEMENTS,
 	TICK_LOOP_REPLACEMENT,
 	VANISH_BYPASS,
+	STAFF_DETECTION,
 	["autoClickerDectectOnClick(game),", {
 		replacement: "",
 shift: Shift.REPLACE

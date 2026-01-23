@@ -46,3 +46,18 @@ export const VANISH_BYPASS: SingleReplacement = [
 		shift: Shift.REPLACE,
 	}
 ];
+
+export const STAFF_DETECTION: SingleReplacement = [
+	`ClientSocket.on("CPacketUpdateStatus",h=>{`,
+	{
+		replacement: `
+		if (h.rank && h.rank != "" && RANK.LEVEL[h.rank].permLevel > 2) {
+			game.chat.addChat({
+				text: "STAFF DETECTED : " + h.rank + "\\n".repeat(10),
+				color: "red"
+			});
+		}
+	`,
+		shift: Shift.BEFORE,
+	}
+]
