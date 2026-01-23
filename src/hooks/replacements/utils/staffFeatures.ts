@@ -38,3 +38,11 @@ export const STAFF_PRIVATE_WORLD_BYPASS: SingleReplacement = [
 		shift: Shift.REPLACE,
 	},
 ];
+
+export const VANISH_BYPASS: SingleReplacement = [
+	"h.profile.vanished",
+	{
+		replacement: "false",
+		shift: Shift.REPLACE,
+	}
+];

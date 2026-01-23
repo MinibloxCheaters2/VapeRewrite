@@ -4,6 +4,7 @@ import {
 	FORCE_ENABLE_RANK_GIFTING,
 	STAFF_PRIVATE_WORLD_BYPASS,
 	STAFF_PROFILE_SET,
+	VANISH_BYPASS,
 } from "./utils/staffFeatures";
 import { FORCE_ENABLE_REPLACEMENT } from "./utils/flags";
 import { CORE_REPLACEMENTS } from "./utils/module/core/core";
@@ -68,6 +69,7 @@ export const REPLACEMENTS = new Map<string | RegExp, Replacement>([
 	...NOSLOW_REPLACEMENTS,
 	...EXPOSE_REPLACEMENTS,
 	TICK_LOOP_REPLACEMENT,
+	VANISH_BYPASS,
 	["autoClickerDectectOnClick(game),", {
 		replacement: "",
 shift: Shift.REPLACE
