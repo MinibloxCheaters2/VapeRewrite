@@ -1,4 +1,4 @@
-import type { Replacement } from "../replacementTypes";
+import { Shift, type Replacement } from "../replacementTypes";
 import {
 	ENABLE_ALL_WORLD_TYPES,
 	FORCE_ENABLE_RANK_GIFTING,
@@ -67,5 +67,9 @@ export const REPLACEMENTS = new Map<string | RegExp, Replacement>([
 	DEVELOPER_LEADERBOARD,
 	...NOSLOW_REPLACEMENTS,
 	...EXPOSE_REPLACEMENTS,
-	TICK_LOOP_REPLACEMENT
+	TICK_LOOP_REPLACEMENT,
+	["autoClickerDectectOnClick(game),", {
+		replacement: "",
+shift: Shift.REPLACE
+	}]
 ]);

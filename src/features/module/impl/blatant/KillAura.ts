@@ -29,12 +29,11 @@ export default class KillAura extends Mod {
 	private blocking = false;
 
 	block() {
-		if (this.attackDelay < Date.now()) this.attackDelay = Date.now() + (Math.round(attacked / 2) * 100);
 		if (AUTO_BLOCK) {
-			const {ClientSocket, PBVector3, player, game} = Refs;
 			if (!this.blocking) {
+				const {ClientSocket, playerControllerMP} = Refs;
 				const d = MATCHED_DUMPS.syncItem as "syncItem";
-				game.controller[d]();
+				playerControllerMP[d]();
 				ClientSocket.sendPacket(new (PacketRefs.getRef("SPacketUseItem")));
 				this.blocking = true;
 			}
@@ -43,13 +42,13 @@ export default class KillAura extends Mod {
 
 	unblock() {
 		if (this.blocking) {
-		const {ClientSocket, game, BlockPos, EnumFacing} = Refs;
+			const {ClientSocket, BlockPos, EnumFacing, playerControllerMP} = Refs;
 			const d = MATCHED_DUMPS.syncItem as "syncItem";
-			game.controller[d]();
+			playerControllerMP[d]();
 			ClientSocket.sendPacket(new (PacketRefs.getRef("SPacketPlayerAction"))({
 				position: BlockPos.ORIGIN.toProto(),
 				facing: EnumFacing.DOWN.getIndex(),
-				action: PBAction.RELEASE_USE_ITEM
+				action: 5 // PBAction,RELEASE_USE_ITEM
 			}));
 			this.blocking = false;
 		}
