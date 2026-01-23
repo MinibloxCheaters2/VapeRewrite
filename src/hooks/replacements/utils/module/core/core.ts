@@ -51,4 +51,5 @@ if (cWrap.canceled)
         replacement: "",
 shift: Shift.REPLACE
     }],
+
 ];
