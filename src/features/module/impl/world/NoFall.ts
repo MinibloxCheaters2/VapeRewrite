@@ -37,7 +37,6 @@ export default class NoFall extends Mod {
 			const pos = Refs.player.pos.clone();
 			Refs.player.pos = pos.setY(pos.y - 0.014);
 			this.falling = false;
-//
 		}
 	}
 }
