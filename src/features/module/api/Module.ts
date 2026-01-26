@@ -1,4 +1,4 @@
-import Bus from "../../../Bus";
+import Bus from "@/Bus";
 import type { Category } from "./Category";
 
 export default abstract class Mod {

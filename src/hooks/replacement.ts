@@ -7,7 +7,7 @@ import {
 } from "../debugControls";
 import logger from "../utils/loggers";
 import DUMPS, { DumpKey } from "./dump";
-import { REPLACEMENTS } from "./replacements/replacements";
+import { REPLACEMENTS } from "./replacements";
 import { type Replacement, Shift } from "./replacementTypes";
 
 function handleReplacement(

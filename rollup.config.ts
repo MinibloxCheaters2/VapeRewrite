@@ -6,7 +6,7 @@ import replacePlugin from "@rollup/plugin-replace";
 import terser from "@rollup/plugin-terser";
 import { isAbsolute, relative, resolve } from "node:path";
 import { readPackageUp } from "read-package-up";
-import { defineConfig, IsExternal } from "rollup";
+import { defineConfig, type IsExternal } from "rollup";
 import postcssPlugin from "rollup-plugin-postcss";
 import userscript from "rollup-plugin-userscript";
 import tsconfigPaths from "rollup-plugin-tsconfig-paths";
@@ -62,7 +62,7 @@ export default defineConfig(
 		external: defineExternal(["@violentmonkey/ui", "@violentmonkey/dom"]),
 		output: {
 			format: "iife",
-			file: `dist/${name}.user.js`,
+			file: `dist/vape-rewrite.user.js`,
 			globals: {
 				"@violentmonkey/dom": "VM",
 				"@violentmonkey/ui": "VM",

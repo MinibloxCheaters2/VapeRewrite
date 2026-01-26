@@ -1,4 +1,4 @@
-import { Shift, type SingleReplacement } from "../../replacementTypes";
+import { Shift, type SingleReplacement } from "../replacementTypes";
 
 export const SHOW_USERNAMES_WITH_HIDDEN_CHARS: SingleReplacement = [
 	/function\s+stripCrazyGamesSuffix\s*\(\w+\)\s*\{[\s\S]*?return[\s\S]*?\}/g,

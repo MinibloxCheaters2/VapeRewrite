@@ -1,5 +1,5 @@
-import { EXPOSED } from "../../../../../utils/patchHelper";
-import { Shift, SingleReplacement } from "../../../../replacementTypes";
+import { Shift, SingleReplacement } from "@/hooks/replacementTypes";
+import { EXPOSED } from "@/utils/patchHelper";
 
 export const TICK_LOOP_REPLACEMENT: SingleReplacement = [
 	"fixedUpdate(){game.world.",

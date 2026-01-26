@@ -1,7 +1,7 @@
-import { Subscribe } from "../../../../event/api/Bus";
-import isKeyDown from "../../../../utils/key";
-import getMoveDirection from "../../../../utils/movement";
-import Refs from "../../../../utils/refs";
+import { Subscribe } from "@/event/api/Bus";
+import isKeyDown from "@/utils/key";
+import getMoveDirection from "@/utils/movement";
+import Refs from "@/utils/refs";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 

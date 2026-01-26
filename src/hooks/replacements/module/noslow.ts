@@ -1,5 +1,5 @@
-import { MOD_MANAGER } from "../../../../utils/patchHelper";
-import { type MultipleReplacements, Shift } from "../../../replacementTypes";
+import { MOD_MANAGER } from "@/utils/patchHelper";
+import { type MultipleReplacements, Shift } from "../../replacementTypes";
 
 const NOSLOW = `${MOD_MANAGER}.noSlow`;
 

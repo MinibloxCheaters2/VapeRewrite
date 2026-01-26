@@ -1,8 +1,8 @@
-import { Subscribe } from "../../../../event/api/Bus";
-import type CancelableWrapper from "../../../../event/api/CancelableWrapper";
-import type { C2SPacket } from "../../../sdk/types/packetTypes";
+import { Subscribe } from "@/event/api/Bus";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
+import CancelableWrapper from "@/event/api/CancelableWrapper";
+import { C2SPacket } from "@/features/sdk/types/packetTypes";
 
 export default class FilterBypass extends Mod {
 	public name = "FilterBypass";

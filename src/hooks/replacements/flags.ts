@@ -4,7 +4,7 @@
  * @module
  */
 
-import { Shift, type SingleReplacement } from "../../replacementTypes";
+import { Shift, type SingleReplacement } from "../replacementTypes";
 
 const FLAGS_TO_FORCE_ENABLE = [
 	// Disables... ads.

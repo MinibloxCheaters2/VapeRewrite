@@ -1,8 +1,8 @@
-import { Subscribe } from "../../../../event/api/Bus";
-import PacketRefs from "../../../../utils/packetRefs";
-import Refs from "../../../../utils/refs";
+import { Subscribe } from "@/event/api/Bus";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
+import Refs from "@/utils/refs";
+import PacketRefs from "@/utils/packetRefs";
 
 const SERVER_CRASHER_CHUNK_XZ_INCREMENT = 16;
 const PACKETS_PER_TICK = 69;

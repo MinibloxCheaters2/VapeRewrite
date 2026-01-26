@@ -1,9 +1,9 @@
-import { Subscribe } from "../../../../event/api/Bus";
-import { MATCHED_DUMPS } from "../../../../hooks/replacement";
-import PacketRefs from "../../../../utils/packetRefs";
-import Refs from "../../../../utils/refs";
-import { findTargets } from "../../../../utils/target";
-import { Entity } from "../../../sdk/types/entity";
+import { Subscribe } from "@/event/api/Bus";
+import { MATCHED_DUMPS } from "@/hooks/replacement";
+import PacketRefs from "@/utils/packetRefs";
+import Refs from "@/utils/refs";
+import { findTargets } from "@/utils/target";
+import { Entity } from "@/features/sdk/types/entity";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 

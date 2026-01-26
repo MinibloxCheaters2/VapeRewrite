@@ -1,4 +1,4 @@
-import { Shift, type SingleReplacement } from "../../replacementTypes";
+import { Shift, SingleReplacement } from "../replacementTypes";
 
 const replacementWorldTypes = /*js*/`availableWorldTypes = {
 		[GameModeId.SURVIVAL]: [WorldGenerationType.NORMAL, WorldGenerationType.SKYBLOCK, WorldGenerationType.ONEBLOCK, WorldGenerationType.FLAT, WorldGenerationType.VOID, WorldGenerationType.DEBUG],

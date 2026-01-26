@@ -1,12 +1,12 @@
-import { Subscribe } from "../../../../event/api/Bus";
-import CancelableWrapper from "../../../../event/api/CancelableWrapper";
-import PacketRefs from "../../../../utils/packetRefs";
-import Refs from "../../../../utils/refs";
-import { S2CPacket } from "../../../sdk/types/packetTypes";
+// reduction amounts
+
+import { Subscribe } from "@/event/api/Bus";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
+import CancelableWrapper from "@/event/api/CancelableWrapper";
+import { S2CPacket } from "@/features/sdk/types/packetTypes";
+import PacketRefs from "@/utils/packetRefs";
 
-// reduction amounts
 // TODO: these should be settings
 const HORIZONTAL = 0;
 const VERTICAL = 0;

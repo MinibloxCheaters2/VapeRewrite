@@ -1,4 +1,4 @@
-import { Match, Shift, type Replacement } from "../replacementTypes";
+import { Match, Shift, type Replacement } from "./replacementTypes";
 import {
 	ENABLE_ALL_WORLD_TYPES,
 	FORCE_ENABLE_RANK_GIFTING,
@@ -6,9 +6,9 @@ import {
 	STAFF_PROFILE_SET,
 	VANISH_BYPASS,
 	STAFF_DETECTION,
-} from "./utils/staffFeatures";
-import { FORCE_ENABLE_REPLACEMENT } from "./utils/flags";
-import { CORE_REPLACEMENTS } from "./utils/core/core";
+} from "./replacements/staffFeatures";
+import { FORCE_ENABLE_REPLACEMENT } from "./replacements/flags";
+import { CORE_REPLACEMENTS } from "./replacements/core/core";
 import {
 	SHOW_USERNAMES_WITH_HIDDEN_CHARS,
 	SHOW_CLOUDS_SETTING,
@@ -22,11 +22,11 @@ import {
 	PLANET_MODEL_EACH_PANEL,
 	DEVELOPER_LEADERBOARD,
 	STATISTICS_MODE_STATS_REPLACEMENT,
-} from "./utils/settingReplacement";
-import { NOSLOW_REPLACEMENTS } from "./utils/module/noslow";
-import { EXPOSE_REPLACEMENTS } from "./utils/module/core/expose";
-import { TICK_LOOP_REPLACEMENT } from "./utils/module/core/tickLoop";
-import { PACKET_RECV_HOOK } from "./utils/module/core/packetRecv";
+} from "./replacements/settingReplacement";
+import { NOSLOW_REPLACEMENTS } from "./replacements/module/noslow";
+import { EXPOSE_REPLACEMENTS } from "./replacements/core/expose";
+import { TICK_LOOP_REPLACEMENT } from "./replacements/core/tickLoop";
+import { PACKET_RECV_HOOK } from "./replacements/core/packetRecv";
 
 // an interesting note, remove the type parameters (<string | RegExp, Replacement>) and then TypeScript starts complaining about types not being the same.
 export const REPLACEMENTS = new Map<Match, Replacement>([
