@@ -1,7 +1,6 @@
+import Mod from "@/features/module/api/Module";
+import ModuleManager, { P } from "@/features/module/api/ModuleManager";
 import { ArgumentType, CommandContext, CommandErrorType, StringReader, Suggestions, SuggestionsBuilder } from "@wq2/brigadier-ts";
-import ModuleManager, { P } from "../../../module/api/ModuleManager";
-import Mod from "../../../module/api/Module";
-import logger from "../../../../utils/loggers";
 
 export const MODULE_NOT_FOUND = new CommandErrorType(found => `Module "${found}" not found`);
 

@@ -1,4 +1,9 @@
-import { LOG_FG_EXPOSED_NAME, LOG_STORE_NAME, NO_FG_EXPOSED_RANDOMIZATION, NO_STORE_NAME_RANDOMIZATION } from "./debugControls";
+import {
+	LOG_FG_EXPOSED_NAME,
+	LOG_STORE_NAME,
+	NO_FG_EXPOSED_RANDOMIZATION,
+	NO_STORE_NAME_RANDOMIZATION,
+} from "./debugControls";
 import logger from "./utils/loggers";
 
 function randomString(length: number): string {
@@ -35,7 +40,8 @@ if (NO_STORE_NAME_RANDOMIZATION)
 	);
 
 if (LOG_STORE_NAME) logger.info(`Store name is ${storeName}`);
-if (LOG_FG_EXPOSED_NAME) logger.info(`from-game exposed store name is ${fgExposedName}`);
+if (LOG_FG_EXPOSED_NAME)
+	logger.info(`from-game exposed store name is ${fgExposedName}`);
 
 export const COMMAND_PREFIX = "." as const;
 

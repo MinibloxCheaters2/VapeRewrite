@@ -3,13 +3,13 @@
  * @module
  */
 
-import Bus from "../../Bus";
-import { COMMAND_PREFIX } from "../../Client";
-import { Subscribe } from "../../event/api/Bus";
-import CancelableWrapper from "../../event/api/CancelableWrapper";
-import PacketRefs from "../../utils/packetRefs";
-import Refs from "../../utils/refs";
-import { C2SPacket } from "../sdk/types/packetTypes";
+import Bus from "@/Bus";
+import { COMMAND_PREFIX } from "@/Client";
+import { Subscribe } from "@/event/api/Bus";
+import CancelableWrapper from "@/event/api/CancelableWrapper";
+import PacketRefs from "@/utils/packetRefs";
+import Refs from "@/utils/refs";
+import { C2SPacket } from "@/features/sdk/types/packetTypes";
 import dispatcher from "./api/CommandDispatcher";
 
 export default new class CommandListener {

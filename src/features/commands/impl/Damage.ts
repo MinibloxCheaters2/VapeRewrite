@@ -1,6 +1,6 @@
 import { argument, literal, FloatArgumentType } from "@wq2/brigadier-ts";
 import dispatcher from "../api/CommandDispatcher";
-import Refs from "../../../utils/refs";
+import Refs from "@/utils/refs";
 
 dispatcher.register(literal("damage")
     .then(argument("amount", new FloatArgumentType())

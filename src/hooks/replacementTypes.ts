@@ -10,6 +10,8 @@ export interface Replacement {
 	shift: Shift;
 }
 
-export type Replacements = Map<string | RegExp, Replacement>;
-export type SingleReplacement = [string | RegExp, Replacement];
+export type Match = string | RegExp;
+
+export type Replacements = Map<Match, Replacement>;
+export type SingleReplacement = [Match, Replacement];
 export type MultipleReplacements = SingleReplacement[];

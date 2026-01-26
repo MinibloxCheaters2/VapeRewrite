@@ -1,4 +1,4 @@
-import { Shift, type Replacement } from "../replacementTypes";
+import { Match, Shift, type Replacement } from "../replacementTypes";
 import {
 	ENABLE_ALL_WORLD_TYPES,
 	FORCE_ENABLE_RANK_GIFTING,
@@ -8,7 +8,7 @@ import {
 	STAFF_DETECTION,
 } from "./utils/staffFeatures";
 import { FORCE_ENABLE_REPLACEMENT } from "./utils/flags";
-import { CORE_REPLACEMENTS } from "./utils/module/core/core";
+import { CORE_REPLACEMENTS } from "./utils/core/core";
 import {
 	SHOW_USERNAMES_WITH_HIDDEN_CHARS,
 	SHOW_CLOUDS_SETTING,
@@ -29,7 +29,7 @@ import { TICK_LOOP_REPLACEMENT } from "./utils/module/core/tickLoop";
 import { PACKET_RECV_HOOK } from "./utils/module/core/packetRecv";
 
 // an interesting note, remove the type parameters (<string | RegExp, Replacement>) and then TypeScript starts complaining about types not being the same.
-export const REPLACEMENTS = new Map<string | RegExp, Replacement>([
+export const REPLACEMENTS = new Map<Match, Replacement>([
 	...CORE_REPLACEMENTS,
 	// enable all game modes and disable ads
 	FORCE_ENABLE_REPLACEMENT,

@@ -3,5 +3,5 @@
  * @module
  */
 
-import "../impl/Toggle.ts";
-import "../impl/Damage.ts";
+import "@/impl/Toggle.ts";
+import "@/impl/Damage.ts";

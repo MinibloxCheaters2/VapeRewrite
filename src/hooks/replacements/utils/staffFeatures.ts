@@ -1,6 +1,6 @@
 import { Shift, type SingleReplacement } from "../../replacementTypes";
 
-const replacementWorldTypes = `availableWorldTypes = {
+const replacementWorldTypes = /*js*/`availableWorldTypes = {
 		[GameModeId.SURVIVAL]: [WorldGenerationType.NORMAL, WorldGenerationType.SKYBLOCK, WorldGenerationType.ONEBLOCK, WorldGenerationType.FLAT, WorldGenerationType.VOID, WorldGenerationType.DEBUG],
 		[GameModeId.CREATIVE]: [WorldGenerationType.NORMAL, WorldGenerationType.FLAT, WorldGenerationType.VOID, WorldGenerationType.SKYBLOCK, WorldGenerationType.ONEBLOCK, WorldGenerationType.DEBUG],
 		[GameModeId.ADVENTURE]: [WorldGenerationType.NORMAL, WorldGenerationType.FLAT, WorldGenerationType.VOID, WorldGenerationType.SKYBLOCK, WorldGenerationType.ONEBLOCK, WorldGenerationType.DEBUG]
@@ -8,10 +8,10 @@ const replacementWorldTypes = `availableWorldTypes = {
 
 const STAFF_RANK = "1000";
 export const FORCE_ENABLE_RANK_GIFTING: SingleReplacement = [
-	'jsxRuntimeExports.jsx("option",{value:"legend",children:"Legend"})',
+	/*js*/`jsxRuntimeExports.jsx("option",{value:"legend",children:"Legend"})`,
 	{
 		replacement:
-			',jsxRuntimeExports.jsx("option", { value: "immortal", children: "Immortal" })',
+			/*js*/`,jsxRuntimeExports.jsx("option", { value: "immortal", children: "Immortal" })`,
 		shift: Shift.AFTER,
 	},
 ];
@@ -25,7 +25,7 @@ export const ENABLE_ALL_WORLD_TYPES: SingleReplacement = [
 ];
 
 export const STAFF_PROFILE_SET: SingleReplacement = [
-	"getRankLevel(player.profile.rank)",
+	/*js*/`getRankLevel(player.profile.rank)`,
 	{
 		replacement: STAFF_RANK,
 		shift: Shift.REPLACE,
@@ -48,9 +48,9 @@ export const VANISH_BYPASS: SingleReplacement = [
 ];
 
 export const STAFF_DETECTION: SingleReplacement = [
-	`ClientSocket.on("CPacketUpdateStatus",h=>{`,
+	/*js*/`ClientSocket.on("CPacketUpdateStatus",h=>{`,
 	{
-		replacement: `
+		replacement: /*js*/`
 		if (h.rank && h.rank != "" && RANK.LEVEL[h.rank].permLevel > 2) {
 			game.chat.addChat({
 				text: "STAFF DETECTED : " + h.rank + "\\n".repeat(10),

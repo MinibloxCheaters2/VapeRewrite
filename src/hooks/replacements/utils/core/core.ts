@@ -1,5 +1,5 @@
-import { EXPOSED } from "../../../../../utils/patchHelper";
-import { type MultipleReplacements, Shift } from "../../../../replacementTypes";
+import { EXPOSED } from "@/utils/patchHelper";
+import { type MultipleReplacements, Shift } from "@/hooks/replacementTypes";
 
 export const CORE_REPLACEMENTS: MultipleReplacements = [
 	[
@@ -47,9 +47,5 @@ if (cWrap.canceled)
 			shift: Shift.AFTER,
 		},
 	],
-	    ["autoClickerDectectOnClick(game),", {
-        replacement: "",
-shift: Shift.REPLACE
-    }],
 
 ];

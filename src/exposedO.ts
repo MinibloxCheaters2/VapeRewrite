@@ -31,7 +31,7 @@ const Interop = {
 	},
 	get run(): ExposedFromGame["run"] {
 		return Interop.store.run;
-	}
+	},
 } as const;
 
 Interop.initIfRequired();
