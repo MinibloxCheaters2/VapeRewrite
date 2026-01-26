@@ -2,7 +2,7 @@
 	"name": "vaperewrite",
 	"version": "0.0.0",
 	"description": "",
-	"author": "datamodel",
+	"author": "Seized and Desisted",
 	"license": "AGPL-3.0-only",
 	"private": true,
 	"engines": {
@@ -11,8 +11,6 @@
 	"scripts": {
 		"dev": "rollup -wc",
 		"clean": "del-cli dist",
-		"lint": "eslint",
-		"lint:fix": "eslint --fix",
 		"ci": "run-s lint",
 		"build:js": "rollup -c",
 		"build": "cross-env NODE_ENV=production run-s ci clean build:js",
@@ -21,12 +19,13 @@
 	},
 	"dependencies": {
 		"@babel/runtime": "^7.28.6",
+		"@types/node": "^25.0.10",
 		"@violentmonkey/dom": "^2.2.1",
-		"@wq2/ui": "^0.10.1",
 		"@wq2/brigadier-ts": "^1.0.3",
+		"@wq2/ui": "^0.10.1",
 		"rollup": "4.56.0",
-		"solid-js": "^1.9.10",
-		"typescript-eslint": "^8.53.1"
+		"rollup-plugin-tsconfig-paths": "^1.5.2",
+		"solid-js": "^1.9.11"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.28.6",
@@ -35,14 +34,12 @@
 		"@babel/plugin-transform-runtime": "^7.28.5",
 		"@babel/preset-env": "^7.28.6",
 		"@babel/preset-typescript": "^7.28.5",
-		"@rollup/plugin-alias": "^6.0.0",
 		"@rollup/plugin-babel": "^6.1.0",
 		"@rollup/plugin-commonjs": "^29.0.0",
 		"@rollup/plugin-json": "^6.1.0",
 		"@rollup/plugin-node-resolve": "^16.0.3",
 		"@rollup/plugin-replace": "^6.0.3",
 		"@rollup/plugin-terser": "^0.4.4",
-		"@types/eslint": "^9.6.1",
 		"@types/three": "0.158.3",
 		"@unocss/postcss": "^66.6.0",
 		"@violentmonkey/types": "^0.3.2",
@@ -51,9 +48,6 @@
 		"commander": "^14.0.2",
 		"cross-env": "^10.1.0",
 		"del-cli": "^7.0.0",
-		"eslint": "^9.39.2",
-		"eslint-config-prettier": "^10.1.8",
-		"globals": "^17.0.0",
 		"lint-staged": "^16.2.7",
 		"npm-run-all": "^4.1.5",
 		"patch-package": "^8.0.1",
@@ -69,11 +63,10 @@
 	},
 	"lint-staged": {
 		"*.{ts,tsx}": [
-			"eslint --fix",
-			"prettier --write"
+			"biome check --fix"
 		],
 		"*.css": [
-			"prettier --write"
+			"biome check --fix"
 		]
 	}
 }

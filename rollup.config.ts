@@ -4,21 +4,21 @@ import jsonPlugin from "@rollup/plugin-json";
 import resolvePlugin from "@rollup/plugin-node-resolve";
 import replacePlugin from "@rollup/plugin-replace";
 import terser from "@rollup/plugin-terser";
-import { isAbsolute, relative, resolve } from "path";
+import { isAbsolute, relative, resolve } from "node:path";
 import { readPackageUp } from "read-package-up";
-import { defineConfig } from "rollup";
+import { defineConfig, IsExternal } from "rollup";
 import postcssPlugin from "rollup-plugin-postcss";
 import userscript from "rollup-plugin-userscript";
+import tsconfigPaths from "rollup-plugin-tsconfig-paths";
 
-const { packageJson } = await readPackageUp();
+const {packageJson} = (await readPackageUp())!;
 const extensions = [".ts", ".tsx", ".mjs", ".js", ".jsx"];
 
 export default defineConfig(
-	Object.entries({
-		"vape-rewrite": "src/index.ts",
-	}).map(([name, entry]) => ({
-		input: entry,
+	{
+		input: "src/index.ts",
 		plugins: [
+			tsconfigPaths(),
 			postcssPlugin({
 				inject: false,
 				minimize: true,
@@ -54,7 +54,7 @@ export default defineConfig(
 				: undefined,
 			userscript((meta) => {
 				const newMeta = meta
-					.replace("process.env.AUTHOR", packageJson.author.name)
+					.replace("process.env.AUTHOR", packageJson.author?.name ?? "Unspecified")
 					.replace("process.env.VERSION", packageJson.version);
 				return newMeta;
 			}),
@@ -69,19 +69,14 @@ export default defineConfig(
 			},
 			indent: false,
 		},
-	})),
+	}
 );
 
-/**
- *
- * @param {((string | (id: string) => boolean) | RegExp)[]} externals
- * @returns {import("rollup").IsExternal}
- */
-function defineExternal(externals) {
+function defineExternal(externals: ((string | ((id: string) => boolean)) | RegExp)[]): IsExternal {
 	return (id) =>
 		externals.some((pattern) => {
 			if (typeof pattern === "function") return pattern(id);
-			if (pattern && typeof pattern.test === "function") {
+			if (pattern instanceof RegExp) {
 				return pattern.test(id);
 			}
 			if (isAbsolute(pattern)) {
