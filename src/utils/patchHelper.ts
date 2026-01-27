@@ -1,4 +1,4 @@
-import { fgExposedName, storeName } from "../Client";
+import { fgExposedName, storeName } from "./names";
 import dump from "../hooks/dump";
 import { ExposedFromGame } from "../hooks/exposed";
 

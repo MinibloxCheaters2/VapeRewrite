@@ -35,7 +35,12 @@ for (const [cat, info] of Object.entries(categoryInfoSet).sort(([an], [bn]) => {
 	categoryPanel.wrapper.addEventListener("mouseup", () => {
 		categoryPanel.wrapper.style.cursor = "auto";
 	});
-	categoryPanel.setMovable(true);
+	categoryPanel.setMovable(true, {
+		canDrag(e) {
+			const target = e.target as HTMLElement;
+			return !!target.closest("[data-drag-handle]");
+		},
+	});
 	categoryPanel.show();
 	render(() => CategoryUI(cat, info), categoryPanel.body);
 }

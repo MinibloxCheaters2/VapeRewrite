@@ -9,10 +9,10 @@ const profilePanel = getPanel({
 profilePanel.setMovable(true, {
 	canDrag(e) {
 		const target = e.target as HTMLElement;
-
-		return !!target.closest("select, option, input, textarea, button, label");
+		return !!target.closest("[data-drag-handle]");
 	},
 });
+
 profilePanel.show();
 
 render(Profiles, profilePanel.body);

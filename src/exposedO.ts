@@ -9,8 +9,8 @@
  * @module
  */
 
-import { fgExposedName } from "./Client";
 import type { ExposedFromGame } from "./hooks/exposed";
+import { fgExposedName } from "./utils/names";
 
 const Interop = {
 	/** DO NOT CALL THIS IF THE STORE IS ALREADY AN OBJECT. */

@@ -1,7 +1,7 @@
 import Bus from "./Bus";
-import { storeName } from "./Client";
 import type ClientEvents from "./event/api/Events";
 import exposed from "./hooks/exposed";
+import { storeName } from "./utils/names";
 
 export interface Store {
 	/** Objects exposed from this client to the replacements */

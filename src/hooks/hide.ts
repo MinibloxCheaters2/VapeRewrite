@@ -3,7 +3,7 @@
  * @module
  */
 
-import { storeName } from "../Client";
+import { storeName } from "@/utils/names";
 
 function replaceAndCopyFunction<OP, OR>(
 	oldFunc: (...args: OP[]) => OR,
