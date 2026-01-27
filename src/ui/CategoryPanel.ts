@@ -1,5 +1,5 @@
 import { render } from "solid-js/web";
-import { getPanel } from "@violentmonkey/ui";
+import { getPanel } from "@wq2/ui";
 import { categoryInfoSet } from "../features/module/api/Category";
 import CategoryUI from "./components/CategoryComponent";
 

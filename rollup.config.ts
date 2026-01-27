@@ -59,13 +59,13 @@ export default defineConfig(
 				return newMeta;
 			}),
 		],
-		external: defineExternal(["@violentmonkey/ui", "@violentmonkey/dom"]),
+		external: defineExternal(["@wq2/ui", "@violentmonkey/dom"]),
 		output: {
 			format: "iife",
 			file: `dist/vape-rewrite.user.js`,
 			globals: {
 				"@violentmonkey/dom": "VM",
-				"@violentmonkey/ui": "VM",
+				"@wq2/ui": "VM",
 			},
 			indent: false,
 		},
