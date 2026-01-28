@@ -2,6 +2,7 @@ import { render } from "solid-js/web";
 import { getPanel } from "@wq2/ui";
 import { categoryInfoSet } from "../features/module/api/Category";
 import CategoryUI from "./components/CategoryComponent";
+import { dragHandleAttrName } from "@/utils/names";
 
 let catIdx = 0;
 
@@ -28,17 +29,10 @@ for (const [cat, info] of Object.entries(categoryInfoSet).sort(([an], [bn]) => {
 		top: `60px`,
 		left: `${left}px`,
 	});
-
-	categoryPanel.wrapper.addEventListener("mousedown", () => {
-		categoryPanel.wrapper.style.cursor = "grabbing";
-	});
-	categoryPanel.wrapper.addEventListener("mouseup", () => {
-		categoryPanel.wrapper.style.cursor = "auto";
-	});
 	categoryPanel.setMovable(true, {
 		canDrag(e) {
 			const target = e.target as HTMLElement;
-			return !!target.closest("[data-drag-handle]");
+			return !!target.closest(`[${dragHandleAttrName}]`);
 		},
 	});
 	categoryPanel.show();

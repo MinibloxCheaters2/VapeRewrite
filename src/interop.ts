@@ -60,8 +60,14 @@ export class NamedConfig extends Config {
 	}
 }
 
+const CONFIG_KEY_PREFIX = "vapeConfig";
+
 function configKey(n: string): string {
-	return `vapeConfig${n}`;
+	return `${CONFIG_KEY_PREFIX}${n}`;
+}
+
+function isConfigKey(n: string): boolean {
+	return n.startsWith(CONFIG_KEY_PREFIX);
 }
 
 let loadedConfig: NamedConfig;
@@ -88,7 +94,7 @@ async function importConfig(): Promise<void> {
 
 function listConfigs(): string[] {
 	// TODO
-	return [];
+	return GM_listValues().filter(isConfigKey).map(a => a.slice(CONFIG_KEY_PREFIX.length));
 }
 
 function emitEvent<E extends keyof ClientEvents>(

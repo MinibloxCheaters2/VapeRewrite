@@ -1,7 +1,8 @@
+import { dragHandleAttrName } from "@/utils/names";
 import Category, {
 	type CategoryInfo,
-} from "../../features/module/api/Category";
-import ModuleManager, { P } from "../../features/module/api/ModuleManager";
+} from "@/features/module/api/Category";
+import ModuleManager, { P } from "@/features/module/api/ModuleManager";
 import Module from "./Module";
 import Spacer from "./Spacer";
 
@@ -9,7 +10,7 @@ export default function CategoryUI(category: string, info: CategoryInfo) {
 	const mods = ModuleManager.findModules(P.byCategory(Category[category]));
 	return (
 		<div>
-			<div
+			<div {...{ [dragHandleAttrName]: "" }}
 				style={{
 					display: "flex",
 					"align-items": "center",

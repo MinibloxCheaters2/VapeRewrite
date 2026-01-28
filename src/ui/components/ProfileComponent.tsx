@@ -1,3 +1,4 @@
+import { randomIntInclusive, randomString } from "@/utils/random";
 import StoreInterop from "../../interop";
 
 export default function Profiles() {
@@ -5,9 +6,10 @@ export default function Profiles() {
 	// StoreInterop.store.loadConfig;
 	// StoreInterop.store.saveConfig;
 	// TODO: randomization for these IDs and values
-	const actionSelectID = "config-action",
-		loadValue = "load",
-		saveValue = "save";
+	const actionSelectID = randomString(randomIntInclusive(6, 9)),
+		loadValue = randomString(randomIntInclusive(4, 6)),
+		saveValue = randomString(randomIntInclusive(6, 17));
+
 	return (
 		<div>
 			{/* vertically stacked */}
@@ -28,7 +30,7 @@ export default function Profiles() {
 			<label for={actionSelectID}>
 				Choose a config to perform this operation on
 			</label>
-			<select id={actionSelectID} required>
+			<select required>
 				{configs.map((cfg) => (
 					<option value={cfg}>{cfg}</option>
 				))}

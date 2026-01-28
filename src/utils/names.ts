@@ -9,11 +9,11 @@ import { randomIntInclusive, randomString } from "./random";
 
 export const storeName = NO_STORE_NAME_RANDOMIZATION
 	? "VapeStore"
-	: randomString(Math.min(randomIntInclusive(4, 9)));
+	: randomString(randomIntInclusive(4, 9));
 
 export const fgExposedName = NO_FG_EXPOSED_RANDOMIZATION
 	? "VapeFgExposed"
-	: randomString(Math.min(randomIntInclusive(4, 9)));
+	: randomString(randomIntInclusive(4, 9));
 
 if (NO_STORE_NAME_RANDOMIZATION)
 	logger.warn(
@@ -23,3 +23,5 @@ if (NO_STORE_NAME_RANDOMIZATION)
 if (LOG_STORE_NAME) logger.info(`Store name is ${storeName}`);
 if (LOG_FG_EXPOSED_NAME)
 	logger.info(`from-game exposed store name is ${fgExposedName}`);
+
+export const dragHandleAttrName = `data-${randomString(randomIntInclusive(1, 3))}`;
