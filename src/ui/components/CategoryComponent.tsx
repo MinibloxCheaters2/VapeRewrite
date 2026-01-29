@@ -6,9 +6,10 @@ import ModuleManager, { P } from "@/features/module/api/ModuleManager";
 import Module from "./Module";
 import Spacer from "./Spacer";
 import { createSignal } from "solid-js";
+import getResourceURL from "@/utils/cachedResourceURL";
 
-const CONTRACT = GM_getResourceURL("contract");
-const EXPAND = GM_getResourceURL("expand");
+const CONTRACT = getResourceURL("contract");
+const EXPAND = getResourceURL("expand");
 
 export default function CategoryUI(category: string, info: CategoryInfo) {
 	const mods = ModuleManager.findModules(P.byCategory(Category[category]));

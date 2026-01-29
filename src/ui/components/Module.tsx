@@ -1,6 +1,7 @@
 import { type ParentProps } from "solid-js";
 import type Mod from "../../features/module/api/Module";
 import { ACCENT_COLOR } from "../colors";
+import getResourceURL from "@/utils/cachedResourceURL";
 
 export default function Module({ mod }: ParentProps<{ mod: Mod }>) {
 	const { name, stateAccessor: toggled } = mod;
@@ -21,6 +22,9 @@ export default function Module({ mod }: ParentProps<{ mod: Mod }>) {
 					background: "none",
 					border: "none",
 					cursor: "pointer",
+					display: "flex",
+					"align-items": "center",
+					flex: "1",
 				}}
 				type="button"
 				on:click={() => {
@@ -30,10 +34,7 @@ export default function Module({ mod }: ParentProps<{ mod: Mod }>) {
 				<div style={{ color: "white" }}>{name}</div>
 
 				{bind !== undefined ? (
-					<p
-						style={{ "margin-left": "auto" }}
-						aria-details={`${name} is bound to ${bind}`}
-					>
+					<p aria-details={`${name} is bound to ${bind}`}>
 						{bind}
 					</p>
 				) : undefined}
@@ -44,13 +45,13 @@ export default function Module({ mod }: ParentProps<{ mod: Mod }>) {
 						background: "none",
 						border: "none",
 						cursor: "pointer",
+						"margin-left": "auto",
 					}}
 					type="button"
 				>
 					<img
-						style={{ "margin-left": "auto" }}
-						src={GM_getResourceURL("bind")}
-						loading="lazy"
+							loading="lazy"
+						src={getResourceURL("bind")}
 						alt="Click to bind"
 					/>
 				</button>

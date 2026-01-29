@@ -1,3 +1,5 @@
+import getResourceURL from "@/utils/cachedResourceURL";
+
 export enum Category {
 	COMBAT,
 	RENDER,
@@ -59,7 +61,7 @@ export class CategoryInfo {
 		return lol;
 	}
 	get iconURL(): string {
-		this.#cachedIconURL ??= GM_getResourceURL(this.data.icon);
+		this.#cachedIconURL ??= getResourceURL(this.data.icon);
 		return this.#cachedIconURL;
 	}
 }
