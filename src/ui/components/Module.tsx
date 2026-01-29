@@ -3,8 +3,7 @@ import type Mod from "../../features/module/api/Module";
 import { ACCENT_COLOR } from "../colors";
 
 export default function Module({ mod }: ParentProps<{ mod: Mod }>) {
-	const { name, stateSignal } = mod;
-	const [toggled, setToggled] = stateSignal;
+	const { name, stateAccessor: toggled } = mod;
 	const bind = undefined; // TODO: bind system
 
 	return (
@@ -25,7 +24,7 @@ export default function Module({ mod }: ParentProps<{ mod: Mod }>) {
 				}}
 				type="button"
 				on:click={() => {
-					setToggled(mod.enabled);
+					mod.toggle();
 				}}
 			>
 				<div style={{ color: "white" }}>{name}</div>

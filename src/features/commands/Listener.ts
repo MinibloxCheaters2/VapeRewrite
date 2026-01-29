@@ -34,7 +34,14 @@ export default new class CommandListener {
 				});
 				return;
 			}
-			await dispatcher.execute(r, null);
+			try {
+				await dispatcher.execute(r, null);
+			} catch (e) {
+				Refs.game.chat.addChat({
+					text: `ERROR WHEN EXECUTING "${removedPrefix}": ${e} (this may exclude some useful information, check developer console for more info)`
+				});
+				console.error(`ERROR WHEN EXECUTING COMMAND "${removedPrefix}":`, e);
+			}
 		}
 		if (packet instanceof PacketRefs.getRef("SPacketTabComplete") && CommandListener.isCommand(packet.message)) {
 			wrap.cancel();

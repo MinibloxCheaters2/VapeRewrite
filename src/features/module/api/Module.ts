@@ -8,7 +8,13 @@ export default abstract class Mod {
 	/** What category this module is in */
 	public abstract category: Category;
 
-	public stateSignal = createSignal(false);
+	private stateSignal = createSignal(false, {
+		name: "Module state signal"
+	});
+
+	get stateAccessor() {
+		return this.stateSignal[0];
+	}
 
 	/**
 	 * Do NOT override this, override {@link onEnable} instead
@@ -45,11 +51,11 @@ export default abstract class Mod {
 		// TODO: implement toggle notifications and dynamic island stuff here
 	}
 
-	set state(value: boolean) {
+	private set state(value: boolean) {
 		this.stateSignal[1](value);
 	}
 
-	get state(): boolean {
+	private get state(): boolean {
 		return this.stateSignal[0]();
 	}
 

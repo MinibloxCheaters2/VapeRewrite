@@ -39,19 +39,20 @@ export default function CategoryUI(category: string, info: CategoryInfo) {
 					loading="lazy"
 				/>
 			</div>
-			<div>
-				{mods.map((m, i) => {
-					return (
-						<div>
-							<Module mod={m}></Module>
-							{i >=
-							ModuleManager.modules.length - 1 ? undefined : (
-								<Spacer size={"4px"}></Spacer>
-							)}
-						</div>
-					);
-				})}
-			</div>
+			{expanded() ?
+				<div>
+					{mods.map((m, i) => {
+						return (
+							<div>
+								<Module mod={m}></Module>
+								{i >=
+									ModuleManager.modules.length - 1 ? undefined : (
+									<Spacer size={"4px"}></Spacer>
+								)}
+							</div>
+						);
+					})}
+				</div> : undefined}
 		</div>
 	);
 }
