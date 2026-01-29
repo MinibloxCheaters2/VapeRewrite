@@ -6,7 +6,6 @@ import { dragHandleAttrName } from "@/utils/names";
 const profilePanel = getPanel({
 	theme: "dark",
 });
-
 profilePanel.setMovable(true, {
 	canDrag(e) {
 		const target = e.target as HTMLElement;

@@ -16,7 +16,9 @@
 		"build:js": "rollup -c",
 		"build": "cross-env NODE_ENV=production run-s ci clean build:js",
 		"devbuild": "run-s clean dev",
-		"postinstall": "patch-package"
+		"postinstall": "patch-package",
+		"lint": "biome check",
+		"lint:fix": "biome check --fix"
 	},
 	"dependencies": {
 		"@babel/runtime": "^7.28.6",

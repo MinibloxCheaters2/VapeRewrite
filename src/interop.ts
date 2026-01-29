@@ -94,7 +94,9 @@ async function importConfig(): Promise<void> {
 
 function listConfigs(): string[] {
 	// TODO
-	return GM_listValues().filter(isConfigKey).map(a => a.slice(CONFIG_KEY_PREFIX.length));
+	return GM_listValues()
+		.filter(isConfigKey)
+		.map((a) => a.slice(CONFIG_KEY_PREFIX.length));
 }
 
 function emitEvent<E extends keyof ClientEvents>(

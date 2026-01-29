@@ -3,6 +3,7 @@
 // @namespace   https://codeberg.org/Miniblox
 // @description The Vape UserScript, but rewritten.
 // @license     AGPL-3.0-or-later
+// @homepageURL https://codeberg.org/Miniblox/Vape
 // @match       https://miniblox.io/*
 // @match       https://miniblox.org/*
 // @match       https://miniblox.online/*
