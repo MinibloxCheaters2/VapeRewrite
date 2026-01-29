@@ -1,4 +1,8 @@
-const resourceURLCache: WeakMap<readonly [string, boolean], string> = new WeakMap();
+// stores resource URLs that are blob URLs
+const resourceURLCache: Record<string, string> = {};
+
+// stores resource URLs that are data URLs
+const resourceURLCache2: Record<string, string> = {};
 
 /**
  * @param name Name of a resource defined in the *Metadata Block*.
@@ -13,11 +17,9 @@ export default function getResourceURL(
   name: string,
   isBlobUrl: boolean = true
 ) {
-	const key = [name, isBlobUrl] as const;
+	const cache = isBlobUrl ? resourceURLCache : resourceURLCache2;
 
-	if (!resourceURLCache.has(key)) {
-		resourceURLCache.set(key, GM_getResourceURL(name, isBlobUrl));
-	}
+	cache[name] ??= GM_getResourceURL(name, isBlobUrl);
 
-	return resourceURLCache.get(key);
+	return cache[name];
 }
