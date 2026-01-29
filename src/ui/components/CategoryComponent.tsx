@@ -5,9 +5,15 @@ import Category, {
 import ModuleManager, { P } from "@/features/module/api/ModuleManager";
 import Module from "./Module";
 import Spacer from "./Spacer";
+import { createSignal } from "solid-js";
+
+const CONTRACT = GM_getResourceURL("contract");
+const EXPAND = GM_getResourceURL("expand");
 
 export default function CategoryUI(category: string, info: CategoryInfo) {
 	const mods = ModuleManager.findModules(P.byCategory(Category[category]));
+	const [expanded, setExpanded] = createSignal(true);
+
 	return (
 		<div>
 			<div {...{ [dragHandleAttrName]: "" }}
@@ -17,6 +23,9 @@ export default function CategoryUI(category: string, info: CategoryInfo) {
 					gap: "0.5rem",
 					padding: "0.5rem 0.75rem",
 				}}
+				on:click={() => {
+					setExpanded(!expanded());
+				}}
 			>
 				<img
 					src={info.iconURL}
@@ -24,6 +33,11 @@ export default function CategoryUI(category: string, info: CategoryInfo) {
 					loading="lazy"
 				/>
 				<div>{info.data.name}</div>
+				<img
+					src={expanded() ? EXPAND : CONTRACT}
+					alt={`${expanded() ? `Expand ${category}` : `Contract ${category}`}`}
+					loading="lazy"
+				/>
 			</div>
 			<div>
 				{mods.map((m, i) => {

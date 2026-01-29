@@ -20,6 +20,8 @@
 // @require     https://cdn.jsdelivr.net/npm/@violentmonkey/dom@2
 // @require     https://cdn.jsdelivr.net/npm/@wq2/ui@0.10.5
 // @resource    bind https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/bind.png
+// @resource    expand https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/expand.png
+// @resource    contract https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/contract.png
 // @resource    combat https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/categories/combat.png
 // @resource    blatant https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/categories/blatant.png
 // @resource    minigames https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/categories/minigames.png

@@ -1,5 +1,5 @@
 import { Vector3 } from "three";
-import { ClientEntityPlayer, EntityPlayer } from "../features/sdk/types/entity";
+import { ClientEntityPlayer, EntityLivingBase } from "../features/sdk/types/entity";
 import { Game } from "../features/sdk/types/game";
 import { ClientWorld } from "../features/sdk/types/world";
 import Interop from "../exposedO";
@@ -20,7 +20,7 @@ class Refs {
 	static #BlockPos: typeof BlockPos;
 	static #EnumFacing: typeof EnumFacing;
 	// TODO: ts like really annoying so uh maybe a better solution?
-	static #EntityPlayer: typeof EntityPlayer;
+	static #EntityLivingBase: typeof EntityLivingBase;
 	// for PlayerController, use `game.controller`
 	static #playerControllerMP: PlayerControllerMP;
 
@@ -45,8 +45,8 @@ class Refs {
 		return this.#initOrR(this.#EnumFacing, () => Interop.run(e => e<typeof EnumFacing>("EnumFacing")));
 	}
 
-	static get EntityPlayer() {
-		return this.#initOrR(this.#EntityPlayer, () => Interop.run(e => e<typeof EntityPlayer>("EntityPlayer")));
+	static get EntityLivingBase() {
+		return this.#initOrR(this.#EntityLivingBase, () => Interop.run(e => e<typeof EntityLivingBase>("EntityLivingBase")));
 	}
 
 	static get PBVector3() {

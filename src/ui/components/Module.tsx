@@ -1,13 +1,11 @@
-import { createSignal, type ParentProps } from "solid-js";
+import { type ParentProps } from "solid-js";
 import type Mod from "../../features/module/api/Module";
 import { ACCENT_COLOR } from "../colors";
 
 export default function Module({ mod }: ParentProps<{ mod: Mod }>) {
-	const { name, enabled } = mod;
+	const { name, stateSignal } = mod;
+	const [toggled, setToggled] = stateSignal;
 	const bind = undefined; // TODO: bind system
-	const [getToggled, setToggled] = createSignal<boolean>(enabled, {
-		name: "Module toggled Signal",
-	});
 
 	return (
 		<div
@@ -16,7 +14,7 @@ export default function Module({ mod }: ParentProps<{ mod: Mod }>) {
 				"align-items": "center",
 				gap: "0.5rem",
 				padding: "0.5rem 0.75rem",
-				"background-color": getToggled() ? ACCENT_COLOR : "#120707ff",
+				"background-color": toggled() ? ACCENT_COLOR : "#120707ff",
 			}}
 		>
 			<button
@@ -27,7 +25,6 @@ export default function Module({ mod }: ParentProps<{ mod: Mod }>) {
 				}}
 				type="button"
 				on:click={() => {
-					mod.toggle();
 					setToggled(mod.enabled);
 				}}
 			>

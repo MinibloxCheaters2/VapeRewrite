@@ -1,5 +1,6 @@
 import Bus from "@/Bus";
 import type { Category } from "./Category";
+import { createSignal } from "solid-js";
 
 export default abstract class Mod {
 	/** The name of this module. */
@@ -7,11 +8,7 @@ export default abstract class Mod {
 	/** What category this module is in */
 	public abstract category: Category;
 
-	/**
-	 * ! ONLY use this for toggling the state internally,
-	 * this won't subscribe or unsubscribe the events
-	 */
-	private state: boolean;
+	public stateSignal = createSignal(false);
 
 	/**
 	 * Do NOT override this, override {@link onEnable} instead
@@ -46,6 +43,14 @@ export default abstract class Mod {
 	public toggle(): void {
 		this.toggleSilently();
 		// TODO: implement toggle notifications and dynamic island stuff here
+	}
+
+	set state(value: boolean) {
+		this.stateSignal[1](value);
+	}
+
+	get state(): boolean {
+		return this.stateSignal[0]();
 	}
 
 	set enabled(value: boolean) {
