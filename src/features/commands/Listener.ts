@@ -11,6 +11,7 @@ import PacketRefs from "@/utils/packetRefs";
 import Refs from "@/utils/refs";
 import { C2SPacket } from "@/features/sdk/types/packetTypes";
 import dispatcher from "./api/CommandDispatcher";
+import logger from "@/utils/loggers";
 
 export default new class CommandListener {
 	constructor() {
@@ -40,7 +41,7 @@ export default new class CommandListener {
 				Refs.game.chat.addChat({
 					text: `ERROR WHEN EXECUTING "${removedPrefix}": ${e} (this may exclude some useful information, check developer console for more info)`
 				});
-				console.error(`ERROR WHEN EXECUTING COMMAND "${removedPrefix}":`, e);
+				logger.error(`ERROR WHEN EXECUTING COMMAND "${removedPrefix}":`, e);
 			}
 		}
 		if (packet instanceof PacketRefs.getRef("SPacketTabComplete") && CommandListener.isCommand(packet.message)) {
