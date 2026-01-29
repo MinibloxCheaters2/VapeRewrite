@@ -6,6 +6,7 @@ import Mod from "../../api/Module";
 import CancelableWrapper from "@/event/api/CancelableWrapper";
 import { S2CPacket } from "@/features/sdk/types/packetTypes";
 import PacketRefs from "@/utils/packetRefs";
+import Refs from "@/utils/refs";
 
 // TODO: these should be settings
 const HORIZONTAL = 0;
