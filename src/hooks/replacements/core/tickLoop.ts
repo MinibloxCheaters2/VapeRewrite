@@ -1,4 +1,4 @@
-import { Shift, SingleReplacement } from "@/hooks/replacementTypes";
+import { Shift, type SingleReplacement } from "@/hooks/replacementTypes";
 import { EXPOSED } from "@/utils/patchHelper";
 
 export const TICK_LOOP_REPLACEMENT: SingleReplacement = [
@@ -9,6 +9,6 @@ fixedUpdate() {
 	${EXPOSED}.emitEvent("tick");
 	game.world.
 `,
-	shift: Shift.REPLACE
-	}
+		shift: Shift.REPLACE,
+	},
 ];

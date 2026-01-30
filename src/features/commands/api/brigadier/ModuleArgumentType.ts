@@ -1,13 +1,26 @@
-import Mod from "@/features/modules/api/Module";
+import {
+	ArgumentType,
+	type CommandContext,
+	CommandErrorType,
+	type StringReader,
+	type Suggestions,
+	type SuggestionsBuilder,
+} from "@wq2/brigadier-ts";
+import type Mod from "@/features/modules/api/Module";
 import ModuleManager, { P } from "@/features/modules/api/ModuleManager";
-import { ArgumentType, CommandContext, CommandErrorType, StringReader, Suggestions, SuggestionsBuilder } from "@wq2/brigadier-ts";
 
-export const MODULE_NOT_FOUND = new CommandErrorType(found => `Module "${found}" not found`);
+export const MODULE_NOT_FOUND = new CommandErrorType(
+	(found) => `Module "${found}" not found`,
+);
 
 export default class ModuleArgumentType extends ArgumentType<Mod> {
-
-	listSuggestions(_context: CommandContext<unknown>, builder: SuggestionsBuilder): Promise<Suggestions> {
-		const suggestions = ModuleManager.moduleNames.filter(m => m.toLowerCase().startsWith(builder.getRemaining().toLowerCase()));
+	listSuggestions(
+		_context: CommandContext<unknown>,
+		builder: SuggestionsBuilder,
+	): Promise<Suggestions> {
+		const suggestions = ModuleManager.moduleNames.filter((m) =>
+			m.toLowerCase().startsWith(builder.getRemaining().toLowerCase()),
+		);
 		let b = builder;
 		for (const suggestion of suggestions) {
 			b = b.suggest(suggestion);
@@ -22,7 +35,7 @@ export default class ModuleArgumentType extends ArgumentType<Mod> {
 		if (mod === undefined) {
 			reader.setCursor(start);
 			throw MODULE_NOT_FOUND.createWithContext(reader, name);
-		};
+		}
 		return mod;
 	}
 }

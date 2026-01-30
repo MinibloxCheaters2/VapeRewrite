@@ -1,12 +1,12 @@
 // reduction amounts
 
 import { Subscribe } from "@/event/api/Bus";
-import Category from "../../api/Category";
-import Mod from "../../api/Module";
-import CancelableWrapper from "@/event/api/CancelableWrapper";
-import { S2CPacket } from "@/features/sdk/types/packetTypes";
+import type CancelableWrapper from "@/event/api/CancelableWrapper";
+import type { S2CPacket } from "@/features/sdk/types/packetTypes";
 import PacketRefs from "@/utils/packetRefs";
 import Refs from "@/utils/refs";
+import Category from "../../api/Category";
+import Mod from "../../api/Module";
 
 // TODO: these should be settings
 const HORIZONTAL = 0;
@@ -19,7 +19,10 @@ export default class Velocity extends Mod {
 	@Subscribe("receivePacket")
 	onPacket(e: CancelableWrapper<S2CPacket>) {
 		const { data: packet } = e;
-		if (packet instanceof PacketRefs.getRef("CPacketEntityVelocity") && packet.id === Refs.player.id) {
+		if (
+			packet instanceof PacketRefs.getRef("CPacketEntityVelocity") &&
+			packet.id === Refs.player.id
+		) {
 			if (HORIZONTAL === 0 && VERTICAL === 0) e.cancel();
 
 			const pH = HORIZONTAL / 100;
@@ -28,7 +31,10 @@ export default class Velocity extends Mod {
 			packet.motion.y *= pV;
 			packet.motion.z *= pH;
 		}
-		if (packet instanceof PacketRefs.getRef("CPacketExplosion") && packet.playerPos) {
+		if (
+			packet instanceof PacketRefs.getRef("CPacketExplosion") &&
+			packet.playerPos
+		) {
 			if (HORIZONTAL === 0 && VERTICAL === 0) e.cancel();
 
 			const pH = HORIZONTAL / 100;

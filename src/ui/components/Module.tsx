@@ -1,7 +1,7 @@
-import { type ParentProps } from "solid-js";
+import type { ParentProps } from "solid-js";
+import getResourceURL from "@/utils/cachedResourceURL";
 import type Mod from "../../features/modules/api/Module";
 import { ACCENT_COLOR } from "../colors";
-import getResourceURL from "@/utils/cachedResourceURL";
 
 export default function Module({ mod }: ParentProps<{ mod: Mod }>) {
 	const { name, stateAccessor: toggled } = mod;
@@ -34,9 +34,7 @@ export default function Module({ mod }: ParentProps<{ mod: Mod }>) {
 				<div style={{ color: "white" }}>{name}</div>
 
 				{bind !== undefined ? (
-					<p aria-details={`${name} is bound to ${bind}`}>
-						{bind}
-					</p>
+					<p aria-details={`${name} is bound to ${bind}`}>{bind}</p>
 				) : undefined}
 			</button>
 			{bind === undefined ? (
@@ -50,7 +48,7 @@ export default function Module({ mod }: ParentProps<{ mod: Mod }>) {
 					type="button"
 				>
 					<img
-							loading="lazy"
+						loading="lazy"
 						src={getResourceURL("bind")}
 						alt="Click to bind"
 					/>

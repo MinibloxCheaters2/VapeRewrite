@@ -8,7 +8,7 @@ export enum Priority {
 	LOWEST = 0,
 	// PacketQueueManager runs here
 	FINAL_DECISION = -250,
-	READ_FINAL_STATE = -500
+	READ_FINAL_STATE = -500,
 }
 
 interface HandlerEntry<E = unknown> {
@@ -76,7 +76,9 @@ export default class EventBus<Events extends Record<string, unknown>> {
 		const subscriptions: Subscription<Events>[] = proto.__subscriptions;
 		if (subscriptions) {
 			for (const sub of subscriptions) {
-				const handler = (instance as any)[sub.method].bind(instance);
+				const handler = (
+					instance as { [k: typeof sub.method]: () => void }
+				)[sub.method].bind(instance);
 				const inst = instance as Idk<Events>;
 				inst.__handlers ??= [];
 				inst.__handlers.push({
@@ -108,7 +110,7 @@ export interface Subscription<E> {
 	event: keyof E;
 	method: string;
 	priority?: number;
-};
+}
 
 export function Subscribe<K extends keyof ClientEvents>(
 	event: K,
@@ -124,7 +126,8 @@ export function Subscribe<K extends keyof ClientEvents>(
 		mdc.addInitializer(function () {
 			const t = this as Idk<Record<string, unknown>>;
 			t.__subscriptions ??= [];
-			const subscriptions: Subscription<ClientEvents>[] = t.__subscriptions;
+			const subscriptions: Subscription<ClientEvents>[] =
+				t.__subscriptions;
 			subscriptions.push({ event, method: mdc.name, priority });
 		});
 	};

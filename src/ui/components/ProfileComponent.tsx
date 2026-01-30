@@ -1,6 +1,6 @@
+import { dragHandleAttrName } from "@/utils/names";
 import { randomIntInclusive, randomString } from "@/utils/random";
 import StoreInterop from "../../interop";
-import { dragHandleAttrName } from "@/utils/names";
 
 export default function Profiles() {
 	const configs = StoreInterop.store.listConfigs();
@@ -13,7 +13,10 @@ export default function Profiles() {
 	return (
 		<div>
 			{/* TODO: this background color is REALLY ugly, I *need* to change it but like idk */}
-			<div {...{ [dragHandleAttrName]: "" }} style={{height: "2vh", "background-color": "#333"}}></div>
+			<div
+				{...{ [dragHandleAttrName]: "" }}
+				style={{ height: "2vh", "background-color": "#333" }}
+			></div>
 			{/* vertically stacked */}
 			<div
 				style={{

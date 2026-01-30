@@ -16,7 +16,11 @@ export default function getMoveDirection(moveSpeed: number) {
 		moveForward = moveForward * speed;
 		const rt = Math.cos(player.yaw) * moveSpeed;
 		const nt = -Math.sin(player.yaw) * moveSpeed;
-		return new Vec3(moveStrafe * rt - moveForward * nt, 0, moveForward * rt + moveStrafe * nt);
+		return new Vec3(
+			moveStrafe * rt - moveForward * nt,
+			0,
+			moveForward * rt + moveStrafe * nt,
+		);
 	}
 	return new Vec3(0, 0, 0);
 }

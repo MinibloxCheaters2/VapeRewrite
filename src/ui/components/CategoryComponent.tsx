@@ -1,12 +1,10 @@
-import { dragHandleAttrName } from "@/utils/names";
-import Category, {
-	type CategoryInfo,
-} from "@/features/modules/api/Category";
+import { createSignal } from "solid-js";
+import Category, { type CategoryInfo } from "@/features/modules/api/Category";
 import ModuleManager, { P } from "@/features/modules/api/ModuleManager";
+import getResourceURL from "@/utils/cachedResourceURL";
+import { dragHandleAttrName } from "@/utils/names";
 import Module from "./Module";
 import Spacer from "./Spacer";
-import { createSignal } from "solid-js";
-import getResourceURL from "@/utils/cachedResourceURL";
 
 const CONTRACT = getResourceURL("contract");
 const EXPAND = getResourceURL("expand");
@@ -17,7 +15,8 @@ export default function CategoryUI(category: string, info: CategoryInfo) {
 
 	return (
 		<div>
-			<div {...{ [dragHandleAttrName]: "" }}
+			<div
+				{...{ [dragHandleAttrName]: "" }}
 				style={{
 					display: "flex",
 					"align-items": "center",
@@ -40,20 +39,21 @@ export default function CategoryUI(category: string, info: CategoryInfo) {
 					loading="lazy"
 				/>
 			</div>
-			{expanded() ?
+			{expanded() ? (
 				<div>
 					{mods.map((m, i) => {
 						return (
 							<div>
 								<Module mod={m}></Module>
 								{i >=
-									ModuleManager.modules.length - 1 ? undefined : (
+								ModuleManager.modules.length - 1 ? undefined : (
 									<Spacer size={"4px"}></Spacer>
 								)}
 							</div>
 						);
 					})}
-				</div> : undefined}
+				</div>
+			) : undefined}
 		</div>
 	);
 }

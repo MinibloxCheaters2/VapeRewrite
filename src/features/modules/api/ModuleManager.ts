@@ -1,17 +1,17 @@
-import AntiBan from "../impl/utility/AntiBan.js";
-import Test from "../impl/utility/Test.js";
-import type Mod from "./Module.js";
-import type Category from "./Category.js";
+import InfiniteFly from "../impl/blatant/InfiniteFly.js";
+import KillAura from "../impl/blatant/KillAura.js";
 import NoSlow from "../impl/blatant/NoSlow.js";
 import Phase from "../impl/blatant/Phase.js";
 import Scaffold from "../impl/blatant/Scaffold.js";
+import Velocity from "../impl/combat/Velocity.js";
+import AntiBan from "../impl/utility/AntiBan.js";
 import AutoRespawn from "../impl/utility/AutoRespawn.js";
 import FilterBypass from "../impl/utility/FilterBypass.js";
-import InfiniteFly from "../impl/blatant/InfiniteFly.js";
 import ServerCrasher from "../impl/utility/ServerCrasher.js";
-import KillAura from "../impl/blatant/KillAura.js";
-import NoFall from "../impl/world/NoFall.js";
-import Velocity from "../impl/combat/Velocity.js";
+import Test from "../impl/utility/Test.js";
+// import NoFall from "../impl/world/NoFall.js";
+import type Category from "./Category.js";
+import type Mod from "./Module.js";
 
 /** some basic predicates for finding modules */
 export const P = {
@@ -48,11 +48,13 @@ export default class ModuleManager {
 		new InfiniteFly(),
 		new ServerCrasher(),
 		new KillAura(),
-		new Velocity()/*,
-		new NoFall()*/
+		new Velocity() /*,
+		new NoFall()*/,
 	] as const;
 
-	public static readonly moduleNames: string[] = this.modules.map(m => m.name);
+	public static readonly moduleNames: string[] = this.modules.map(
+		(m) => m.name,
+	);
 
 	public static findModule(
 		predicate: (module: Mod) => boolean,

@@ -1,6 +1,6 @@
-import { Shift, SingleReplacement } from "../replacementTypes";
+import { Shift, type SingleReplacement } from "../replacementTypes";
 
-const replacementWorldTypes = /*js*/`availableWorldTypes = {
+const replacementWorldTypes = /*js*/ `availableWorldTypes = {
 		[GameModeId.SURVIVAL]: [WorldGenerationType.NORMAL, WorldGenerationType.SKYBLOCK, WorldGenerationType.ONEBLOCK, WorldGenerationType.FLAT, WorldGenerationType.VOID, WorldGenerationType.DEBUG],
 		[GameModeId.CREATIVE]: [WorldGenerationType.NORMAL, WorldGenerationType.FLAT, WorldGenerationType.VOID, WorldGenerationType.SKYBLOCK, WorldGenerationType.ONEBLOCK, WorldGenerationType.DEBUG],
 		[GameModeId.ADVENTURE]: [WorldGenerationType.NORMAL, WorldGenerationType.FLAT, WorldGenerationType.VOID, WorldGenerationType.SKYBLOCK, WorldGenerationType.ONEBLOCK, WorldGenerationType.DEBUG]
@@ -8,10 +8,9 @@ const replacementWorldTypes = /*js*/`availableWorldTypes = {
 
 const STAFF_RANK = "1000";
 export const FORCE_ENABLE_RANK_GIFTING: SingleReplacement = [
-	/*js*/`jsxRuntimeExports.jsx("option",{value:"legend",children:"Legend"})`,
+	/*js*/ `jsxRuntimeExports.jsx("option",{value:"legend",children:"Legend"})`,
 	{
-		replacement:
-			/*js*/`,jsxRuntimeExports.jsx("option", { value: "immortal", children: "Immortal" })`,
+		replacement: /*js*/ `,jsxRuntimeExports.jsx("option", { value: "immortal", children: "Immortal" })`,
 		shift: Shift.AFTER,
 	},
 ];
@@ -25,7 +24,7 @@ export const ENABLE_ALL_WORLD_TYPES: SingleReplacement = [
 ];
 
 export const STAFF_PROFILE_SET: SingleReplacement = [
-	/*js*/`getRankLevel(player.profile.rank)`,
+	/*js*/ `getRankLevel(player.profile.rank)`,
 	{
 		replacement: STAFF_RANK,
 		shift: Shift.REPLACE,
@@ -44,13 +43,13 @@ export const VANISH_BYPASS: SingleReplacement = [
 	{
 		replacement: "false",
 		shift: Shift.REPLACE,
-	}
+	},
 ];
 
 export const STAFF_DETECTION: SingleReplacement = [
-	/*js*/`ClientSocket.on("CPacketUpdateStatus",h=>{`,
+	/*js*/ `ClientSocket.on("CPacketUpdateStatus",h=>{`,
 	{
-		replacement: /*js*/`
+		replacement: /*js*/ `
 		if (h.rank && h.rank != "" && RANK.LEVEL[h.rank].permLevel > 2) {
 			game.chat.addChat({
 				text: "STAFF DETECTED : " + h.rank + "\\n".repeat(10),
@@ -59,5 +58,5 @@ export const STAFF_DETECTION: SingleReplacement = [
 		}
 	`,
 		shift: Shift.AFTER,
-	}
-]
+	},
+];

@@ -6,8 +6,8 @@
 import Bus from "../Bus";
 import CancelableWrapper from "../event/api/CancelableWrapper";
 import type ClientEvents from "../event/api/Events";
-import ModuleManager from "../features/modules/api/ModuleManager";
 import dispatcher from "../features/commands/api/CommandDispatcher";
+import ModuleManager from "../features/modules/api/ModuleManager";
 import { MATCHED_DUMPS } from "./replacement";
 
 /** functions exposed by patches that modify the game script */
@@ -25,7 +25,10 @@ export interface ExposedFromGame {
 	 * });
 	 * ```
 	 */
-	run<A, R>(fn: (evalInScript: <ER>(code: string) => ER, ...args: A[]) => R, ...args: A[]): R;
+	run<A, R>(
+		fn: (evalInScript: <ER>(code: string) => ER, ...args: A[]) => R,
+		...args: A[]
+	): R;
 }
 
 export default {
@@ -48,5 +51,5 @@ export default {
 
 	get commandManager() {
 		return dispatcher;
-	}
+	},
 };

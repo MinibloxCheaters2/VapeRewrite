@@ -1,6 +1,6 @@
+import { createSignal } from "solid-js";
 import Bus from "@/Bus";
 import type { Category } from "./Category";
-import { createSignal } from "solid-js";
 
 export default abstract class Mod {
 	/** The name of this module. */
@@ -9,7 +9,7 @@ export default abstract class Mod {
 	public abstract category: Category;
 
 	private stateSignal = createSignal(false, {
-		name: "Module state signal"
+		name: "Module state signal",
 	});
 
 	get stateAccessor() {
@@ -71,6 +71,4 @@ export default abstract class Mod {
 	get enabled(): boolean {
 		return this.state;
 	}
-
-
 }

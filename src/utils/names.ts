@@ -3,7 +3,12 @@
  * @module
  */
 
-import { LOG_FG_EXPOSED_NAME, LOG_STORE_NAME, NO_FG_EXPOSED_RANDOMIZATION, NO_STORE_NAME_RANDOMIZATION } from "@/debugControls";
+import {
+	LOG_FG_EXPOSED_NAME,
+	LOG_STORE_NAME,
+	NO_FG_EXPOSED_RANDOMIZATION,
+	NO_STORE_NAME_RANDOMIZATION,
+} from "@/debugControls";
 import logger from "./loggers";
 import { randomIntInclusive, randomString } from "./random";
 

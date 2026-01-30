@@ -1,5 +1,5 @@
-import { EXPOSED } from "@/utils/patchHelper";
 import { type MultipleReplacements, Shift } from "@/hooks/replacementTypes";
+import { EXPOSED } from "@/utils/patchHelper";
 
 export const CORE_REPLACEMENTS: MultipleReplacements = [
 	[
@@ -25,5 +25,4 @@ if (cWrap.canceled)
 			shift: Shift.AFTER,
 		},
 	],
-
 ];

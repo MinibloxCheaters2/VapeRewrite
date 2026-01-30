@@ -7,8 +7,7 @@ const DUMP_REGEXES = {
 	entities:
 		/this\.([a-zA-Z]*)\.values\(\)\)\s*[a-zA-Z]* instanceof EntityLiving/m,
 	// PlayerControllerMP#updateMouseOver
-	isInvisible:
-		/\.mode\.isSpectator\(\)\s*\|\|\s*w\.([a-zA-Z]*)\(\)/m,
+	isInvisible: /\.mode\.isSpectator\(\)\s*\|\|\s*w\.([a-zA-Z]*)\(\)/m,
 	attackTargetEntityWithCurrentItem: /hitVec.z\}\)\}\)\),player\.([a-zA-Z]*)/,
 	lastReportedYaw: /this\.([a-zA-Z]*)=this\.yaw,this\.last/m,
 	windowClick: /([a-zA-Z]*)\(this\.inventorySlots\.windowId/m,

@@ -1,10 +1,10 @@
+import { Subscribe } from "@/event/api/Bus";
+import type CancelableWrapper from "@/event/api/CancelableWrapper";
+import type { C2SPacket } from "@/features/sdk/types/packetTypes";
+import PacketRefs from "@/utils/packetRefs";
 import Refs from "@/utils/refs";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
-import { Subscribe } from "@/event/api/Bus";
-import CancelableWrapper from "@/event/api/CancelableWrapper";
-import { C2SPacket } from "@/features/sdk/types/packetTypes";
-import PacketRefs from "@/utils/packetRefs";
 
 export default class NoFall extends Mod {
 	public name = "NoFall";
@@ -14,8 +14,8 @@ export default class NoFall extends Mod {
 		Refs.game.chat.addChat({
 			text: "[Vape Rewrite] Vector is black and made the `fallDistance` field not update so uh NoFall won't work cat",
 			color: "yellow",
-			id: "6 + 7 = 13"
-		})
+			id: "6 + 7 = 13",
+		});
 	}
 
 	@Subscribe("tick")
@@ -25,13 +25,13 @@ export default class NoFall extends Mod {
 		}
 	}
 	@Subscribe("sendPacket")
-	onPacket({data: packet}: CancelableWrapper<C2SPacket>) {
-		if (packet instanceof (PacketRefs.getRef("SPacketPlayerPosLook"))) {
+	onPacket({ data: packet }: CancelableWrapper<C2SPacket>) {
+		if (packet instanceof PacketRefs.getRef("SPacketPlayerPosLook")) {
 			if (!this.falling) {
-				Refs.game.chat.addChat({text: "Not falling"});
+				Refs.game.chat.addChat({ text: "Not falling" });
 				return;
 			}
-			Refs.game.chat.addChat({text: "Impossible"});
+			Refs.game.chat.addChat({ text: "Impossible" });
 			packet.onGround = false;
 			packet.pos.y -= 0.014;
 			const pos = Refs.player.pos.clone();

@@ -1,4 +1,4 @@
-import { Shift, SingleReplacement } from "@/hooks/replacementTypes";
+import { Shift, type SingleReplacement } from "@/hooks/replacementTypes";
 import { EXPOSED } from "@/utils/patchHelper";
 
 // ClientDecoder#add
@@ -28,6 +28,6 @@ if (v.typeName === "ClientBoundCombined") {
 		});
 }
 `,
-	shift: Shift.REPLACE
-	}
+		shift: Shift.REPLACE,
+	},
 ];

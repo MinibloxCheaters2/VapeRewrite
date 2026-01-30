@@ -2,9 +2,9 @@
 
 import Bus from "../Bus";
 import { Priority, Subscribe } from "../event/api/Bus";
-import CancelableWrapper from "../event/api/CancelableWrapper";
+import type CancelableWrapper from "../event/api/CancelableWrapper";
 import SubscribeOnInit from "../event/api/SubscribeOnInit";
-import { AnyPacket, C2SPacket } from "../features/sdk/types/packetTypes";
+import type { AnyPacket, C2SPacket } from "../features/sdk/types/packetTypes";
 import PacketUtil from "./PacketUtil";
 
 export class PacketRecord<T> {
@@ -15,16 +15,21 @@ export class PacketRecord<T> {
 export enum Action {
 	FLUSH,
 	PASS,
-	QUEUE
+	QUEUE,
 }
 
 export class PacketOutcome<P> {
-	constructor(public packet: P, public action: Action) {}
+	constructor(
+		public packet: P,
+		public action: Action,
+	) {}
 }
 
-export default new class PacketQueueManager extends SubscribeOnInit {
+export default new (class PacketQueueManager extends SubscribeOnInit {
 	private packetQueue: PacketRecord<C2SPacket>[] = [];
-	get lagging() { return this.packetQueue.length > 0; }
+	get lagging() {
+		return this.packetQueue.length > 0;
+	}
 
 	/** this doesn't remove the packet from the packet queue since I'm lazy, you do that yourself. this just sends the packet. */
 	private flushPacket<T extends C2SPacket>(record: PacketRecord<T>) {
@@ -33,11 +38,10 @@ export default new class PacketQueueManager extends SubscribeOnInit {
 	}
 
 	flush(when?: (p: PacketRecord<AnyPacket>) => boolean) {
-		this.packetQueue = this.packetQueue.filter(p => {
+		this.packetQueue = this.packetQueue.filter((p) => {
 			const result = when?.(p) ?? true;
 
-			if (result)
-				this.flushPacket(p);
+			if (result) this.flushPacket(p);
 
 			return result;
 		});
@@ -51,4 +55,4 @@ export default new class PacketQueueManager extends SubscribeOnInit {
 			this.flush();
 		}
 	}
-}
+})();

@@ -6,7 +6,7 @@ import {
 	LOG_APPLYING_REPLACEMENTS,
 } from "../debugControls";
 import logger from "../utils/loggers";
-import DUMPS, { DumpKey } from "./dump";
+import DUMPS, { type DumpKey } from "./dump";
 import { REPLACEMENTS } from "./replacements";
 import { type Replacement, Shift } from "./replacementTypes";
 

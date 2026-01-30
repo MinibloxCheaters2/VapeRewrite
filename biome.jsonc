@@ -8,6 +8,6 @@
 		"useIgnoreFile": true
 	},
 	"files": {
-		"includes": ["src/*"]
+		"includes": ["src/**", "!src/features/sdk/types"]
 	}
 }

@@ -17,10 +17,10 @@ const dataURLCache: Record<string, string> = {};
  * It's long so reusing it in DOM may be less performant due to the lack of caching,
  * but it's particularly handy for direct synchronous decoding of the data on sites
  * that forbid fetching `blob:` in their CSP.
-*/
+ */
 export default function getResourceURL(
-  name: string,
-  isBlobUrl: boolean = true
+	name: string,
+	isBlobUrl: boolean = true,
 ) {
 	const cache = isBlobUrl ? blobURLCache : dataURLCache;
 
