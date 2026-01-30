@@ -1,6 +1,11 @@
 import { createSignal } from "solid-js";
 import Bus from "@/Bus";
 import type { Category } from "./Category";
+import { addBind, removeBind, setBind } from "@/features/binds/handler";
+
+const NO_BIND = "";
+
+const TOGGLE_CALLBACK = (m: Mod) => () => m.toggle();
 
 export default abstract class Mod {
 	/** The name of this module. */
@@ -11,6 +16,43 @@ export default abstract class Mod {
 	private stateSignal = createSignal(false, {
 		name: "Module state signal",
 	});
+
+	private bindSignal = createSignal(NO_BIND, {
+		name: "Module bind signal",
+	});
+
+	#keyID: string;
+
+	get KEY_ID() {
+		this.#keyID ??= `mod${this.name}`;
+		return this.#keyID;
+	}
+
+	get bindAccessor() {
+		return this.bindSignal[0];
+	}
+
+	get bind() {
+		return this.bindSignal[0]();
+	}
+
+	#updateBind(orig: string, newBind: string) {
+		if (newBind === NO_BIND) {
+			removeBind(orig, this.KEY_ID);
+		} else {
+			if (orig === NO_BIND) {
+				addBind(newBind, this.KEY_ID, TOGGLE_CALLBACK(this));
+			} else {
+				setBind(orig, newBind, this.KEY_ID);
+			}
+		}
+	}
+
+	set bind(value: string) {
+		this.#updateBind(this.bindSignal[0](), value);
+
+		this.bindSignal[1](value);
+	}
 
 	get stateAccessor() {
 		return this.stateSignal[0];

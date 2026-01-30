@@ -3,9 +3,10 @@ import getResourceURL from "@/utils/cachedResourceURL";
 import type Mod from "../../features/modules/api/Module";
 import { ACCENT_COLOR } from "../colors";
 
+const NO_BIND = "";
+
 export default function Module({ mod }: ParentProps<{ mod: Mod }>) {
-	const { name, stateAccessor: toggled } = mod;
-	const bind = undefined; // TODO: bind system
+	const { name, stateAccessor: toggled, bindAccessor: bind } = mod;
 
 	return (
 		<div
@@ -32,28 +33,28 @@ export default function Module({ mod }: ParentProps<{ mod: Mod }>) {
 				}}
 			>
 				<div style={{ color: "white" }}>{name}</div>
-
-				{bind !== undefined ? (
-					<p aria-details={`${name} is bound to ${bind}`}>{bind}</p>
-				) : undefined}
 			</button>
-			{bind === undefined ? (
-				<button
-					style={{
-						background: "none",
-						border: "none",
-						cursor: "pointer",
-						"margin-left": "auto",
-					}}
-					type="button"
-				>
+			<button
+				style={{
+					background: "none",
+					border: "none",
+					cursor: "pointer",
+					"margin-left": "auto",
+				}}
+				type="button"
+			>
+				{bind() === NO_BIND ? (
 					<img
 						loading="lazy"
 						src={getResourceURL("bind")}
 						alt="Click to bind"
 					/>
-				</button>
-			) : undefined}
+				) : (
+					<p>
+						{bind().toUpperCase()}
+					</p>
+				)}
+			</button>
 		</div>
 	);
 }
