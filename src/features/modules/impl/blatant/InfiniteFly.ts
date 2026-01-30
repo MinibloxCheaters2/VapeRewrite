@@ -9,7 +9,7 @@ export default class InfiniteFly extends Mod {
 	public name = "InfiniteFly";
 	public category = Category.BLATANT;
 	private warned = false;
-	private speed = 0.394;
+	private speed = 0.36;
 	private reduceVerticalMotion = false;
 	private ticks = 0;
 	private verticalSpeed = 0.67;
