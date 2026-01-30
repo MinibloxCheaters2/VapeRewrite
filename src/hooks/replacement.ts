@@ -20,8 +20,9 @@ function handleReplacement(
 		case Shift.REPLACE:
 			return replacement;
 		case Shift.AFTER:
-		default:
 			return `${original}${replacement}`;
+		default:
+			throw `Unimplemented shift (src/hooks/replacement.ts#handleReplacement)!: ${shift}`;
 	}
 }
 
