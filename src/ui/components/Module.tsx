@@ -1,5 +1,5 @@
 import { type ParentProps } from "solid-js";
-import type Mod from "../../features/module/api/Module";
+import type Mod from "../../features/modules/api/Module";
 import { ACCENT_COLOR } from "../colors";
 import getResourceURL from "@/utils/cachedResourceURL";
 

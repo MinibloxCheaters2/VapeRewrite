@@ -23,12 +23,12 @@ import {
 	DEVELOPER_LEADERBOARD,
 	STATISTICS_MODE_STATS_REPLACEMENT,
 } from "./replacements/settingReplacement";
-import { NOSLOW_REPLACEMENTS } from "./replacements/module/noslow";
+import { NOSLOW_REPLACEMENTS } from "./replacements/modules/noslow";
 import { EXPOSE_REPLACEMENTS } from "./replacements/core/expose";
 import { TICK_LOOP_REPLACEMENT } from "./replacements/core/tickLoop";
 import { PACKET_RECV_HOOK } from "./replacements/core/packetRecv";
 import VERSION_REPLACEMENT from "./replacements/core/version";
-import ANTIBAN_REPLACEMENT from "./replacements/module/antiban";
+import ANTIBAN_REPLACEMENT from "./replacements/modules/antiban";
 
 // an interesting note, remove the type parameters (<string | RegExp, Replacement>) and then TypeScript starts complaining about types not being the same.
 export const REPLACEMENTS = new Map<Match, Replacement>([

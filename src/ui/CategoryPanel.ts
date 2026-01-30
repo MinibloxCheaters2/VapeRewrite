@@ -1,6 +1,6 @@
 import { render } from "solid-js/web";
 import { getPanel } from "@wq2/ui";
-import { categoryInfoSet } from "../features/module/api/Category";
+import { categoryInfoSet } from "../features/modules/api/Category";
 import CategoryUI from "./components/CategoryComponent";
 import { dragHandleAttrName } from "@/utils/names";
 

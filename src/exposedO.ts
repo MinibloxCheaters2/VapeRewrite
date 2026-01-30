@@ -1,11 +1,11 @@
 /**
  * Moved out of the Store class to fix a circular dependency:
- * src/features/module/api/ModuleManager.ts
- *	-> src/features/module/impl/blatant/InfiniteFly.ts
+ * src/features/modules/api/ModuleManager.ts
+ *	-> src/features/modules/impl/blatant/InfiniteFly.ts
  *	-> src/utils/key.ts
  *	-> src/interop.ts
  *	-> src/hooks/exposed.ts
- * -> src/features/module/api/ModuleManager.ts
+ * -> src/features/modules/api/ModuleManager.ts
  * @module
  */
 

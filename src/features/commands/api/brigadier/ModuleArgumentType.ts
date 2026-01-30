@@ -1,5 +1,5 @@
-import Mod from "@/features/module/api/Module";
-import ModuleManager, { P } from "@/features/module/api/ModuleManager";
+import Mod from "@/features/modules/api/Module";
+import ModuleManager, { P } from "@/features/modules/api/ModuleManager";
 import { ArgumentType, CommandContext, CommandErrorType, StringReader, Suggestions, SuggestionsBuilder } from "@wq2/brigadier-ts";
 
 export const MODULE_NOT_FOUND = new CommandErrorType(found => `Module "${found}" not found`);

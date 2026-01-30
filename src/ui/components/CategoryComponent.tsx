@@ -1,8 +1,8 @@
 import { dragHandleAttrName } from "@/utils/names";
 import Category, {
 	type CategoryInfo,
-} from "@/features/module/api/Category";
-import ModuleManager, { P } from "@/features/module/api/ModuleManager";
+} from "@/features/modules/api/Category";
+import ModuleManager, { P } from "@/features/modules/api/ModuleManager";
 import Module from "./Module";
 import Spacer from "./Spacer";
 import { createSignal } from "solid-js";

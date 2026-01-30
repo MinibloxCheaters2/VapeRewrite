@@ -6,7 +6,7 @@
 import Bus from "../Bus";
 import CancelableWrapper from "../event/api/CancelableWrapper";
 import type ClientEvents from "../event/api/Events";
-import ModuleManager from "../features/module/api/ModuleManager";
+import ModuleManager from "../features/modules/api/ModuleManager";
 import dispatcher from "../features/commands/api/CommandDispatcher";
 import { MATCHED_DUMPS } from "./replacement";
 
