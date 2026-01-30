@@ -24,6 +24,7 @@
 		"@babel/runtime": "^7.28.6",
 		"@types/node": "^25.0.10",
 		"@violentmonkey/dom": "^2.2.1",
+		"@violentmonkey/shortcut": "^1.4.4",
 		"@wq2/brigadier-ts": "^1.0.7",
 		"@wq2/ui": "^0.10.5",
 		"rollup": "4.57.0",
