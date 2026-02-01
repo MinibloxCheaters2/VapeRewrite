@@ -1,11 +1,13 @@
 // TODO: support queueing S2C packets?
 
+import type { SPacketPlayerPosLook } from "@/features/sdk/types/packets";
 import Bus from "../Bus";
 import { Priority, Subscribe } from "../event/api/Bus";
 import type CancelableWrapper from "../event/api/CancelableWrapper";
 import type { AnyPacket, C2SPacket } from "../features/sdk/types/packetTypes";
-import PacketRefs from "./packetRefs";
 import PacketUtil from "./PacketUtil";
+import PacketRefs from "./packetRefs";
+import { SimpleVec3 } from "./vec";
 
 export class PacketRecord<T> {
 	constructor(
@@ -29,6 +31,16 @@ export class PacketOutcome<P> {
 
 export default new (class PacketQueueManager {
 	private packetQueue: PacketRecord<C2SPacket>[] = [];
+	get serverPos() {
+		return (
+			this.packetQueue.find(
+				(p) =>
+					p.packet instanceof
+						PacketRefs.getRef("SPacketPlayerPosLook") &&
+					p.packet.pos,
+			).packet as SPacketPlayerPosLook
+		).pos;
+	}
 
 	constructor() {
 		Bus.registerSubscriber(this);
@@ -55,10 +67,8 @@ export default new (class PacketQueueManager {
 	}
 
 	#preProcessing(pkt: C2SPacket): "pass" | "flush" | undefined {
-		if (pkt instanceof PacketRefs.getRef("SPacketMessage"))
-			return "pass";
-		if (pkt instanceof PacketRefs.getRef("SPacketRespawn"))
-			return "flush";
+		if (pkt instanceof PacketRefs.getRef("SPacketMessage")) return "pass";
+		if (pkt instanceof PacketRefs.getRef("SPacketRespawn")) return "flush";
 	}
 
 	@Subscribe("sendPacket", Priority.FINAL_DECISION)
