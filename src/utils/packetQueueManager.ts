@@ -7,7 +7,6 @@ import type CancelableWrapper from "../event/api/CancelableWrapper";
 import type { AnyPacket, C2SPacket } from "../features/sdk/types/packetTypes";
 import PacketUtil from "./PacketUtil";
 import PacketRefs from "./packetRefs";
-import { SimpleVec3 } from "./vec";
 
 export class PacketRecord<T> {
 	constructor(
