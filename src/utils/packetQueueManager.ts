@@ -1,6 +1,9 @@
 // TODO: support queueing S2C packets?
 
-import type { SPacketPlayerPosLook } from "@/features/sdk/types/packets";
+import type {
+	PBFloatVector3,
+	SPacketPlayerPosLook,
+} from "@/features/sdk/types/packets";
 import Bus from "../Bus";
 import { Priority, Subscribe } from "../event/api/Bus";
 import type CancelableWrapper from "../event/api/CancelableWrapper";
@@ -30,15 +33,16 @@ export class PacketOutcome<P> {
 
 export default new (class PacketQueueManager {
 	private packetQueue: PacketRecord<C2SPacket>[] = [];
-	get serverPos() {
+
+	get serverPos(): PBFloatVector3 | undefined {
 		return (
 			this.packetQueue.find(
 				(p) =>
 					p.packet instanceof
 						PacketRefs.getRef("SPacketPlayerPosLook") &&
 					p.packet.pos,
-			).packet as SPacketPlayerPosLook
-		).pos;
+			)?.packet as SPacketPlayerPosLook | undefined
+		)?.pos;
 	}
 
 	constructor() {
@@ -49,10 +53,18 @@ export default new (class PacketQueueManager {
 		return this.packetQueue.length > 0;
 	}
 
+	/**
+	 * @returns `Date.now() - this.packetQueue[0].time`, or `0` if `this.lagging` is false.
+	 */
+	laggingFor(): number {
+		if (!this.lagging) return 0;
+		return Date.now() - this.packetQueue[0].time;
+	}
+
 	/** this doesn't remove the packet from the packet queue since I'm lazy, you do that yourself. this just sends the packet. */
 	private flushPacket<T extends C2SPacket>(record: PacketRecord<T>) {
 		// TODO: only handling C2S packets
-		PacketUtil.sendSilently(record);
+		PacketUtil.sendSilently(record.packet);
 	}
 
 	flush(when?: (p: PacketRecord<AnyPacket>) => boolean) {
@@ -61,7 +73,7 @@ export default new (class PacketQueueManager {
 
 			if (result) this.flushPacket(p);
 
-			return result;
+			return !result;
 		});
 	}
 

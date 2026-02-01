@@ -1,4 +1,8 @@
+import { Subscribe } from "@/event/api/Bus";
+import type CancelableWrapper from "@/event/api/CancelableWrapper";
+import type { C2SPacket } from "@/features/sdk/types/packetTypes";
 import logger from "@/utils/loggers";
+import PacketRefs from "@/utils/packetRefs";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 
@@ -72,5 +76,16 @@ export default class AntiBan extends Mod {
 			return acc;
 		}
 		return GUEST_TOKEN;
+	}
+
+	@Subscribe("sendPacket")
+	private handlePacket({ data: pkt }: CancelableWrapper<C2SPacket>) {
+		// the idea is that we first login with a guest token and then with our banned token.
+		if (
+			pkt instanceof PacketRefs.getRef("SPacketLoginStart") &&
+			pkt.session !== GUEST_TOKEN
+		) {
+			pkt.session = GUEST_TOKEN;
+		}
 	}
 }
