@@ -5,6 +5,7 @@ import Phase from "../impl/blatant/Phase.js";
 import Scaffold from "../impl/blatant/Scaffold.js";
 import Criticals from "../impl/combat/Criticals.js";
 import Velocity from "../impl/combat/Velocity.js";
+import WTap from "../impl/combat/WTap.js";
 import AntiBan from "../impl/utility/AntiBan.js";
 import AutoRespawn from "../impl/utility/AutoRespawn.js";
 import FilterBypass from "../impl/utility/FilterBypass.js";
@@ -55,6 +56,7 @@ export default class ModuleManager {
 		new NoFall(),
 		this.criticals,
 		new RejoinOnMute(),
+		new WTap()
 	] as const;
 
 	public static readonly moduleNames: string[] = this.modules.map(

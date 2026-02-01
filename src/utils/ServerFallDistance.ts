@@ -7,8 +7,8 @@ import Bus from "@/Bus";
 import { Priority, Subscribe } from "@/event/api/Bus";
 import type CancelableWrapper from "@/event/api/CancelableWrapper";
 import type { C2SPacket } from "@/features/sdk/types/packetTypes";
-import PacketRefs from "./packetRefs";
 import logger from "./loggers";
+import PacketRefs from "./packetRefs";
 
 export default new (class PacketFallDistance {
 	currentFallDistance = 0;
