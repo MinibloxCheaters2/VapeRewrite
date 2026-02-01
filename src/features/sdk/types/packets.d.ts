@@ -109,9 +109,9 @@ export declare class SPacketPlayerAbilities extends Message {
 	isFlying: boolean;
 }
 export declare class SPacketPlayerPosLook extends Message {
-	pos: PBFloatVector3;
-	yaw: number;
-	pitch: number;
+	pos?: PBFloatVector3;
+	yaw?: number;
+	pitch?: number;
 	onGround: boolean;
 }
 export declare class Vector3 {

@@ -4,6 +4,7 @@ import "./packet.d.ts";
 import type { ClientWorld } from "./world";
 import { Chat } from "./chat.d.ts";
 import { PlayerController } from "./controller.js";
+import { ServerInfo } from "./serverInfo.js";
 
 export enum ConnectionState {
 	IDK = 0,

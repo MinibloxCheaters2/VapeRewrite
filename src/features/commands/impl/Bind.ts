@@ -12,7 +12,7 @@ dispatcher.register(
 					const to = e.get<string>("to").toLowerCase();
 					const actual = to === "none" ? "" : to;
 					// the setter handles the setting logic.
-					m.bind = to;
+					m.bind = actual;
 				},
 			),
 		),

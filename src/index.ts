@@ -1,9 +1,11 @@
 import "./meta.js?userscript-metadata";
+import "./exposedO";
+import "./interop";
 import "./hooks/index";
 import "./ui/app";
-import "./interop";
 import "./features/commands/api/CommandManager";
 import "./features/commands/Listener";
 import "./utils/packetQueueManager";
 import "./utils/aiming/rotation";
 import "./features/binds/handler";
+import "./utils/ServerFallDistance";

@@ -1,7 +1,7 @@
 import { createSignal } from "solid-js";
 import Bus from "@/Bus";
-import type { Category } from "./Category";
 import { addBind, removeBind, setBind } from "@/features/binds/handler";
+import type { Category } from "./Category";
 
 const NO_BIND = "";
 

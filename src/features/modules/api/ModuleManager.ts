@@ -3,13 +3,15 @@ import KillAura from "../impl/blatant/KillAura.js";
 import NoSlow from "../impl/blatant/NoSlow.js";
 import Phase from "../impl/blatant/Phase.js";
 import Scaffold from "../impl/blatant/Scaffold.js";
+import Criticals from "../impl/combat/Criticals.js";
 import Velocity from "../impl/combat/Velocity.js";
 import AntiBan from "../impl/utility/AntiBan.js";
 import AutoRespawn from "../impl/utility/AutoRespawn.js";
 import FilterBypass from "../impl/utility/FilterBypass.js";
+import RejoinOnMute from "../impl/utility/RejoinOnMute.js";
 import ServerCrasher from "../impl/utility/ServerCrasher.js";
 import Test from "../impl/utility/Test.js";
-// import NoFall from "../impl/world/NoFall.js";
+import NoFall from "../impl/world/NoFall.js";
 import type Category from "./Category.js";
 import type Mod from "./Module.js";
 
@@ -28,10 +30,11 @@ export const P = {
 export default class ModuleManager {
 	// only important ish modules (ones that will get referenced in other modules)
 	// should be as a variable instead of in the array
-	public static antiBan = new AntiBan();
-	public static noSlow = new NoSlow();
-	public static phase = new Phase();
-	public static scaffold = new Scaffold();
+	public static readonly antiBan = new AntiBan();
+	public static readonly noSlow = new NoSlow();
+	public static readonly phase = new Phase();
+	public static readonly scaffold = new Scaffold();
+	public static readonly criticals = new Criticals();
 
 	constructor() {
 		throw new Error("everything in module manager is static lol");
@@ -48,8 +51,10 @@ export default class ModuleManager {
 		new InfiniteFly(),
 		new ServerCrasher(),
 		new KillAura(),
-		new Velocity() /*,
-		new NoFall()*/,
+		new Velocity(),
+		new NoFall(),
+		this.criticals,
+		new RejoinOnMute(),
 	] as const;
 
 	public static readonly moduleNames: string[] = this.modules.map(

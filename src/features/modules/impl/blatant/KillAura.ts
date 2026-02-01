@@ -63,6 +63,8 @@ export default class KillAura extends Mod {
 		const { ClientSocket, PBVector3, player } = Refs;
 		const box = e.getEntityBoundingBox();
 		const hitVec = player.getEyePos().clone().clamp(box.min, box.max);
+		// we don't send the attack packet silently,
+		// so the Criticals module will automatically send the packets BEFORE this one sends!
 		ClientSocket.sendPacket(
 			new (PacketRefs.getRef("SPacketUseEntity"))({
 				id: e.id,

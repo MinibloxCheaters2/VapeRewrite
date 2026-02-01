@@ -50,9 +50,7 @@ export default function Module({ mod }: ParentProps<{ mod: Mod }>) {
 						alt="Click to bind"
 					/>
 				) : (
-					<p>
-						{bind().toUpperCase()}
-					</p>
+					<p style={{ color: "white" }}>{bind().toUpperCase()}</p>
 				)}
 			</button>
 		</div>
