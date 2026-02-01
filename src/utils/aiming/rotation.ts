@@ -1,6 +1,6 @@
+import Bus from "@/Bus";
 import { Priority, Subscribe } from "../../event/api/Bus";
 import type CancelableWrapper from "../../event/api/CancelableWrapper";
-import SubscribeOnInit from "../../event/api/SubscribeOnInit";
 import type { C2SPacket } from "../../features/sdk/types/packetTypes";
 import PacketRefs from "../packetRefs";
 import Refs from "../refs";
@@ -24,7 +24,10 @@ export class RotationTarget {
 	) {}
 }
 
-export default new (class RotationManager extends SubscribeOnInit {
+export default new (class RotationManager {
+	constructor() {
+		Bus.registerSubscriber(this);
+	}
 	currentRotation: Rotation = Rotation.ZERO;
 	targetRotation: Rotation = Rotation.ZERO;
 	get playerRotation() {

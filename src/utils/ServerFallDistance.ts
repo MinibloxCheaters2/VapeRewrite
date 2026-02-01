@@ -7,7 +7,6 @@ import Bus from "@/Bus";
 import { Priority, Subscribe } from "@/event/api/Bus";
 import type CancelableWrapper from "@/event/api/CancelableWrapper";
 import type { C2SPacket } from "@/features/sdk/types/packetTypes";
-import logger from "./loggers";
 import PacketRefs from "./packetRefs";
 
 export default new (class PacketFallDistance {
@@ -29,7 +28,6 @@ export default new (class PacketFallDistance {
 			return;
 		}
 		const diff = this.#lastY - y;
-		logger.debug(`diff: ${diff}`);
 		this.#lastY = y;
 		this.currentFallDistance += Math.abs(diff);
 	}

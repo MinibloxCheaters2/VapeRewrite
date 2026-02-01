@@ -27,7 +27,9 @@ const FLAGS_TO_FORCE_ENABLE = [
 ];
 
 export const FORCE_ENABLE_REPLACEMENT: SingleReplacement = [
-	new RegExp(`(index_browserExports\\.useFlag|(this\\.)?game\\.unleash\\.isEnabled)\\("(${FLAGS_TO_FORCE_ENABLE.join("|")})"\\)`),
+	new RegExp(
+		`(index_browserExports\\.useFlag|(this\\.)?game\\.unleash\\.isEnabled)\\("(${FLAGS_TO_FORCE_ENABLE.join("|")})"\\)`,
+	),
 	{
 		replacement: "true",
 		shift: Shift.REPLACE,

@@ -3,13 +3,15 @@
 import Bus from "../Bus";
 import { Priority, Subscribe } from "../event/api/Bus";
 import type CancelableWrapper from "../event/api/CancelableWrapper";
-import SubscribeOnInit from "../event/api/SubscribeOnInit";
 import type { AnyPacket, C2SPacket } from "../features/sdk/types/packetTypes";
+import PacketRefs from "./packetRefs";
 import PacketUtil from "./PacketUtil";
 
 export class PacketRecord<T> {
-	packet: T;
-	time: number;
+	constructor(
+		public packet: T,
+		public time: number,
+	) {}
 }
 
 export enum Action {
@@ -25,8 +27,13 @@ export class PacketOutcome<P> {
 	) {}
 }
 
-export default new (class PacketQueueManager extends SubscribeOnInit {
+export default new (class PacketQueueManager {
 	private packetQueue: PacketRecord<C2SPacket>[] = [];
+
+	constructor() {
+		Bus.registerSubscriber(this);
+	}
+
 	get lagging() {
 		return this.packetQueue.length > 0;
 	}
@@ -47,12 +54,36 @@ export default new (class PacketQueueManager extends SubscribeOnInit {
 		});
 	}
 
+	#preProcessing(pkt: C2SPacket): "pass" | "flush" | undefined {
+		if (pkt instanceof PacketRefs.getRef("SPacketMessage"))
+			return "pass";
+		if (pkt instanceof PacketRefs.getRef("SPacketRespawn"))
+			return "flush";
+	}
+
 	@Subscribe("sendPacket", Priority.FINAL_DECISION)
-	private onPacket(pkt: CancelableWrapper<C2SPacket>) {
-		const outcome = new PacketOutcome(pkt.data, Action.FLUSH);
+	private onPacket(e: CancelableWrapper<C2SPacket>) {
+		if (e.canceled) return;
+		switch (this.#preProcessing(e.data)) {
+			case "pass":
+				return;
+			case "flush":
+				this.packetQueue.push(new PacketRecord(e.data, Date.now()));
+				e.cancel();
+				return;
+			case undefined:
+				break;
+		}
+
+		const outcome = new PacketOutcome(e.data, Action.FLUSH);
+
 		Bus.emit("queueC2SPacket", outcome);
-		if (outcome.action === Action.FLUSH) {
-			this.flush();
+
+		if (outcome.action === Action.FLUSH) this.flush();
+
+		if (outcome.action === Action.QUEUE) {
+			this.packetQueue.push(new PacketRecord(outcome.packet, Date.now()));
+			e.cancel();
 		}
 	}
 })();

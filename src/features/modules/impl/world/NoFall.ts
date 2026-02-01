@@ -25,7 +25,8 @@ export default class NoFall extends Mod {
 		if (
 			packet instanceof PacketRefs.getRef("SPacketPlayerPosLook") &&
 			!packet.onGround &&
-			PacketFallDistance.currentFallDistance >= Refs.player.getMaxFallHeight() - FALL_HEIGHT_BUFFER
+			PacketFallDistance.currentFallDistance >=
+				Refs.player.getMaxFallHeight() - FALL_HEIGHT_BUFFER
 		) {
 			packet.onGround = true;
 			Refs.player.fallDistance = 0.0;
