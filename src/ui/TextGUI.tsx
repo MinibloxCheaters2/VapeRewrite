@@ -1,4 +1,4 @@
-import { createEffect, createSignal, For } from "solid-js";
+import { For } from "solid-js";
 import { render } from "solid-js/web";
 import { REAL_CLIENT_NAME } from "@/Client";
 import ModuleManager from "@/features/modules/api/ModuleManager";
@@ -11,25 +11,10 @@ const COLORS = {
 };
 
 function TextGUI() {
-	const [enabledModules, setEnabledModules] = createSignal<
-		Array<{ name: string; enabled: boolean }>
-	>([]);
-
-	// Update enabled modules list
-	createEffect(() => {
-		const interval = setInterval(() => {
-			const modules = Object.values(ModuleManager.modules)
-				.map((mod) => ({
-					name: mod.name,
-					enabled: mod.stateAccessor(),
-				}))
-				.filter((m) => m.enabled)
-				.sort((a, b) => b.name.length - a.name.length); // Sort by length descending
-			setEnabledModules(modules);
-		}, 100);
-
-		return () => clearInterval(interval);
-	});
+	const modules = ModuleManager.modules.map((a) => ({
+		name: a.name,
+		enabled: a.stateAccessor,
+	}));
 
 	return (
 		<div
@@ -80,7 +65,7 @@ function TextGUI() {
 					gap: "1px",
 				}}
 			>
-				<For each={enabledModules()}>
+				<For each={modules.filter((a) => a.enabled())}>
 					{(module) => (
 						<div
 							style={{
