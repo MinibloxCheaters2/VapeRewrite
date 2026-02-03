@@ -272,6 +272,7 @@ function CategoryWindow(props: CategoryWindowProps) {
 function ModuleButton(props: { mod: Mod; onExpandChange: () => void }) {
 	const [hovered, setHovered] = createSignal(false);
 	const [expanded, setExpanded] = createSignal(false);
+	const [listening, setListening] = createSignal(false);
 	const { name, stateAccessor: toggled, bindAccessor: bind } = props.mod;
 
 	const handleContextMenu = (e: PointerEvent) => {
@@ -280,6 +281,16 @@ function ModuleButton(props: { mod: Mod; onExpandChange: () => void }) {
 		setExpanded(!expanded());
 		// Notify parent to update height immediately
 		requestAnimationFrame(() => props.onExpandChange());
+	};
+
+	const handleKeyboardEvent = (e: KeyboardEvent) => {
+		if (!listening()) return;
+		setListening(false);
+		e.preventDefault();
+		e.stopImmediatePropagation();
+		e.stopPropagation();
+		props.mod.bind = e.key.toLowerCase();
+		document.removeEventListener("keydown", handleKeyboardEvent);
 	};
 
 	return (
@@ -353,7 +364,13 @@ function ModuleButton(props: { mod: Mod; onExpandChange: () => void }) {
 								"rgba(255, 255, 255, 0.08)";
 						}}
 						on:click={(e) => {
+							e.stopImmediatePropagation();
 							e.stopPropagation();
+							setListening(true);
+							document.addEventListener(
+								"keydown",
+								handleKeyboardEvent,
+							);
 						}}
 					>
 						{bind() === "" ? (
@@ -363,7 +380,7 @@ function ModuleButton(props: { mod: Mod; onExpandChange: () => void }) {
 								style={{
 									width: "12px",
 									height: "12px",
-									filter: "brightness(0.4)",
+									color: "white",
 								}}
 							/>
 						) : (

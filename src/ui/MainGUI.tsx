@@ -177,7 +177,6 @@ function MainGUI() {
 							style={{
 								width: "14px",
 								height: "14px",
-								filter: "brightness(0.4)",
 							}}
 						/>
 					</button>
@@ -243,7 +242,6 @@ function MainGUI() {
 							style={{
 								width: "20px",
 								height: "20px",
-								filter: "brightness(0.4)",
 								transform: "rotate(-90deg)",
 							}}
 						/>
@@ -321,7 +319,6 @@ function CategoryButton(props: { category: string; info: CategoryInfo }) {
 				style={{
 					width: "4px",
 					height: "8px",
-					filter: "brightness(0.4)",
 					transform: expanded() ? "translateX(6px)" : "translateX(0)",
 					transition: "transform 0.16s linear",
 				}}

@@ -165,7 +165,6 @@ function ProfilesPanel() {
 							style={{
 								width: "10px",
 								height: "10px",
-								filter: "brightness(0.4)",
 							}}
 						/>
 					</button>
