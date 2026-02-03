@@ -3,6 +3,7 @@ import { render } from "solid-js/web";
 import getResourceURL from "@/utils/cachedResourceURL";
 import { dragHandleAttrName } from "@/utils/names";
 import { guiVisible } from "./guiState";
+import shadowWrapper from "./shadowWrapper";
 
 const COLORS = {
 	main: "rgb(26, 25, 26)",
@@ -155,20 +156,7 @@ function SettingsPanel() {
 					}}
 					class="clickgui-scrollbar"
 				>
-					<div
-						style={{
-							"text-align": "center",
-							color: COLORS.textDark,
-							"font-size": "12px",
-							padding: "20px",
-							"font-family": "Arial, sans-serif",
-						}}
-					>
-						Settings panel coming soon...
-						<br />
-						<br />
-						GUI Color, Scale, Rainbow Mode, etc.
-					</div>
+
 				</div>
 			</div>
 		</Show>
@@ -178,7 +166,7 @@ function SettingsPanel() {
 export function initSettingsPanel() {
 	const container = document.createElement("div");
 	container.id = "settings-panel-container";
-	document.body.appendChild(container);
+	shadowWrapper.wrapper.appendChild(container);
 
 	render(() => <SettingsPanel />, container);
 }

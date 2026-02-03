@@ -52,9 +52,9 @@ export const ROTATION_REPLACEMENTS: MultipleReplacements = [
 		},
 	],
 	[
-		"this.setPositionAndRotation(this.pos.x, this.pos.y, this.pos.z, h.yaw, h.pitch)",
+		"this.setPositionAndRotation(this.pos.x,this.pos.y,this.pos.z,h.yaw,h.pitch)",
 		{
-			replacement: "",
+			replacement: "undefined",
 			shift: Shift.REPLACE,
 		},
 	],

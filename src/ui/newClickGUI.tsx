@@ -38,6 +38,7 @@ const COLORS = {
 
 import getResourceURL from "@/utils/cachedResourceURL";
 import { dragHandleAttrName } from "@/utils/names";
+import shadowWrapper from "./shadowWrapper";
 
 interface CategoryWindowProps {
 	category: string;
@@ -536,7 +537,7 @@ function ModuleSettings(props: { mod: Mod; onExpandChange: () => void }) {
 export function initNewClickGUI() {
 	const container = document.createElement("div");
 	container.id = "new-clickgui-container";
-	document.body.appendChild(container);
+	shadowWrapper.wrapper.appendChild(container);
 
 	const priority = {
 		combat: 2,

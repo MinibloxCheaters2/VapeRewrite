@@ -14,6 +14,7 @@ import {
 } from "./guiState";
 import { setProfilesPanelVisible } from "./ProfilesPanel";
 import { setSettingsPanelVisible } from "./SettingsPanel";
+import shadowWrapper from "./shadowWrapper";
 
 const COLORS = {
 	main: "rgb(26, 25, 26)",
@@ -284,17 +285,7 @@ function CategoryButton(props: { category: string; info: CategoryInfo }) {
 		>
 			<img
 				src={props.info.iconURL}
-				alt=""
-				style={{
-					width: "16px",
-					height: "16px",
-					filter: expanded()
-						? "brightness(0) saturate(100%) invert(48%) sepia(89%) saturate(449%) hue-rotate(118deg) brightness(91%) contrast(96%)"
-						: hovered()
-							? "brightness(0) invert(0.8)"
-							: "brightness(0) invert(0.6)",
-					transition: "filter 0.16s linear",
-				}}
+				alt={props.category}
 			/>
 			<span
 				style={{
@@ -330,7 +321,7 @@ function CategoryButton(props: { category: string; info: CategoryInfo }) {
 export function initMainGUI() {
 	const container = document.createElement("div");
 	container.id = "main-gui-container";
-	document.body.appendChild(container);
+	shadowWrapper.wrapper.appendChild(container);
 
 	render(() => <MainGUI />, container);
 }

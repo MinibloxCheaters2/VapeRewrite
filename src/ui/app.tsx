@@ -5,6 +5,7 @@ import globalCss from "../style.css";
 GM_addStyle(globalCss);
 
 import "./wait"; // putting the file's contents in this file would make Rollup position it after these imports.
+import "./shadowWrapper";
 import { initMainGUI } from "./MainGUI";
 import { initNewClickGUI } from "./newClickGUI";
 import { initNotifications } from "./notifications";

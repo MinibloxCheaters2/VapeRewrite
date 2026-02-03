@@ -1,6 +1,7 @@
 import { createSignal, For } from "solid-js";
 import { render } from "solid-js/web";
 import getResourceURL from "@/utils/cachedResourceURL";
+import shadowWrapper from "./shadowWrapper";
 
 const COLORS = {
 	main: "rgb(26, 25, 26)",
@@ -130,7 +131,7 @@ function NotificationItem(props: { notification: Notification }) {
 export function initNotifications() {
 	const container = document.createElement("div");
 	container.id = "notifications-container";
-	document.body.appendChild(container);
+	shadowWrapper.wrapper.appendChild(container);
 
 	// Add animation styles
 	const style = document.createElement("style");

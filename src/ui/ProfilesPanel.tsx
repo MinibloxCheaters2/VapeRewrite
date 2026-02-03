@@ -3,6 +3,7 @@ import { render } from "solid-js/web";
 import getResourceURL from "@/utils/cachedResourceURL";
 import { dragHandleAttrName } from "@/utils/names";
 import { guiVisible } from "./guiState";
+import shadowWrapper from "./shadowWrapper";
 
 const COLORS = {
 	main: "rgb(26, 25, 26)",
@@ -288,7 +289,7 @@ function ProfilesPanel() {
 export function initProfilesPanel() {
 	const container = document.createElement("div");
 	container.id = "profiles-panel-container";
-	document.body.appendChild(container);
+	shadowWrapper.wrapper.appendChild(container);
 
 	render(() => <ProfilesPanel />, container);
 }

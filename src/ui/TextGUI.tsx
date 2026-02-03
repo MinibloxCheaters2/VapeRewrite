@@ -3,6 +3,7 @@ import { render } from "solid-js/web";
 import { REAL_CLIENT_NAME } from "@/Client";
 import ModuleManager from "@/features/modules/api/ModuleManager";
 import getResourceURL from "@/utils/cachedResourceURL";
+import shadowWrapper from "./shadowWrapper";
 
 const COLORS = {
 	text: "rgb(200, 200, 200)",
@@ -115,7 +116,7 @@ function TextGUI() {
 export function initTextGUI() {
 	const container = document.createElement("div");
 	container.id = "textgui-container";
-	document.body.appendChild(container);
+	shadowWrapper.wrapper.appendChild(container);
 
 	render(() => <TextGUI />, container);
 }
