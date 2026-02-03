@@ -91,6 +91,22 @@ function TextGUI() {
 							}}
 						>
 							{module.name}
+							{module.tag() ? (
+								<div
+									style={{
+										color: COLORS.text,
+										"font-size": "14px",
+										"text-shadow": `2px 2px 2px ${COLORS.shadow}`,
+										"font-weight": "600",
+										"letter-spacing": "0.3px",
+										cursor: "pointer",
+										transition: "opacity 0.16s linear",
+										padding: "1px 4px",
+									}}
+								>
+									{module.tag()}
+								</div>
+							) : undefined}
 						</div>
 					)}
 				</For>

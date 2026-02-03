@@ -9,21 +9,19 @@ const NO_BIND = "";
 const TOGGLE_CALLBACK = (m: Mod) => () => m.toggle();
 
 // Setting types
-export interface BaseSetting {
+export interface BaseSetting<V> {
 	name: string;
 	type: string;
+	value: Accessor<V>;
+	setValue(value: V): void;
 }
 
-export interface ToggleSetting extends BaseSetting {
+export interface ToggleSetting extends BaseSetting<boolean> {
 	type: "toggle";
-	value: Accessor<boolean>;
-	setValue: (value: boolean) => void;
 }
 
-export interface SliderSetting extends BaseSetting {
+export interface SliderSetting extends BaseSetting<number> {
 	type: "slider";
-	value: Accessor<number>;
-	setValue: (value: number) => void;
 	min: number;
 	max: number;
 	step?: number;
@@ -44,33 +42,33 @@ export function getName(m: ModeLike): string {
 }
 
 export interface DropdownSetting<V extends ModeLike = string>
-	extends BaseSetting {
+	extends BaseSetting<V> {
 	type: "dropdown";
 	value: Accessor<V>;
 	setValue: (value: V) => void;
 	options: V[];
 }
 
-export interface TextBoxSetting extends BaseSetting {
+export interface TextBoxSetting extends BaseSetting<string> {
 	type: "textbox";
-	value: Accessor<string>;
-	setValue: (value: string) => void;
 	placeholder?: string;
 }
 
-export interface ColorSliderSetting extends BaseSetting {
-	type: "colorslider";
-	hue: Accessor<number>;
-	sat: Accessor<number>;
-	value: Accessor<number>;
-	opacity: Accessor<number>;
-	setColor: (h: number, s: number, v: number, o: number) => void;
+interface ColorSettingValue {
+	h: number;
+	s: number;
+	v: number;
+	o: number;
+}
+
+export interface ColorSliderSetting extends BaseSetting<ColorSettingValue> {
+	type: "color";
 }
 
 export type ModuleSetting =
 	| ToggleSetting
 	| SliderSetting
-	| DropdownSetting
+	| DropdownSetting<ModeLike>
 	| TextBoxSetting
 	| ColorSliderSetting;
 
@@ -182,13 +180,13 @@ export default abstract class Mod {
 		return setting;
 	}
 
-	protected createDropdownSetting(
+	protected createDropdownSetting<V extends ModeLike = string>(
 		name: string,
-		options: string[],
-		defaultValue?: string,
-	): DropdownSetting {
-		const [value, setValue] = createSignal(defaultValue || options[0]);
-		const setting: DropdownSetting = {
+		options: V[],
+		defaultValue?: V,
+	): DropdownSetting<V> {
+		const [value, setValue] = createSignal(defaultValue ?? options[0]);
+		const setting: DropdownSetting<V> = {
 			name,
 			type: "dropdown",
 			value,
@@ -218,31 +216,28 @@ export default abstract class Mod {
 
 	protected createColorSliderSetting(
 		name: string,
-		defaultHue = 0.5,
-		defaultSat = 1,
-		defaultValue = 1,
-		defaultOpacity = 1,
+		value: ColorSettingValue = {
+			h: 0.5,
+			s: 1,
+			v: 1,
+			o: 1,
+		},
 	): ColorSliderSetting {
-		const [hue, setHue] = createSignal(defaultHue);
-		const [sat, setSat] = createSignal(defaultSat);
-		const [value, setValue] = createSignal(defaultValue);
-		const [opacity, setOpacity] = createSignal(defaultOpacity);
+		const [color, setColor] = createSignal(value);
 
 		const setting: ColorSliderSetting = {
 			name,
-			type: "colorslider",
-			hue,
-			sat,
-			value,
-			opacity,
-			setColor: (h: number, s: number, v: number, o: number) => {
-				setHue(h);
-				setSat(s);
-				setValue(v);
-				setOpacity(o);
-			},
+			type: "color",
+			value: color,
+			setValue: setColor,
 		};
 		this.settings.push(setting);
+		return setting;
+	}
+
+	private tagBy<S extends BaseSetting<V>, V>(setting: S): S {
+		this.tag = setting.name;
+		this.tagSignal[1](setting.name);
 		return setting;
 	}
 
