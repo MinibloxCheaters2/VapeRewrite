@@ -13,6 +13,7 @@ const COLORS = {
 function TextGUI() {
 	const modules = ModuleManager.modules.map((a) => ({
 		name: a.name,
+		tag: a.tagAccessor,
 		enabled: a.stateAccessor,
 	}));
 

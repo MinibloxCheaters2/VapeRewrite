@@ -83,10 +83,15 @@ export default abstract class Mod {
 	/** Module settings */
 	public settings: ModuleSetting[] = [];
 
+	/** Is the module enabled / on? */
 	private stateSignal = createSignal(false, {
 		name: "Module state signal",
 	});
 
+	/** Some text to show after the module, i.e. the mode, this CAN BE UNDEFINED. */
+	private tagSignal = createSignal<string | undefined>();
+
+	/** What is this module bound to? */
 	private bindSignal = createSignal(NO_BIND, {
 		name: "Module bind signal",
 	});
@@ -102,8 +107,20 @@ export default abstract class Mod {
 		return this.bindSignal[0];
 	}
 
+	get tagAccessor() {
+		return this.tagSignal[0];
+	}
+
 	get bind() {
 		return this.bindSignal[0]();
+	}
+
+	get tag() {
+		return this.tagSignal[0]();
+	}
+
+	set tag(value: string | undefined) {
+		this.tagSignal[1](value);
 	}
 
 	#updateBind(orig: string, newBind: string) {
