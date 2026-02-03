@@ -1,4 +1,4 @@
-import { createSignal } from "solid-js";
+import { type Accessor, createSignal } from "solid-js";
 import Bus from "@/Bus";
 import { addBind, removeBind, setBind } from "@/features/binds/handler";
 import type { Category } from "./Category";
@@ -7,11 +7,65 @@ const NO_BIND = "";
 
 const TOGGLE_CALLBACK = (m: Mod) => () => m.toggle();
 
+// Setting types
+export interface BaseSetting {
+	name: string;
+	type: string;
+}
+
+export interface ToggleSetting extends BaseSetting {
+	type: "toggle";
+	value: Accessor<boolean>;
+	setValue: (value: boolean) => void;
+}
+
+export interface SliderSetting extends BaseSetting {
+	type: "slider";
+	value: Accessor<number>;
+	setValue: (value: number) => void;
+	min: number;
+	max: number;
+	step?: number;
+}
+
+export interface DropdownSetting extends BaseSetting {
+	type: "dropdown";
+	value: Accessor<string>;
+	setValue: (value: string) => void;
+	options: string[];
+}
+
+export interface TextBoxSetting extends BaseSetting {
+	type: "textbox";
+	value: Accessor<string>;
+	setValue: (value: string) => void;
+	placeholder?: string;
+}
+
+export interface ColorSliderSetting extends BaseSetting {
+	type: "colorslider";
+	hue: Accessor<number>;
+	sat: Accessor<number>;
+	value: Accessor<number>;
+	opacity: Accessor<number>;
+	setColor: (h: number, s: number, v: number, o: number) => void;
+}
+
+export type ModuleSetting =
+	| ToggleSetting
+	| SliderSetting
+	| DropdownSetting
+	| TextBoxSetting
+	| ColorSliderSetting;
+
 export default abstract class Mod {
 	/** The name of this module. */
 	public abstract name: string;
 	/** What category this module is in */
 	public abstract category: Category;
+
+	/** Module settings */
+	public settings: ModuleSetting[] = [];
 
 	private stateSignal = createSignal(false, {
 		name: "Module state signal",
@@ -56,6 +110,107 @@ export default abstract class Mod {
 
 	get stateAccessor() {
 		return this.stateSignal[0];
+	}
+
+	// Helper methods to create settings
+	protected createToggleSetting(
+		name: string,
+		defaultValue = false,
+	): ToggleSetting {
+		const [value, setValue] = createSignal(defaultValue);
+		const setting: ToggleSetting = {
+			name,
+			type: "toggle",
+			value,
+			setValue,
+		};
+		this.settings.push(setting);
+		return setting;
+	}
+
+	protected createSliderSetting(
+		name: string,
+		defaultValue: number,
+		min: number,
+		max: number,
+		step?: number,
+	): SliderSetting {
+		const [value, setValue] = createSignal(defaultValue);
+		const setting: SliderSetting = {
+			name,
+			type: "slider",
+			value,
+			setValue,
+			min,
+			max,
+			step,
+		};
+		this.settings.push(setting);
+		return setting;
+	}
+
+	protected createDropdownSetting(
+		name: string,
+		options: string[],
+		defaultValue?: string,
+	): DropdownSetting {
+		const [value, setValue] = createSignal(defaultValue || options[0]);
+		const setting: DropdownSetting = {
+			name,
+			type: "dropdown",
+			value,
+			setValue,
+			options,
+		};
+		this.settings.push(setting);
+		return setting;
+	}
+
+	protected createTextBoxSetting(
+		name: string,
+		defaultValue = "",
+		placeholder?: string,
+	): TextBoxSetting {
+		const [value, setValue] = createSignal(defaultValue);
+		const setting: TextBoxSetting = {
+			name,
+			type: "textbox",
+			value,
+			setValue,
+			placeholder,
+		};
+		this.settings.push(setting);
+		return setting;
+	}
+
+	protected createColorSliderSetting(
+		name: string,
+		defaultHue = 0.5,
+		defaultSat = 1,
+		defaultValue = 1,
+		defaultOpacity = 1,
+	): ColorSliderSetting {
+		const [hue, setHue] = createSignal(defaultHue);
+		const [sat, setSat] = createSignal(defaultSat);
+		const [value, setValue] = createSignal(defaultValue);
+		const [opacity, setOpacity] = createSignal(defaultOpacity);
+
+		const setting: ColorSliderSetting = {
+			name,
+			type: "colorslider",
+			hue,
+			sat,
+			value,
+			opacity,
+			setColor: (h: number, s: number, v: number, o: number) => {
+				setHue(h);
+				setSat(s);
+				setValue(v);
+				setOpacity(o);
+			},
+		};
+		this.settings.push(setting);
+		return setting;
 	}
 
 	/**
