@@ -1,4 +1,5 @@
 import Blink from "../impl/blatant/Blink.js";
+import FakeLag from "../impl/blatant/FakeLag.js";
 import InfiniteFly from "../impl/blatant/InfiniteFly.js";
 import KillAura from "../impl/blatant/KillAura.js";
 import NoSlow from "../impl/blatant/NoSlow.js";
@@ -59,6 +60,7 @@ export default class ModuleManager {
 		new RejoinOnMute(),
 		new WTap(),
 		new Blink(),
+		new FakeLag(),
 	] as const;
 
 	public static readonly moduleNames: string[] = this.modules.map(

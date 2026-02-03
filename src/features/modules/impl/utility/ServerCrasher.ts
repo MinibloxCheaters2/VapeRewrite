@@ -10,8 +10,8 @@ const PACKETS_PER_TICK = 69;
 export default class ServerCrasher extends Mod {
 	public name = "ServerCrasher";
 	public category = Category.UTILITY;
-	public x = 10;
-	public z = 10;
+	private x = 10;
+	private z = 10;
 
 	protected onEnable(): void {
 		this.x = 10;

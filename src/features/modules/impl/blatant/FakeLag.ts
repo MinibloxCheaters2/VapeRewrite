@@ -1,0 +1,109 @@
+import { Subscribe } from "@/event/api/Bus";
+import type { C2SPacket } from "@/features/sdk/types/packetTypes";
+import packetQueueManager, {
+	Action,
+	type PacketOutcome,
+} from "@/utils/packetQueueManager";
+import PacketRefs from "@/utils/packetRefs";
+import Refs from "@/utils/refs";
+import { findTargets } from "@/utils/target";
+import { SimpleVec3 } from "@/utils/vec";
+import Category from "../../api/Category";
+import Mod from "../../api/Module";
+
+// TODO: settings
+const FLUSH_ON_ACTION = true;
+const RANGE = 12; // 6 * 2
+const MAX_DELAY_MS = 1.5e3; // 1.5 seconds
+
+export default class FakeLag extends Mod {
+	public name = "FakeLag";
+	public category = Category.BLATANT;
+	#targetsInRange = [];
+	#enemyNearby = false;
+
+	protected onDisable(): void {
+		this.#enemyNearby = false;
+		this.#targetsInRange = [];
+	}
+
+	#flushPreconditions(packet: C2SPacket): boolean {
+		if (FLUSH_ON_ACTION) {
+			if (
+				packet instanceof PacketRefs.getRef("SPacketEntityAction") &&
+				packet.id === Refs.player.id
+			) {
+				return true;
+			}
+			if (packet instanceof PacketRefs.getRef("SPacketUseEntity")) {
+				return true;
+			}
+			if (packet instanceof PacketRefs.getRef("SPacketUseItem")) {
+				return true;
+			}
+			if (packet instanceof PacketRefs.getRef("SPacketPlayerAction")) {
+				return true;
+			}
+			if (packet instanceof PacketRefs.getRef("SPacketUpdateSign")) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	@Subscribe("tick")
+	private onTick() {
+		this.#targetsInRange = findTargets(RANGE);
+		this.#enemyNearby = this.#targetsInRange.length !== 0;
+	}
+
+	@Subscribe("queueC2SPacket")
+	private handleQueue(outcome: PacketOutcome<C2SPacket>) {
+		if (!this.#enemyNearby) return;
+
+		if (
+			packetQueueManager.laggingFor() > MAX_DELAY_MS ||
+			this.#flushPreconditions(outcome.packet)
+		) {
+			outcome.action = Action.FLUSH;
+			return;
+		}
+
+		const targets = this.#targetsInRange;
+
+		// no opps
+		if (targets.length === 0) return;
+
+		const anyIntersects = targets.find((t) =>
+			t.boundingBox.intersectsBox(Refs.player.boundingBox),
+		);
+
+		if (anyIntersects) return;
+
+		const svPos = packetQueueManager.serverPos; // CAN BE UNDEFINED
+		const playerPos = Refs.player.pos;
+		const srvPos = svPos
+			? SimpleVec3.fromFloatVec3(svPos)
+			: SimpleVec3.fromThreeVec3(Refs.player.pos);
+		const serverPos = playerPos
+			.clone()
+			.setX(srvPos.x)
+			.setY(srvPos.y)
+			.setZ(srvPos.z);
+
+		const serverDistance = Math.min(
+			...targets.map((e) => e.pos.distanceTo(serverPos)),
+		);
+
+		const clientDistance = Math.min(
+			...targets.map((e) => e.pos.distanceTo(Refs.player.pos)),
+		);
+
+		if (serverDistance < clientDistance) {
+			return;
+		}
+
+		outcome.action = Action.QUEUE;
+	}
+}

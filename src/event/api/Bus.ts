@@ -42,7 +42,9 @@ export default class EventBus<Events extends Record<string, unknown>> {
 
 	off<K extends keyof Events>(
 		event: K,
-		listener: (payload: Events[K]) => void,
+		listener: Events[K] extends void
+			? () => void
+			: (payload: Events[K]) => void,
 	): void {
 		const handlers = this.listeners[event];
 		if (handlers) {
@@ -99,6 +101,7 @@ export default class EventBus<Events extends Record<string, unknown>> {
 		const handlers = inst.__handlers;
 		if (handlers) {
 			for (const { event, handler } of handlers) {
+				//@ts-expect-error: lazy
 				this.off(event as keyof Events, handler);
 			}
 			inst.__handlers = [];

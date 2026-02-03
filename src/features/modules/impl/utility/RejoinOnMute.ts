@@ -19,7 +19,7 @@ export default class RejoinOnMute extends Mod {
 			packet instanceof PacketRefs.getRef("CPacketMessage") &&
 			packet.color === undefined &&
 			packet.id === undefined &&
-			packet.text.startsWith(`${Refs.game.player.name}: `) &&
+			packet.text.startsWith(`${Refs.player.name}: `) &&
 			packet.text.length < LIMIT
 		) {
 			Refs.game.chat.addChat({
