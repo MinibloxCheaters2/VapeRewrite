@@ -14,6 +14,14 @@ import tsconfigPaths from "rollup-plugin-tsconfig-paths";
 const {packageJson} = (await readPackageUp())!;
 const extensions = [".ts", ".tsx", ".mjs", ".js", ".jsx"];
 
+export const BUILD_DATE = new Date();
+
+// on April 1st, Baby Oil Rewrite. otherwise, Vape Rewrite.
+export const REAL_CLIENT_NAME =
+	BUILD_DATE.getMonth() === 3 && BUILD_DATE.getDate() === 1
+		? ("Baby Oil Rewrite" as const)
+		: ("Vape Rewrite" as const);
+
 export default defineConfig(
 	{
 		input: "src/index.ts",
@@ -55,17 +63,17 @@ export default defineConfig(
 			userscript((meta) => {
 				const newMeta = meta
 					.replace("process.env.AUTHOR", packageJson.author?.name ?? "Unspecified")
-					.replace("process.env.VERSION", packageJson.version);
+					.replace("process.env.VERSION", packageJson.version)
+					.replace("process.env.NAME", REAL_CLIENT_NAME);
 				return newMeta;
 			}),
 		],
-		external: defineExternal(["@wq2/ui", "@violentmonkey/dom"]),
+		external: defineExternal(["@violentmonkey/dom"]),
 		output: {
 			format: "iife",
 			file: `dist/vape-rewrite.user.js`,
 			globals: {
 				"@violentmonkey/dom": "VM",
-				"@wq2/ui": "VM",
 			},
 			indent: false,
 		},

@@ -2,6 +2,8 @@
  * Skidded straight from Vencord. Looks cool, so why not?
  */
 
+import { REAL_CLIENT_NAME } from "@/Client";
+
 export class Logger {
 	/**
 	 * Returns the console format args for a title with the specified background color and black text
@@ -32,7 +34,7 @@ export class Logger {
 		customFmt = "",
 	) {
 		console[level](
-			`%c Vape Rewrite %c %c ${this.name} ${customFmt}`,
+			`%c ${REAL_CLIENT_NAME} %c %c ${this.name} ${customFmt}`,
 			`background: ${levelColor}; color: black; font-weight: bold; border-radius: 5px;`,
 			"",
 			`background: ${this.color}; color: black; font-weight: bold; border-radius: 5px;`,

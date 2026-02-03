@@ -39,11 +39,10 @@ export default new (class RotationManager {
 	}
 	@Subscribe("tick", Priority.READ_FINAL_STATE)
 	private onTick() {
-		if (!this.#currentPlan) return;
-		if (this.#currentPlan.resetIn <= 0) {
+		if (this.#currentPlan?.resetIn <= 0) {
 			this.#currentPlan = undefined;
 		}
-		this.#currentPlan.resetIn--;
+		if (this.#currentPlan) this.#currentPlan.resetIn--;
 	}
 	// only handles packets that weren't canceled above (i.e. from packet queue manager)
 	@Subscribe("sendPacket", Priority.READ_FINAL_STATE)

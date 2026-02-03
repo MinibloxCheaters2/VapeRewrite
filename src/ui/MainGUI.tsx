@@ -1,5 +1,6 @@
 import { createSignal, For, onCleanup, onMount, Show } from "solid-js";
 import { render } from "solid-js/web";
+import { REAL_CLIENT_NAME } from "@/Client";
 import {
 	type CategoryInfo,
 	categoryInfoSet,
@@ -131,7 +132,7 @@ function MainGUI() {
 				>
 					<img
 						src={getResourceURL("guivape")}
-						alt="Vape"
+						alt={REAL_CLIENT_NAME}
 						style={{
 							height: "18px",
 							filter: "brightness(0) invert(1)",
@@ -140,7 +141,7 @@ function MainGUI() {
 					/>
 					<img
 						src={getResourceURL("guiv4")}
-						alt="V4"
+						alt="v4"
 						style={{
 							height: "16px",
 							"margin-left": "2px",

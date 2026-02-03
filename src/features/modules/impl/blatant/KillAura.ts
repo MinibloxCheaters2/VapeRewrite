@@ -2,13 +2,13 @@ import { Subscribe } from "@/event/api/Bus";
 import type { Entity } from "@/features/sdk/types/entity";
 import { MATCHED_DUMPS } from "@/hooks/replacement";
 import RotationManager, { RotationPlan } from "@/utils/aiming/rotate";
+import Rotation from "@/utils/aiming/rotation";
 import PacketRefs from "@/utils/packetRefs";
+import deg2rad from "@/utils/radians";
 import Refs from "@/utils/refs";
 import { findTargets } from "@/utils/target";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
-import Rotation from "@/utils/aiming/rotation";
-import deg2rad from "@/utils/radians";
 
 function wrapAngleTo180_radians(angle: number): number {
 	let ang = angle;
@@ -82,7 +82,8 @@ export default class KillAura extends Mod {
 		const hitVec = player.getEyePos().clone().clamp(box.min, box.max);
 
 		const aimPos = player.pos.clone().sub(e.pos);
-		const lastReportedYawN = MATCHED_DUMPS.lastReportedYaw as "lastReportedYaw";
+		const lastReportedYawN =
+			MATCHED_DUMPS.lastReportedYaw as "lastReportedYaw";
 		const newYaw = wrapAngleTo180_radians(
 			Math.atan2(aimPos.x, aimPos.z) - player[lastReportedYawN],
 		);

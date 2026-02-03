@@ -1,5 +1,6 @@
 import { createEffect, createSignal, For } from "solid-js";
 import { render } from "solid-js/web";
+import { REAL_CLIENT_NAME } from "@/Client";
 import ModuleManager from "@/features/modules/api/ModuleManager";
 import getResourceURL from "@/utils/cachedResourceURL";
 
@@ -53,7 +54,7 @@ function TextGUI() {
 			>
 				<img
 					src={getResourceURL("textvape")}
-					alt="Vape"
+					alt={REAL_CLIENT_NAME}
 					style={{
 						height: "18px",
 						filter: "drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.8))",
@@ -117,6 +118,4 @@ export function initTextGUI() {
 	document.body.appendChild(container);
 
 	render(() => <TextGUI />, container);
-
-	console.log("TextGUI initialized");
 }

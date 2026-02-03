@@ -557,6 +557,4 @@ export function initNewClickGUI() {
 
 		catIdx++;
 	}
-
-	console.log("NewClickGUI initialized with", catIdx, "categories");
 }

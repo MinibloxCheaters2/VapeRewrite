@@ -12,8 +12,6 @@ import { initProfilesPanel } from "./ProfilesPanel";
 import { initSettingsPanel } from "./SettingsPanel";
 import { initTextGUI } from "./TextGUI";
 
-console.log("Vape Rewrite GUI initializing...");
-
 // Initialize GUIs
 initMainGUI();
 initNewClickGUI();
@@ -21,5 +19,3 @@ initTextGUI();
 initNotifications();
 initSettingsPanel();
 initProfilesPanel();
-
-console.log("Vape Rewrite GUI initialized. Press \\ or RightShift to toggle.");
