@@ -6,6 +6,6 @@ import "./ui/app";
 import "./features/commands/api/CommandManager";
 import "./features/commands/Listener";
 import "./utils/packetQueueManager";
-import "./utils/aiming/rotation";
+import "./utils/aiming/rotate";
 import "./features/binds/handler";
 import "./utils/ServerFallDistance";

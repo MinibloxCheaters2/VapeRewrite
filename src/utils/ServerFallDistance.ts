@@ -32,7 +32,7 @@ export default new (class PacketFallDistance {
 		this.currentFallDistance += Math.abs(diff);
 	}
 
-	@Subscribe("sendPacket", Priority.READ_FINAL_STATE)
+	@Subscribe("sendPacket", Priority.LOWEST)
 	private sendPacket({ data: pkt }: CancelableWrapper<C2SPacket>) {
 		if (pkt instanceof PacketRefs.getRef("SPacketPlayerPosLook")) {
 			this.handle(pkt.onGround, pkt.pos?.y);

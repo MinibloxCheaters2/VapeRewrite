@@ -1,6 +1,7 @@
 import { type Accessor, createSignal } from "solid-js";
 import Bus from "@/Bus";
 import { addBind, removeBind, setBind } from "@/features/binds/handler";
+import { showNotification } from "@/ui/notifications";
 import type { Category } from "./Category";
 
 const NO_BIND = "";
@@ -28,11 +29,26 @@ export interface SliderSetting extends BaseSetting {
 	step?: number;
 }
 
-export interface DropdownSetting extends BaseSetting {
+export interface Tagged {
+	tag: string;
+}
+
+export type ModeLike = string | Tagged;
+
+export function getName(m: ModeLike): string {
+	if (typeof m === "string") {
+		return m;
+	}
+	// Tagged
+	return m.tag;
+}
+
+export interface DropdownSetting<V extends ModeLike = string>
+	extends BaseSetting {
 	type: "dropdown";
-	value: Accessor<string>;
-	setValue: (value: string) => void;
-	options: string[];
+	value: Accessor<V>;
+	setValue: (value: V) => void;
+	options: V[];
 }
 
 export interface TextBoxSetting extends BaseSetting {
@@ -245,7 +261,12 @@ export default abstract class Mod {
 	/** Toggles this module and sends a notification. */
 	public toggle(): void {
 		this.toggleSilently();
-		// TODO: implement toggle notifications and dynamic island stuff here
+		showNotification(
+			this.name,
+			this.enabled ? "Enabled" : "Disabled",
+			"info",
+			2000,
+		);
 	}
 
 	private set state(value: boolean) {

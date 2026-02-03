@@ -1,6 +1,7 @@
 import { CORE_REPLACEMENTS } from "./replacements/core/core";
 import { EXPOSE_REPLACEMENTS } from "./replacements/core/expose";
 import { PACKET_RECV_HOOK } from "./replacements/core/packetRecv";
+import { ROTATION_REPLACEMENTS } from "./replacements/core/rotation";
 import { TICK_LOOP_REPLACEMENT } from "./replacements/core/tickLoop";
 import VERSION_REPLACEMENT from "./replacements/core/version";
 import { FORCE_ENABLE_REPLACEMENT } from "./replacements/flags";
@@ -85,4 +86,5 @@ export const REPLACEMENTS = new Map<Match, Replacement>([
 	],
 	PACKET_RECV_HOOK,
 	VERSION_REPLACEMENT,
+	...ROTATION_REPLACEMENTS,
 ]);

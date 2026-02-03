@@ -1,5 +1,6 @@
 // TODO: support queueing S2C packets?
 
+import type { Material, Mesh } from "three";
 import type {
 	PBFloatVector3,
 	SPacketPlayerPosLook,
@@ -8,8 +9,10 @@ import Bus from "../Bus";
 import { Priority, Subscribe } from "../event/api/Bus";
 import type CancelableWrapper from "../event/api/CancelableWrapper";
 import type { AnyPacket, C2SPacket } from "../features/sdk/types/packetTypes";
+import Rotation from "./aiming/rotation";
 import PacketUtil from "./PacketUtil";
 import PacketRefs from "./packetRefs";
+import Refs from "./refs";
 
 export class PacketRecord<T> {
 	constructor(
@@ -33,6 +36,7 @@ export class PacketOutcome<P> {
 
 export default new (class PacketQueueManager {
 	private packetQueue: PacketRecord<C2SPacket>[] = [];
+	#posBox: Mesh;
 
 	get serverPos(): PBFloatVector3 | undefined {
 		return (
@@ -43,6 +47,18 @@ export default new (class PacketQueueManager {
 					p.packet.pos,
 			)?.packet as SPacketPlayerPosLook | undefined
 		)?.pos;
+	}
+
+	get serverRot(): Rotation | undefined {
+		return Rotation.fromPacket(
+			this.packetQueue.find(
+				(p) =>
+					p.packet instanceof
+						PacketRefs.getRef("SPacketPlayerPosLook") &&
+					p.packet.yaw !== undefined &&
+					p.packet.pitch !== undefined,
+			)?.packet as SPacketPlayerPosLook | undefined,
+		);
 	}
 
 	constructor() {
@@ -106,5 +122,51 @@ export default new (class PacketQueueManager {
 			this.packetQueue.push(new PacketRecord(outcome.packet, Date.now()));
 			e.cancel();
 		}
+	}
+
+	#hidePosBox() {
+		if (!this.#posBox?.visible) return;
+		this.#posBox.visible = false;
+	}
+
+	#updatePosBox() {
+		if (!this.lagging) return;
+		if (!this.serverPos) return;
+		this.#posBox.visible = true;
+		this.#posBox.position.set(
+			this.serverPos.x,
+			this.serverPos.y + 1,
+			this.serverPos.z,
+		);
+	}
+
+	#initPosBox() {
+		const mesh = new Refs.Mesh(
+			new Refs.BoxGeometry(1, Refs.player.height, 1),
+		);
+		this.#posBox = mesh;
+		const mtr = mesh.material as Material;
+		mtr.depthTest = false;
+		mtr.transparent = true;
+		mtr.opacity = 0.5;
+		mesh.renderOrder = 6;
+		mesh.visible = true;
+		Refs.game.gameScene.ambientMeshes.add(mesh);
+		return mesh;
+	}
+
+	@Subscribe("tick")
+	private onRender() {
+		if (!this.lagging) {
+			this.#hidePosBox();
+			return;
+		}
+		const sPos = this.serverPos;
+		if (!sPos) {
+			this.#hidePosBox();
+			return;
+		}
+		if (!this.#posBox) this.#initPosBox();
+		this.#updatePosBox();
 	}
 })();

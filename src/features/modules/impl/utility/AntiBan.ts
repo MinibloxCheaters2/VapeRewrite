@@ -1,8 +1,4 @@
-import { Subscribe } from "@/event/api/Bus";
-import type CancelableWrapper from "@/event/api/CancelableWrapper";
-import type { C2SPacket } from "@/features/sdk/types/packetTypes";
 import logger from "@/utils/loggers";
-import PacketRefs from "@/utils/packetRefs";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 
@@ -17,14 +13,18 @@ export default class AntiBan extends Mod {
 	name = "AntiBan";
 	category = Category.UTILITY;
 
-	// TODO: replace this with settings stuff when settings are implemented
-	get accGenIntegrationEnabled(): boolean {
-		return false;
+	private integration = this.createToggleSetting("AccountGen", false);
+	private endpoint = this.createTextBoxSetting(
+		"APIServerLocation",
+		"http://localhost:3785/",
+	);
+
+	get genEnabled(): boolean {
+		return this.integration.value();
 	}
 
-	// TODO: replace this with settings stuff when settings are implemented
 	get apiServerLocation(): URL {
-		return new URL("http://localhost:3785/");
+		return new URL(this.endpoint.value());
 	}
 
 	get generateMinibloxAccountEndpoint(): URL {
@@ -50,7 +50,7 @@ export default class AntiBan extends Mod {
 	}
 
 	/** note: it's recommended to default to a guest account if this fails or the API server is offline. */
-	private async generateAccount(): Promise<AccountData> {
+	async #generateAccount(): Promise<AccountData> {
 		const r = await fetch(this.generateMinibloxAccountEndpoint);
 		if (!r.ok) {
 			throw new Error(
@@ -63,11 +63,11 @@ export default class AntiBan extends Mod {
 	// TODO(AntiBan): implement account gen functionality
 	public async getToken(): Promise<string> {
 		if (
-			this.accGenIntegrationEnabled &&
+			this.genEnabled &&
 			this.apiServerLocation &&
 			(await this.isAPIServerOnline())
 		) {
-			const acc = this.generateAccount()
+			const acc = this.#generateAccount()
 				.then((r) => r.session)
 				.catch((e) => {
 					logger.error("Failed to create an account:", e);
@@ -76,16 +76,5 @@ export default class AntiBan extends Mod {
 			return acc;
 		}
 		return GUEST_TOKEN;
-	}
-
-	@Subscribe("sendPacket")
-	private handlePacket({ data: pkt }: CancelableWrapper<C2SPacket>) {
-		// the idea is that we first login with a guest token and then with our banned token.
-		if (
-			pkt instanceof PacketRefs.getRef("SPacketLoginStart") &&
-			pkt.session !== GUEST_TOKEN
-		) {
-			pkt.session = GUEST_TOKEN;
-		}
 	}
 }

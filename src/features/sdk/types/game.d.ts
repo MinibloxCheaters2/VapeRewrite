@@ -1,10 +1,10 @@
-import type { Scene } from "three/src/Three.js";
 import type { ClientEntityPlayer } from "./entity.d.ts";
 import "./packet.d.ts";
 import type { ClientWorld } from "./world";
 import { Chat } from "./chat.d.ts";
 import { PlayerController } from "./controller.js";
 import { ServerInfo } from "./serverInfo.js";
+import type { GameScene } from "./gameScene.js";
 
 export enum ConnectionState {
 	IDK = 0,
@@ -20,7 +20,7 @@ export declare class Game {
 	player: ClientEntityPlayer;
 	controller: PlayerController;
 	// tickLoop: number;
-	gameScene: Scene;
+	gameScene: GameScene;
 	world: ClientWorld;
 	playerList: PlayerList;
 	unleash;

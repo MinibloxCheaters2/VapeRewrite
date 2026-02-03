@@ -1,4 +1,5 @@
 import { Shift, type SingleReplacement } from "@/hooks/replacementTypes";
+import { EXPOSED } from "@/utils/patchHelper";
 
 export default [
 	"new SPacketLoginStart({" +
@@ -11,7 +12,9 @@ export default [
 	{
 		replacement: `new SPacketLoginStart({
   requestedUuid: undefined,
-  session: localStorage.getItem(SESSION_TOKEN_KEY) ?? "",
+  session: (${EXPOSED}.moduleManager.antiBan.enabled
+    ? await ${EXPOSED}.moduleManager.antiBan.getToken()
+    : (localStorage.getItem(SESSION_TOKEN_KEY) ?? "")),
   hydration: "0",
   metricsId: uuid$1(),
   clientVersion: VERSION$1

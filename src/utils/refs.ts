@@ -1,4 +1,5 @@
-import type { Vector3 } from "three";
+import type { BoxGeometry, Mesh, Vector3 } from "three";
+import { MATCHED_DUMPS } from "@/hooks/replacement";
 import Interop from "../exposedO";
 import type { BlockPos } from "../features/sdk/types/blockpos";
 import type { ClientSocket } from "../features/sdk/types/clientSocket";
@@ -27,6 +28,8 @@ class Refs {
 	static #EntityLivingBase: typeof EntityLivingBase;
 	// for PlayerController, use `game.controller`
 	static #playerControllerMP: PlayerControllerMP;
+	static #BoxGeometry: typeof BoxGeometry;
+	static #Mesh: typeof Mesh;
 
 	static #initOrR<T>(field: T, initializer: () => T) {
 		field ??= initializer();
@@ -36,6 +39,20 @@ class Refs {
 	static get playerControllerMP() {
 		return Refs.#initOrR(Refs.#playerControllerMP, () =>
 			Interop.run((e) => e<PlayerControllerMP>("playerControllerMP")),
+		);
+	}
+
+	static get BoxGeometry() {
+		return Refs.#initOrR(Refs.#BoxGeometry, () =>
+			Interop.run((e) =>
+				e<typeof BoxGeometry>(MATCHED_DUMPS.boxGeometry),
+			),
+		);
+	}
+
+	static get Mesh() {
+		return Refs.#initOrR(Refs.#Mesh, () =>
+			Interop.run((e) => e<typeof Mesh>("Mesh")),
 		);
 	}
 

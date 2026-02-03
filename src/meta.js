@@ -19,17 +19,31 @@
 // @author      process.env.AUTHOR
 // @require     https://cdn.jsdelivr.net/npm/@violentmonkey/dom@2
 // @require     https://cdn.jsdelivr.net/npm/@wq2/ui@0.10.5
-// @resource    bind https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/bind.png
-// @resource    expand https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/expand.png
-// @resource    contract https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/contract.png
-// @resource    combat https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/categories/combat.png
-// @resource    blatant https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/categories/blatant.png
-// @resource    minigames https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/categories/minigames.png
-// @resource    profiles https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/profiles.png
-// @resource    utility https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/categories/utility.png
-// @resource    inventory https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/categories/inventory.png
-// @resource    render https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/categories/render.png
-// @resource    world https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/categories/world.png
+// @resource    bind https://codeberg.org/Miniblox/VapeRewrite/raw/branch/vape-clickgui/icons/misc/bind.png
+// @resource    expand https://codeberg.org/Miniblox/VapeRewrite/raw/branch/vape-clickgui/icons/misc/expand.png
+// @resource    expand-right https://codeberg.org/Miniblox/VapeRewrite/raw/branch/vape-clickgui/icons/misc/expand-right.png
+// @resource    contract https://codeberg.org/Miniblox/VapeRewrite/raw/branch/vape-clickgui/icons/misc/contract.png
+// @resource    combat https://codeberg.org/Miniblox/VapeRewrite/raw/branch/vape-clickgui/icons/category/combat.png
+// @resource    blatant https://codeberg.org/Miniblox/VapeRewrite/raw/branch/vape-clickgui/icons/category/blatant.png
+// @resource    minigames https://codeberg.org/Miniblox/VapeRewrite/raw/branch/vape-clickgui/icons/category/minigames.png
+// @resource    guivape https://codeberg.org/Miniblox/VapeRewrite/raw/branch/vape-clickgui/icons/gui/vape.png
+// @resource    guiv4 https://codeberg.org/Miniblox/VapeRewrite/raw/branch/vape-clickgui/icons/gui/v4.png
+// @resource    guisettings https://codeberg.org/Miniblox/VapeRewrite/raw/branch/vape-clickgui/icons/gui/settings.png
+// @resource    overlay-tab https://codeberg.org/Miniblox/VapeRewrite/raw/branch/vape-clickgui/icons/overlays/tab.png
+// @resource    dots https://codeberg.org/Miniblox/VapeRewrite/raw/branch/vape-clickgui/icons/misc/dots.png
+// @resource    profilesicon https://codeberg.org/Miniblox/VapeRewrite/raw/branch/vape-clickgui/icons/profiles.png
+// @resource    close https://codeberg.org/Miniblox/VapeRewrite/raw/branch/vape-clickgui/icons/misc/close.png
+// @resource    add https://codeberg.org/Miniblox/VapeRewrite/raw/branch/vape-clickgui/icons/misc/add.png
+// @resource    textvape https://codeberg.org/Miniblox/VapeRewrite/raw/branch/vape-clickgui/icons/textvape.png
+// @resource    textv4 https://codeberg.org/Miniblox/VapeRewrite/raw/branch/vape-clickgui/icons/textv4.png
+// @resource    info https://codeberg.org/Miniblox/VapeRewrite/raw/branch/vape-clickgui/icons/notifications/info.png
+// @resource    warning https://codeberg.org/Miniblox/VapeRewrite/raw/branch/vape-clickgui/icons/notifications/warning.png
+// @resource    alert https://codeberg.org/Miniblox/VapeRewrite/raw/branch/vape-clickgui/icons/notifications/alert.png
+// @resource    rainbow_1 https://codeberg.org/Miniblox/VapeRewrite/raw/branch/vape-clickgui/icons/rainbow/1.png
+// @resource    utility https://codeberg.org/Miniblox/VapeRewrite/raw/branch/vape-clickgui/icons/category/utility.png
+// @resource    inventory https://codeberg.org/Miniblox/VapeRewrite/raw/branch/vape-clickgui/icons/category/inventory.png
+// @resource    render https://codeberg.org/Miniblox/VapeRewrite/raw/branch/vape-clickgui/icons/category/render.png
+// @resource    world https://codeberg.org/Miniblox/VapeRewrite/raw/branch/vape-clickgui/icons/category/world.png
 // @run-at      document-start
 // ==/UserScript==
 

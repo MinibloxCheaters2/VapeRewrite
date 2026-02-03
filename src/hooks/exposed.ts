@@ -6,9 +6,10 @@
 import Bus from "../Bus";
 import CancelableWrapper from "../event/api/CancelableWrapper";
 import type ClientEvents from "../event/api/Events";
-import dispatcher from "../features/commands/api/CommandDispatcher";
-import ModuleManager from "../features/modules/api/ModuleManager";
+import dispatcher from "@/features/commands/api/CommandDispatcher";
+import ModuleManager from "@/features/modules/api/ModuleManager";
 import { MATCHED_DUMPS } from "./replacement";
+import RotationManager from "@/utils/aiming/rotate";
 
 /** functions exposed by patches that modify the game script */
 export interface ExposedFromGame {
@@ -43,6 +44,9 @@ export default {
 	},
 	get moduleManager() {
 		return ModuleManager;
+	},
+	get RotationManager() {
+		return RotationManager;
 	},
 
 	get dump() {

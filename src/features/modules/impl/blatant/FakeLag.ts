@@ -5,16 +5,12 @@ import packetQueueManager, {
 	type PacketOutcome,
 } from "@/utils/packetQueueManager";
 import PacketRefs from "@/utils/packetRefs";
+import { getRandomArbitrary } from "@/utils/random";
 import Refs from "@/utils/refs";
 import { findTargets } from "@/utils/target";
 import { SimpleVec3 } from "@/utils/vec";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
-
-// TODO: settings
-const FLUSH_ON_ACTION = true;
-const RANGE = 12; // 6 * 2
-const MAX_DELAY_MS = 1.5e3; // 1.5 seconds
 
 export default class FakeLag extends Mod {
 	public name = "FakeLag";
@@ -22,13 +18,38 @@ export default class FakeLag extends Mod {
 	#targetsInRange = [];
 	#enemyNearby = false;
 
+	#rng = this.createSliderSetting("Range", 12, 1, 18, 0.1);
+	#miD = this.createSliderSetting("MinDelayMS", 1.5e3, 1, 1.5e3, 1.5);
+	#maD = this.createSliderSetting("MaxDelayMS", 1.5e3, 2, 1.5e3, 1.5);
+	#fOA = this.createToggleSetting("FlushOnAction", true);
+
+	get #range() {
+		return this.#rng.value();
+	}
+
+	get #minDelay() {
+		return this.#miD.value();
+	}
+
+	get #maxDelay() {
+		return this.#maD.value();
+	}
+
+	get #flushOnAction() {
+		return this.#fOA.value();
+	}
+
+	get #delay() {
+		return getRandomArbitrary(this.#minDelay, this.#maxDelay);
+	}
+
 	protected onDisable(): void {
 		this.#enemyNearby = false;
 		this.#targetsInRange = [];
 	}
 
 	#flushPreconditions(packet: C2SPacket): boolean {
-		if (FLUSH_ON_ACTION) {
+		if (this.#flushOnAction) {
 			if (
 				packet instanceof PacketRefs.getRef("SPacketEntityAction") &&
 				packet.id === Refs.player.id
@@ -54,7 +75,7 @@ export default class FakeLag extends Mod {
 
 	@Subscribe("tick")
 	private onTick() {
-		this.#targetsInRange = findTargets(RANGE);
+		this.#targetsInRange = findTargets(this.#range);
 		this.#enemyNearby = this.#targetsInRange.length !== 0;
 	}
 
@@ -63,7 +84,7 @@ export default class FakeLag extends Mod {
 		if (!this.#enemyNearby) return;
 
 		if (
-			packetQueueManager.laggingFor() > MAX_DELAY_MS ||
+			packetQueueManager.laggingFor() > this.#delay ||
 			this.#flushPreconditions(outcome.packet)
 		) {
 			outcome.action = Action.FLUSH;
