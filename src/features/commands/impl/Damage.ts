@@ -1,10 +1,10 @@
-import { argument, FloatArgumentType, literal } from "@wq2/brigadier-ts";
+import { argument, IntegerArgumentType, literal } from "@wq2/brigadier-ts";
 import Refs from "@/utils/refs";
 import dispatcher from "../api/CommandDispatcher";
 
 dispatcher.register(
 	literal("damage").then(
-		argument("amount", new FloatArgumentType()).executes(async (e) => {
+		argument("amount", new IntegerArgumentType()).executes(async (e) => {
 			const amount = e.get<number>("amount");
 			for (let i = 1; i < amount; i++) {
 				Refs.game.controller.objectMouseOver.hitVec =

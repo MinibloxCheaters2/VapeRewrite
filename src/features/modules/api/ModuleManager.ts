@@ -75,10 +75,4 @@ export default class ModuleManager {
 	public static findModules(predicate: (module: Mod) => boolean): Mod[] {
 		return ModuleManager.modules.filter(predicate);
 	}
-
-	public static disableAll(): void {
-		for (const mod of ModuleManager.modules) {
-			mod.enabled = false;
-		}
-	}
 }
