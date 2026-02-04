@@ -283,10 +283,7 @@ function CategoryButton(props: { category: string; info: CategoryInfo }) {
 			on:contextmenu={handleContextMenu}
 			type="button"
 		>
-			<img
-				src={props.info.iconURL}
-				alt={props.category}
-			/>
+			<img src={props.info.iconURL} alt={props.category} />
 			<span
 				style={{
 					"margin-left": "12px",

@@ -37,7 +37,6 @@ export default class ModuleManager {
 	public static readonly noSlow = new NoSlow();
 	public static readonly phase = new Phase();
 	public static readonly scaffold = new Scaffold();
-	public static readonly criticals = new Criticals();
 
 	constructor() {
 		throw new Error("everything in module manager is static lol");
@@ -56,11 +55,11 @@ export default class ModuleManager {
 		new KillAura(),
 		new Velocity(),
 		new NoFall(),
-		this.criticals,
+		new Criticals(),
 		new RejoinOnMute(),
 		new WTap(),
 		new Blink(),
-		new FakeLag(),
+		new FakeLag()
 	] as const;
 
 	public static readonly moduleNames: string[] = this.modules.map(

@@ -16,7 +16,9 @@ export default new (class ShadowWrapper {
 		iframe.remove();
 
 		const container = document.createElement("div");
-		const shadow = attachShadow.apply(container, [{ mode: "closed" }]) as ShadowRoot;
+		const shadow = attachShadow.apply(container, [
+			{ mode: "closed" },
+		]) as ShadowRoot;
 		document.body.appendChild(container);
 		return shadow;
 	}

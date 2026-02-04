@@ -183,7 +183,7 @@ export default abstract class Mod {
 	protected createDropdownSetting<V extends ModeLike = string>(
 		name: string,
 		options: V[],
-		defaultValue?: V,
+		defaultValue?: typeof options[0],
 	): DropdownSetting<V> {
 		const [value, setValue] = createSignal(defaultValue ?? options[0]);
 		const setting: DropdownSetting<V> = {

@@ -155,9 +155,7 @@ function SettingsPanel() {
 						"overflow-y": "auto",
 					}}
 					class="clickgui-scrollbar"
-				>
-
-				</div>
+				></div>
 			</div>
 		</Show>
 	);
