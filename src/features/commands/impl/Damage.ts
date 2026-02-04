@@ -10,6 +10,10 @@ dispatcher.register(
 				Refs.game.controller.objectMouseOver.hitVec =
 					Refs.player.pos.clone();
 				Refs.game.controller.attackEntity(Refs.player);
+				Refs.game.chat.addChat({
+					text: "Dealt " + amount + " damage!",
+					color: "blue"
+				});
 			}
 		}),
 	),
