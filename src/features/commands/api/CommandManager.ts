@@ -6,3 +6,5 @@
 import "../impl/Bind.ts";
 import "../impl/Damage.ts";
 import "../impl/Toggle.ts";
+import "../impl/Panic.ts";
+import "../impl/Say.ts";
