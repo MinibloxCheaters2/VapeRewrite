@@ -59,7 +59,7 @@ export default class ModuleManager {
 		new RejoinOnMute(),
 		new WTap(),
 		new Blink(),
-		new FakeLag()
+		new FakeLag(),
 	] as const;
 
 	public static readonly moduleNames: string[] = this.modules.map(

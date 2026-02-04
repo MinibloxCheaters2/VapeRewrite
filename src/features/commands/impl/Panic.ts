@@ -1,6 +1,5 @@
 import { literal } from "@wq2/brigadier-ts";
 import ModuleManager from "@/features/modules/api/ModuleManager";
-import ModuleArgumentType from "../api/brigadier/ModuleArgumentType";
 import Refs from "@/utils/refs";
 import dispatcher from "../api/CommandDispatcher";
 
@@ -9,10 +8,10 @@ dispatcher.register(
 		ModuleManager.modules.forEach((m) => {
 			m.enabled = false;
 		});
-            Refs.game.chat.addChat({
-					text: "Disabled all modules!",
-					color: "green"
-				});
+		Refs.game.chat.addChat({
+			text: "Disabled all modules!",
+			color: "green",
+		});
 		return 1;
 	}),
 );

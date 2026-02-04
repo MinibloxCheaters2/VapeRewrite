@@ -1,8 +1,8 @@
 import { argument, literal, StringArgumentType } from "@wq2/brigadier-ts";
 import type Mod from "@/features/modules/api/Module";
+import Refs from "@/utils/refs";
 import ModuleArgumentType from "../api/brigadier/ModuleArgumentType";
 import dispatcher from "../api/CommandDispatcher";
-import Refs from "@/utils/refs";
 
 dispatcher.register(
 	literal("bind").then(
@@ -15,9 +15,14 @@ dispatcher.register(
 					// the setter handles the setting logic.
 					m.bind = actual;
 					Refs.game.chat.addChat({
-					text: "Bound " + m.name + " to " + (actual || "none") + "!",
-					color: "aqua"
-				});
+						text:
+							"Bound " +
+							m.name +
+							" to " +
+							(actual || "none") +
+							"!",
+						color: "aqua",
+					});
 				},
 			),
 		),
