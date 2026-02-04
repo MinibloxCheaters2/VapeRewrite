@@ -24,7 +24,7 @@ export function ToggleComponent(props: {
 	const [hovered, setHovered] = createSignal(false);
 
 	return (
-		<button
+		<div
 			style={{
 				display: "flex",
 				"align-items": "center",
@@ -39,7 +39,6 @@ export function ToggleComponent(props: {
 			on:pointerenter={() => setHovered(true)}
 			on:pointerleave={() => setHovered(false)}
 			on:click={() => props.onChange(!props.enabled)}
-			type="button"
 		>
 			<span
 				style={{
@@ -76,7 +75,7 @@ export function ToggleComponent(props: {
 					}}
 				/>
 			</div>
-		</button>
+		</div>
 	);
 }
 

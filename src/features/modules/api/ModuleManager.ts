@@ -8,6 +8,7 @@ import Scaffold from "../impl/blatant/Scaffold.js";
 import Criticals from "../impl/combat/Criticals.js";
 import Velocity from "../impl/combat/Velocity.js";
 import WTap from "../impl/combat/WTap.js";
+import TextGUIModule from "../impl/render/TextGUI.js";
 import AntiBan from "../impl/utility/AntiBan.js";
 import AutoRespawn from "../impl/utility/AutoRespawn.js";
 import FilterBypass from "../impl/utility/FilterBypass.js";
@@ -37,6 +38,7 @@ export default class ModuleManager {
 	public static readonly noSlow = new NoSlow();
 	public static readonly phase = new Phase();
 	public static readonly scaffold = new Scaffold();
+	public static readonly textGUI = new TextGUIModule();
 
 	constructor() {
 		throw new Error("everything in module manager is static lol");
@@ -60,6 +62,7 @@ export default class ModuleManager {
 		new WTap(),
 		new Blink(),
 		new FakeLag(),
+		this.textGUI,
 	] as const;
 
 	public static readonly moduleNames: string[] = this.modules.map(
