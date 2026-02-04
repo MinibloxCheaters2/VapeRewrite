@@ -1,5 +1,7 @@
-import type { Block } from "./undefined";
+import { Vector3 } from "three";
 import type { Entity } from "./entity";
+import { World } from "./world";
+import { EnumFacing } from "./math/facing";
 
 // Base Item class
 export interface Item {
@@ -7,16 +9,36 @@ export interface Item {
 	maxStackSize: number;
 	maxDamage: number;
 	hasSubtypes: boolean;
-	
+
 	getUnlocalizedName(): string;
 	getItemStackDisplayName(stack: ItemStack): string;
-	onItemUse(stack: ItemStack, player: Entity, world: any, pos: any, side: any, hitX: number, hitY: number, hitZ: number): boolean;
-	onItemRightClick(stack: ItemStack, world: any, player: Entity): ItemStack;
+	onItemUse(
+		stack: ItemStack,
+		player: Entity,
+		world: World,
+		pos: Vector3,
+		side: EnumFacing,
+		hitX: number,
+		hitY: number,
+		hitZ: number,
+	): boolean;
+	onItemRightClick(stack: ItemStack, world: World, player: Entity): ItemStack;
 	getMaxItemUseDuration(stack: ItemStack): number;
 	getItemUseAction(stack: ItemStack): string;
-	onPlayerStoppedUsing(stack: ItemStack, world: any, player: Entity, timeLeft: number): void;
+	onPlayerStoppedUsing(
+		stack: ItemStack,
+		world: World,
+		player: Entity,
+		timeLeft: number,
+	): void;
 	hitEntity(stack: ItemStack, target: Entity, attacker: Entity): boolean;
-	onBlockDestroyed(stack: ItemStack, world: any, block: Block, pos: any, player: Entity): boolean;
+	onBlockDestroyed(
+		stack: ItemStack,
+		world: World,
+		block: Block,
+		pos: Vector3,
+		player: Entity,
+	): boolean;
 	canHarvestBlock(block: Block): boolean;
 	getStrVsBlock(stack: ItemStack, block: Block): number;
 }
@@ -25,7 +47,17 @@ export interface Item {
 export interface ItemBlock extends Item {
 	block: Block;
 	getBlock(): Block;
-	placeBlockAt(stack: ItemStack, player: Entity, world: any, pos: any, side: any, hitX: number, hitY: number, hitZ: number, metadata: number): boolean;
+	placeBlockAt(
+		stack: ItemStack,
+		player: Entity,
+		world: World,
+		pos: Vector3,
+		side: EnumFacing,
+		hitX: number,
+		hitY: number,
+		hitZ: number,
+		metadata: number,
+	): boolean;
 }
 
 // ItemSword - Swords
@@ -47,7 +79,7 @@ export interface ItemArmor extends Item {
 	maxDamage: number;
 	renderIndex: number;
 	material: string;
-	
+
 	getArmorMaterial(): string;
 	getColor(stack: ItemStack): number;
 	removeColor(stack: ItemStack): void;
@@ -60,7 +92,7 @@ export interface ItemFood extends Item {
 	saturationModifier: number;
 	isWolfsFavoriteMeat: boolean;
 	alwaysEdible: boolean;
-	
+
 	getHealAmount(stack: ItemStack): number;
 	getSaturationModifier(stack: ItemStack): number;
 }
@@ -70,7 +102,7 @@ export interface ItemTool extends Item {
 	efficiencyOnProperMaterial: number;
 	damageVsEntity: number;
 	toolMaterial: string;
-	
+
 	getToolMaterial(): string;
 	getStrVsBlock(stack: ItemStack, block: Block): number;
 }
@@ -90,10 +122,10 @@ export interface ItemStack {
 	item: Item;
 	stackSize: number;
 	itemDamage: number;
-	
+
 	getItem(): Item;
 	getDisplayName(): string;
-	getEnchantmentTagList(): any[];
+	getEnchantmentTagList(): unknown[];
 	hasEffect(): boolean;
 	isItemEnchanted(): boolean;
 	isItemEnchantable(): boolean;
@@ -102,10 +134,15 @@ export interface ItemStack {
 	isItemDamaged(): boolean;
 	getItemDamage(): number;
 	getMaxDamage(): number;
-	attemptDamageItem(amount: number, random: any): boolean;
+	attemptDamageItem(amount: number, random: unknown): boolean;
 	damageItem(amount: number, entity: Entity): void;
 	hitEntity(target: Entity, player: Entity): void;
-	onBlockDestroyed(world: any, block: Block, pos: any, player: Entity): void;
+	onBlockDestroyed(
+		world: World,
+		block: Block,
+		pos: unknown,
+		player: Entity,
+	): void;
 	canHarvestBlock(block: Block): boolean;
 	interactWithEntity(player: Entity, target: Entity): boolean;
 	copy(): ItemStack;
@@ -114,12 +151,12 @@ export interface ItemStack {
 	isItemEqual(other: ItemStack): boolean;
 	getTooltip(player: Entity, advanced: boolean): string[];
 	hasDisplayName(): boolean;
-	getDisplayName(): string;
 	setStackDisplayName(name: string): ItemStack;
 	clearCustomName(): void;
 	hasTagCompound(): boolean;
-	getTagCompound(): any;
-	setTagCompound(nbt: any): void;
+	// TODO: idk what types these are, assuming strings?
+	getTagCompound(): string;
+	setTagCompound(nbt: string): void;
 }
 
 // Global Items registry

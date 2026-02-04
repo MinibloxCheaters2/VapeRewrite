@@ -1,5 +1,7 @@
 import type { BlockPos } from "./blockpos";
+import { Block } from "./blocks";
 import type { Entity, EntityPlayer } from "./entity";
+import type { EnumDifficulty } from "./enums";
 import type { CPacketLeaderboard } from "./packets";
 
 export interface Material {
@@ -9,45 +11,32 @@ export interface Material {
 	blocksMovement(): boolean;
 }
 
-export interface Block {
-	name?: string;
-	material: Material;
-	getBoundingBox?(): {
-		min: { x: number; y: number; z: number };
-		max: { x: number; y: number; z: number };
-	};
-	isFullBlock(): boolean;
-	isOpaqueCube(): boolean;
-	isPassable(world: World, pos: BlockPos): boolean;
-	getCollisionBoundingBox(world: World, pos: BlockPos): any;
-}
-
 export interface BlockState {
 	getBlock(): Block;
 	getMaterial(): Material;
 }
 
-export default class World {
-	static mutableblockpos: BlockPos;
-	static pos1: BlockPos;
-	static pos2: BlockPos;
+export declare class World {
+	static mutableblockpos: BlockPos; /* = new BlockPos(0, 0, 0)*/
+	static pos1: BlockPos; /* = new BlockPos(0, 0, 0)*/
+	static pos2: BlockPos; /* = new BlockPos(0, 0, 0)*/
 	players: Map<number, EntityPlayer>;
 	totalTime: number;
 	worldTime: number;
 	tick: number;
-	serverInterface: any;
+	serverInterface: ServerInterface;
 	loadedEntityList: Entity[];
 	unloadedEntityList: Map<number, Entity>;
-	loadedTileEntitiesMap: any;
-	tileEntitiesToBeRemoved: any[];
-	chunkProvider: any[];
+	loadedTileEntitiesMap: Map;
+	tileEntitiesToBeRemoved: unknown[];
+	chunkProvider: unknown[];
 	ambientTickCountdown: number;
 	scheduledUpdatesAreImmediate: boolean;
-	leaderboards: Map<string, any>;
-	enchantmentHelper: any;
-	difficulty: any;
-	simulationChunkSet: Set<any>;
-	teamMap: Map<string, any>;
+	leaderboards: Map<string, CPacketLeaderboard>;
+	enchantmentHelper: EnchantmentHelper;
+	difficulty: EnumDifficulty;
+	simulationChunkSet: Set;
+	teamMap: Map<string, Team>;
 	/** IMPORTANT: USE DUMPS */
 	entities: Map<number, Entity>;
 	get isClient(): boolean;

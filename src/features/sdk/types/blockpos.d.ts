@@ -29,7 +29,7 @@ export declare class BlockPos {
 	set(x: number, y: number, z: number): void;
 	add(u: number, h: number, p: number): BlockPos;
 	subtract(u: number, h: number, p: number): BlockPos;
-	
+
 	// Utility methods for block iteration
 	static getAllInBoxMutable(min: BlockPos, max: BlockPos): BlockPos[];
 	up(n?: number): BlockPos;
@@ -40,4 +40,3 @@ export declare class BlockPos {
 	east(n?: number): BlockPos;
 	offset(facing: any, n?: number): BlockPos;
 }
-

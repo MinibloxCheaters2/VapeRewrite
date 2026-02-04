@@ -1,40 +1,20 @@
-import { Vector3 } from "three";
-import { BlockPos } from "./blockpos";
-import { Entity, EntityLivingBase, EntityPlayer } from "./entity";
-import { PBItemStack, SPacketEnchantItem } from "./packets";
-import World from "./world";
-import { ItemStack } from "./items";
-import { BlockState } from "./world";
+import type { Vector3 } from "three";
+import type { BlockPos } from "./blockpos";
+import type { Entity, EntityLivingBase, EntityPlayer } from "./entity";
+import type { PBItemStack } from "./packets";
+import type World from "./world";
+import type { ItemStack } from "./items";
+import type { BlockState } from "./world";
+import type { EnumFacing } from "./math/facing";
 
 export declare class PlayerControllerMP {
 	lastSentSlot: number;
 	isHittingBlock: boolean;
-	key: {
-		leftClick: boolean;
-		rightClick: boolean;
-	};
-	objectMouseOver: RayTraceResult;
-	
+
 	/** IMPORTANT: USE DUMPS */
 	syncItem(): void;
 	func_181040_m(): this["isHittingBlock"];
 	sendEnchantPacket(windowId: string, button: number): void;
-	onPlayerRightClick(
-		player: EntityPlayer,
-		world: World,
-		item: ItemStack,
-		pos: BlockPos | Vector3,
-		placeSide: any,
-		hitVec: Vector3,
-	): boolean;
-	/* IMPORTANT USE DUMPS */
-	windowClick(
-		windowID: number,
-		slotID: number,
-		button: number,
-		mode: number,
-		player: EntityPlayer,
-	): any;
 	leftClick(): void;
 	rightClick(): void;
 }
@@ -49,7 +29,7 @@ export declare class PlayerController {
 	rightClick: boolean;
 	objectMouseOver: RayTraceResult;
 	rightClickDelayTimer: number;
-	currBreakingLocation: any;
+	currBreakingLocation: BlockPos;
 	reset(): void;
 	getBlockReachDistance(): 5 | 4.5;
 	leftClick(u: boolean): void;
@@ -60,10 +40,11 @@ export declare class PlayerController {
 		world: World,
 		item: ItemStack,
 		pos: Vector3 | BlockPos,
-		placeSide: any,
+		placeSide: EnumFacing,
 		hitVec: Vector3,
-	): any;
-	sendUseItem(plr: EntityLivingBase, h: any, p: any): boolean;
+	): boolean;
+	// TODO: item or item stack?
+	sendUseItem(plr: EntityLivingBase, world: World, item: ItemStack): boolean;
 	/** **IMPORTANT**: USE DUMPS */
 	windowClick(
 		windowID: number,
@@ -71,12 +52,16 @@ export declare class PlayerController {
 		button: number,
 		mode: number,
 		player: EntityPlayer,
-	): any;
-	onStoppedUsingItem(u: any): void;
+	): ItemStack;
+	/** @param entity the entity that was using the item */
+	onStoppedUsingItem(entity: EntityPlayer): void;
 	select(): void;
 	punch(): boolean | undefined;
 	attackEntity(e: Entity): void;
-	interactWithEntitySendPacket(u: any, h: any): boolean;
+	interactWithEntitySendPacket(
+		_unusedPlayer: unknown,
+		entity: Entity,
+	): boolean;
 	findHotbarSlotForPickBlock(u: PBItemStack): number;
 	getTargetedBlockCoords(): BlockPos;
 	getTargetedBlockState(): BlockState;

@@ -56,7 +56,12 @@ export declare class SPacketPlayerPosLook {
 	yaw?: number;
 	pitch?: number;
 	onGround: boolean;
-	constructor(data: { pos: PBVector3; yaw?: number; pitch?: number; onGround: boolean });
+	constructor(data: {
+		pos: PBVector3;
+		yaw?: number;
+		pitch?: number;
+		onGround: boolean;
+	});
 }
 
 export declare class SPacketUseEntity {
@@ -74,7 +79,11 @@ export declare class SPacketPlayerAction {
 	position: PBBlockPos;
 	facing: number;
 	action: PBAction;
-	constructor(data: { position: PBBlockPos; facing: number; action: PBAction });
+	constructor(data: {
+		position: PBBlockPos;
+		facing: number;
+		action: PBAction;
+	});
 }
 
 export declare class SPacketMessage {

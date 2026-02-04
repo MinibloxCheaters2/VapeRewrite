@@ -17,7 +17,18 @@ export type PotionEffect = unknown;
 
 // Re-export from dedicated files
 export type { Block, Material, BlockState } from "./world";
-export type { Item, ItemStack, ItemBlock, ItemSword, ItemBow, ItemArmor, ItemFood, ItemTool, ItemPickaxe, ItemAppleGold } from "./items";
+export type {
+	Item,
+	ItemStack,
+	ItemBlock,
+	ItemSword,
+	ItemBow,
+	ItemArmor,
+	ItemFood,
+	ItemTool,
+	ItemPickaxe,
+	ItemAppleGold,
+} from "./items";
 
 // Container types
 export interface Container {
@@ -58,6 +69,3 @@ export interface InventoryPlayer {
 	hasCustomName(): boolean;
 	isItemValidForSlot(slot: number, stack: ItemStack): boolean;
 }
-
-
-

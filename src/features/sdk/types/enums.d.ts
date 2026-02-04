@@ -21,18 +21,3 @@ export enum EnumCreatureAttribute {
 	UNDEAD = 1,
 	ARTHROPOD = 2,
 }
-
-export declare class EnumFacing {
-	static readonly DOWN: EnumFacing;
-	static readonly UP: EnumFacing;
-	static readonly NORTH: EnumFacing;
-	static readonly SOUTH: EnumFacing;
-	static readonly EAST: EnumFacing;
-	static readonly WEST: EnumFacing;
-	static readonly VALUES: EnumFacing[];
-
-	getIndex(): number;
-	getOpposite(): EnumFacing;
-	toVector(): { x: number; y: number; z: number };
-	getAxis(): "X" | "Y" | "Z";
-}

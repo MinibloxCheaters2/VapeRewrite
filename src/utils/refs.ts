@@ -1,18 +1,23 @@
 import type { BoxGeometry, Mesh, Vector3 } from "three";
+import type { HUD3D } from "@/features/sdk/types/hud";
+import type { PBVector3 } from "@/features/sdk/types/packets";
 import { MATCHED_DUMPS } from "@/hooks/replacement";
 import Interop from "../exposedO";
 import type { BlockPos } from "../features/sdk/types/blockpos";
 import type { ClientSocket } from "../features/sdk/types/clientSocket";
-import type { PlayerControllerMP } from "../features/sdk/types/controller";
+import type {
+	PlayerController,
+	PlayerControllerMP,
+} from "../features/sdk/types/controller";
 import type {
 	ClientEntityPlayer,
 	EntityLivingBase,
 } from "../features/sdk/types/entity";
 import type { Game } from "../features/sdk/types/game";
+import type { Items } from "../features/sdk/types/items";
+import type { Materials } from "../features/sdk/types/materials";
 import type { EnumFacing } from "../features/sdk/types/math/facing";
 import type { ClientWorld } from "../features/sdk/types/world";
-import type { Materials } from "../features/sdk/types/materials";
-import type { Items } from "../features/sdk/types/items";
 
 // biome-ignore lint/complexity/noStaticOnlyClass: job
 class Refs {
@@ -22,17 +27,20 @@ class Refs {
 	static #player?: ClientEntityPlayer;
 	static #Vec3?: typeof Vector3;
 	static #clientSocket: typeof ClientSocket;
-	static #PBVector3: any;
+	static #PBVector3: PBVector3;
 	static #BlockPos: typeof BlockPos;
 	static #EnumFacing: typeof EnumFacing;
 	// TODO: ts like really annoying so uh maybe a better solution?
 	static #EntityLivingBase: typeof EntityLivingBase;
 	// for PlayerController, use `game.controller`
+	static #playerController: PlayerController;
 	static #playerControllerMP: PlayerControllerMP;
 	static #BoxGeometry: typeof BoxGeometry;
 	static #Mesh: typeof Mesh;
 	static #Materials: typeof Materials;
 	static #Items: typeof Items;
+	static #ItemBlock: typeof ItemBlock;
+	static #hud3D: HUD3D;
 
 	static #initOrR<T>(field: T, initializer: () => T) {
 		field ??= initializer();
@@ -48,6 +56,24 @@ class Refs {
 	static get Items() {
 		return Refs.#initOrR(Refs.#Items, () =>
 			Interop.run((e) => e<typeof Items>("Items")),
+		);
+	}
+	static get ItemBlock() {
+		return Refs.#initOrR(Refs.#ItemBlock, () =>
+			Interop.run((e) => e<typeof ItemBlock>("ItemBlock")),
+		);
+	}
+	static get hud3D() {
+		return Refs.#initOrR(Refs.#hud3D, () =>
+			Interop.run((e) => e<HUD3D>("hud3D")),
+		);
+	}
+
+	/** Literally just `game.controller` */
+	static get playerController() {
+		return Refs.#initOrR(
+			Refs.#playerController,
+			() => Refs.game.controller,
 		);
 	}
 
@@ -97,7 +123,7 @@ class Refs {
 
 	static get PBVector3() {
 		return Refs.#initOrR(Refs.#PBVector3, () =>
-			Interop.run((e) => e("PBVector3")),
+			Interop.run((e) => e<PBVector3>("PBVector3")),
 		);
 	}
 

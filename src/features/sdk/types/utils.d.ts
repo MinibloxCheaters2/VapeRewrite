@@ -9,11 +9,39 @@ import type { RayTraceResult } from "./controller";
 export declare function keyPressed(key: string): boolean;
 
 // Crafting utilities
-export declare function canCraftItem(inventory: InventoryPlayer, recipe: any): boolean;
-export declare function craftItem(inventory: InventoryPlayer, recipe: any, shiftDown: boolean): void;
+export declare function canCraftItem(
+	inventory: InventoryPlayer,
+	recipe: any,
+): boolean;
+export declare function craftItem(
+	inventory: InventoryPlayer,
+	recipe: any,
+	shiftDown: boolean,
+): void;
+
+export type ItemID = number;
+
+export interface Result {
+	count: number;
+	id: ItemID;
+}
+
+export interface RecipeT {
+	result: Result;
+}
+
+export interface IngredientsRecipe extends RecipeT {
+	ingredients: ItemID[];
+}
+
+export interface ShapeRecipe extends RecipeT {
+	inShape: ItemID[][];
+}
+
+export type Recipe = IngredientsRecipe | ShapeRecipe;
 
 // Recipe registry
-export declare const recipes: Record<number, any[]>;
+export declare const recipes: Record<number, Recipe[]>;
 
 // Potion registry
 export declare class Potion {

@@ -1,12 +1,13 @@
+import type { Vector3 } from "three";
 import { Subscribe } from "@/event/api/Bus";
 import Interop from "@/exposedO";
+import type { BlockPos } from "@/features/sdk/types/blockpos";
+import type { EnumFacing } from "@/features/sdk/types/math/facing";
+import { MATCHED_DUMPS } from "@/hooks/replacement";
+import logger from "@/utils/loggers";
+import Refs from "@/utils/refs";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
-import Refs from "@/utils/refs";
-import { MATCHED_DUMPS } from "@/hooks/replacement";
-import type { ItemStack } from "@/features/sdk/types/items";
-import type { BlockPos } from "@/features/sdk/types/blockpos";
-import type { Vector3 } from "three";
 
 export default class Scaffold extends Mod {
 	public name = "Scaffold";
@@ -15,7 +16,20 @@ export default class Scaffold extends Mod {
 	// Settings
 	private towerSetting = this.createToggleSetting("Tower", true);
 	private expandSetting = this.createSliderSetting("Expand", 1, 0, 5, 0.5);
-	private cycleSetting = this.createSliderSetting("Cycle Speed", 10, 0, 20, 1);
+	private cycleSetting = this.createSliderSetting(
+		"Cycle Speed",
+		10,
+		0,
+		20,
+		1,
+	);
+	private placesPerTickSetting = this.createSliderSetting(
+		"Places Per Tick",
+		10,
+		0,
+		20,
+		1,
+	);
 	private sameYSetting = this.createToggleSetting("Same Y", false);
 
 	// State
@@ -33,6 +47,10 @@ export default class Scaffold extends Mod {
 
 	get cycleSpeed() {
 		return this.cycleSetting.value();
+	}
+
+	get placesPerTick() {
+		return this.placesPerTickSetting.value();
 	}
 
 	get sameY() {
@@ -64,17 +82,16 @@ export default class Scaffold extends Mod {
 	}
 
 	private findBlockSlots(): number[] {
-		const { player } = Refs;
+		const { player, ItemBlock } = Refs;
 		if (!player) return [];
 
 		const slotsWithBlocks: number[] = [];
-		const ItemBlock = Interop.run((e) => e("ItemBlock")) as any;
 
 		for (let i = 0; i < 9; i++) {
 			const item = player.inventory.main[i];
 			if (
 				item &&
-				(item.item as any) instanceof ItemBlock &&
+				item.item instanceof ItemBlock &&
 				item.item.block?.getBoundingBox &&
 				item.item.block.getBoundingBox().max.y === 1 &&
 				item.item.name !== "tnt"
@@ -85,7 +102,7 @@ export default class Scaffold extends Mod {
 		return slotsWithBlocks;
 	}
 
-	private getPossibleSides(pos: BlockPos): any {
+	private getPossibleSides(pos: BlockPos): EnumFacing | null {
 		const { EnumFacing, game, Materials } = Refs;
 		if (!EnumFacing || !game || !Materials) return null;
 
@@ -105,20 +122,20 @@ export default class Scaffold extends Mod {
 		return null;
 	}
 
-	private getRandomHitVec(placePos: BlockPos, face: any): Vector3 {
+	private getRandomHitVec(placePos: BlockPos, face: EnumFacing): Vector3 {
 		const { Vec3, EnumFacing } = Refs;
 		const rand = () => 0.2 + Math.random() * 0.6;
 		let hitX = placePos.x + 0.5;
 		let hitY = placePos.y + 0.5;
 		let hitZ = placePos.z + 0.5;
 
-		const axis = face.getAxis();
+		const { name: axis } = face.getAxis();
 
-		if (axis === "Y") {
+		if (axis === "y") {
 			hitX = placePos.x + rand();
 			hitY = placePos.y + (face === EnumFacing.UP ? 0.99 : 0.01);
 			hitZ = placePos.z + rand();
-		} else if (axis === "X") {
+		} else if (axis === "x") {
 			hitX = placePos.x + (face === EnumFacing.EAST ? 0.99 : 0.01);
 			hitY = placePos.y + rand();
 			hitZ = placePos.z + rand();
@@ -133,8 +150,23 @@ export default class Scaffold extends Mod {
 
 	@Subscribe("tick")
 	onTick(): void {
-		const { player, game, BlockPos, playerControllerMP } = Refs;
-		if (!player || !game || !BlockPos || !playerControllerMP) return;
+		const {
+			player,
+			game,
+			BlockPos,
+			ItemBlock,
+			playerControllerMP,
+			playerController,
+		} = Refs;
+
+		if (
+			!player ||
+			!game ||
+			!BlockPos ||
+			!playerControllerMP ||
+			!playerController
+		)
+			return;
 
 		this.tickCount++;
 
@@ -152,8 +184,7 @@ export default class Scaffold extends Mod {
 		}
 
 		const item = player.inventory.getCurrentItem();
-		const ItemBlock = Interop.run((e) => e("ItemBlock")) as any;
-		if (!item || !((item.getItem() as any) instanceof ItemBlock)) return;
+		if (!item || !(item.getItem() instanceof ItemBlock)) return;
 
 		// Get key pressed function
 		const keyPressedDump = MATCHED_DUMPS.keyPressedPlayer;
@@ -162,11 +193,10 @@ export default class Scaffold extends Mod {
 			: null;
 
 		// Check if player is moving
-		const moveForwardDump = MATCHED_DUMPS.moveForward as string;
-		const moveStrafeDump = MATCHED_DUMPS.moveStrafe as string;
+		const moveForwardDump = MATCHED_DUMPS.moveForward as "moveForward";
+		const moveStrafeDump = MATCHED_DUMPS.moveStrafe as "moveStrafe";
 		const isMoving =
-			(player as any)[moveForwardDump] !== 0 ||
-			(player as any)[moveStrafeDump] !== 0;
+			player[moveForwardDump] !== 0 || player[moveStrafeDump] !== 0;
 
 		// Calculate positions
 		const playerX = Math.floor(player.pos.x);
@@ -218,8 +248,8 @@ export default class Scaffold extends Mod {
 			);
 		}
 
-		const { Materials } = Refs;
-		const hud3D = Interop.run((e) => e("hud3D")) as any;
+		const { Materials, hud3D } = Refs;
+		let places = 0;
 
 		for (const pos of positionsToCheck) {
 			const blockAtPos = game.world.getBlockState(pos).getBlock();
@@ -246,13 +276,17 @@ export default class Scaffold extends Mod {
 							if (side) {
 								placeSide = side;
 								found = true;
+								// break;
 							}
 						}
 					}
 				}
 			}
 
-			if (!placeSide) continue;
+			if (!placeSide) {
+				logger.debug("no place side found, continue.");
+				continue;
+			}
 
 			// Calculate place position
 			const dir = placeSide.getOpposite().toVector();
@@ -266,15 +300,10 @@ export default class Scaffold extends Mod {
 			const hitVec = this.getRandomHitVec(placePos, placeSide);
 
 			// Tower mode
-			if (
-				this.tower &&
-				keyPressed &&
-				keyPressed("space") &&
-				player.onGround
-			) {
+			if (this.tower && keyPressed?.("space") && player.onGround) {
 				const centerDist = Math.sqrt(
-					Math.pow(player.pos.x - (playerX + 0.5), 2) +
-						Math.pow(player.pos.z - (playerZ + 0.5), 2),
+					(player.pos.x - (playerX + 0.5)) ** 2 +
+						(player.pos.z - (playerZ + 0.5)) ** 2,
 				);
 
 				if (
@@ -288,7 +317,7 @@ export default class Scaffold extends Mod {
 
 			// Try to place block
 			if (
-				playerControllerMP.onPlayerRightClick(
+				playerController.onPlayerRightClick(
 					player,
 					game.world,
 					item,
@@ -297,9 +326,7 @@ export default class Scaffold extends Mod {
 					hitVec,
 				)
 			) {
-				if (hud3D && hud3D.swingArm) {
-					hud3D.swingArm();
-				}
+				hud3D.swingArm?.();
 
 				// Handle item stack
 				if (item.stackSize === 0) {
@@ -307,7 +334,7 @@ export default class Scaffold extends Mod {
 				}
 			}
 
-			break; // Only place one block per tick
+			if (places++ > this.placesPerTick) break; // Only place one block per tick
 		}
 	}
 }

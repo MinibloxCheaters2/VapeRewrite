@@ -1,5 +1,6 @@
 // Options and settings extracted from Impact
 
+// biome-ignore lint/complexity/noStaticOnlyClass: they're typings :sob:
 export declare class Options {
 	static streamerMode: { value: boolean };
 	static renderDistance: { value: number };
@@ -25,6 +26,9 @@ export declare class Options {
 	static entityShadows: { value: boolean };
 	static mainHand: { value: string };
 	static autoJump: { value: boolean };
+	static reset(): void;
+	static resetVideo(): void;
+	static resetControls(): void;
 }
 
 export declare const Options$1: typeof Options;

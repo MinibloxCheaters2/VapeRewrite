@@ -3,22 +3,27 @@ import type { Game } from "./game";
 
 export declare class GameScene {
 	game: Game;
-	camera = new PerspectiveCamera(85,window.innerWidth / window.innerHeight,.01,1e7);
-	scene = new Scene;
-	axesHelper = new AxesHelper(.01);
-	entityMeshes = new Group;
-	chunkMeshes = new Group;
-	ambientMeshes = new Group;
-	leaderboardMeshes = new Group;
-	sun = new Sun(this);
-	stars = new Stars(this, this.sun);
-	sky = new Sky(this, this.sun);
-	fog = new Fog(this);
-	clouds = new Clouds(this);
+	readonly camera = new PerspectiveCamera(
+		85,
+		window.innerWidth / window.innerHeight,
+		0.01,
+		1e7,
+	);
+	readonly scene = new Scene();
+	readonly axesHelper = new AxesHelper(0.01);
+	readonly entityMeshes = new Group();
+	readonly chunkMeshes = new Group();
+	readonly ambientMeshes = new Group();
+	readonly leaderboardMeshes = new Group();
+	readonly sun = new Sun(this);
+	readonly stars = new Stars(this, this.sun);
+	readonly sky = new Sky(this, this.sun);
+	readonly fog = new Fog(this);
+	readonly clouds = new Clouds(this);
 	tileEntityRenderer: TileEntityRenderer;
 	effectRenderer: EffectRenderer;
-    constructor(game: Game);
-    updateCameraZoom(): void;
-    update(): void;
-    clear(): void;
+	constructor(game: Game);
+	updateCameraZoom(): void;
+	update(): void;
+	clear(): void;
 }
