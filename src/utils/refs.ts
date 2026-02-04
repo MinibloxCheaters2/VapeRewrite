@@ -10,8 +10,9 @@ import type {
 } from "../features/sdk/types/entity";
 import type { Game } from "../features/sdk/types/game";
 import type { EnumFacing } from "../features/sdk/types/math/facing";
-import type { PBVector3 } from "../features/sdk/types/packets";
 import type { ClientWorld } from "../features/sdk/types/world";
+import type { Materials } from "../features/sdk/types/materials";
+import type { Items } from "../features/sdk/types/items";
 
 // biome-ignore lint/complexity/noStaticOnlyClass: job
 class Refs {
@@ -21,7 +22,7 @@ class Refs {
 	static #player?: ClientEntityPlayer;
 	static #Vec3?: typeof Vector3;
 	static #clientSocket: typeof ClientSocket;
-	static #PBVector3: typeof PBVector3;
+	static #PBVector3: any;
 	static #BlockPos: typeof BlockPos;
 	static #EnumFacing: typeof EnumFacing;
 	// TODO: ts like really annoying so uh maybe a better solution?
@@ -30,10 +31,24 @@ class Refs {
 	static #playerControllerMP: PlayerControllerMP;
 	static #BoxGeometry: typeof BoxGeometry;
 	static #Mesh: typeof Mesh;
+	static #Materials: typeof Materials;
+	static #Items: typeof Items;
 
 	static #initOrR<T>(field: T, initializer: () => T) {
 		field ??= initializer();
 		return field;
+	}
+
+	static get Materials() {
+		return Refs.#initOrR(Refs.#Materials, () =>
+			Interop.run((e) => e<typeof Materials>("Materials")),
+		);
+	}
+
+	static get Items() {
+		return Refs.#initOrR(Refs.#Items, () =>
+			Interop.run((e) => e<typeof Items>("Items")),
+		);
 	}
 
 	static get playerControllerMP() {

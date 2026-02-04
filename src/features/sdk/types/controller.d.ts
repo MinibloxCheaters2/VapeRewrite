@@ -3,22 +3,48 @@ import { BlockPos } from "./blockpos";
 import { Entity, EntityLivingBase, EntityPlayer } from "./entity";
 import { PBItemStack, SPacketEnchantItem } from "./packets";
 import World from "./world";
-import { Item } from "./undefined";
+import { ItemStack } from "./items";
+import { BlockState } from "./world";
 
 export declare class PlayerControllerMP {
 	lastSentSlot: number;
 	isHittingBlock: boolean;
+	key: {
+		leftClick: boolean;
+		rightClick: boolean;
+	};
+	objectMouseOver: RayTraceResult;
+	
 	/** IMPORTANT: USE DUMPS */
 	syncItem(): void;
 	func_181040_m(): this["isHittingBlock"];
 	sendEnchantPacket(windowId: string, button: number): void;
+	onPlayerRightClick(
+		player: EntityPlayer,
+		world: World,
+		item: ItemStack,
+		pos: BlockPos | Vector3,
+		placeSide: any,
+		hitVec: Vector3,
+	): boolean;
+	/* IMPORTANT USE DUMPS */
+	windowClick(
+		windowID: number,
+		slotID: number,
+		button: number,
+		mode: number,
+		player: EntityPlayer,
+	): any;
+	leftClick(): void;
+	rightClick(): void;
 }
 
 export declare class PlayerController {
 	prevBlock: undefined;
 	lastBreakSoundPlay: number;
 	key: {
-		leftClick: number;
+		leftClick: boolean;
+		rightClick: boolean;
 	};
 	rightClick: boolean;
 	objectMouseOver: RayTraceResult;
@@ -32,8 +58,8 @@ export declare class PlayerController {
 	onPlayerRightClick(
 		e: EntityPlayer,
 		world: World,
-		item: Item,
-		pos: Vector3,
+		item: ItemStack,
+		pos: Vector3 | BlockPos,
 		placeSide: any,
 		hitVec: Vector3,
 	): any;

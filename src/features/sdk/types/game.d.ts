@@ -16,6 +16,12 @@ export enum ConnectionState {
 	PLAY = 6,
 }
 
+export interface GameInfo {
+	selectedSlot: number;
+	showSignEditor: any;
+	showDeathScreen?: boolean;
+}
+
 export declare class Game {
 	player: ClientEntityPlayer;
 	controller: PlayerController;
