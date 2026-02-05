@@ -5,22 +5,13 @@ import PlayerArgumentType from "../api/brigadier/PlayerArgumentType";
 import dispatcher from "../api/CommandDispatcher";
 
 dispatcher.register(
-    literal("locate").then(
-        argument("player", new PlayerArgumentType()).executes(async (e) => {
-            const playeru = e.get<any>("player");
-            for (let i of Refs.game.world.players) {
-                if(i[1].profile.username == playeru.name){
-                    Refs.game.chat.addChat({
-                        text: `${playeru.name} is at ${Math.round(i[1].pos.x).toString()}, ${Math.round(i[1].pos.y).toString()}, ${Math.round(i[1].pos.z).toString()}`,
-                        color: "blue"
-                    })
-                    return;
-                }
-            }
-            Refs.game.chat.addChat({
-                text: `Could not find player ${playeru.name}`,
-                color: "red"
-            })
-    })
-    ),
-)
+	literal("locate").then(
+		argument("player", new PlayerArgumentType()).executes(async (e) => {
+			const player = e.get<EntityPlayer>("player");
+			Refs.game.chat.addChat({
+				text: `${player.name} is at ${Math.round(player.pos.x).toString()}, ${Math.round(player.pos.y).toString()}, ${Math.round(player.pos.z).toString()}`,
+				color: "blue",
+			});
+		}),
+	),
+);
