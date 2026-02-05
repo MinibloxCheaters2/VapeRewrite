@@ -5,6 +5,8 @@ import { findTargets } from "@/utils/target";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 
+// BROKEN TO FIX LATER
+
 export default class TargetStrafe extends Mod {
 	public name = "TargetStrafe";
 	public category = Category.COMBAT;
