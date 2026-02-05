@@ -10,18 +10,17 @@ dispatcher.register(
     literal("locate").then(
         argument("player", new PlayerArgumentType()).executes(async (e) => {
             const playeru = e.get<any>("player");
-            let players = Refs.game.world.players;
-            for (let p of players) {
-                if(p[1].profile.username == playeru){
+            for (let i of Refs.game.world.players) {
+                if(i[1].profile.username == playeru.name){
                     Refs.game.chat.addChat({
-                        text: `${playeru} is at ${Math.round(p[1].pos.x).toString()}, ${Math.round(p[1].pos.y).toString()}, ${Math.round(p[1].pos.z).toString()}`,
+                        text: `${playeru.name} is at ${Math.round(i[1].pos.x).toString()}, ${Math.round(i[1].pos.y).toString()}, ${Math.round(i[1].pos.z).toString()}`,
                         color: "blue"
                     })
                     return;
                 }
             }
             Refs.game.chat.addChat({
-                text: `Could not find player ${playeru}`,
+                text: `Could not find player ${playeru.name}`,
                 color: "red"
             })
     })
