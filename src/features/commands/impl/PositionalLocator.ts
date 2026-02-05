@@ -9,7 +9,7 @@ dispatcher.register(
 		argument("player", new PlayerArgumentType()).executes(async (e) => {
 			const player = e.get<EntityPlayer>("player");
 			Refs.game.chat.addChat({
-				text: `${player.name} is at ${Math.round(player.pos.x).toString()}, ${Math.round(player.pos.y).toString()}, ${Math.round(player.pos.z).toString()}`,
+				text: `${player.name} is at ${Math.round(player.pos.x)}, ${Math.round(player.pos.y)}, ${Math.round(player.pos.z)}`,
 				color: "blue",
 			});
 		}),
