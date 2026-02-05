@@ -11,7 +11,6 @@ import Mod from "../../api/Module";
  * Modes:
  * - Normal: Standard creative-like fly (detected by new AC)
  * - Infinite (Old AC): Bypass for old anticheat servers
- * - Damage: Use self-damage knockback to fly
  * - Jump: Bunny hop in air to bypass AC
  * - Jetpack: Boost upward like a jetpack
  * - Glide: Slow fall with horizontal control
@@ -23,7 +22,7 @@ export default class Fly extends Mod {
 	// Mode selection
 	private modeSetting = this.createDropdownSetting(
 		"Mode",
-		["Normal", "Infinite (Old AC)", "Damage", "Jump", "Jetpack", "Glide"],
+		["Normal", "Infinite (Old AC)", "Jump", "Jetpack", "Glide"],
 		"Normal",
 	);
 
@@ -55,36 +54,10 @@ export default class Fly extends Mod {
 	);
 
 	// Infinite mode settings
-	private lessGlideSetting = this.createToggleSetting(
+	private lessVerticalMovement = this.createToggleSetting(
 		"Less Glide",
 		true,
 		() => this.modeSetting.value() === "Infinite (Old AC)",
-	);
-
-	// Damage mode settings
-	private damageAmountSetting = this.createSliderSetting(
-		"Damage Amount",
-		1,
-		1,
-		5,
-		1,
-		() => this.modeSetting.value() === "Damage",
-	);
-	private damageDelaySetting = this.createSliderSetting(
-		"Damage Delay",
-		20,
-		5,
-		100,
-		1,
-		() => this.modeSetting.value() === "Damage",
-	);
-	private speedDecaySetting = this.createSliderSetting(
-		"Speed Decay",
-		0.98,
-		0.9,
-		0.99,
-		0.01,
-		() => this.modeSetting.value() === "Damage",
 	);
 
 	// Jump mode settings
@@ -185,7 +158,7 @@ export default class Fly extends Mod {
 		}
 
 		// Infinite mode smooth stop
-		if (mode === "Infinite (Old AC)" && this.lessGlideSetting.value()) {
+		if (mode === "Infinite (Old AC)" && this.lessVerticalMovement.value()) {
 			this.stopTicks = 4;
 		}
 
@@ -215,9 +188,6 @@ export default class Fly extends Mod {
 			case "Infinite (Old AC)":
 				this.infiniteFly();
 				break;
-			case "Damage":
-				this.damageFly();
-				break;
 			case "Jump":
 				this.jumpFly();
 				break;
@@ -232,7 +202,7 @@ export default class Fly extends Mod {
 
 	/**
 	 * Normal Fly - Standard creative-like fly
-	 * Uses desync to attempt bypass (detected by new AC)
+	 * Uses desync to attempt bypass
 	 */
 	private normalFly(): void {
 		const { player } = Refs;
@@ -264,7 +234,7 @@ export default class Fly extends Mod {
 		player.motion.z = dir.z;
 
 		const goUp = isKeyDown("space");
-		const goDown = isKeyDown("shift");
+		const goDown = isKeyDown("alt");
 
 		// First 6 ticks: stay still (unless moving up/down)
 		if (this.ticks <= 6 && !goUp && !goDown) {
@@ -278,75 +248,9 @@ export default class Fly extends Mod {
 				? this.verticalSetting.value()
 				: -this.verticalSetting.value();
 		}
-		// Auto-glide to prevent falling
-		else if (!this.lessGlideSetting.value() || this.ticks % 2 === 0) {
+		// Go up only every 2 ticks, barely helps.
+		else if (!this.lessVerticalMovement.value() || this.ticks % 2 === 0) {
 			player.motion.y = 0.18;
-		}
-	}
-
-	/**
-	 * Damage Fly - Use self-damage knockback to fly
-	 * Deals damage at start, then glides straight with Y coordinate locked
-	 */
-	private damageFly(): void {
-		const { player, game } = Refs;
-		this.ticks++;
-
-		// Initial damage boost (only once at start)
-		if (this.ticks === 1) {
-			// Store starting Y coordinate
-			this.damageStartY = player.pos.y;
-
-			// Deal self-damage to gain initial velocity
-			const amount = this.damageAmountSetting.value();
-			for (let i = 0; i < amount; i++) {
-				game.controller.objectMouseOver.hitVec = player.pos.clone();
-				game.controller.attackEntity(player);
-			}
-
-			// Set initial strong velocity
-			const dir = getMoveDirection(this.speedSetting.value() * 2); // 2x speed initially
-			player.motion.x = dir.x;
-			player.motion.z = dir.z;
-			player.motion.y = 0; // Lock Y motion
-			return;
-		}
-
-		// Lock Y coordinate to starting position
-		player.pos.y = this.damageStartY;
-		player.motion.y = 0;
-
-		// Gradually decrease speed over time (configurable decay)
-		const speedDecay = this.speedDecaySetting.value();
-		player.motion.x *= speedDecay;
-		player.motion.z *= speedDecay;
-
-		// Manual control for going down
-		const goDown = isKeyDown("shift");
-		if (goDown) {
-			// Allow going down by updating the locked Y position
-			this.damageStartY -= this.verticalSetting.value();
-			player.pos.y = this.damageStartY;
-		}
-
-		// Re-boost if space is pressed (after delay)
-		const goUp = isKeyDown("space");
-		this.damageTimer++;
-		if (goUp && this.damageTimer >= this.damageDelaySetting.value()) {
-			this.damageTimer = 0;
-
-			// Re-apply damage for another boost
-			const amount = this.damageAmountSetting.value();
-			for (let i = 0; i < amount; i++) {
-				game.controller.objectMouseOver.hitVec = player.pos.clone();
-				game.controller.attackEntity(player);
-			}
-
-			// Boost velocity again (horizontal only)
-			const dir = getMoveDirection(this.speedSetting.value() * 1.5);
-			player.motion.x = dir.x;
-			player.motion.z = dir.z;
-			player.motion.y = 0; // Keep Y locked
 		}
 	}
 
@@ -449,8 +353,6 @@ export default class Fly extends Mod {
 				return `Normal ${speed}`;
 			case "Infinite (Old AC)":
 				return `Infinite ${speed}`;
-			case "Damage":
-				return `Damage ${this.damageAmountSetting.value()}`;
 			case "Jump":
 				return `Jump ${speed}`;
 			case "Jetpack":
