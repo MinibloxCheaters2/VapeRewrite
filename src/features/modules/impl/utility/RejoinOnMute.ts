@@ -29,4 +29,5 @@ export default class RejoinOnMute extends Mod {
 			Refs.game.connect(Refs.game.serverInfo.serverId);
 		}
 	}
+	
 }
