@@ -18,6 +18,19 @@ export declare interface ChatLog extends ChatData {
 
 export declare class Chat {
 	log: ChatLog[];
+	inputHistory: string[];
+	inputHistoryIndex: number;
+	autoCompleteRequested: boolean;
+	autoComplete: {
+		active: boolean;
+		index: number;
+		list: string[];
+	};
+	inputValue: string;
+	showInput: boolean;
+	isInputCommandMode: boolean;
+	setAutoCompleteDefault(): void;
 	addChat(data: ChatData): void;
 	autoCompleteReceived(packet: CPacketTabComplete): void;
+	clear(): void;
 }

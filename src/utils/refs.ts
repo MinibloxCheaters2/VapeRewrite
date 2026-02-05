@@ -4,6 +4,7 @@ import type { PBVector3 } from "@/features/sdk/types/packets";
 import { MATCHED_DUMPS } from "@/hooks/replacement";
 import Interop from "../exposedO";
 import type { BlockPos } from "../features/sdk/types/blockpos";
+import type { Chat } from "../features/sdk/types/chat";
 import type { ClientSocket } from "../features/sdk/types/clientSocket";
 import type {
 	PlayerController,
@@ -18,7 +19,6 @@ import type { Items } from "../features/sdk/types/items";
 import type { Materials } from "../features/sdk/types/materials";
 import type { EnumFacing } from "../features/sdk/types/math/facing";
 import type { ClientWorld } from "../features/sdk/types/world";
-import type { Chat } from "../features/sdk/types/chat";
 
 // biome-ignore lint/complexity/noStaticOnlyClass: job
 class Refs {
@@ -50,28 +50,24 @@ class Refs {
 	}
 
 	static get Materials() {
-		return Refs.#initOrR(
-			Refs.#Materials,
-			() => Interop.run((e) => e<typeof Materials>("Materials")),
+		return Refs.#initOrR(Refs.#Materials, () =>
+			Interop.run((e) => e<typeof Materials>("Materials")),
 		);
 	}
 
 	static get Items() {
-		return Refs.#initOrR(
-			Refs.#Items,
-			() => Interop.run((e) => e<typeof Items>("Items")),
+		return Refs.#initOrR(Refs.#Items, () =>
+			Interop.run((e) => e<typeof Items>("Items")),
 		);
 	}
 	static get ItemBlock() {
-		return Refs.#initOrR(
-			Refs.#ItemBlock,
-			() => Interop.run((e) => e<typeof ItemBlock>("ItemBlock")),
+		return Refs.#initOrR(Refs.#ItemBlock, () =>
+			Interop.run((e) => e<typeof ItemBlock>("ItemBlock")),
 		);
 	}
 	static get hud3D() {
-		return Refs.#initOrR(
-			Refs.#hud3D,
-			() => Interop.run((e) => e<HUD3D>("hud3D")),
+		return Refs.#initOrR(Refs.#hud3D, () =>
+			Interop.run((e) => e<HUD3D>("hud3D")),
 		);
 	}
 
@@ -84,65 +80,52 @@ class Refs {
 	}
 
 	static get playerControllerMP() {
-		return Refs.#initOrR(
-			Refs.#playerControllerMP,
-			() =>
-				Interop.run((e) => e<PlayerControllerMP>("playerControllerMP")),
+		return Refs.#initOrR(Refs.#playerControllerMP, () =>
+			Interop.run((e) => e<PlayerControllerMP>("playerControllerMP")),
 		);
 	}
 
 	static get BoxGeometry() {
-		return Refs.#initOrR(
-			Refs.#BoxGeometry,
-			() =>
-				Interop.run((e) =>
-					e<typeof BoxGeometry>(MATCHED_DUMPS.boxGeometry)
-				),
+		return Refs.#initOrR(Refs.#BoxGeometry, () =>
+			Interop.run((e) =>
+				e<typeof BoxGeometry>(MATCHED_DUMPS.boxGeometry),
+			),
 		);
 	}
 
 	static get Mesh() {
-		return Refs.#initOrR(
-			Refs.#Mesh,
-			() => Interop.run((e) => e<typeof Mesh>("Mesh")),
+		return Refs.#initOrR(Refs.#Mesh, () =>
+			Interop.run((e) => e<typeof Mesh>("Mesh")),
 		);
 	}
 
 	static get Vec3() {
-		return Refs.#initOrR(
-			Refs.#Vec3,
-			() => Interop.run((e) => e<typeof Vector3>("Vector3$1")),
+		return Refs.#initOrR(Refs.#Vec3, () =>
+			Interop.run((e) => e<typeof Vector3>("Vector3$1")),
 		);
 	}
 
 	static get BlockPos() {
-		return Refs.#initOrR(
-			Refs.#BlockPos,
-			() => Interop.run((e) => e<typeof BlockPos>("BlockPos")),
+		return Refs.#initOrR(Refs.#BlockPos, () =>
+			Interop.run((e) => e<typeof BlockPos>("BlockPos")),
 		);
 	}
 
 	static get EnumFacing() {
-		return Refs.#initOrR(
-			Refs.#EnumFacing,
-			() => Interop.run((e) => e<typeof EnumFacing>("EnumFacing")),
+		return Refs.#initOrR(Refs.#EnumFacing, () =>
+			Interop.run((e) => e<typeof EnumFacing>("EnumFacing")),
 		);
 	}
 
 	static get EntityLivingBase() {
-		return Refs.#initOrR(
-			Refs.#EntityLivingBase,
-			() =>
-				Interop.run((e) =>
-					e<typeof EntityLivingBase>("EntityLivingBase")
-				),
+		return Refs.#initOrR(Refs.#EntityLivingBase, () =>
+			Interop.run((e) => e<typeof EntityLivingBase>("EntityLivingBase")),
 		);
 	}
 
 	static get PBVector3() {
-		return Refs.#initOrR(
-			Refs.#PBVector3,
-			() => Interop.run((e) => e<PBVector3>("PBVector3")),
+		return Refs.#initOrR(Refs.#PBVector3, () =>
+			Interop.run((e) => e<PBVector3>("PBVector3")),
 		);
 	}
 
@@ -153,9 +136,8 @@ class Refs {
 	}
 
 	static get ClientSocket(): typeof ClientSocket {
-		return Refs.#initOrR(
-			Refs.#clientSocket,
-			() => Interop.run((e) => e("ClientSocket")),
+		return Refs.#initOrR(Refs.#clientSocket, () =>
+			Interop.run((e) => e("ClientSocket")),
 		);
 	}
 
@@ -169,9 +151,8 @@ class Refs {
 	static get player() {
 		// this.#player ??= runOnBridge(e => e<ClientEntityPlayer>("player"));
 		// return this.#player;
-		return Refs.#initOrR(
-			Refs.#player,
-			() => Interop.run((e) => e<ClientEntityPlayer>("player")),
+		return Refs.#initOrR(Refs.#player, () =>
+			Interop.run((e) => e<ClientEntityPlayer>("player")),
 		);
 	}
 }
