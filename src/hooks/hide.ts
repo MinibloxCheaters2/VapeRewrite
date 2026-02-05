@@ -3,7 +3,7 @@
  * @module
  */
 
-import { storeName } from "@/utils/names";
+import { fgExposedName, storeName } from "@/utils/names";
 
 function replaceAndCopyFunction<OP, OR>(
 	oldFunc: (...args: OP[]) => OR,
@@ -21,11 +21,17 @@ function replaceAndCopyFunction<OP, OR>(
 	});
 }
 
+function spliceIt<T>(arr: T[], item: T): T[] | [] {
+	const idx = arr.indexOf(item);
+	if (idx === -1) return [];
+	return arr.splice(idx, 1);
+}
+
 Object.getOwnPropertyNames = replaceAndCopyFunction(
 	Object.getOwnPropertyNames,
 	(list) => {
-		if (list.indexOf(storeName) !== -1)
-			list.splice(list.indexOf(storeName), 1);
+		spliceIt(list, storeName);
+		spliceIt(list, fgExposedName);
 		return list;
 	},
 );
@@ -34,6 +40,7 @@ Object.getOwnPropertyDescriptors = replaceAndCopyFunction(
 	Object.getOwnPropertyDescriptors,
 	(l) => {
 		delete l[storeName];
+		delete l[fgExposedName];
 		return l;
 	},
 );
