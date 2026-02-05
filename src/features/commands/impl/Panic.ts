@@ -8,7 +8,7 @@ dispatcher.register(
 		ModuleManager.modules.forEach((m) => {
 			m.enabled = false;
 		});
-		Refs.game.chat.addChat({
+		Refs.chat.addChat({
 			text: "Disabled all modules!",
 			color: "green",
 		});

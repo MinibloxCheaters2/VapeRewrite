@@ -6,7 +6,7 @@ import dispatcher from "../api/CommandDispatcher";
 dispatcher.register(
     literal("clear").executes(
         async () => {
-            Refs.game.chat.clear()
+            Refs.chat.clear();
             return 1;
         }
     )

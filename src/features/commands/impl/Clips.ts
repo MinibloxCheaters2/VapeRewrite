@@ -8,7 +8,7 @@ dispatcher.register(
 			const amount = e.get<number>("by");
 			const pos = Refs.player.pos.clone();
 			Refs.player.setPosition(pos.x, pos.y + amount, pos.z);
-			Refs.game.chat.addChat({
+			Refs.chat.addChat({
 				text: `Vertically clipped ${amount} blocks!`,
 				color: "blue",
 			});
@@ -22,7 +22,7 @@ dispatcher.register(
 			const amount = e.get<number>("by");
 			const pos = Refs.player.pos.clone();
 			Refs.player.setPosition(pos.x + amount, pos.y, pos.z);
-			Refs.game.chat.addChat({
+			Refs.chat.addChat({
 				text: `X-Axis clipped ${amount} blocks!`,
 				color: "blue",
 			});
@@ -35,7 +35,7 @@ dispatcher.register(
 			const amount = e.get<number>("by");
 			const pos = Refs.player.pos.clone();
 			Refs.player.setPosition(pos.x, pos.y, pos.z + amount);
-			Refs.game.chat.addChat({
+			Refs.chat.addChat({
 				text: `Z-Axis clipped ${amount} blocks!`,
 				color: "blue",
 			});
@@ -57,7 +57,7 @@ dispatcher.register(
 						pos.y + byY,
 						pos.z + byZ,
 					);
-					Refs.game.chat.addChat({
+					Refs.chat.addChat({
 						text: `Clipped X: ${byX}, Y: ${byY}, Z: ${byZ} blocks!`,
 						color: "blue",
 					});

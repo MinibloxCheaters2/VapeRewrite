@@ -14,7 +14,7 @@ dispatcher.register(
 					const actual = to === "none" ? "" : to;
 					// the setter handles the setting logic.
 					m.bind = actual;
-					Refs.game.chat.addChat({
+					Refs.chat.addChat({
 						text:
 							"Bound " +
 							m.name +
