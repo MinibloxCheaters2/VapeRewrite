@@ -40,6 +40,14 @@ export default new (class ChatHook {
 		log[origIdx] = modified;
 		return true;
 	}
+	addChatWithId(data: ChatData): UUIDv4 | undefined {
+		Refs.chat.addChat(data);
+		const { log } = Refs.chat;
+		const last = log[log.length - 1];
+		if (!last) return undefined;
+		const id = (last as ChatLog & Record<symbol, UUIDv4>)[idSymbol];
+		return typeof id === "string" ? (id as UUIDv4) : undefined;
+	}
 	modifyChatAppend(
 		id: UUIDv4,
 		modifier: ChatLog | ((old: ChatLog) => ChatLog),
