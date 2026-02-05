@@ -4,7 +4,6 @@ import Interop from "@/exposedO";
 import type { BlockPos } from "@/features/sdk/types/blockpos";
 import type { EnumFacing } from "@/features/sdk/types/math/facing";
 import { MATCHED_DUMPS } from "@/hooks/replacement";
-import logger from "@/utils/loggers";
 import Refs from "@/utils/refs";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
@@ -284,7 +283,6 @@ export default class Scaffold extends Mod {
 			}
 
 			if (!placeSide) {
-				logger.debug("no place side found, continue.");
 				continue;
 			}
 
