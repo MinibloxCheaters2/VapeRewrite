@@ -13,7 +13,20 @@ export default class TargetStrafe extends Mod {
 	private radiusSetting = this.createSliderSetting("Radius", 1.8, 1, 4, 0.1);
 	private speedSetting = this.createSliderSetting("Speed", 0.5, 0.1, 1, 0.01);
 	private floatSetting = this.createToggleSetting("Float", true);
-	private floatYSetting = this.createSliderSetting("FloatY", 0.08, 0.02, 0.2, 0.01);
+	private floatYSetting = this.createSliderSetting(
+		"FloatY",
+		0.08,
+		0.02,
+		0.2,
+		0.01,
+	);
+	private smoothSetting = this.createSliderSetting(
+		"Smoothness",
+		0.35,
+		0,
+		1,
+		0.01,
+	);
 	private directionSetting = this.createDropdownSetting("Direction", [
 		"Left",
 		"Right",
@@ -26,6 +39,8 @@ export default class TargetStrafe extends Mod {
 		"Only When Moving",
 		false,
 	);
+	private lastDirX = 0;
+	private lastDirZ = 0;
 
 	get range() {
 		return this.rangeSetting.value();
@@ -45,6 +60,10 @@ export default class TargetStrafe extends Mod {
 
 	get floatY() {
 		return this.floatYSetting.value();
+	}
+
+	get smoothness() {
+		return this.smoothSetting.value();
 	}
 
 	get direction() {
@@ -103,8 +122,16 @@ export default class TargetStrafe extends Mod {
 		desiredX /= desiredMag;
 		desiredZ /= desiredMag;
 
-		player.motion.x = desiredX * this.speed;
-		player.motion.z = desiredZ * this.speed;
+		if (this.smoothness > 0) {
+			this.lastDirX += (desiredX - this.lastDirX) * this.smoothness;
+			this.lastDirZ += (desiredZ - this.lastDirZ) * this.smoothness;
+		} else {
+			this.lastDirX = desiredX;
+			this.lastDirZ = desiredZ;
+		}
+
+		player.motion.x = this.lastDirX * this.speed;
+		player.motion.z = this.lastDirZ * this.speed;
 
 		if (this.floatEnabled) {
 			if (player.onGround) {
