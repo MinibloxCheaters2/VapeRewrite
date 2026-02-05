@@ -24,6 +24,6 @@ dispatcher.register(
                 text: `Could not find player ${playeru}`,
                 color: "red"
             })
-    )
+    })
+    ),
 )
-);
