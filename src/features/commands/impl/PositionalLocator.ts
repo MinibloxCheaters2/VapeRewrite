@@ -1,29 +1,17 @@
 import { argument, literal } from "@wq2/brigadier-ts";
-import PacketRefs from "@/utils/packetRefs";
+import type { EntityPlayer } from "@/features/sdk/types/entity";
 import Refs from "@/utils/refs";
-import dispatcher from "../api/CommandDispatcher";
 import PlayerArgumentType from "../api/brigadier/PlayerArgumentType";
-
-
+import dispatcher from "../api/CommandDispatcher";
 
 dispatcher.register(
-    literal("locate").then(
-        argument("player", new PlayerArgumentType()).executes(async (e) => {
-            const playeru = e.get<any>("player");
-            let players = Refs.game.world.players;
-            for (let p of players) {
-                if(p[1].profile.username == playeru){
-                    Refs.game.chat.addChat({
-                        text: `${playeru} is at ${Math.round(p[1].pos.x).toString()}, ${Math.round(p[1].pos.y).toString()}, ${Math.round(p[1].pos.z).toString()}`,
-                        color: "blue"
-                    })
-                    return;
-                }
-            }
-            Refs.game.chat.addChat({
-                text: `Could not find player ${playeru}`,
-                color: "red"
-            })
-    })
-    ),
-)
+	literal("locate").then(
+		argument("player", new PlayerArgumentType()).executes(async (e) => {
+			const player = e.get<EntityPlayer>("player");
+			Refs.game.chat.addChat({
+				text: `${player.name} is at ${Math.round(player.pos.x).toString()}, ${Math.round(player.pos.y).toString()}, ${Math.round(player.pos.z).toString()}`,
+				color: "blue",
+			});
+		}),
+	),
+);
