@@ -9,9 +9,11 @@ export default class TargetStrafe extends Mod {
 	public name = "TargetStrafe";
 	public category = Category.COMBAT;
 
-	private rangeSetting = this.createSliderSetting("Range", 6, 3, 10, 0.5);
-	private radiusSetting = this.createSliderSetting("Radius", 2.5, 1, 6, 0.1);
-	private speedSetting = this.createSliderSetting("Speed", 0.36, 0.1, 1, 0.01);
+	private rangeSetting = this.createSliderSetting("Range", 5, 3, 8, 0.5);
+	private radiusSetting = this.createSliderSetting("Radius", 1.8, 1, 4, 0.1);
+	private speedSetting = this.createSliderSetting("Speed", 0.5, 0.1, 1, 0.01);
+	private floatSetting = this.createToggleSetting("Float", true);
+	private floatYSetting = this.createSliderSetting("FloatY", 0.08, 0.02, 0.2, 0.01);
 	private directionSetting = this.createDropdownSetting("Direction", [
 		"Left",
 		"Right",
@@ -35,6 +37,14 @@ export default class TargetStrafe extends Mod {
 
 	get speed() {
 		return this.speedSetting.value();
+	}
+
+	get floatEnabled() {
+		return this.floatSetting.value();
+	}
+
+	get floatY() {
+		return this.floatYSetting.value();
 	}
 
 	get direction() {
@@ -95,5 +105,13 @@ export default class TargetStrafe extends Mod {
 
 		player.motion.x = desiredX * this.speed;
 		player.motion.z = desiredZ * this.speed;
+
+		if (this.floatEnabled) {
+			if (player.onGround) {
+				player.motion.y = this.floatY;
+			} else if (player.motion.y < -0.05) {
+				player.motion.y = -0.05;
+			}
+		}
 	}
 }
