@@ -140,11 +140,7 @@ class Refs {
 	}
 
 	static get world() {
-		// this.#world ??= runOnBridge(e => e<ClientWorld>("world"));
-		// return this.#world;
-		return Refs.#initOrR(Refs.#world, () =>
-			Interop.run((e) => e<ClientWorld>("world")),
-		);
+		return Refs.#initOrR(Refs.#world, () => Refs.game.world);
 	}
 
 	static get player() {
