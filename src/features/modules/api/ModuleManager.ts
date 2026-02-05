@@ -6,6 +6,7 @@ import NoSlow from "../impl/blatant/NoSlow.js";
 import Phase from "../impl/blatant/Phase.js";
 import Scaffold from "../impl/blatant/Scaffold.js";
 import Criticals from "../impl/combat/Criticals.js";
+import TargetStrafe from "../impl/combat/TargetStrafe.js";
 import Velocity from "../impl/combat/Velocity.js";
 import WTap from "../impl/combat/WTap.js";
 import TextGUIModule from "../impl/render/TextGUI.js";
@@ -58,6 +59,7 @@ export default class ModuleManager {
 		new Velocity(),
 		new NoFall(),
 		new Criticals(),
+		new TargetStrafe(),
 		new RejoinOnMute(),
 		new WTap(),
 		new Blink(),
