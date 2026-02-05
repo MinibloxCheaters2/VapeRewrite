@@ -1,50 +1,65 @@
-// Utility functions and classes extracted from Impact
 import type { BlockPos } from "./blockpos";
 import type { Vector3 } from "three";
 import type { ItemStack, InventoryPlayer } from "./undefined";
 import type World from "./world";
 import type { RayTraceResult } from "./controller";
+import { Potion } from "./potion";
 
-// Key press utility
 export declare function keyPressed(key: string): boolean;
 
-// Crafting utilities
 export declare function canCraftItem(
 	inventory: InventoryPlayer,
-	recipe: any,
+	recipe: Recipe,
 ): boolean;
+
 export declare function craftItem(
 	inventory: InventoryPlayer,
-	recipe: any,
+	recipe: Recipe,
 	shiftDown: boolean,
 ): void;
 
 export type ItemID = number;
 
 export interface Result {
-	count: number;
-	id: ItemID;
+  count: number
+  id: ItemID
 }
 
-export interface RecipeT {
-	result: Result;
+export type Shape = ItemID[][]
+export type OptionalShape = (ItemID | undefined)[][]
+
+export interface WithResult {
+  result: Result
 }
 
-export interface IngredientsRecipe extends RecipeT {
-	ingredients: ItemID[];
+export interface WithIngredients extends WithResult {
+  ingredients: ItemID[]
 }
 
-export interface ShapeRecipe extends RecipeT {
-	inShape: ItemID[][];
+export interface WithShape extends WithResult {
+  inShape: Shape
 }
 
-export type Recipe = IngredientsRecipe | ShapeRecipe;
+export interface WithOptionalShape extends WithResult {
+  inShape: OptionalShape
+}
+
+export interface WithOptionalShapeAndIngredients extends WithResult {
+  inShape?: Shape
+  ingredients?: ItemID[]
+}
+
+export type Recipe =
+  | WithIngredients
+  | WithShape
+  | WithOptionalShape
+  | WithOptionalShapeAndIngredients
 
 // Recipe registry
-export declare const recipes: Record<number, Recipe[]>;
+export declare type RecipeRegistry = Record<number, Recipe[]>;
 
 // Potion registry
-export declare class Potion {
+export declare class Potions {
 	getId(): number;
 	static readonly jump: Potion;
 	static readonly blindness: Potion;
@@ -70,8 +85,6 @@ export declare class Potion {
 	static readonly absorption: Potion;
 	static readonly saturation: Potion;
 }
-
-export declare const Potions: typeof Potion;
 
 // Rank system
 export declare const RANK: {

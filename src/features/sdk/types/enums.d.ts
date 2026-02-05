@@ -1,5 +1,3 @@
-// Enum definitions extracted from Impact
-
 export enum EnumDifficulty {
 	PEACEFUL = 0,
 	EASY = 1,
