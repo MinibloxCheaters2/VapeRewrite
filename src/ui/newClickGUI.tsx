@@ -475,58 +475,76 @@ function ModuleSettings(props: { mod: Mod; onExpandChange: () => void }) {
 			>
 				<For each={props.mod.settings}>
 					{(setting) => {
-						switch (setting.type) {
-							case "toggle":
-								return (
-									<ToggleComponent
-										name={setting.name}
-										enabled={setting.value()}
-										onChange={setting.setValue}
-									/>
-								);
-							case "slider":
-								return (
-									<SliderComponent
-										name={setting.name}
-										value={setting.value()}
-										min={setting.min}
-										max={setting.max}
-										onChange={setting.setValue}
-									/>
-								);
-							case "dropdown":
-								return (
-									<DropdownComponent
-										name={setting.name}
-										value={setting.value()}
-										options={setting.options}
-										onChange={setting.setValue}
-										onExpandChange={props.onExpandChange}
-									/>
-								);
-							case "textbox":
-								return (
-									<TextBoxComponent
-										name={setting.name}
-										value={setting.value()}
-										placeholder={setting.placeholder}
-										onChange={setting.setValue}
-									/>
-								);
-							case "colorslider":
-								return (
-									<ColorSliderComponent
-										name={setting.name}
-										hue={setting.hue()}
-										sat={setting.sat()}
-										value={setting.value()}
-										opacity={setting.opacity()}
-										onChange={setting.setColor}
-									/>
-								);
-							default:
-								return null;
-						}
+						// Check visibility condition
+						const isVisible = () => {
+							if (setting.visible) {
+								return setting.visible();
+							}
+							return true;
+						};
+
+						return (
+							<Show when={isVisible()}>
+								{(() => {
+									switch (setting.type) {
+										case "toggle":
+											return (
+												<ToggleComponent
+													name={setting.name}
+													enabled={setting.value()}
+													onChange={setting.setValue}
+												/>
+											);
+										case "slider":
+											return (
+												<SliderComponent
+													name={setting.name}
+													value={setting.value()}
+													min={setting.min}
+													max={setting.max}
+													onChange={setting.setValue}
+												/>
+											);
+										case "dropdown":
+											return (
+												<DropdownComponent
+													name={setting.name}
+													value={setting.value()}
+													options={setting.options}
+													onChange={setting.setValue}
+													onExpandChange={
+														props.onExpandChange
+													}
+												/>
+											);
+										case "textbox":
+											return (
+												<TextBoxComponent
+													name={setting.name}
+													value={setting.value()}
+													placeholder={
+														setting.placeholder
+													}
+													onChange={setting.setValue}
+												/>
+											);
+										case "colorslider":
+											return (
+												<ColorSliderComponent
+													name={setting.name}
+													hue={setting.hue()}
+													sat={setting.sat()}
+													value={setting.value()}
+													opacity={setting.opacity()}
+													onChange={setting.setColor}
+												/>
+											);
+										default:
+											return null;
+									}
+								})()}
+							</Show>
+						);
 					}}
 				</For>
 			</Show>

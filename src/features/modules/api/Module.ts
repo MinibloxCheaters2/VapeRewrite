@@ -14,6 +14,8 @@ export interface BaseSetting<V> {
 	type: string;
 	value: Accessor<V>;
 	setValue(value: V): void;
+	/** Optional visibility condition - if returns false, setting is hidden */
+	visible?: () => boolean;
 }
 
 export interface ToggleSetting extends BaseSetting<boolean> {
@@ -147,6 +149,7 @@ export default abstract class Mod {
 	protected createToggleSetting(
 		name: string,
 		defaultValue = false,
+		visible?: () => boolean,
 	): ToggleSetting {
 		const [value, setValue] = createSignal(defaultValue);
 		const setting: ToggleSetting = {
@@ -154,6 +157,7 @@ export default abstract class Mod {
 			type: "toggle",
 			value,
 			setValue,
+			visible,
 		};
 		this.settings.push(setting);
 		return setting;
@@ -165,6 +169,7 @@ export default abstract class Mod {
 		min: number,
 		max: number,
 		step?: number,
+		visible?: () => boolean,
 	): SliderSetting {
 		const [value, setValue] = createSignal(defaultValue);
 		const setting: SliderSetting = {
@@ -175,6 +180,7 @@ export default abstract class Mod {
 			min,
 			max,
 			step,
+			visible,
 		};
 		this.settings.push(setting);
 		return setting;
@@ -184,6 +190,7 @@ export default abstract class Mod {
 		name: string,
 		options: V[],
 		defaultValue?: (typeof options)[0],
+		visible?: () => boolean,
 	): DropdownSetting<V> {
 		const [value, setValue] = createSignal(defaultValue ?? options[0]);
 		const setting: DropdownSetting<V> = {
@@ -192,6 +199,7 @@ export default abstract class Mod {
 			value,
 			setValue,
 			options,
+			visible,
 		};
 		this.settings.push(setting);
 		return setting;
@@ -201,6 +209,7 @@ export default abstract class Mod {
 		name: string,
 		defaultValue = "",
 		placeholder?: string,
+		visible?: () => boolean,
 	): TextBoxSetting {
 		const [value, setValue] = createSignal(defaultValue);
 		const setting: TextBoxSetting = {
@@ -209,6 +218,7 @@ export default abstract class Mod {
 			value,
 			setValue,
 			placeholder,
+			visible,
 		};
 		this.settings.push(setting);
 		return setting;
@@ -222,6 +232,7 @@ export default abstract class Mod {
 			v: 1,
 			o: 1,
 		},
+		visible?: () => boolean,
 	): ColorSliderSetting {
 		const [color, setColor] = createSignal(value);
 
@@ -230,6 +241,7 @@ export default abstract class Mod {
 			type: "color",
 			value: color,
 			setValue: setColor,
+			visible,
 		};
 		this.settings.push(setting);
 		return setting;

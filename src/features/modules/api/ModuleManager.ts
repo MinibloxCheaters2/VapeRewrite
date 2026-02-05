@@ -1,6 +1,6 @@
 import Blink from "../impl/blatant/Blink.js";
 import FakeLag from "../impl/blatant/FakeLag.js";
-import InfiniteFly from "../impl/blatant/InfiniteFly.js";
+import Fly from "../impl/blatant/Fly.js";
 import KillAura from "../impl/blatant/KillAura.js";
 import NoSlow from "../impl/blatant/NoSlow.js";
 import Phase from "../impl/blatant/Phase.js";
@@ -53,7 +53,7 @@ export default class ModuleManager {
 		this.phase,
 		this.scaffold,
 		new FilterBypass(),
-		new InfiniteFly(),
+		new Fly(),
 		new ServerCrasher(),
 		new KillAura(),
 		new Velocity(),
