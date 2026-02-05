@@ -1,10 +1,8 @@
 import { argument, literal } from "@wq2/brigadier-ts";
-import PacketRefs from "@/utils/packetRefs";
+import type { EntityPlayer } from "@/features/sdk/types/entity";
 import Refs from "@/utils/refs";
-import dispatcher from "../api/CommandDispatcher";
 import PlayerArgumentType from "../api/brigadier/PlayerArgumentType";
-
-
+import dispatcher from "../api/CommandDispatcher";
 
 dispatcher.register(
     literal("locate").then(
