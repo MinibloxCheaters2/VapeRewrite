@@ -18,6 +18,7 @@ import type { Items } from "../features/sdk/types/items";
 import type { Materials } from "../features/sdk/types/materials";
 import type { EnumFacing } from "../features/sdk/types/math/facing";
 import type { ClientWorld } from "../features/sdk/types/world";
+import type {Chat} from "../features/sdk/types/chat";
 
 // biome-ignore lint/complexity/noStaticOnlyClass: job
 class Refs {
@@ -25,6 +26,7 @@ class Refs {
 	static #game?: Game;
 	static #world?: ClientWorld;
 	static #player?: ClientEntityPlayer;
+	static #chat?: Chat;
 	static #Vec3?: typeof Vector3;
 	static #clientSocket: typeof ClientSocket;
 	static #PBVector3: PBVector3;
@@ -141,6 +143,9 @@ class Refs {
 
 	static get world() {
 		return Refs.#initOrR(Refs.#world, () => Refs.game.world);
+	}
+	static get chat() {
+		return Refs.#initOrR(Refs.#chat, () => Refs.game.chat);
 	}
 
 	static get player() {
