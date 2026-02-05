@@ -36,14 +36,15 @@ export default class ModuleArgumentType extends ArgumentType<EntityPlayer> {
 	parse(reader: StringReader): EntityPlayer {
 		const start = reader.getCursor();
 		const name = reader.readString();
-		const mod = Refs.world.players
+		const plr = Refs.world.players
 			.values()
 			.find((p) => p.name.toLowerCase() === name.toLowerCase());
 
-		if (mod === undefined) {
+		if (plr === undefined) {
 			reader.setCursor(start);
 			throw PLAYER_NOT_FOUND.createWithContext(reader, name);
 		}
-		return mod;
+
+		return plr;
 	}
 }
