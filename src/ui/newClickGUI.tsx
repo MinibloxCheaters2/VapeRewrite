@@ -47,7 +47,7 @@ interface CategoryWindowProps {
 }
 
 function CategoryWindow(props: CategoryWindowProps) {
-	const [expanded, setExpanded] = createSignal(false);
+	const [expanded, setExpanded] = createSignal(true);
 	const [position, setPosition] = createSignal(props.position);
 	const [dragging, setDragging] = createSignal(false);
 	const [dragOffset, setDragOffset] = createSignal({ x: 0, y: 0 });
@@ -118,6 +118,14 @@ function CategoryWindow(props: CategoryWindowProps) {
 	onMount(() => {
 		document.addEventListener("pointermove", handlePointerMove);
 		document.addEventListener("pointerup", handlePointerUp);
+		
+		// Initial height calculation
+		if (contentRef) {
+			requestAnimationFrame(() => {
+				const height = Math.min(contentRef.scrollHeight, 560);
+				setWindowHeight(41 + height);
+			});
+		}
 	});
 
 	onCleanup(() => {
