@@ -6,7 +6,7 @@ import Mod from "../../api/Module";
 
 export default class Blink extends Mod {
 	public name = "Blink";
-	public category = Category.BLATANT;
+	public category = Category.UTILITY;
 
 	@Subscribe("queueC2SPacket")
 	private handleQueue(outcome: PacketOutcome<C2SPacket>) {

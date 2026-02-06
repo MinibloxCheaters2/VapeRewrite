@@ -14,7 +14,7 @@ import Mod from "../../api/Module";
 
 export default class FakeLag extends Mod {
 	public name = "FakeLag";
-	public category = Category.BLATANT;
+	public category = Category.UTILITY;
 	#targetsInRange = [];
 	#enemyNearby = false;
 

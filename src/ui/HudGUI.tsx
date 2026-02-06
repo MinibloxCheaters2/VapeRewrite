@@ -308,10 +308,7 @@ function HudManagerPanel() {
 								"0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)",
 							padding: "4px",
 							"min-width": "150px",
-							"max-height": "300px",
-							"overflow-y": "auto",
 						}}
-						class="clickgui-scrollbar"
 					>
 						<For each={HudManager.getHudTypes()}>
 							{(hudClass) => {
@@ -366,10 +363,7 @@ function HudManagerPanel() {
 								"0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)",
 							padding: "8px 0",
 							"min-width": "220px",
-							"max-height": "400px",
-							"overflow-y": "auto",
 						}}
-						class="clickgui-scrollbar"
 					>
 						<div
 							style={{

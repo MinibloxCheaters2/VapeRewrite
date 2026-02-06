@@ -69,7 +69,7 @@ function CategoryWindow(props: CategoryWindowProps) {
 		if (expanded() && contentRef) {
 			// Use requestAnimationFrame for immediate update
 			requestAnimationFrame(() => {
-				const height = Math.min(contentRef.scrollHeight, 560); // 601 - 41 = 560
+				const height = contentRef.scrollHeight;
 				setWindowHeight(41 + height);
 			});
 		} else {
@@ -118,12 +118,14 @@ function CategoryWindow(props: CategoryWindowProps) {
 	onMount(() => {
 		document.addEventListener("pointermove", handlePointerMove);
 		document.addEventListener("pointerup", handlePointerUp);
-		
-		// Initial height calculation
+
+		// Initial height calculation - use double RAF to ensure DOM is fully rendered
 		if (contentRef) {
 			requestAnimationFrame(() => {
-				const height = Math.min(contentRef.scrollHeight, 560);
-				setWindowHeight(41 + height);
+				requestAnimationFrame(() => {
+					const height = contentRef.scrollHeight;
+					setWindowHeight(41 + height);
+				});
 			});
 		}
 	});
@@ -257,11 +259,9 @@ function CategoryWindow(props: CategoryWindowProps) {
 					<div
 						ref={contentRef}
 						style={{
-							"max-height": "560px",
-							"overflow-y": "auto",
+							"overflow-y": "visible",
 							"overflow-x": "hidden",
 						}}
-						class="clickgui-scrollbar"
 					>
 						<For each={modules}>
 							{(mod) => (
@@ -567,7 +567,7 @@ export function initNewClickGUI() {
 
 	const priority = {
 		combat: 2,
-		blatant: 3,
+		movement: 3,
 		render: 4,
 		utility: 5,
 		world: 6,

@@ -24,7 +24,7 @@ function wrapAngleTo180_radians(angle: number): number {
 
 export default class KillAura extends Mod {
 	public name = "KillAura";
-	public category = Category.BLATANT;
+	public category = Category.COMBAT;
 	private attackDelay = Date.now();
 	private blocking = false;
 
@@ -109,11 +109,11 @@ export default class KillAura extends Mod {
 			new (PacketRefs.getRef("SPacketUseEntity"))({
 				id: e.id,
 				action: 1,
-				hitVec: new PBVector3({
+				hitVec: {
 					x: hitVec.x,
 					y: hitVec.y,
 					z: hitVec.z,
-				}),
+				},
 			}),
 		);
 		const d = MATCHED_DUMPS.attackTargetEntityWithCurrentItem as "attack";

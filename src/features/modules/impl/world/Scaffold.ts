@@ -10,7 +10,7 @@ import Mod from "../../api/Module";
 
 export default class Scaffold extends Mod {
 	public name = "Scaffold";
-	public category = Category.BLATANT;
+	public category = Category.WORLD;
 
 	// Settings
 	private towerSetting = this.createToggleSetting("Tower", true);
