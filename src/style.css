@@ -4,7 +4,8 @@
 /* New ClickGUI Styles */
 #new-clickgui-container,
 #main-gui-container,
-#textgui-container {
+#textgui-container,
+#hud-gui-container {
 	font-family: Arial, sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
@@ -12,23 +13,28 @@
 
 #new-clickgui-container *,
 #main-gui-container *,
-#textgui-container * {
+#textgui-container *,
+#hud-gui-container * {
 	box-sizing: border-box;
 }
 
-#new-clickgui-container .clickgui-scrollbar::-webkit-scrollbar {
+#new-clickgui-container .clickgui-scrollbar::-webkit-scrollbar,
+#hud-gui-container .clickgui-scrollbar::-webkit-scrollbar {
 	width: 2px;
 }
 
-#new-clickgui-container .clickgui-scrollbar::-webkit-scrollbar-track {
+#new-clickgui-container .clickgui-scrollbar::-webkit-scrollbar-track,
+#hud-gui-container .clickgui-scrollbar::-webkit-scrollbar-track {
 	background: transparent;
 }
 
-#new-clickgui-container .clickgui-scrollbar::-webkit-scrollbar-thumb {
+#new-clickgui-container .clickgui-scrollbar::-webkit-scrollbar-thumb,
+#hud-gui-container .clickgui-scrollbar::-webkit-scrollbar-thumb {
 	background: rgba(255, 255, 255, 0.25);
 	border-radius: 2px;
 }
 
-#new-clickgui-container .clickgui-scrollbar::-webkit-scrollbar-thumb:hover {
+#new-clickgui-container .clickgui-scrollbar::-webkit-scrollbar-thumb:hover,
+#hud-gui-container .clickgui-scrollbar::-webkit-scrollbar-thumb:hover {
 	background: rgba(255, 255, 255, 0.4);
 }

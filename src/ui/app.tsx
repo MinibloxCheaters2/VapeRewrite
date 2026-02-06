@@ -6,17 +6,21 @@ GM_addStyle(globalCss);
 
 import "./wait"; // putting the file's contents in this file would make Rollup position it after these imports.
 import "./shadowWrapper";
+import { initHudSystem } from "@/features/hud";
+import { initHudGUI } from "./HudGUI";
 import { initMainGUI } from "./MainGUI";
 import { initNewClickGUI } from "./newClickGUI";
 import { initNotifications } from "./notifications";
 import { initProfilesPanel } from "./ProfilesPanel";
 import { initSettingsPanel } from "./SettingsPanel";
-import { initTextGUI } from "./TextGUI";
+
+// Initialize HUD system
+initHudSystem();
 
 // Initialize GUIs
 initMainGUI();
 initNewClickGUI();
-initTextGUI();
+initHudGUI();
 initNotifications();
 initSettingsPanel();
 initProfilesPanel();

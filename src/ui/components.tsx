@@ -416,8 +416,14 @@ export function ColorSliderComponent(props: {
 	onChange: (h: number, s: number, v: number, o: number) => void;
 	tooltip?: string;
 }) {
-	const [expanded, _setExpanded] = createSignal(false);
-	const [rainbow, setRainbow] = createSignal(false);
+	const [expanded, setExpanded] = createSignal(false);
+	const [draggingHue, setDraggingHue] = createSignal(false);
+	const [draggingSV, setDraggingSV] = createSignal(false);
+	const [draggingOpacity, setDraggingOpacity] = createSignal(false);
+
+	let hueSliderRef: HTMLDivElement | undefined;
+	let svPickerRef: HTMLDivElement | undefined;
+	let opacitySliderRef: HTMLDivElement | undefined;
 
 	const color = () => {
 		const h = props.hue;
@@ -453,6 +459,85 @@ export function ColorSliderComponent(props: {
 		return `rgb(${Math.round((r + m) * 255)}, ${Math.round((g + m) * 255)}, ${Math.round((b + m) * 255)})`;
 	};
 
+	const hueColor = (h: number) => {
+		const c = 1;
+		const x = c * (1 - Math.abs(((h * 6) % 2) - 1));
+		let r = 0,
+			g = 0,
+			b = 0;
+
+		if (h < 1 / 6) {
+			r = c;
+			g = x;
+		} else if (h < 2 / 6) {
+			r = x;
+			g = c;
+		} else if (h < 3 / 6) {
+			g = c;
+			b = x;
+		} else if (h < 4 / 6) {
+			g = x;
+			b = c;
+		} else if (h < 5 / 6) {
+			r = x;
+			b = c;
+		} else {
+			r = c;
+			b = x;
+		}
+
+		return `rgb(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)})`;
+	};
+
+	const updateHue = (e: PointerEvent) => {
+		if (!hueSliderRef) return;
+		const rect = hueSliderRef.getBoundingClientRect();
+		const percent = Math.max(
+			0,
+			Math.min(1, (e.clientX - rect.left) / rect.width),
+		);
+		props.onChange(percent, props.sat, props.value, props.opacity);
+	};
+
+	const updateSV = (e: PointerEvent) => {
+		if (!svPickerRef) return;
+		const rect = svPickerRef.getBoundingClientRect();
+		const s = Math.max(
+			0,
+			Math.min(1, (e.clientX - rect.left) / rect.width),
+		);
+		const v = Math.max(
+			0,
+			Math.min(1, 1 - (e.clientY - rect.top) / rect.height),
+		);
+		props.onChange(props.hue, s, v, props.opacity);
+	};
+
+	const updateOpacity = (e: PointerEvent) => {
+		if (!opacitySliderRef) return;
+		const rect = opacitySliderRef.getBoundingClientRect();
+		const percent = Math.max(
+			0,
+			Math.min(1, (e.clientX - rect.left) / rect.width),
+		);
+		props.onChange(props.hue, props.sat, props.value, percent);
+	};
+
+	const handlePointerMove = (e: PointerEvent) => {
+		if (draggingHue()) updateHue(e);
+		if (draggingSV()) updateSV(e);
+		if (draggingOpacity()) updateOpacity(e);
+	};
+
+	const handlePointerUp = () => {
+		setDraggingHue(false);
+		setDraggingSV(false);
+		setDraggingOpacity(false);
+	};
+
+	document.addEventListener("pointermove", handlePointerMove);
+	document.addEventListener("pointerup", handlePointerUp);
+
 	return (
 		<div style={{ "background-color": COLORS.mainDark }}>
 			<div
@@ -461,7 +546,9 @@ export function ColorSliderComponent(props: {
 					"align-items": "center",
 					height: "50px",
 					padding: "0 12px",
+					cursor: "pointer",
 				}}
+				on:click={() => setExpanded(!expanded())}
 			>
 				<span
 					style={{
@@ -473,52 +560,144 @@ export function ColorSliderComponent(props: {
 					{props.name}
 				</span>
 				<div style={{ flex: "1" }} />
-				<button
-					style={{
-						width: "12px",
-						height: "12px",
-						"margin-right": "8px",
-						background: "none",
-						border: "none",
-						cursor: "pointer",
-						padding: "0",
-					}}
-					type="button"
-					on:click={() => setRainbow(!rainbow())}
-				>
-					<img
-						src={getResourceURL("rainbow_1")}
-						alt=""
-						style={{
-							width: "12px",
-							height: "12px",
-							filter: rainbow() ? "none" : "brightness(0.4)",
-						}}
-					/>
-				</button>
 				<div
 					style={{
-						width: "12px",
-						height: "12px",
+						width: "24px",
+						height: "24px",
 						"background-color": color(),
 						opacity: props.opacity,
-						"border-radius": "2px",
-						border: "1px solid rgba(255, 255, 255, 0.1)",
+						"border-radius": "4px",
+						border: "1px solid rgba(255, 255, 255, 0.2)",
+						cursor: "pointer",
 					}}
 				/>
 			</div>
 			<Show when={expanded()}>
-				<div style={{ padding: "0 12px 12px" }}>
-					{/* Hue, Saturation, Value, Opacity sliders would go here */}
+				<div style={{ padding: "12px" }}>
+					{/* Saturation/Value Picker */}
 					<div
+						ref={svPickerRef}
 						style={{
-							"text-align": "center",
-							color: COLORS.textDarker,
-							"font-size": "11px",
-							padding: "12px",
+							width: "100%",
+							height: "120px",
+							position: "relative",
+							"border-radius": "4px",
+							background: `linear-gradient(to top, black, transparent), linear-gradient(to right, white, ${hueColor(props.hue)})`,
+							cursor: "crosshair",
+							"margin-bottom": "12px",
+						}}
+						on:pointerdown={(e) => {
+							setDraggingSV(true);
+							updateSV(e);
 						}}
 					>
-						Color picker coming soon...
+						{/* Picker indicator */}
+						<div
+							style={{
+								position: "absolute",
+								left: `${props.sat * 100}%`,
+								top: `${(1 - props.value) * 100}%`,
+								width: "12px",
+								height: "12px",
+								border: "2px solid white",
+								"border-radius": "50%",
+								transform: "translate(-50%, -50%)",
+								"box-shadow": "0 0 4px rgba(0, 0, 0, 0.5)",
+								"pointer-events": "none",
+							}}
+						/>
+					</div>
+
+					{/* Hue Slider */}
+					<div style={{ "margin-bottom": "8px" }}>
+						<span
+							style={{
+								color: COLORS.textDark,
+								"font-size": "10px",
+								"font-family": "Arial, sans-serif",
+								display: "block",
+								"margin-bottom": "4px",
+							}}
+						>
+							Hue
+						</span>
+						<div
+							ref={hueSliderRef}
+							style={{
+								position: "relative",
+								height: "12px",
+								"border-radius": "6px",
+								background:
+									"linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000)",
+								cursor: "pointer",
+							}}
+							on:pointerdown={(e) => {
+								setDraggingHue(true);
+								updateHue(e);
+							}}
+						>
+							<div
+								style={{
+									position: "absolute",
+									left: `${props.hue * 100}%`,
+									top: "50%",
+									width: "16px",
+									height: "16px",
+									"background-color": "white",
+									border: "2px solid rgba(0, 0, 0, 0.3)",
+									"border-radius": "50%",
+									transform: "translate(-50%, -50%)",
+									"box-shadow": "0 0 4px rgba(0, 0, 0, 0.3)",
+									"pointer-events": "none",
+								}}
+							/>
+						</div>
+					</div>
+
+					{/* Opacity Slider */}
+					<div>
+						<span
+							style={{
+								color: COLORS.textDark,
+								"font-size": "10px",
+								"font-family": "Arial, sans-serif",
+								display: "block",
+								"margin-bottom": "4px",
+							}}
+						>
+							Opacity
+						</span>
+						<div
+							ref={opacitySliderRef}
+							style={{
+								position: "relative",
+								height: "12px",
+								"border-radius": "6px",
+								background: `linear-gradient(to right, transparent, ${color()})`,
+								"background-image": `linear-gradient(to right, transparent, ${color()}), repeating-linear-gradient(45deg, #ccc 0, #ccc 2px, #fff 2px, #fff 4px)`,
+								cursor: "pointer",
+							}}
+							on:pointerdown={(e) => {
+								setDraggingOpacity(true);
+								updateOpacity(e);
+							}}
+						>
+							<div
+								style={{
+									position: "absolute",
+									left: `${props.opacity * 100}%`,
+									top: "50%",
+									width: "16px",
+									height: "16px",
+									"background-color": "white",
+									border: "2px solid rgba(0, 0, 0, 0.3)",
+									"border-radius": "50%",
+									transform: "translate(-50%, -50%)",
+									"box-shadow": "0 0 4px rgba(0, 0, 0, 0.3)",
+									"pointer-events": "none",
+								}}
+							/>
+						</div>
 					</div>
 				</div>
 			</Show>

@@ -64,7 +64,11 @@ interface ColorSettingValue {
 }
 
 export interface ColorSliderSetting extends BaseSetting<ColorSettingValue> {
-	type: "color";
+	type: "colorslider";
+	hue: () => number;
+	sat: () => number;
+	opacity: () => number;
+	setColor: (h: number, s: number, v: number, o: number) => void;
 }
 
 export type ModuleSetting =
@@ -238,9 +242,14 @@ export default abstract class Mod {
 
 		const setting: ColorSliderSetting = {
 			name,
-			type: "color",
+			type: "colorslider",
 			value: color,
 			setValue: setColor,
+			hue: () => color().h,
+			sat: () => color().s,
+			opacity: () => color().o,
+			setColor: (h: number, s: number, v: number, o: number) =>
+				setColor({ h, s, v, o }),
 			visible,
 		};
 		this.settings.push(setting);

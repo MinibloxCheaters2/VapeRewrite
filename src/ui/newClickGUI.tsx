@@ -534,7 +534,7 @@ function ModuleSettings(props: { mod: Mod; onExpandChange: () => void }) {
 													name={setting.name}
 													hue={setting.hue()}
 													sat={setting.sat()}
-													value={setting.value()}
+													value={setting.value().v}
 													opacity={setting.opacity()}
 													onChange={setting.setColor}
 												/>
