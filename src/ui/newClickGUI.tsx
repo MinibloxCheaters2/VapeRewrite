@@ -567,7 +567,7 @@ export function initNewClickGUI() {
 
 	const priority = {
 		combat: 2,
-		movement: 3,
+		blatant: 3,
 		render: 4,
 		utility: 5,
 		world: 6,

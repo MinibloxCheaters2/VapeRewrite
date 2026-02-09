@@ -1,4 +1,4 @@
-import { createSignal } from "solid-js";
+import { createSignal, type JSX } from "solid-js";
 import type {
 	ColorSliderSetting,
 	DropdownSetting,
@@ -58,7 +58,7 @@ export default abstract class HudElement {
 	 * Render the HUD element content
 	 * @returns JSX element to render
 	 */
-	public abstract render(): any;
+	public abstract render(): JSX.Element;
 
 	/**
 	 * Called when the HUD element is added

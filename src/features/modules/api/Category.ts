@@ -2,7 +2,7 @@ import getResourceURL from "@/utils/cachedResourceURL";
 
 export enum Category {
 	COMBAT,
-	MOVEMENT,
+	BLATANT,
 	RENDER,
 	WORLD,
 	MINIGAMES,
@@ -26,9 +26,9 @@ const categoryDataSet: Record<Category, CategoryData> = {
 		icon: "combat",
 		name: "Combat",
 	},
-	[Category.MOVEMENT]: {
-		icon: "utility",
-		name: "Movement",
+	[Category.BLATANT]: {
+		icon: "blatant",
+		name: "Blatant",
 	},
 	[Category.RENDER]: {
 		icon: "render",

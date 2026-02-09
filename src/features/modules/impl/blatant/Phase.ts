@@ -3,6 +3,6 @@ import Mod from "../../api/Module";
 
 export default class Phase extends Mod {
 	public name = "Phase";
-	public category = Category.MOVEMENT;
+	public category = Category.BLATANT;
 	// All functionality will be in hooking-replacements
 }

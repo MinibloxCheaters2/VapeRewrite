@@ -17,7 +17,7 @@ import Mod from "../../api/Module";
  */
 export default class Fly extends Mod {
 	public name = "Fly";
-	public category = Category.MOVEMENT;
+	public category = Category.BLATANT;
 
 	// Mode selection
 	private modeSetting = this.createDropdownSetting(

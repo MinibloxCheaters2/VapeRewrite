@@ -1,4 +1,5 @@
 import { createSignal, For, Show } from "solid-js";
+import { getName, type ModeLike } from "@/features/modules/api/Module";
 import getResourceURL from "@/utils/cachedResourceURL";
 
 const COLORS = {
@@ -218,9 +219,9 @@ export function SliderComponent(props: {
 // Dropdown component
 export function DropdownComponent(props: {
 	name: string;
-	value: string;
-	options: string[];
-	onChange: (value: string) => void;
+	value: ModeLike;
+	options: ModeLike[];
+	onChange: (value: ModeLike) => void;
 	tooltip?: string;
 	onExpandChange?: () => void;
 }) {
@@ -271,7 +272,7 @@ export function DropdownComponent(props: {
 						"font-family": "Arial, sans-serif",
 					}}
 				>
-					{props.value}
+					{getName(props.value)}
 				</span>
 				<img
 					src={getResourceURL("contract")}
@@ -337,7 +338,7 @@ export function DropdownComponent(props: {
 										"font-family": "Arial, sans-serif",
 									}}
 								>
-									{option}
+									{getName(option)}
 								</span>
 							</div>
 						)}

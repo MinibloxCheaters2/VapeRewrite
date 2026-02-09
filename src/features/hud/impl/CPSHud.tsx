@@ -31,6 +31,8 @@ export default class CPSHud extends HudElement {
 	private rightCPSSignal = createSignal(0);
 	private leftClicks: number[] = [];
 	private rightClicks: number[] = [];
+	#cpsUpdateInterval: number;
+	#mouseDownHandler: (this: Document, ev: MouseEvent) => unknown;
 
 	public onAdd(): void {
 		const handleMouseDown = (e: MouseEvent) => {
@@ -55,11 +57,11 @@ export default class CPSHud extends HudElement {
 			this.leftCPSSignal[1](this.leftClicks.length);
 			this.rightCPSSignal[1](this.rightClicks.length);
 
-			(this as any)._cpsUpdateInterval = setTimeout(updateCPS, 50);
+			this.#cpsUpdateInterval = setTimeout(updateCPS, 50);
 		};
 
 		document.addEventListener("mousedown", handleMouseDown);
-		(this as any)._mouseDownHandler = handleMouseDown;
+		this.#mouseDownHandler = handleMouseDown;
 		updateCPS();
 	}
 
