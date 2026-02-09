@@ -16,6 +16,7 @@ import RejoinOnMute from "../impl/utility/RejoinOnMute.js";
 import ServerCrasher from "../impl/utility/ServerCrasher.js";
 import NoFall from "../impl/world/NoFall.js";
 import Scaffold from "../impl/world/Scaffold.js";
+import Timer from "../impl/world/Timer.js";
 import type Category from "./Category.js";
 import type Mod from "./Module.js";
 
@@ -56,6 +57,7 @@ export default class ModuleManager {
 		new KillAura(),
 		new Velocity(),
 		new NoFall(),
+		new Timer(),
 		new Criticals(),
 		new TargetStrafe(),
 		new RejoinOnMute(),
