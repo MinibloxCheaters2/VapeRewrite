@@ -16,9 +16,9 @@ export const NO_FG_EXPOSED_RANDOMIZATION = false;
 //#endregion
 //#region Replacement system
 /** Checks for unmatched replacements, and if found, logs the unmatched replacements into the console */
-export const CHECK_UNMATCHED_REPLACEMENTS = true;
+export const CHECK_UNMATCHED_REPLACEMENTS = false;
 /** Checks for unmatched dumps, and if found, logs the unmatched dumps into the console. */
-export const CHECK_UNMATCHED_DUMPS = true;
+export const CHECK_UNMATCHED_DUMPS = false;
 /** Logs when we're applying replacements. */
-export const LOG_APPLYING_REPLACEMENTS = true;
+export const LOG_APPLYING_REPLACEMENTS = false;
 //#endregion

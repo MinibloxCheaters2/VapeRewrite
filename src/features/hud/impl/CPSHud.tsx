@@ -57,7 +57,10 @@ export default class CPSHud extends HudElement {
 			this.leftCPSSignal[1](this.leftClicks.length);
 			this.rightCPSSignal[1](this.rightClicks.length);
 
-			this.#cpsUpdateInterval = setTimeout(updateCPS, 50);
+			this.#cpsUpdateInterval = setTimeout(
+				updateCPS,
+				50,
+			) as unknown as number;
 		};
 
 		document.addEventListener("mousedown", handleMouseDown);
@@ -66,14 +69,11 @@ export default class CPSHud extends HudElement {
 	}
 
 	public onRemove(): void {
-		if ((this as any)._mouseDownHandler) {
-			document.removeEventListener(
-				"mousedown",
-				(this as any)._mouseDownHandler,
-			);
+		if (this.#mouseDownHandler) {
+			document.removeEventListener("mousedown", this.#mouseDownHandler);
 		}
-		if ((this as any)._cpsUpdateInterval) {
-			clearTimeout((this as any)._cpsUpdateInterval);
+		if (this.#cpsUpdateInterval) {
+			clearTimeout(this.#cpsUpdateInterval);
 		}
 	}
 

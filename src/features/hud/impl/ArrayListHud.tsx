@@ -104,7 +104,7 @@ export default class ArrayListHud extends HudElement {
 			this.rainbowOffsetSignal[1](
 				(this.rainbowOffsetSignal[0]() + 0.002) % 1,
 			);
-		}, 16);
+		}, 16) as unknown as number; // :sob:
 
 		// Store interval for cleanup
 		this.#rainbowInterval = interval;
@@ -112,8 +112,8 @@ export default class ArrayListHud extends HudElement {
 
 	public onRemove(): void {
 		// Clean up interval
-		if ((this as any)._rainbowInterval) {
-			clearInterval((this as any)._rainbowInterval);
+		if (this.#rainbowInterval) {
+			clearInterval(this.#rainbowInterval);
 		}
 	}
 

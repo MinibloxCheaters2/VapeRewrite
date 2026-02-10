@@ -9,4 +9,3 @@ import "./utils/packetQueueManager";
 import "./utils/aiming/rotate";
 import "./features/binds/handler";
 import "./utils/ServerFallDistance";
-import "./hooks/ChatHook";

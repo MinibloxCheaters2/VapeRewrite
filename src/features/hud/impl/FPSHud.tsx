@@ -1,8 +1,10 @@
 import { createSignal } from "solid-js";
+import Refs from "@/utils/refs";
 import HudElement from "../api/HudElement";
 
 export default class FPSHud extends HudElement {
 	public name = "FPS";
+	#fpsAnimationFrame: number;
 
 	constructor() {
 		super();
@@ -35,21 +37,21 @@ export default class FPSHud extends HudElement {
 			const elapsed = now - this.lastFrameTime;
 
 			if (elapsed >= this.fpsUpdateInterval) {
-				const fps = Math.round((this.frameCount * 1000) / elapsed);
+				const fps = Refs.game.resourceMonitor.filteredFPS;
 				this.fpsSignal[1](fps);
 				this.frameCount = 0;
 				this.lastFrameTime = now;
 			}
 
-			(this as any)._fpsAnimationFrame = requestAnimationFrame(updateFPS);
+			this.#fpsAnimationFrame = requestAnimationFrame(updateFPS);
 		};
 
 		updateFPS();
 	}
 
 	public onRemove(): void {
-		if ((this as any)._fpsAnimationFrame) {
-			cancelAnimationFrame((this as any)._fpsAnimationFrame);
+		if (this.#fpsAnimationFrame) {
+			cancelAnimationFrame(this.#fpsAnimationFrame);
 		}
 	}
 

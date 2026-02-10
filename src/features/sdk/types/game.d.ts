@@ -22,6 +22,17 @@ export interface GameInfo {
 	showDeathScreen?: boolean;
 }
 
+export declare class ResourceMonitor {
+	instantFPS: number;
+	filteredFPS: number;
+	/** note: this is always  */
+	instantPing: number;
+	filteredPing: number;
+	static fpsGraphUpdate: unknown | null;
+	static memoryGraphUpdate: unknown | null;
+	static tickTimeGraphUpdate: unknown | null;
+}
+
 export declare class Game {
 	player: ClientEntityPlayer;
 	controller: PlayerController;
@@ -46,7 +57,7 @@ export declare class Game {
 	scoreboardTitle: string;
 	delta: number;
 	serverInfo: ServerInfo;
-	resourceMonitor;
+	resourceMonitor: ResourceMonitor;
 	get isCrazyGames(): boolean;
 	get isDiscordActivity(): boolean;
 	get isPoki(): boolean;

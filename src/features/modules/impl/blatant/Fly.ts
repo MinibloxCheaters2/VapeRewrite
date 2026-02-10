@@ -117,18 +117,14 @@ export default class Fly extends Mod {
 	// State
 	private ticks = 0;
 	private warned = false;
-	private damageTimer = 0;
 	private jumpTimer = 0;
 	private stopTicks = 0;
-	private damageStartY = 0; // Y coordinate when damage fly starts
 
 	protected onEnable(): void {
 		this.ticks = 0;
 		this.warned = false;
-		this.damageTimer = 0;
 		this.jumpTimer = 0;
 		this.stopTicks = 0;
-		this.damageStartY = 0;
 
 		const mode = this.modeSetting.value();
 
@@ -163,7 +159,6 @@ export default class Fly extends Mod {
 		}
 
 		this.ticks = 0;
-		this.damageTimer = 0;
 		this.jumpTimer = 0;
 	}
 

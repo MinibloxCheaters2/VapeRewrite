@@ -10,7 +10,7 @@ import Mod from "../../api/Module";
  */
 export default class Timer extends Mod {
 	public name = "Timer";
-	public category = Category.WORLD;
+	public category = Category.BLATANT;
 
 	// Timer speed multiplier
 	private speedSetting = this.createSliderSetting(
