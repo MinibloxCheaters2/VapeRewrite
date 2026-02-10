@@ -96,6 +96,7 @@ export default class ArrayListHud extends HudElement {
 	private showLogoSetting = this.createToggleSetting("Show Logo", true);
 
 	private rainbowOffsetSignal = createSignal(0);
+	#rainbowInterval: number;
 
 	public onAdd(): void {
 		// Start rainbow animation
@@ -106,7 +107,7 @@ export default class ArrayListHud extends HudElement {
 		}, 16);
 
 		// Store interval for cleanup
-		(this as any)._rainbowInterval = interval;
+		this.#rainbowInterval = interval;
 	}
 
 	public onRemove(): void {

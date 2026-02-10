@@ -1,5 +1,3 @@
-module.exports = {
-	plugins: {
-		"@unocss/postcss": {},
-	},
+export const plugins = {
+	"@unocss/postcss": {},
 };

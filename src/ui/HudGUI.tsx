@@ -383,7 +383,7 @@ function HudManagerPanel() {
 								{selectedHud()?.name} Settings
 							</span>
 						</div>
-						<HudSettings hud={selectedHud()!} />
+						<HudSettings hud={selectedHud()} />
 					</div>
 				</Show>
 			</div>

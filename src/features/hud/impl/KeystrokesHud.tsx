@@ -41,6 +41,10 @@ export default class KeystrokesHud extends HudElement {
 	private showMouseSetting = this.createToggleSetting("Show Mouse", true);
 
 	private keysPressed = createSignal<Set<string>>(new Set());
+	#keyDownHandler: (e: KeyboardEvent) => void;
+	#keyUpHandler: (e: KeyboardEvent) => void;
+	#mouseDownHandler: (e: MouseEvent) => void;
+	#mouseUpHandler: (e: MouseEvent) => void;
 
 	public onAdd(): void {
 		const handleKeyDown = (e: KeyboardEvent) => {
@@ -80,33 +84,24 @@ export default class KeystrokesHud extends HudElement {
 		document.addEventListener("mousedown", handleMouseDown);
 		document.addEventListener("mouseup", handleMouseUp);
 
-		(this as any)._keyDownHandler = handleKeyDown;
-		(this as any)._keyUpHandler = handleKeyUp;
-		(this as any)._mouseDownHandler = handleMouseDown;
-		(this as any)._mouseUpHandler = handleMouseUp;
+		this.#keyDownHandler = handleKeyDown;
+		this.#keyUpHandler = handleKeyUp;
+		this.#mouseDownHandler = handleMouseDown;
+		this.#mouseUpHandler = handleMouseUp;
 	}
 
 	public onRemove(): void {
-		if ((this as any)._keyDownHandler) {
-			document.removeEventListener(
-				"keydown",
-				(this as any)._keyDownHandler,
-			);
+		if (this.#keyDownHandler) {
+			document.removeEventListener("keydown", this.#keyDownHandler);
 		}
-		if ((this as any)._keyUpHandler) {
-			document.removeEventListener("keyup", (this as any)._keyUpHandler);
+		if (this.#keyUpHandler) {
+			document.removeEventListener("keyup", this.#keyUpHandler);
 		}
-		if ((this as any)._mouseDownHandler) {
-			document.removeEventListener(
-				"mousedown",
-				(this as any)._mouseDownHandler,
-			);
+		if (this.#mouseDownHandler) {
+			document.removeEventListener("mousedown", this.#mouseDownHandler);
 		}
-		if ((this as any)._mouseUpHandler) {
-			document.removeEventListener(
-				"mouseup",
-				(this as any)._mouseUpHandler,
-			);
+		if (this.#mouseUpHandler) {
+			document.removeEventListener("mouseup", this.#mouseUpHandler);
 		}
 	}
 

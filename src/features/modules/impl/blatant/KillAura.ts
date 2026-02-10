@@ -77,7 +77,7 @@ export default class KillAura extends Mod {
 	}
 
 	sendAttack(e: Entity, first: boolean) {
-		const { ClientSocket, PBVector3, player } = Refs;
+		const { ClientSocket, player } = Refs;
 		const box = e.getEntityBoundingBox();
 		const hitVec = player.getEyePos().clone().clamp(box.min, box.max);
 
