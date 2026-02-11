@@ -28,7 +28,7 @@ export default class EventBus<Events extends Record<string, unknown>> {
 	private listeners: Partial<{
 		[K in keyof Events]: Array<HandlerEntry<Events[K]>>;
 	}> = {};
-
+	
 	on<K extends keyof Events>(
 		event: K,
 		listener: (payload: Events[K]) => void,
