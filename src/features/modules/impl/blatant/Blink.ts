@@ -6,6 +6,7 @@ import Mod from "../../api/Module";
 
 export default class Blink extends Mod {
 	public name = "Blink";
+	// same reason as FakeLag
 	public category = Category.UTILITY;
 
 	@Subscribe("queueC2SPacket")

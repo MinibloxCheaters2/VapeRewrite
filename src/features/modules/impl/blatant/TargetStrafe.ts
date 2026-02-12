@@ -7,7 +7,7 @@ import Mod from "../../api/Module";
 
 export default class TargetStrafe extends Mod {
 	public name = "TargetStrafe";
-	public category = Category.COMBAT;
+	public category = Category.BLATANT;
 
 	private rangeSetting = this.createSliderSetting("Range", 5, 3, 8, 0.5);
 	private radiusSetting = this.createSliderSetting("Radius", 1.8, 1, 4, 0.1);

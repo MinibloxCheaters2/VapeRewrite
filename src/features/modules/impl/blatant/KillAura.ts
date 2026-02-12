@@ -24,7 +24,7 @@ function wrapAngleTo180_radians(angle: number): number {
 
 export default class KillAura extends Mod {
 	public name = "KillAura";
-	public category = Category.COMBAT;
+	public category = Category.BLATANT;
 	private attackDelay = Date.now();
 	private blocking = false;
 

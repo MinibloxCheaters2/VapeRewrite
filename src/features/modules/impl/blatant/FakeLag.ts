@@ -15,13 +15,14 @@ import Mod from "../../api/Module";
 
 export default class FakeLag extends Mod {
 	public name = "FakeLag";
+	// you can config FakeLag to be legit-looking.
 	public category = Category.UTILITY;
 	#targetsInRange: Entity[] = [];
 	#enemyNearby = false;
 
 	#rng = this.createSliderSetting("Range", 12, 1, 18, 0.1);
-	#miD = this.createSliderSetting("MinDelayMS", 1.5e3, 1, 1.5e3, 1.5);
-	#maD = this.createSliderSetting("MaxDelayMS", 1.5e3, 2, 1.5e3, 1.5);
+	#miD = this.createSliderSetting("MinDelayMS", 267, 0, 1.5e3, 1.5);
+	#maD = this.createSliderSetting("MaxDelayMS", 342, 1, 1.5e3, 1.5);
 	#fOA = this.createToggleSetting("FlushOnAction", true);
 
 	get #range() {
