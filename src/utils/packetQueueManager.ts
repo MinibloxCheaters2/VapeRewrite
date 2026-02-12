@@ -11,7 +11,7 @@ import type CancelableWrapper from "../event/api/CancelableWrapper";
 import type { AnyPacket, C2SPacket } from "../features/sdk/types/packetTypes";
 import Rotation from "./aiming/rotation";
 import PacketUtil from "./PacketUtil";
-import PacketRefs from "./packetRefs";
+import { c2s } from "./packetRefs";
 import Refs from "./refs";
 
 export class PacketRecord<T> {
@@ -42,8 +42,7 @@ export default new (class PacketQueueManager {
 		return (
 			this.packetQueue.find(
 				(p) =>
-					p.packet instanceof
-						PacketRefs.getRef("SPacketPlayerPosLook") &&
+					p.packet instanceof c2s("SPacketPlayerPosLook") &&
 					p.packet.pos,
 			)?.packet as SPacketPlayerPosLook | undefined
 		)?.pos;
@@ -53,8 +52,7 @@ export default new (class PacketQueueManager {
 		return Rotation.fromPacket(
 			this.packetQueue.find(
 				(p) =>
-					p.packet instanceof
-						PacketRefs.getRef("SPacketPlayerPosLook") &&
+					p.packet instanceof c2s("SPacketPlayerPosLook") &&
 					p.packet.yaw !== undefined &&
 					p.packet.pitch !== undefined,
 			)?.packet as SPacketPlayerPosLook | undefined,
@@ -94,8 +92,8 @@ export default new (class PacketQueueManager {
 	}
 
 	#preProcessing(pkt: C2SPacket): "pass" | "flush" | undefined {
-		if (pkt instanceof PacketRefs.getRef("SPacketMessage")) return "pass";
-		if (pkt instanceof PacketRefs.getRef("SPacketRespawn")) return "flush";
+		if (pkt instanceof c2s("SPacketMessage")) return "pass";
+		if (pkt instanceof c2s("SPacketRespawn")) return "flush";
 	}
 
 	@Subscribe("sendPacket", Priority.FINAL_DECISION)

@@ -1,36 +1,38 @@
 import { argument, literal } from "@wq2/brigadier-ts";
+import Bus from "@/Bus";
+import { Subscribe } from "@/event/api/Bus";
+import type CancelableWrapper from "@/event/api/CancelableWrapper";
 import type { EntityPlayer } from "@/features/sdk/types/entity";
+import type { S2CPacket } from "@/features/sdk/types/packetTypes";
+import { s2c } from "@/utils/packetRefs";
 import Refs from "@/utils/refs";
 import PlayerArgumentType from "../api/brigadier/PlayerArgumentType";
 import dispatcher from "../api/CommandDispatcher";
-import { Subscribe } from "@/event/api/Bus";
-import type CancelableWrapper from "@/event/api/CancelableWrapper";
-import type { C2SPacket } from "@/features/sdk/types/packetTypes";
 
 dispatcher.register(
 	literal("locate").then(
 		argument("player", new PlayerArgumentType()).executes(async (e) => {
 			const player = e.get<EntityPlayer>("player");
 			Refs.game.chat.addChat({
-				text: `${player.name} is at ${Math.round(player.pos.x)}, ${
-					Math.round(player.pos.y)
-				}, ${Math.round(player.pos.z)}`,
+				text: `${player.name} is at ${Math.round(player.pos.x)}, ${Math.round(
+					player.pos.y,
+				)}, ${Math.round(player.pos.z)}`,
 				color: "blue",
 			});
 		}),
 	),
 );
 
-class PosLocTor {
-	usrName: string;
-	setUsrName(name: string) {
-		this.usrName = name;
+// biome-ignore lint/correctness/noUnusedVariables: one day it will be used
+class PlayerInfoLocator {
+	constructor() {
+		Bus.registerSubscriber(this);
 	}
 	@Subscribe("receivePacket")
-	private onRcvPkt({data: packet}: CancelableWrapper<C2SPacket>) {
-		if(
-			packet instanceof PacketRefs.getRef("CPacketMessage") &&
-			packet.text.startsWith(`Username: ${this.usrName}`)
-		)
+	// biome-ignore lint/correctness/noUnusedPrivateClassMembers: the annotation uses it
+	#onRecvPacket(e: CancelableWrapper<S2CPacket>) {
+		const { data: packet } = e;
+		if (packet instanceof s2c("CPacketMessage")) {
+		}
 	}
 }

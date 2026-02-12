@@ -1,10 +1,11 @@
 import { Subscribe } from "@/event/api/Bus";
+import type { Entity } from "@/features/sdk/types/entity";
 import type { C2SPacket } from "@/features/sdk/types/packetTypes";
 import packetQueueManager, {
 	Action,
 	type PacketOutcome,
 } from "@/utils/packetQueueManager";
-import PacketRefs from "@/utils/packetRefs";
+import { c2s } from "@/utils/packetRefs";
 import { getRandomArbitrary } from "@/utils/random";
 import Refs from "@/utils/refs";
 import { findTargets } from "@/utils/target";
@@ -15,7 +16,7 @@ import Mod from "../../api/Module";
 export default class FakeLag extends Mod {
 	public name = "FakeLag";
 	public category = Category.UTILITY;
-	#targetsInRange = [];
+	#targetsInRange: Entity[] = [];
 	#enemyNearby = false;
 
 	#rng = this.createSliderSetting("Range", 12, 1, 18, 0.1);
@@ -51,21 +52,21 @@ export default class FakeLag extends Mod {
 	#flushPreconditions(packet: C2SPacket): boolean {
 		if (this.#flushOnAction) {
 			if (
-				packet instanceof PacketRefs.getRef("SPacketEntityAction") &&
+				packet instanceof c2s("SPacketEntityAction") &&
 				packet.id === Refs.player.id
 			) {
 				return true;
 			}
-			if (packet instanceof PacketRefs.getRef("SPacketUseEntity")) {
+			if (packet instanceof c2s("SPacketUseEntity")) {
 				return true;
 			}
-			if (packet instanceof PacketRefs.getRef("SPacketUseItem")) {
+			if (packet instanceof c2s("SPacketUseItem")) {
 				return true;
 			}
-			if (packet instanceof PacketRefs.getRef("SPacketPlayerAction")) {
+			if (packet instanceof c2s("SPacketPlayerAction")) {
 				return true;
 			}
-			if (packet instanceof PacketRefs.getRef("SPacketUpdateSign")) {
+			if (packet instanceof c2s("SPacketUpdateSign")) {
 				return true;
 			}
 		}

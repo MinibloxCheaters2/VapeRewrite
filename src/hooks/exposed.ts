@@ -9,6 +9,7 @@ import RotationManager from "@/utils/aiming/rotate";
 import Bus from "../Bus";
 import CancelableWrapper from "../event/api/CancelableWrapper";
 import type ClientEvents from "../event/api/Events";
+import ChatHook from "./ChatHook";
 import { MATCHED_DUMPS } from "./replacement";
 
 /** functions exposed by patches that modify the game script */
@@ -51,6 +52,10 @@ export default {
 
 	get dump() {
 		return MATCHED_DUMPS;
+	},
+
+	get ChatHook() {
+		return ChatHook;
 	},
 
 	get commandManager() {

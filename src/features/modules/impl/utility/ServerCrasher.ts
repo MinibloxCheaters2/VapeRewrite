@@ -1,5 +1,5 @@
 import { Subscribe } from "@/event/api/Bus";
-import PacketRefs from "@/utils/packetRefs";
+import { c2s } from "@/utils/packetRefs";
 import Refs from "@/utils/refs";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
@@ -24,7 +24,7 @@ export default class ServerCrasher extends Mod {
 			this.x += SERVER_CRASHER_CHUNK_XZ_INCREMENT;
 			this.z += SERVER_CRASHER_CHUNK_XZ_INCREMENT;
 			Refs.ClientSocket.sendPacket(
-				new (PacketRefs.getRef("SPacketRequestChunk"))({
+				new (c2s("SPacketRequestChunk"))({
 					x: this.x,
 					z: this.z,
 				}),

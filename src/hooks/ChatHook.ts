@@ -12,8 +12,7 @@ export type UUIDv4 = `${string}-${string}-4${string}-${string}-${string}`;
 
 export default new (class ChatHook {
 	origAddChat: Chat["addChat"];
-
-	constructor() {
+	init() {
 		const { chat } = Refs;
 		this.origAddChat = chat.addChat;
 		chat.addChat = new Proxy(chat.addChat, {

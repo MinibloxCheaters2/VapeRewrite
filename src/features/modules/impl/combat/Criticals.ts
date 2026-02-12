@@ -1,7 +1,7 @@
 import { Subscribe } from "@/event/api/Bus";
 import type CancelableWrapper from "@/event/api/CancelableWrapper";
 import type { C2SPacket } from "@/features/sdk/types/packetTypes";
-import PacketRefs from "@/utils/packetRefs";
+import { c2s } from "@/utils/packetRefs";
 import Refs from "@/utils/refs";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
@@ -15,7 +15,7 @@ export default class Criticals extends Mod {
 
 	static sendCritPackets() {
 		const { ClientSocket, player } = Refs;
-		const SPacketPlayerPosLook = PacketRefs.getRef("SPacketPlayerPosLook");
+		const SPacketPlayerPosLook = c2s("SPacketPlayerPosLook");
 		for (const offset of CRIT_OFFSETS) {
 			const pos = {
 				x: player.pos.x,
@@ -34,7 +34,7 @@ export default class Criticals extends Mod {
 	@Subscribe("sendPacket")
 	private onPacket({ data: pkt }: CancelableWrapper<C2SPacket>) {
 		if (
-			pkt instanceof PacketRefs.getRef("SPacketUseEntity") &&
+			pkt instanceof c2s("SPacketUseEntity") &&
 			pkt.action === 1 /*ATTACK*/
 		)
 			Criticals.sendCritPackets();

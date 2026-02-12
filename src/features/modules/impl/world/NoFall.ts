@@ -1,7 +1,7 @@
 import { Subscribe } from "@/event/api/Bus";
 import type CancelableWrapper from "@/event/api/CancelableWrapper";
 import type { C2SPacket } from "@/features/sdk/types/packetTypes";
-import PacketRefs from "@/utils/packetRefs";
+import { c2s } from "@/utils/packetRefs";
 import Refs from "@/utils/refs";
 import PacketFallDistance from "@/utils/ServerFallDistance";
 import Category from "../../api/Category";
@@ -23,7 +23,7 @@ export default class NoFall extends Mod {
 	@Subscribe("sendPacket")
 	onPacket({ data: packet }: CancelableWrapper<C2SPacket>) {
 		if (
-			packet instanceof PacketRefs.getRef("SPacketPlayerPosLook") &&
+			packet instanceof c2s("SPacketPlayerPosLook") &&
 			!packet.onGround &&
 			PacketFallDistance.currentFallDistance >=
 				Refs.player.getMaxFallHeight() - FALL_HEIGHT_BUFFER

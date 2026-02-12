@@ -3,7 +3,7 @@ import type { Entity } from "@/features/sdk/types/entity";
 import { MATCHED_DUMPS } from "@/hooks/replacement";
 import RotationManager, { RotationPlan } from "@/utils/aiming/rotate";
 import Rotation from "@/utils/aiming/rotation";
-import PacketRefs from "@/utils/packetRefs";
+import { c2s } from "@/utils/packetRefs";
 import deg2rad from "@/utils/radians";
 import Refs from "@/utils/refs";
 import { findTargets } from "@/utils/target";
@@ -51,9 +51,7 @@ export default class KillAura extends Mod {
 				const { ClientSocket, playerControllerMP } = Refs;
 				const d = MATCHED_DUMPS.syncItem as "syncItem";
 				playerControllerMP[d]();
-				ClientSocket.sendPacket(
-					new (PacketRefs.getRef("SPacketUseItem"))(),
-				);
+				ClientSocket.sendPacket(new (c2s("SPacketUseItem"))());
 				this.blocking = true;
 			}
 		} else this.blocking = false;
@@ -66,7 +64,7 @@ export default class KillAura extends Mod {
 			const d = MATCHED_DUMPS.syncItem as "syncItem";
 			playerControllerMP[d]();
 			ClientSocket.sendPacket(
-				new (PacketRefs.getRef("SPacketPlayerAction"))({
+				new (c2s("SPacketPlayerAction"))({
 					position: BlockPos.ORIGIN.toProto(),
 					facing: EnumFacing.DOWN.getIndex(),
 					action: 5, // PBAction,RELEASE_USE_ITEM
@@ -106,7 +104,7 @@ export default class KillAura extends Mod {
 		// we don't send the attack packet silently,
 		// so the Criticals module will automatically send the packets BEFORE this one sends!
 		ClientSocket.sendPacket(
-			new (PacketRefs.getRef("SPacketUseEntity"))({
+			new (c2s("SPacketUseEntity"))({
 				id: e.id,
 				action: 1,
 				hitVec: {

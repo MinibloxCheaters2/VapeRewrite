@@ -8,7 +8,7 @@ import { Priority, Subscribe } from "@/event/api/Bus";
 import type CancelableWrapper from "@/event/api/CancelableWrapper";
 import type { C2SPacket } from "@/features/sdk/types/packetTypes";
 import packetQueueManager from "../packetQueueManager";
-import PacketRefs from "../packetRefs";
+import { c2s } from "../packetRefs";
 import Refs from "../refs";
 import Rotation from "./rotation";
 
@@ -48,7 +48,7 @@ export default new (class RotationManager {
 	@Subscribe("sendPacket", Priority.READ_FINAL_STATE)
 	private onPacket({ data: packet }: CancelableWrapper<C2SPacket>) {
 		if (
-			packet instanceof PacketRefs.getRef("SPacketPlayerPosLook") &&
+			packet instanceof c2s("SPacketPlayerPosLook") &&
 			packet.yaw !== undefined &&
 			packet.pitch !== undefined
 		) {

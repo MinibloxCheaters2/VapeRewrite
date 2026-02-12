@@ -1,7 +1,7 @@
 import { Subscribe } from "@/event/api/Bus";
 import type CancelableWrapper from "@/event/api/CancelableWrapper";
 import type { C2SPacket } from "@/features/sdk/types/packetTypes";
-import PacketRefs from "@/utils/packetRefs";
+import { s2c } from "@/utils/packetRefs";
 import Refs from "@/utils/refs";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
@@ -16,7 +16,7 @@ export default class RejoinOnMute extends Mod {
 	@Subscribe("receivePacket")
 	private onRecvPacket({ data: packet }: CancelableWrapper<C2SPacket>) {
 		if (
-			packet instanceof PacketRefs.getRef("CPacketMessage") &&
+			packet instanceof s2c("CPacketMessage") &&
 			packet.color === undefined &&
 			packet.id === undefined &&
 			packet.text.startsWith(`${Refs.player.name}: `) &&

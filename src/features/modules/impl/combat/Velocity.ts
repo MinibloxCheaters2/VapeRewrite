@@ -1,7 +1,7 @@
 import { Subscribe } from "@/event/api/Bus";
 import type CancelableWrapper from "@/event/api/CancelableWrapper";
 import type { S2CPacket } from "@/features/sdk/types/packetTypes";
-import PacketRefs from "@/utils/packetRefs";
+import { s2c } from "@/utils/packetRefs";
 import Refs from "@/utils/refs";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
@@ -26,7 +26,7 @@ export default class Velocity extends Mod {
 	onPacket(e: CancelableWrapper<S2CPacket>) {
 		const { data: packet } = e;
 		if (
-			packet instanceof PacketRefs.getRef("CPacketEntityVelocity") &&
+			packet instanceof s2c("CPacketEntityVelocity") &&
 			packet.id === Refs.player.id
 		) {
 			if (this.horizontal === 0 && this.vertical === 0) e.cancel();
@@ -37,10 +37,7 @@ export default class Velocity extends Mod {
 			packet.motion.y *= pV;
 			packet.motion.z *= pH;
 		}
-		if (
-			packet instanceof PacketRefs.getRef("CPacketExplosion") &&
-			packet.playerPos
-		) {
+		if (packet instanceof s2c("CPacketExplosion") && packet.playerPos) {
 			if (this.horizontal === 0 && this.vertical === 0) e.cancel();
 
 			const pH = this.horizontal / 100;
