@@ -5,7 +5,7 @@ on: [push, workflow_dispatch]
 
 jobs:
   push-to-codeberg:
-    runs-on: ubuntu-latest
+    runs-on: codeberg-tiny-lazy
     steps:
       - name: Checkout repository (full history)
         uses: actions/checkout@v6
