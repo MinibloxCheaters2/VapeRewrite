@@ -5,8 +5,9 @@ I hope that, **until I finish this**, I will not be maintaining Vape OR Impact *
 
 ## Roadmap
 
-- [ ] ClickGUI (yes, this is really important, because it's one of the main reasons I want to use Impact over vape)
-- [ ] Basic modules (i.e. Velocity, KillAura, KeepSprint, Sprint, etc.)
+- [x] ClickGUI (yes, this is really important, because it's one of the main reasons I want to use Impact over vape)
+- [x] Basic modules (i.e. Velocity, KillAura, KeepSprint, Sprint, etc.)
+- [ ] whatever else is on the issue list thing
 
 ## Why a new base?
 
