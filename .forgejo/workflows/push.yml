@@ -20,8 +20,8 @@ jobs:
 
       - name: Push to GitHub (HTTPS)
         env:
-          USER: ${{ secrets.GITHUB_USER }}
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          USER: ${{ secrets.USER }}
+          TOKEN: ${{ secrets.TOKEN }}
         run: |
           REPO="github.com/MinibloxCheaters2/VapeRewrite.git"
           # Add remote with token (won't be printed because secrets are masked)
