@@ -5,7 +5,7 @@ export const EXPOSE_REPLACEMENTS: MultipleReplacements = [
 	[
 		"//# sourceMappingURL=index-",
 		{
-			replacement: `${EXPOSE_AS("run", "((fn, ...args) => fn(t => eval(t), ...args));")}
+			replacement: /*js*/ `${EXPOSE_AS("run", "((fn, ...args) => fn(t => eval(t), ...args));")}
 ${EXPOSED}.ChatHook.init();
 `,
 			shift: Shift.BEFORE,

@@ -33,7 +33,7 @@ export const STAFF_PROFILE_SET: SingleReplacement = [
 export const STAFF_PRIVATE_WORLD_BYPASS: SingleReplacement = [
 	/altDown\s*&&\s*getRankLevel\([\s\S]*?\)/g,
 	{
-		replacement: `altDown && ${STAFF_RANK}`,
+		replacement: /*js*/ `altDown && ${STAFF_RANK}`,
 		shift: Shift.REPLACE,
 	},
 ];

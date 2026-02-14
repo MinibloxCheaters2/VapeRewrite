@@ -10,7 +10,7 @@ export default [
 		"clientVersion:VERSION$1" +
 		"})",
 	{
-		replacement: `new SPacketLoginStart({
+		replacement: /*js*/ `new SPacketLoginStart({
   requestedUuid: undefined,
   session: (${EXPOSED}.moduleManager.antiBan.enabled
     ? await ${EXPOSED}.moduleManager.antiBan.getToken()

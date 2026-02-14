@@ -37,13 +37,6 @@ export default new (class RotationManager {
 	scheduleRotation(plan: RotationPlan) {
 		this.#currentPlan = plan;
 	}
-	@Subscribe("tick", Priority.READ_FINAL_STATE)
-	private onTick() {
-		if (this.#currentPlan?.resetIn <= 0) {
-			this.#currentPlan = undefined;
-		}
-		if (this.#currentPlan) this.#currentPlan.resetIn--;
-	}
 	// only handles packets that weren't canceled above (i.e. from packet queue manager)
 	@Subscribe("sendPacket", Priority.READ_FINAL_STATE)
 	private onPacket({ data: packet }: CancelableWrapper<C2SPacket>) {
@@ -53,6 +46,13 @@ export default new (class RotationManager {
 			packet.pitch !== undefined
 		) {
 			this.#trackedRot = Rotation.fromPacket(packet);
+			const plan = this.#currentPlan;
+			if (plan) {
+				if (plan.resetIn <= 0) {
+					this.#currentPlan = undefined;
+				}
+				plan.resetIn--;
+			}
 		}
 	}
 })();

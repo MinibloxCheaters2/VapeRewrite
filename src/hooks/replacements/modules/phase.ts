@@ -1,5 +1,5 @@
-import { DMP, MOD_MANAGER } from "../../../../utils/patchHelper";
-import { type MultipleReplacements, Shift } from "../../../replacementTypes";
+import { DMP, MOD_MANAGER } from "@/utils/patchHelper";
+import { type MultipleReplacements, Shift } from "../../replacementTypes";
 
 const PHASE = `${MOD_MANAGER}.phase`;
 const SCAFFOLD = `${MOD_MANAGER}.scaffold`;

@@ -4,7 +4,7 @@ import { EXPOSED } from "@/utils/patchHelper";
 export const TICK_LOOP_REPLACEMENT: SingleReplacement = [
 	"fixedUpdate(){game.world.",
 	{
-		replacement: `
+		replacement: /*js*/`
 fixedUpdate() {
 	${EXPOSED}.emitEvent("tick");
 	game.world.

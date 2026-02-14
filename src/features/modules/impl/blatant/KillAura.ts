@@ -22,10 +22,15 @@ function wrapAngleTo180_radians(angle: number): number {
 	return ang;
 }
 
+/** max offset you can be looking away from a player in degrees */
+const MAX_OFFSET_DEG = 30;
+/** max offset you can be looking away from a player in radians */
+const MAX_OFFSET_RAD = deg2rad(MAX_OFFSET_DEG);
+
 export default class KillAura extends Mod {
 	public name = "KillAura";
 	public category = Category.BLATANT;
-	private attackDelay = Date.now();
+	// private attackDelay = Date.now();
 	private blocking = false;
 
 	// Settings
@@ -90,7 +95,7 @@ export default class KillAura extends Mod {
 		);
 		if (
 			first &&
-			Math.abs(checkYaw) > deg2rad(30) &&
+			Math.abs(checkYaw) > MAX_OFFSET_RAD &&
 			Math.abs(checkYaw) < deg2rad(this.angle)
 		)
 			RotationManager.scheduleRotation(

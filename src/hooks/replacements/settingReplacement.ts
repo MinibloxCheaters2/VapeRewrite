@@ -8,7 +8,7 @@ export const SHOW_USERNAMES_WITH_HIDDEN_CHARS: SingleReplacement = [
 	},
 ];
 
-const optionsReplacement = `var _n;
+const optionsReplacement = /*js*/`var _n;
 let Options$1 = (_n = class {
 	static reset() {
 		this.resetVideo(), this.resetControls(), this.sound.reset()
@@ -55,7 +55,7 @@ export const YOU_HAVE_AURA_MODE: SingleReplacement = [
 export const ENABLE_CHUNK_CULLING_SETTING: SingleReplacement = [
 	/CHUNK_UNLOADS_PER_TICK\s*\)/g,
 	{
-		replacement: "Options$1.cullChunks.value?CHUNK_UNLOADS_PER_TICK:0)",
+		replacement: /*js*/"Options$1.cullChunks.value?CHUNK_UNLOADS_PER_TICK:0)",
 		shift: Shift.REPLACE,
 	},
 ];
@@ -63,7 +63,7 @@ export const ENABLE_CHUNK_CULLING_SETTING: SingleReplacement = [
 export const SHOW_CLOUDS_SETTING: SingleReplacement = [
 	/I\s*\(\s*this\s*,\s*["']generate["']\s*\)\s*;\s*I\s*\(\s*this\s*,\s*["']showClouds["']\s*\)\s*;/g,
 	{
-		replacement: `I(this, "generate",Options$1.clouds.value);
+		replacement: /*js*/`I(this, "generate",Options$1.clouds.value);
 		I(this, "showClouds",Options$1.clouds.value);`,
 		shift: Shift.REPLACE,
 	},
@@ -72,7 +72,7 @@ export const SHOW_CLOUDS_SETTING: SingleReplacement = [
 export const SHOW_CLOUDS_UPDATE_SETTING: SingleReplacement = [
 	/this\.generate\s*==\s*this\.showClouds/g,
 	{
-		replacement: `this.showClouds = Options$1.clouds.value; this.generate == this.showClouds`,
+		replacement: /*js*/`this.showClouds = Options$1.clouds.value; this.generate == this.showClouds`,
 		shift: Shift.REPLACE,
 	},
 ];
@@ -86,7 +86,7 @@ export const GENERATE_CLOUDS_REPLACEMENT: SingleReplacement = [
 	},
 ];
 
-const trailAuraReplacement = `class EffectsManager {
+const trailAuraReplacement = /*js*/`class EffectsManager {
 	constructor(u, h) {
 		I(this, "activeEffects");
 		this.world = u, this.player = h, this.activeEffects = []
@@ -114,7 +114,7 @@ export const TRAIL_AURA_REPLACEMENT: SingleReplacement = [
 	},
 ];
 
-const browsePlanetsModalReplacement = `BrowsePlanetsModal = m => {
+const browsePlanetsModalReplacement = /*js*/`BrowsePlanetsModal = m => {
   const {
     servers: u,
     profile: h,
@@ -272,7 +272,7 @@ const browsePlanetsModalReplacement = `BrowsePlanetsModal = m => {
   })
 },`;
 
-const planetModelEachPanelReplacement = `const PlanetItem = m => {
+const planetModelEachPanelReplacement = /*js*/`const PlanetItem = m => {
   const u = reactExports.useContext(GameContext),
         h = m.server.gameMode ?? "unknown";
 
@@ -321,7 +321,7 @@ const planetModelEachPanelReplacement = `const PlanetItem = m => {
     })
   })
 },`;
-const leaderboardDEVreplacement = `Leaderboards = () => {
+const leaderboardDEVreplacement = /*js*/`Leaderboards = () => {
 		const {
 			profile: m
 		} = reactExports.useContext(AccountContext),
@@ -517,7 +517,7 @@ export const DEVELOPER_LEADERBOARD: SingleReplacement = [
 		shift: Shift.REPLACE,
 	},
 ];
-const modeStatsReplacement = `modeStats = {
+const modeStatsReplacement = /*js*/`modeStats = {
 		kitpvp: [StatType.KILLS, StatType.DEATHS, StatType.KILLSTREAK],
 		skywars: [StatType.WINS, StatType.KILLS, StatType.DEATHS, StatType.LOSSES],
 		eggwars2: [StatType.WINS, StatType.KILLS, StatType.DEATHS, StatType.LOSSES, StatType.EGGS_BROKEN, StatType.FINAL_KILLS, StatType.FINAL_DEATHS],
