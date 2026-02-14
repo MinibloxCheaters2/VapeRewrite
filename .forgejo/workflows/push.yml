@@ -1,0 +1,31 @@
+# Syncs Codeberg -> GitHub
+name: Push changes to GitHub mirror
+
+on: [push, workflow_dispatch]
+
+jobs:
+  push-to-codeberg:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository (full history)
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Configure git user
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@noreply.codeberg.org"
+
+      - name: Push to GitHub (HTTPS)
+        env:
+          USER: ${{ secrets.GITHUB_USER }}
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          REPO="github.com/MinibloxCheaters2/VapeRewrite.git"
+          # Add remote with token (won't be printed because secrets are masked)
+          git remote add codeberg "https://${GITHUB_USER}:${GITHUB_TOKEN}@${REPO}"
+          # Push branches and tags. Remove --force if you do NOT want to overwrite non-fast-forward.
+          git push codeberg --prune --all
+          git push codeberg --tags

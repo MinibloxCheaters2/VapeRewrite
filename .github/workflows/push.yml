@@ -1,0 +1,31 @@
+# Syncs GitHub -> Codeberg
+name: Push changes to Codeberg
+
+on: [push, workflow_dispatch]
+
+jobs:
+  push-to-codeberg:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-actions[bot]'
+    steps:
+      - name: Checkout repository (full history)
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Configure git user
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+
+      - name: Push to Codeberg (HTTPS)
+        env:
+          CODEBERG_USER: ${{ secrets.CODEBERG_USERNAME }}
+          CODEBERG_TOKEN: ${{ secrets.CODEBERG_TOKEN }}
+        run: |
+          CODEBERG_REPO="codeberg.org/Miniblox/VapeRewrite.git"
+          git remote add codeberg "https://${CODEBERG_USER}:${CODEBERG_TOKEN}@${CODEBERG_REPO}"
+          # Push branches and tags. Remove --force if you do NOT want to overwrite non-fast-forward.
+          git push codeberg --prune --all
+          git push codeberg --tags
