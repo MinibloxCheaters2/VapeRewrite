@@ -4,6 +4,7 @@ import getMoveDirection from "@/utils/movement";
 import Refs from "@/utils/refs";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
+import Bus from "@/Bus";
 
 /**
  * Fly Module - Multiple fly modes for different bypass methods
@@ -22,7 +23,7 @@ export default class Fly extends Mod {
 	// Mode selection
 	private modeSetting = this.createDropdownSetting(
 		"Mode",
-		["Normal", "Infinite (Old AC)", "Jump", "Jetpack", "Glide"],
+		["Normal", "Infinite (Old AC)", "Gifbubble (Old AC)"],
 		"Normal",
 	);
 
@@ -33,6 +34,7 @@ export default class Fly extends Mod {
 		0.05,
 		2.0,
 		0.01,
+		() => this.modeSetting.value() !== "Gifbubble (Old AC)",
 	);
 	private verticalSetting = this.createSliderSetting(
 		"Vertical",
@@ -42,7 +44,7 @@ export default class Fly extends Mod {
 		0.01,
 		() => {
 			const mode = this.modeSetting.value();
-			return mode !== "Glide"; // Hide for Glide mode
+			return mode !== "Gifbubble (Old AC)"; // Hide for Glide mode
 		},
 	);
 
@@ -58,60 +60,6 @@ export default class Fly extends Mod {
 		"Less Glide",
 		true,
 		() => this.modeSetting.value() === "Infinite (Old AC)",
-	);
-
-	// Jump mode settings
-	private jumpHeightSetting = this.createSliderSetting(
-		"Jump Height",
-		0.42,
-		0.2,
-		0.6,
-		0.01,
-		() => this.modeSetting.value() === "Jump",
-	);
-	private jumpIntervalSetting = this.createSliderSetting(
-		"Jump Interval",
-		10,
-		5,
-		20,
-		1,
-		() => this.modeSetting.value() === "Jump",
-	);
-
-	// Jetpack mode settings
-	private jetpackBoostSetting = this.createSliderSetting(
-		"Jetpack Boost",
-		0.05,
-		0.01,
-		0.2,
-		0.01,
-		() => this.modeSetting.value() === "Jetpack",
-	);
-	private jetpackMaxSpeedSetting = this.createSliderSetting(
-		"Max Speed",
-		0.5,
-		0.3,
-		1.0,
-		0.05,
-		() => this.modeSetting.value() === "Jetpack",
-	);
-
-	// Glide mode settings
-	private glideSpeedSetting = this.createSliderSetting(
-		"Glide Speed",
-		0.03,
-		0.01,
-		0.1,
-		0.01,
-		() => this.modeSetting.value() === "Glide",
-	);
-	private glideHorizontalMultiplierSetting = this.createSliderSetting(
-		"Horizontal Multiplier",
-		1.5,
-		1.0,
-		3.0,
-		0.1,
-		() => this.modeSetting.value() === "Glide",
 	);
 
 	// State
@@ -156,6 +104,21 @@ export default class Fly extends Mod {
 		// Infinite mode smooth stop
 		if (mode === "Infinite (Old AC)" && this.lessVerticalMovement.value()) {
 			this.stopTicks = 4;
+			function handler() {
+				const { player } = Refs;
+				if (!player) {
+					Bus.off("tick", handler);
+				}
+
+				// Handle smooth stop for Infinite mode
+				if (this.stopTicks > 0) {
+					player.motion.y = 0.18;
+					this.stopTicks--;
+				} else {
+					Bus.off("tick", handler);
+				}
+			}
+			Bus.on("tick", handler);
 		}
 
 		this.ticks = 0;
@@ -164,16 +127,6 @@ export default class Fly extends Mod {
 
 	@Subscribe("tick")
 	public onTick() {
-		const { player } = Refs;
-		if (!player) return;
-
-		// Handle smooth stop for Infinite mode
-		if (this.stopTicks > 0) {
-			player.motion.y = 0.18;
-			this.stopTicks--;
-			return;
-		}
-
 		const mode = this.modeSetting.value();
 
 		switch (mode) {
@@ -183,14 +136,7 @@ export default class Fly extends Mod {
 			case "Infinite (Old AC)":
 				this.infiniteFly();
 				break;
-			case "Jump":
-				this.jumpFly();
-				break;
-			case "Jetpack":
-				this.jetpackFly();
-				break;
-			case "Glide":
-				this.glideFly();
+			case "Gifbubble (Old AC)":
 				break;
 		}
 	}
@@ -218,7 +164,7 @@ export default class Fly extends Mod {
 
 	/**
 	 * Infinite Fly - Old AC bypass
-	 * Uses special Y-axis control with glide to bypass old anticheat
+	 * Uses special Y-axis control to bypass the old AntiCheat
 	 */
 	private infiniteFly(): void {
 		const { player } = Refs;
@@ -249,96 +195,6 @@ export default class Fly extends Mod {
 		}
 	}
 
-	/**
-	 * Jump Fly - Bunny hop in air
-	 * Repeatedly jumps in air to bypass AC (can only go down)
-	 */
-	private jumpFly(): void {
-		const { player } = Refs;
-		this.ticks++;
-		this.jumpTimer++;
-
-		// Horizontal movement
-		const dir = getMoveDirection(this.speedSetting.value());
-		player.motion.x = dir.x;
-		player.motion.z = dir.z;
-
-		const goDown = isKeyDown("shift");
-
-		// Jump at configured interval to maintain height
-		if (this.jumpTimer >= this.jumpIntervalSetting.value()) {
-			this.jumpTimer = 0;
-			player.motion.y = this.jumpHeightSetting.value();
-		}
-
-		// Allow going down
-		if (goDown) {
-			player.motion.y = -this.verticalSetting.value();
-			this.jumpTimer = 0; // Reset jump timer when going down
-		}
-	}
-
-	/**
-	 * Jetpack Fly - Boost upward like a jetpack
-	 * Hold space to boost up, release to fall
-	 */
-	private jetpackFly(): void {
-		const { player } = Refs;
-
-		// Horizontal movement
-		const dir = getMoveDirection(this.speedSetting.value());
-		player.motion.x = dir.x;
-		player.motion.z = dir.z;
-
-		const goUp = isKeyDown("space");
-		const goDown = isKeyDown("shift");
-
-		const maxSpeed = this.jetpackMaxSpeedSetting.value();
-
-		if (goUp) {
-			// Boost upward
-			player.motion.y += this.jetpackBoostSetting.value();
-			// Cap max upward velocity
-			if (player.motion.y > maxSpeed) {
-				player.motion.y = maxSpeed;
-			}
-		} else if (goDown) {
-			// Fast descent
-			player.motion.y = -this.verticalSetting.value();
-		} else {
-			// Natural fall (gravity)
-			player.motion.y -= 0.08;
-			// Cap fall speed
-			if (player.motion.y < -maxSpeed) {
-				player.motion.y = -maxSpeed;
-			}
-		}
-	}
-
-	/**
-	 * Glide Fly - Slow fall with horizontal control
-	 * Glides down slowly while maintaining horizontal movement
-	 */
-	private glideFly(): void {
-		const { player } = Refs;
-
-		// Horizontal movement (configurable multiplier)
-		const multiplier = this.glideHorizontalMultiplierSetting.value();
-		const dir = getMoveDirection(this.speedSetting.value() * multiplier);
-		player.motion.x = dir.x;
-		player.motion.z = dir.z;
-
-		const goDown = isKeyDown("shift");
-
-		if (goDown) {
-			// Faster descent
-			player.motion.y = -0.3; // Fixed fast descent
-		} else {
-			// Slow glide down
-			player.motion.y = -this.glideSpeedSetting.value();
-		}
-	}
-
 	public getTag(): string {
 		const mode = this.modeSetting.value();
 		const speed = this.speedSetting.value().toFixed(2);
@@ -348,12 +204,6 @@ export default class Fly extends Mod {
 				return `Normal ${speed}`;
 			case "Infinite (Old AC)":
 				return `Infinite ${speed}`;
-			case "Jump":
-				return `Jump ${speed}`;
-			case "Jetpack":
-				return `Jetpack ${speed}`;
-			case "Glide":
-				return `Glide ${speed}`;
 			default:
 				return mode;
 		}
