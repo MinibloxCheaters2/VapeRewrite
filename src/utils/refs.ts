@@ -15,7 +15,7 @@ import type {
 	EntityLivingBase,
 } from "../features/sdk/types/entity";
 import type { Game } from "../features/sdk/types/game";
-import type { Items } from "../features/sdk/types/items";
+import type { ItemBlock, Items } from "../features/sdk/types/items";
 import type { Materials } from "../features/sdk/types/materials";
 import type { EnumFacing } from "../features/sdk/types/math/facing";
 import type { ClientWorld } from "../features/sdk/types/world";
@@ -149,8 +149,6 @@ class Refs {
 	}
 
 	static get player() {
-		// this.#player ??= runOnBridge(e => e<ClientEntityPlayer>("player"));
-		// return this.#player;
 		return Refs.#initOrR(Refs.#player, () =>
 			Interop.run((e) => e<ClientEntityPlayer>("player")),
 		);

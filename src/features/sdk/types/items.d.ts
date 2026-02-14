@@ -44,7 +44,7 @@ export interface Item {
 }
 
 // ItemBlock - Placeable blocks
-export interface ItemBlock extends Item {
+export class ItemBlock extends Item {
 	block: Block;
 	getBlock(): Block;
 	placeBlockAt(

@@ -15,12 +15,7 @@ dispatcher.register(
 					// the setter handles the setting logic.
 					m.bind = actual;
 					Refs.chat.addChat({
-						text:
-							"Bound " +
-							m.name +
-							" to " +
-							(actual || "none") +
-							"!",
+						text: `Bound ${m.name} to ${actual}!`,
 						color: "aqua",
 					});
 				},

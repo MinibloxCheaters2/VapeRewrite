@@ -5,6 +5,5 @@ import dispatcher from "../api/CommandDispatcher";
 dispatcher.register(
 	literal("clear").executes(async () => {
 		Refs.chat.clear();
-		return 1;
 	}),
 );
