@@ -2,6 +2,7 @@
 
 A new UserScript for Vape! This time, I'm not slacking.
 I hope that, **until I finish this**, I will not be maintaining Vape OR Impact **anymore** (other than VERY MINOR changes).
+Hi from GitHub lol (testing GitHub -> Codeberg syncing)
 
 ## Roadmap
 
