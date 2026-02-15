@@ -46,27 +46,34 @@ jobs:
   release:
     runs-on: codeberg-tiny-lazy
     permissions:
-      contents: write  # Needed for releases
+      contents: write
 
     steps:
       # 1️⃣ Checkout repository
       - uses: actions/checkout@v6
 
-      # 2️⃣ Setup Node.js 20 (required for yargs/meow)
+      # 2️⃣ Setup Node.js 20
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 20
 
-      # 3️⃣ Install dependencies
-      - name: npm install
+      # 3️⃣ Install dependencies (including devDependencies)
+      - name: Install dependencies
         run: npm install
 
-      # 4️⃣ Build project
-      - name: Build
-        run: npm run build
+      # 4️⃣ Install ts-node and typescript if not already
+      - name: Ensure ts-node for Rollup
+        run: |
+          npm install -D ts-node typescript
 
-      # 5️⃣ Determine version
+      # 5️⃣ Build project with Rollup TypeScript config
+      - name: Build
+        run: |
+          # Use ts-node to run the TypeScript Rollup config
+          npx ts-node --esm rollup.config.ts
+
+      # 6️⃣ Determine version
       - name: Determine version
         id: version
         run: |
@@ -77,7 +84,7 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "Version resolved: $VERSION"
 
-      # 6️⃣ Determine tag and title
+      # 7️⃣ Determine tag and title
       - name: Tag and title
         id: tag
         run: |
@@ -89,7 +96,7 @@ jobs:
           echo "TAG=$TAG" >> $GITHUB_ENV
           echo "TITLE=$TITLE" >> $GITHUB_ENV
 
-      # 7️⃣ Create release on Codeberg
+      # 8️⃣ Create Codeberg Release
       - name: Create Release
         id: create_release
         run: |
@@ -109,7 +116,7 @@ jobs:
           echo "UPLOAD_URL=$UPLOAD_URL" >> $GITHUB_ENV
           echo "Release created: $TAG"
 
-      # 8️⃣ Upload all userscripts from dist/
+      # 9️⃣ Upload all userscripts from dist/
       - name: Upload Userscripts
         run: |
           for FILE in dist/*.user.js; do
@@ -123,6 +130,6 @@ jobs:
             fi
           done
 
-      # 9️⃣ Finish
+      # 🔟 Finish
       - name: Done
         run: echo "Release $TAG uploaded successfully to Codeberg!"
