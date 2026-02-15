@@ -6,7 +6,7 @@ on: [push, workflow_dispatch]
 jobs:
   push-to-github:
     runs-on: codeberg-tiny-lazy
-    if: ${{ github.actor != 'babMirrorBot' }}
+    if: github.actor != 'babMirrorBot'
     steps:
       - name: Checkout repository (full history)
         uses: actions/checkout@v6
