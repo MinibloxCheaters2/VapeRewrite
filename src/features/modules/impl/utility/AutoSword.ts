@@ -10,10 +10,11 @@ export default class AutoSword extends Mod {
 
 	private rangeSetting = this.createSliderSetting("Range", 10, 3, 20, 0.5);
 	private swapBackSetting = this.createToggleSetting("Swap Back", true);
-	private prioritySetting = this.createDropdownSetting("Priority", [
-		"Damage",
-		"Durability",
-	], "Damage");
+	private prioritySetting = this.createDropdownSetting(
+	"Priority",
+	["Damage", "Durability"],
+	"Damage",
+);
 
 	private previousSlot: number | null = null;
 	private lastSlotSwitch = 0;
