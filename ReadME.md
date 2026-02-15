@@ -3,6 +3,7 @@
 A new UserScript for Vape! This time, I'm not slacking.
 I hope that, **until I finish this**, I will not be maintaining Vape OR Impact **anymore** (other than VERY MINOR changes).
 
+
 ## Roadmap
 
 - [x] ClickGUI (yes, this is really important, because it's one of the main reasons I want to use Impact over vape)
