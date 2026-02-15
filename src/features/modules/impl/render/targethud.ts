@@ -14,9 +14,17 @@ export default class TargetHUD extends Mod {
 		"Top Left",
 		"Top Right",
 	]);
-	private showArmorSetting = this.createToggleSetting("Show Armor", true);
-	private showDistanceSetting = this.createToggleSetting("Show Distance", true);
-	private scaleSetting = this.createSliderSetting("Scale", 1.0, 0.5, 2.0, 0.1);
+	private showDistanceSetting = this.createToggleSetting(
+	"Show Distance",
+	true,
+);
+private scaleSetting = this.createSliderSetting(
+	"Scale",
+	1.0,
+	0.5,
+	2.0,
+	0.1,
+);
 
 	private currentTarget: any = null;
 
