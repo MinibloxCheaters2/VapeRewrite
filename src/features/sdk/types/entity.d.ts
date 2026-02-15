@@ -9,7 +9,6 @@ import {
 	AttributeMap,
 	CombatTracker,
 	CommandBlockLogic,
-	Container,
 	ContainerPlayer,
 	DataWatcher,
 	EffectsManager,
@@ -18,7 +17,6 @@ import {
 	GameProfile,
 	Inventory,
 	InventoryEnderChest,
-	InventoryPlayer,
 	ItemStack,
 	PotionEffect,
 	Profile,
@@ -31,6 +29,8 @@ import { AxisAlignedBB } from "./aliases";
 import { EnumFacing } from "./math/facing";
 import { DamageSource } from "./damageSource";
 import { Block, BlockChest } from "./blocks";
+import { InventoryPlayer } from "./inventory";
+import { Container } from "./container";
 
 declare enum Perspective {
 	FIRST_PERSON,

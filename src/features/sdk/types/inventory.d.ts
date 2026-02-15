@@ -35,3 +35,18 @@ export declare class InventoryBasic {
 	getFieldCount(): number;
 	clear(): void;
 }
+
+export class InventoryPlayer extends InventoryBasic {
+	currentItem: number;
+	main: (ItemStack | null)[];
+	armor: (ItemStack | null)[];
+	getCurrentItem(): ItemStack | null;
+	hasItem?(item: Item): boolean;
+	addItemStackToInventory(stack: ItemStack): boolean;
+	canHarvestBlock(block: Block): boolean;
+	armorItemInSlot(slot: number): ItemStack | null;
+	getTotalArmorValue(): number;
+	damageArmor(damage: number): void;
+	dropAllItems(): void;
+	hasCustomName(): boolean;
+}
