@@ -7,8 +7,6 @@ import {
 } from "./packet";
 import {
 	AttributeMap,
-	Block,
-	BlockChest,
 	CombatTracker,
 	CommandBlockLogic,
 	Container,
@@ -32,6 +30,7 @@ import { BlockPos } from "./blockpos";
 import { AxisAlignedBB } from "./aliases";
 import { EnumFacing } from "./math/facing";
 import { DamageSource } from "./damageSource";
+import { Block, BlockChest } from "./blocks";
 
 declare enum Perspective {
 	FIRST_PERSON,
@@ -210,7 +209,7 @@ declare class EntityPlayer extends EntityLivingBase {
 	dropItemForPlayer(h: unknown, p?: boolean): unknown;
 	dropItem(h: unknown, p: unknown, g: unknown, y?: boolean): unknown;
 	joinEntityItemWithWorld(e: Entity): void;
-	canHarvestBlock(h: unknown): boolean;
+	canHarvestBlock(h: Block): boolean;
 	getToolDigEfficiency(h: unknown): unknown;
 	addExhaustion(h: unknown): void;
 	getFoodStats(): FoodStats;

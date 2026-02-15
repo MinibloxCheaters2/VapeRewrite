@@ -15,21 +15,6 @@ export type BlockChest = unknown;
 
 export type PotionEffect = unknown;
 
-// Re-export from dedicated files
-export type { Block, Material, BlockState } from "./world";
-export type {
-	Item,
-	ItemStack,
-	ItemBlock,
-	ItemSword,
-	ItemBow,
-	ItemArmor,
-	ItemFood,
-	ItemTool,
-	ItemPickaxe,
-	ItemAppleGold,
-} from "./items";
-
 // Container types
 export interface Container {
 	windowId: number;

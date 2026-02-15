@@ -13,7 +13,7 @@ dispatcher.register(
 	literal("locate").then(
 		argument("player", new PlayerArgumentType()).executes(async (e) => {
 			const player = e.get<EntityPlayer>("player");
-			Refs.game.chat.addChat({
+			Refs.chat.addChat({
 				text: `${player.name} is at ${Math.round(player.pos.x)}, ${Math.round(
 					player.pos.y,
 				)}, ${Math.round(player.pos.z)}`,

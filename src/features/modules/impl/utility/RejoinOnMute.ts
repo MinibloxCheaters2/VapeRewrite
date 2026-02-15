@@ -22,7 +22,7 @@ export default class RejoinOnMute extends Mod {
 			packet.text.startsWith(`${Refs.player.name}: `) &&
 			packet.text.length < LIMIT
 		) {
-			Refs.game.chat.addChat({
+			Refs.chat.addChat({
 				text: "[RejoinOnMute] You have been muted by a game moderator, rejoining!",
 				color: "yellow",
 			});

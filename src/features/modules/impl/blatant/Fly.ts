@@ -48,13 +48,6 @@ export default class Fly extends Mod {
 		},
 	);
 
-	// Normal mode settings
-	private desyncSetting = this.createToggleSetting(
-		"Desync",
-		true,
-		() => this.modeSetting.value() === "Normal",
-	);
-
 	// Infinite mode settings
 	private lessVerticalMovement = this.createToggleSetting(
 		"Less Glide",
@@ -65,24 +58,21 @@ export default class Fly extends Mod {
 	// State
 	private ticks = 0;
 	private warned = false;
-	private jumpTimer = 0;
 	private stopTicks = 0;
 
 	protected onEnable(): void {
 		this.ticks = 0;
 		this.warned = false;
-		this.jumpTimer = 0;
-		this.stopTicks = 0;
 
 		const mode = this.modeSetting.value();
 
 		// Show mode-specific warnings
 		if (mode === "Infinite (Old AC)" && !this.warned) {
-			Refs.game.chat.addChat({
+			Refs.chat.addChat({
 				text: "Infinite Fly only works on servers using the old AC",
 				color: "yellow",
 			});
-			Refs.game.chat.addChat({
+			Refs.chat.addChat({
 				text: "(KitPvP, Skywars, Eggwars, Bridge Duels use new AC)",
 				color: "gray",
 			});
@@ -122,7 +112,6 @@ export default class Fly extends Mod {
 		}
 
 		this.ticks = 0;
-		this.jumpTimer = 0;
 	}
 
 	@Subscribe("tick")

@@ -78,7 +78,7 @@ export default class Spider extends Mod {
 		if (!player) return false;
 
 		const box = player.boundingBox;
-		const expandedBox = box.expand(this.wallDetectRange, 0, this.wallDetectRange);
+		const expandedBox = box.expandByVector(new Refs.Vec3(this.wallDetectRange, 0, this.wallDetectRange));
 
 		const { game } = Refs;
 		if (!game) return false;
@@ -97,7 +97,7 @@ export default class Spider extends Mod {
 		if (!nearWall) return;
 
 		const shouldClimb =
-			this.autoClimb || player.motionY < 0 || player.onGround;
+			this.autoClimb || player.motion.y < 0 || player.onGround;
 
 		if (shouldClimb) {
 			// Climb Climb Climb!!

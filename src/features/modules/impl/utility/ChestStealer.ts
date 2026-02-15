@@ -89,8 +89,7 @@ export default class ChestStealer extends Mod {
 	private isBlacklisted(itemName: string): boolean {
 		const name = itemName.toLowerCase();
 		return this.blacklist.some(
-			(item) =>
-				name.includes(item) || item.includes(name),
+			(item) => name.includes(item) || item.includes(name),
 		);
 	}
 
@@ -135,7 +134,7 @@ export default class ChestStealer extends Mod {
 			this.stolenItems = 0;
 
 			if (this.notify) {
-				Refs.game.chat.addChat({
+				Refs.chat.addChat({
 					text: "[ChestStealer] Opened chest",
 					color: "green",
 				});
@@ -145,7 +144,7 @@ export default class ChestStealer extends Mod {
 		if (packet instanceof s2c("CPacketCloseWindow")) {
 			if (this.currentWindowId === packet.windowId) {
 				if (this.notify && this.stolenItems > 0) {
-					Refs.game.chat.addChat({
+					Refs.chat.addChat({
 						text: `[ChestStealer] Stole ${this.stolenItems} items`,
 						color: "yellow",
 					});
@@ -157,7 +156,7 @@ export default class ChestStealer extends Mod {
 
 	@Subscribe("tick")
 	public onTick() {
-		const { playerController } = Refs;
+		const { playerController, player } = Refs;
 		if (!playerController || this.currentWindowId === null) {
 			return;
 		}
@@ -168,7 +167,7 @@ export default class ChestStealer extends Mod {
 			return;
 		}
 
-		const container = playerController.openContainer;
+		const container = player.openContainer;
 		if (!container) {
 			this.currentWindowId = null;
 			return;

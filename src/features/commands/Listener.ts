@@ -36,7 +36,7 @@ export default new (class CommandListener {
 			const removedPrefix = packet.text.slice(COMMAND_PREFIX.length);
 			const r = await dispatcher.parse(removedPrefix, null);
 			if (r.getErrors().size > 0) {
-				Refs.game.chat.addChat({
+				Refs.chat.addChat({
 					text: `ERROR WHEN PARSING "${removedPrefix}": ${Array.from(r.getErrors().values()).join()}`,
 				});
 				return;
@@ -44,7 +44,7 @@ export default new (class CommandListener {
 			try {
 				await dispatcher.execute(r, null);
 			} catch (e) {
-				Refs.game.chat.addChat({
+				Refs.chat.addChat({
 					text: `ERROR WHEN EXECUTING "${removedPrefix}": ${e} (this may exclude some useful information, check developer console for more info)`,
 				});
 				logger.error(
@@ -69,7 +69,7 @@ export default new (class CommandListener {
 					? `${COMMAND_PREFIX}${applied}`
 					: applied;
 			});
-			Refs.game.chat.autoCompleteReceived(
+			Refs.chat.autoCompleteReceived(
 				new (s2c("CPacketTabComplete"))({
 					matches: applied,
 				}),

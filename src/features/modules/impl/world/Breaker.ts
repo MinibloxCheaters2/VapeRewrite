@@ -24,10 +24,7 @@ export default class Breaker extends Mod {
 
 	private isDragonEgg(block: any): boolean {
 		const name = block.name?.toLowerCase() || "";
-		return (
-			name.includes("dragon") &&
-			name.includes("egg")
-		);
+		return name.includes("dragon") && name.includes("egg");
 	}
 
 	private getNearbyBlocks() {
@@ -78,7 +75,7 @@ export default class Breaker extends Mod {
 		);
 
 		if (this.notify) {
-			Refs.game.chat.addChat({
+			Refs.chat.addChat({
 				text: "[Breaker] Egg broken!",
 				color: "green",
 			});
