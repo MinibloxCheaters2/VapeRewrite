@@ -44,7 +44,7 @@ on:
 
 jobs:
   release:
-    runs-on: ubuntu-latest
+    runs-on: codeberg-tiny-lazy
     permissions:
       contents: write  # Needed for releases
 
