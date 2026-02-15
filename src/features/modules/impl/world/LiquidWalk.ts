@@ -8,7 +8,13 @@ export default class LiquidWalk extends Mod {
 	public category = Category.WORLD;
 
 	// Settings
-	private speedSetting = this.createSliderSetting("Speed", 1.0, 0.5, 2.0, 0.1);
+	private speedSetting = this.createSliderSetting(
+		"Speed",
+		1.0,
+		0.5,
+		2.0,
+		0.1,
+	);
 	private bounceSetting = this.createToggleSetting("Bounce", true);
 	private bounceHeightSetting = this.createSliderSetting(
 		"Bounce Height",
@@ -83,7 +89,7 @@ export default class LiquidWalk extends Mod {
 				player.motion.y = this.bounceHeight;
 			}
 		}
-    
+
 		if (belowLiquid || atLiquid) {
 			player.motion.x *= this.speed;
 			player.motion.z *= this.speed;

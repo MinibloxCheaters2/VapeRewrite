@@ -14,14 +14,11 @@ class Slot {
 	 * @param _xDisplayPos unused parameter left over from MCP code.
 	 * @param _yDisplayPos unused parameter left over from MCP code.
 	 */
-	constructor(inventory, index, _xDisplayPos, _yDisplayPos) {
-		this.inventory = inventory;
-		this.slotIndex = index;
-	}
-    /**
-     * if p2 has more items than p1, onCrafting(item,countIncrease) is called
-     */
-    onSlotChange(p1: ItemStack | null, p2: ItemStack | null): void;
+	constructor(inventory, index, _xDisplayPos, _yDisplayPos);
+	/**
+	 * if p2 has more items than p1, onCrafting(item,countIncrease) is called
+	 */
+	onSlotChange(p1: ItemStack | null, p2: ItemStack | null): void;
 	onCrafting(stack: ItemStack, amount: number): void;
 	onCrafting(stack: ItemStack): void;
 	onPickupFromSlot(plr: EntityPlayer, stack: ItemStack): void;

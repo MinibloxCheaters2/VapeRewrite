@@ -78,7 +78,9 @@ export default class Spider extends Mod {
 		if (!player) return false;
 
 		const box = player.boundingBox;
-		const expandedBox = box.expandByVector(new Refs.Vec3(this.wallDetectRange, 0, this.wallDetectRange));
+		const expandedBox = box.expandByVector(
+			new Refs.Vec3(this.wallDetectRange, 0, this.wallDetectRange),
+		);
 
 		const { game } = Refs;
 		if (!game) return false;

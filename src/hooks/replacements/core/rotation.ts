@@ -7,35 +7,35 @@ export const ROTATION_REPLACEMENTS: MultipleReplacements = [
 	[
 		"this.yaw-this.",
 		{
-			replacement: /*js*/`(${ACTIVE_YAW} ?? this.yaw) - this.`,
+			replacement: /*js*/ `(${ACTIVE_YAW} ?? this.yaw) - this.`,
 			shift: Shift.REPLACE,
 		},
 	],
 	[
 		"x.yaw=player.yaw",
 		{
-			replacement: /*js*/`x.yaw = ${ACTIVE_YAW} ?? this.yaw`,
+			replacement: /*js*/ `x.yaw = ${ACTIVE_YAW} ?? this.yaw`,
 			shift: Shift.REPLACE,
 		},
 	],
 	[
 		`=this.yaw,this.lastReportedPitch=`,
 		{
-			replacement: /*js*/`=(${ACTIVE_YAW} ?? this.yaw),this.lastReportedPitch=`,
+			replacement: /*js*/ `=(${ACTIVE_YAW} ?? this.yaw),this.lastReportedPitch=`,
 			shift: Shift.REPLACE,
 		},
 	],
 	[
 		`this.neck.rotation.y=controls.yaw`,
 		{
-			replacement: /*js*/`this.neck.rotation.y=(${ACTIVE_YAW} ?? this.yaw)`,
+			replacement: /*js*/ `this.neck.rotation.y=(${ACTIVE_YAW} ?? this.yaw)`,
 			shift: Shift.REPLACE,
 		},
 	],
 	[
 		"yaw:this.yaw",
 		{
-			replacement: /*js*/`yaw:(${ACTIVE_YAW} ?? this.yaw)`,
+			replacement: /*js*/ `yaw:(${ACTIVE_YAW} ?? this.yaw)`,
 			shift: Shift.REPLACE,
 		},
 	],

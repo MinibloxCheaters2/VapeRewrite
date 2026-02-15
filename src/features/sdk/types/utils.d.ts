@@ -21,39 +21,39 @@ export declare function craftItem(
 export type ItemID = number;
 
 export interface Result {
-  count: number
-  id: ItemID
+	count: number;
+	id: ItemID;
 }
 
-export type Shape = ItemID[][]
-export type OptionalShape = (ItemID | undefined)[][]
+export type Shape = ItemID[][];
+export type OptionalShape = (ItemID | undefined)[][];
 
 export interface WithResult {
-  result: Result
+	result: Result;
 }
 
 export interface WithIngredients extends WithResult {
-  ingredients: ItemID[]
+	ingredients: ItemID[];
 }
 
 export interface WithShape extends WithResult {
-  inShape: Shape
+	inShape: Shape;
 }
 
 export interface WithOptionalShape extends WithResult {
-  inShape: OptionalShape
+	inShape: OptionalShape;
 }
 
 export interface WithOptionalShapeAndIngredients extends WithResult {
-  inShape?: Shape
-  ingredients?: ItemID[]
+	inShape?: Shape;
+	ingredients?: ItemID[];
 }
 
 export type Recipe =
-  | WithIngredients
-  | WithShape
-  | WithOptionalShape
-  | WithOptionalShapeAndIngredients
+	| WithIngredients
+	| WithShape
+	| WithOptionalShape
+	| WithOptionalShapeAndIngredients;
 
 // Recipe registry
 export declare type RecipeRegistry = Record<number, Recipe[]>;

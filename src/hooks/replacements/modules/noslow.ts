@@ -7,7 +7,7 @@ export const NOSLOW_REPLACEMENTS: MultipleReplacements = [
 	[
 		"updatePlayerMoveState(),this.isUsingItem()",
 		{
-			replacement: /*js*/`updatePlayerMoveState(),(this.isUsingItem() && !${NOSLOW}.enabled)`,
+			replacement: /*js*/ `updatePlayerMoveState(),(this.isUsingItem() && !${NOSLOW}.enabled)`,
 			shift: Shift.REPLACE,
 		},
 	],
@@ -15,7 +15,7 @@ export const NOSLOW_REPLACEMENTS: MultipleReplacements = [
 	[
 		"S&&!this.isUsingItem()",
 		{
-			replacement: /*js*/`S&&!(this.isUsingItem() && !${NOSLOW}.enabled)`,
+			replacement: /*js*/ `S&&!(this.isUsingItem() && !${NOSLOW}.enabled)`,
 			shift: Shift.REPLACE,
 		},
 	],

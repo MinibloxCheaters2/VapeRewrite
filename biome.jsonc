@@ -8,6 +8,9 @@
 		"useIgnoreFile": true
 	},
 	"files": {
-		"includes": ["src/**", "!src/features/sdk/types"]
+		"includes": ["src/**"]
+	},
+	"linter": {
+		"includes": ["!src/features/sdk/types/**"]
 	}
 }

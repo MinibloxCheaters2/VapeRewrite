@@ -5,7 +5,7 @@ export const CORE_REPLACEMENTS: MultipleReplacements = [
 	[
 		'document.addEventListener("DOMContentLoaded",startGame,!1);',
 		{
-			replacement: /*js*/`setTimeout(function() {
+			replacement: /*js*/ `setTimeout(function() {
         const DOMContentLoaded_event = document.createEvent("Event");
         DOMContentLoaded_event.initEvent("DOMContentLoaded", true, true);
         document.dispatchEvent(DOMContentLoaded_event);
@@ -17,7 +17,7 @@ export const CORE_REPLACEMENTS: MultipleReplacements = [
 	[
 		"static sendPacket(u){",
 		{
-			replacement: /*js*/`const cWrap = ${EXPOSED}.newCancelableWrapper(u);
+			replacement: /*js*/ `const cWrap = ${EXPOSED}.newCancelableWrapper(u);
 ${EXPOSED}.emitEvent("sendPacket", cWrap);
 if (cWrap.canceled)
 	return;

@@ -3,9 +3,9 @@ import { EXPOSED } from "@/utils/patchHelper";
 
 // ClientDecoder#add
 export const PACKET_RECV_HOOK: SingleReplacement = [
-	/*js*/`v.typeName==="ClientBoundCombined"?w.packets.forEach(k=>{this.emit("decoded",{type:PacketType$1.EVENT,nsp:"/",data:[k.packet.case,k.packet.value]})}):this.emit("decoded",{type:PacketType$1.EVENT,nsp:"/",data:[v.typeName,w]})`,
+	/*js*/ `v.typeName==="ClientBoundCombined"?w.packets.forEach(k=>{this.emit("decoded",{type:PacketType$1.EVENT,nsp:"/",data:[k.packet.case,k.packet.value]})}):this.emit("decoded",{type:PacketType$1.EVENT,nsp:"/",data:[v.typeName,w]})`,
 	{
-		replacement: /*js*/`
+		replacement: /*js*/ `
 if (v.typeName === "ClientBoundCombined") {
 	w.packets.forEach(k => {
 		const cWrap = ${EXPOSED}.newCancelableWrapper(k.packet.value);
