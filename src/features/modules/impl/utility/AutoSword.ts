@@ -14,7 +14,7 @@ export default class AutoSword extends Mod {
 	"Priority",
 	["Damage", "Durability"],
 	"Damage",
-);
+   );
 
 	private previousSlot: number | null = null;
 	private lastSlotSwitch = 0;
