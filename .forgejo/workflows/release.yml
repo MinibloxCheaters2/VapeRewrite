@@ -1,0 +1,122 @@
+name: RELEASE-USERSCRIPT
+
+on:
+  workflow_dispatch:
+    inputs:
+      releasetype:
+        description: "Select Release Type"
+        type: choice
+        required: true
+        options:
+          - prerelease
+          - release
+      versionOverride:
+        description: "Override version number?"
+        required: false
+        type: string
+      tagPrefix:
+        description: "Release Tag Prefix"
+        required: true
+        type: choice
+        options: 
+          - extreme-unstable
+          - unstable
+          - latest-commit
+          - bleeding-edge
+          - canary
+          - alpha
+          - nightly
+          - public-dev
+          - beta
+          - test-build
+          - release
+          - LTS
+          - deprecated
+          - obsolete
+      titleOverride:
+        description: "Override title?"
+        required: false
+        type: string
+      descriptionEdit:
+        description: "Enter Description"
+        required: true
+        type: string
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Needed for releases
+
+    steps:
+      # 1️⃣ Checkout
+      - uses: actions/checkout@v6
+
+      # 2️⃣ Install dependencies
+      - name: npm install
+        run: npm install
+
+      # 3️⃣ Build
+      - name: Build
+        run: npm run build
+
+      # 4️⃣ Determine version
+      - name: Determine version
+        id: version
+        run: |
+          VERSION=$(jq -r '.version' package.json)
+          if [ -n "${{ github.event.inputs.versionOverride }}" ]; then
+            VERSION="${{ github.event.inputs.versionOverride }}"
+          fi
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "Version resolved: $VERSION"
+
+      # 5️⃣ Determine tag and title
+      - name: Tag and title
+        id: tag
+        run: |
+          TAG="${{ github.event.inputs.tagPrefix }}-$VERSION"
+          TITLE="${{ github.event.inputs.titleOverride }}"
+          if [ -z "$TITLE" ]; then
+            TITLE="$TAG"
+          fi
+          echo "TAG=$TAG" >> $GITHUB_ENV
+          echo "TITLE=$TITLE" >> $GITHUB_ENV
+
+      # 6️⃣ Create Codeberg Release
+      - name: Create Release
+        id: create_release
+        run: |
+          RESPONSE=$(curl -s -X POST \
+            -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"tag_name\": \"$TAG\",
+              \"name\": \"$TITLE\",
+              \"body\": \"${{ github.event.inputs.descriptionEdit }}\",
+              \"draft\": false,
+              \"prerelease\": $([[ "${{ github.event.inputs.releasetype }}" == "prerelease" ]] && echo true || echo false)
+            }" \
+            "${{ github.api_url }}/repos/${{ github.repository }}/releases")
+
+          UPLOAD_URL=$(echo "$RESPONSE" | jq -r '.upload_url' | sed 's/{?name,label}//')
+          echo "UPLOAD_URL=$UPLOAD_URL" >> $GITHUB_ENV
+          echo "Release created: $TAG"
+
+      # 7️⃣ Upload all userscripts from dist/
+      - name: Upload Userscripts
+        run: |
+          for FILE in dist/*.user.js; do
+            if [ -f "$FILE" ]; then
+              echo "Uploading $FILE..."
+              curl -X POST \
+                -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" \
+                -H "Content-Type: application/javascript" \
+                --data-binary @"$FILE" \
+                "${UPLOAD_URL}?name=$(basename $FILE)"
+            fi
+          done
+
+      # 8️⃣ Finish
+      - name: Done
+        run: echo "Release $TAG uploaded successfully to Codeberg!"
