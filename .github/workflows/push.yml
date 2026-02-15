@@ -24,8 +24,6 @@ jobs:
           CODEBERG_USER: ${{ secrets.CODEBERG_USERNAME }}
           CODEBERG_TOKEN: ${{ secrets.CODEBERG_TOKEN }}
         run: |
-          CODEBERG_REPO="codeberg.org/Miniblox/VapeRewrite.git"
-          git remote add codeberg "https://${CODEBERG_USER}:${CODEBERG_TOKEN}@${CODEBERG_REPO}"
-          # Push branches and tags. Remove --force if you do NOT want to overwrite non-fast-forward.
-          git push codeberg --prune --all
-          git push codeberg --tags
+          URL="https://${CODEBERG_USER}:${CODEBERG_TOKEN}@codeberg.org/Miniblox/VapeRewrite.git"
+          git push "$URL" --prune --all
+          git push "$URL" --tags

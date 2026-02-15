@@ -23,9 +23,6 @@ jobs:
           USER: ${{ secrets.USER }}
           TOKEN: ${{ secrets.TOKEN }}
         run: |
-          REPO="github.com/MinibloxCheaters2/VapeRewrite.git"
-          # Add remote with token (won't be printed because secrets are masked)
-          git remote add codeberg "https://${USER}:${TOKEN}@${REPO}"
-          # Push branches and tags. Remove --force if you do NOT want to overwrite non-fast-forward.
-          git push codeberg --prune --all
-          git push codeberg --tags
+          URL="https://${USER}:${TOKEN}@github.com/MinibloxCheaters2/VapeRewrite.git"
+          git push "$URL" --prune --all
+          git push "$URL" --tags
