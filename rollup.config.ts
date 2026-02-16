@@ -76,6 +76,7 @@ export default defineConfig(
 				"@violentmonkey/dom": "VM",
 			},
 			indent: false,
+			sourcemap: "inline"
 		},
 	}
 );

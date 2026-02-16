@@ -1,4 +1,4 @@
-name: RELEASE-USERSCRIPT
+name: Release
 
 on:
   workflow_dispatch:
@@ -18,11 +18,8 @@ on:
         description: "Release Tag Prefix"
         required: true
         type: choice
-        options: 
-          - extreme-unstable
+        options:
           - unstable
-          - latest-commit
-          - bleeding-edge
           - canary
           - alpha
           - nightly
@@ -31,8 +28,6 @@ on:
           - test-build
           - release
           - LTS
-          - deprecated
-          - obsolete
       titleOverride:
         description: "Override title?"
         required: false
@@ -46,27 +41,20 @@ jobs:
   release:
     runs-on: codeberg-tiny-lazy
     permissions:
-      contents: write  # Needed for releases
+      contents: write
 
     steps:
-      # 1️⃣ Checkout repository
       - uses: actions/checkout@v6
 
-      # 2️⃣ Setup Node.js 20 (required for yargs/meow)
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
 
-      # 3️⃣ Install dependencies
-      - name: npm install
-        run: npm install
+      - name: Install
+        run: bun install
 
-      # 4️⃣ Build project
       - name: Build
-        run: npm run build
+        run: bun run build
 
-      # 5️⃣ Determine version
       - name: Determine version
         id: version
         run: |
@@ -77,7 +65,6 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "Version resolved: $VERSION"
 
-      # 6️⃣ Determine tag and title
       - name: Tag and title
         id: tag
         run: |
@@ -89,7 +76,6 @@ jobs:
           echo "TAG=$TAG" >> $GITHUB_ENV
           echo "TITLE=$TITLE" >> $GITHUB_ENV
 
-      # 7️⃣ Create release on Codeberg
       - name: Create Release
         id: create_release
         run: |
@@ -109,7 +95,6 @@ jobs:
           echo "UPLOAD_URL=$UPLOAD_URL" >> $GITHUB_ENV
           echo "Release created: $TAG"
 
-      # 8️⃣ Upload all userscripts from dist/
       - name: Upload Userscripts
         run: |
           for FILE in dist/*.user.js; do
@@ -123,6 +108,5 @@ jobs:
             fi
           done
 
-      # 9️⃣ Finish
       - name: Done
         run: echo "Release $TAG uploaded successfully to Codeberg!"
