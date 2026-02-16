@@ -45,6 +45,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ">=20"
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -53,7 +56,7 @@ jobs:
         run: bun install
 
       - name: Build
-        run: bun run build
+        run: bun run build:prod
 
       - name: Determine version
         id: version
