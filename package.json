@@ -62,13 +62,10 @@
 		"socket.io-client": "^4.8.3",
 		"typescript": "^5.9.3",
 		"unocss": "^66.6.0",
-		"@biomejs/biome": "^2.3.15"
+		"@biomejs/biome": "^2.4.0"
 	},
 	"lint-staged": {
-		"*.{ts,tsx}": [
-			"biome check --fix"
-		],
-		"*.css": [
+		"*.{ts,tsx,js,css}": [
 			"biome check --fix"
 		]
 	}
