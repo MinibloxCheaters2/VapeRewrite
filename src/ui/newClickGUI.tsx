@@ -47,7 +47,7 @@ interface CategoryWindowProps {
 }
 
 function CategoryWindow(props: CategoryWindowProps) {
-	const [expanded, setExpanded] = createSignal(true);
+	const [expanded, setExpanded] = createSignal(false);
 	const [position, setPosition] = createSignal(props.position);
 	const [dragging, setDragging] = createSignal(false);
 	const [dragOffset, setDragOffset] = createSignal({ x: 0, y: 0 });
