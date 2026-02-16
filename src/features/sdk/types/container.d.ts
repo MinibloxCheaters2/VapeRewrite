@@ -1,7 +1,7 @@
 import { InventoryBasic } from "./inventory";
 
 // Container types
-export interface Container {
+export class Container {
 	windowId: number;
 	inventorySlots: Slot[];
 	numRows: number;
@@ -9,7 +9,7 @@ export interface Container {
 	getSizeInventory(): number;
 }
 
-export interface ContainerChest extends Container {
+export class ContainerChest extends Container {
 	numRows: number;
 	getLowerChestInventory(): InventoryBasic;
 }

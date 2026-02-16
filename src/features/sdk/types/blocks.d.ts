@@ -5,7 +5,7 @@ import type { AxisAlignedBB } from "./aliases";
 import type { Box3 } from "three";
 import type { BlockState } from "./world";
 
-export interface Block {
+export class Block {
 	name?: string;
 	material: Material;
 	slipperiness: number;
@@ -26,7 +26,7 @@ export interface Block {
 	isPassable(world: World, pos: BlockPos): boolean;
 	getCollisionBoundingBox(world: World, pos: BlockPos): AxisAlignedBB | null;
 	isCollidable(): boolean;
-	canCollideCheck(state: any, hitIfLiquid: boolean): boolean;
+	canCollideCheck(state: BlockState, hitIfLiquid: boolean): boolean;
 	getMaterial(): Material;
 	getBlockHardness(world: World, pos: BlockPos): number;
 	setBlockUnbreakable(): this;
@@ -40,7 +40,7 @@ export interface Block {
 	setLightLevel(level: number): this;
 	setResistance(resistance: number): this;
 	setHardness(hardness: number): this;
-	setStepSound(sound: any): this;
+	setStepSound(sound: SoundType): this;
 	setBlockBounds(
 		minX: number,
 		minY: number,
@@ -51,7 +51,7 @@ export interface Block {
 	): void;
 }
 
-export interface BlockChest extends Block {
+export class BlockChest extends Block {
 	// Chest block
 	isTrapped?: boolean;
 }

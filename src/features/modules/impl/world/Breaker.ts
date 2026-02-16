@@ -1,4 +1,6 @@
 import { Subscribe } from "@/event/api/Bus";
+import type { BlockPos } from "@/features/sdk/types/blockpos";
+import type { Block /*, Blocks*/ } from "@/features/sdk/types/blocks";
 import { c2s } from "@/utils/packetRefs";
 import Refs from "@/utils/refs";
 import Category from "../../api/Category";
@@ -22,7 +24,8 @@ export default class Breaker extends Mod {
 		return this.notifySetting.value();
 	}
 
-	private isDragonEgg(block: any): boolean {
+	private isDragonEgg(block: Block): boolean {
+		// block == Blocks.dragon_egg;
 		const name = block.name?.toLowerCase() || "";
 		return name.includes("dragon") && name.includes("egg");
 	}
@@ -62,12 +65,12 @@ export default class Breaker extends Mod {
 		return blocks.sort((a, b) => a.distance - b.distance);
 	}
 
-	private breakBlock(pos: any): void {
+	private breakBlock(pos: BlockPos): void {
 		const { ClientSocket, EnumFacing } = Refs;
 		if (!ClientSocket || !EnumFacing) return;
 
 		ClientSocket.sendPacket(
-			new (c2s("SPacketBlockDig"))({
+			new (c2s("SPacketBreakBlock"))({
 				position: pos.toProto?.() || pos,
 				facing: EnumFacing.UP.getIndex(),
 				action: 2,

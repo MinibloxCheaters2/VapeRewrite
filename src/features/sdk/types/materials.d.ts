@@ -1,5 +1,5 @@
 // Material types for blocks
-export interface Material {
+export class Material {
 	readonly air: boolean;
 	isSolid(): boolean;
 	isLiquid(): boolean;

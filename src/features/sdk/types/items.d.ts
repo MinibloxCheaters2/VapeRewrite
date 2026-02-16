@@ -4,7 +4,7 @@ import { World } from "./world";
 import { EnumFacing } from "./math/facing";
 
 // Base Item class
-export interface Item {
+export class Item {
 	name: string;
 	maxStackSize: number;
 	maxDamage: number;
@@ -61,19 +61,19 @@ export class ItemBlock extends Item {
 }
 
 // ItemSword - Swords
-export interface ItemSword extends Item {
+export class ItemSword extends Item {
 	attackDamage: number;
 	weaponMaterial: string;
 	getAttackDamage(): number;
 }
 
 // ItemBow - Bows
-export interface ItemBow extends Item {
+export class ItemBow extends Item {
 	maxItemUseDuration: number;
 }
 
 // ItemArmor - Armor pieces
-export interface ItemArmor extends Item {
+export class ItemArmor extends Item {
 	armorType: number;
 	damageReduceAmount: number;
 	maxDamage: number;
@@ -87,7 +87,7 @@ export interface ItemArmor extends Item {
 }
 
 // ItemFood - Food items
-export interface ItemFood extends Item {
+export class ItemFood extends Item {
 	healAmount: number;
 	saturationModifier: number;
 	isWolfsFavoriteMeat: boolean;
@@ -98,7 +98,7 @@ export interface ItemFood extends Item {
 }
 
 // ItemTool - Tools (pickaxe, axe, shovel, hoe)
-export interface ItemTool extends Item {
+export class ItemTool extends Item {
 	efficiencyOnProperMaterial: number;
 	damageVsEntity: number;
 	toolMaterial: string;
@@ -108,17 +108,17 @@ export interface ItemTool extends Item {
 }
 
 // ItemPickaxe - Pickaxes
-export interface ItemPickaxe extends ItemTool {
+export class ItemPickaxe extends ItemTool {
 	// Inherits from ItemTool
 }
 
 // ItemAppleGold - Golden apples
-export interface ItemAppleGold extends ItemFood {
+export class ItemAppleGold extends ItemFood {
 	// Inherits from ItemFood
 }
 
 // ItemStack - Stack of items
-export interface ItemStack {
+export class ItemStack {
 	item: Item;
 	stackSize: number;
 	itemDamage: number;

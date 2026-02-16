@@ -9,8 +9,5 @@
 	},
 	"files": {
 		"includes": ["src/**"]
-	},
-	"linter": {
-		"includes": ["!src/features/sdk/types/**"]
 	}
 }

@@ -1,8 +1,8 @@
-import { EntityPlayer } from "./entity";
-import { InventoryBasic } from "./inventory";
-import { ItemStack } from "./items";
+import type { EntityPlayer } from "./entity";
+import type { InventoryBasic } from "./inventory";
+import type { ItemStack } from "./items";
 
-class Slot {
+export default class Slot {
 	slotIndex: number;
 	inventory: InventoryBasic;
 	slotNumber: number;

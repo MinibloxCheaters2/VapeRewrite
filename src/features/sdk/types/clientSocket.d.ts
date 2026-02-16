@@ -63,9 +63,13 @@ export declare interface EventMap {
 	CPacketServerMetadata: CPacketServerMetadata;
 	CPacketTimeUpdate: CPacketTimeUpdate;
 	ClientBoundCombined: ClientBoundCombined;
+	// biome-ignore lint/suspicious/noConfusingVoidType: used as a parameter + I'm bored
 	connect: void;
 }
 
+type thing<T> = T extends void ? () => void : (data: T) => void;
+
+// biome-ignore lint/complexity/noStaticOnlyClass: this is Miniblox's code, not mine.
 export declare class ClientSocket {
 	static socket: Socket;
 	static disconnectMessage?: string;
@@ -76,7 +80,7 @@ export declare class ClientSocket {
 	static setUrl(url: string, path?: string): void;
 	static connect(): void;
 	static disconnect(message: string): void;
-	static once<T>(name: T, callback: (data: EventMap[T]) => void): void;
-	static on<T>(name: T, callback: (data: EventMap[T]) => void): void;
+	static once<T>(name: T, callback: thing<EventMap[T]>): void;
+	static on<T>(name: T, callback: (data: thing<EventMap[T]>) => void): void;
 	static sendPacket(packet: C2SPacket): void;
 }

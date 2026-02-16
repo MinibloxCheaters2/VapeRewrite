@@ -15,7 +15,7 @@ import type {
 	EntityLivingBase,
 } from "../features/sdk/types/entity";
 import type { Game } from "../features/sdk/types/game";
-import type { ItemBlock, Items } from "../features/sdk/types/items";
+import type { ItemBlock, ItemSword, Items } from "../features/sdk/types/items";
 import type { Materials } from "../features/sdk/types/materials";
 import type { EnumFacing } from "../features/sdk/types/math/facing";
 import type { ClientWorld } from "../features/sdk/types/world";
@@ -42,11 +42,18 @@ class Refs {
 	static #Materials: typeof Materials;
 	static #Items: typeof Items;
 	static #ItemBlock: typeof ItemBlock;
+	static #ItemSword: typeof ItemSword;
 	static #hud3D: HUD3D;
 
 	static #initOrR<T>(field: T, initializer: () => T) {
 		field ??= initializer();
 		return field;
+	}
+
+	static get ItemSword(): typeof ItemSword {
+		return Refs.#initOrR(Refs.#ItemSword, () =>
+			Interop.run((e) => e<typeof ItemSword>("ItemSword")),
+		);
 	}
 
 	static get Materials() {

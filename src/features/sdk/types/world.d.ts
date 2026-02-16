@@ -4,14 +4,14 @@ import type { Entity, EntityPlayer } from "./entity";
 import type { EnumDifficulty } from "./enums";
 import type { CPacketLeaderboard } from "./packets";
 
-export interface Material {
+export class Material {
 	readonly air: boolean;
 	isSolid(): boolean;
 	isLiquid(): boolean;
 	blocksMovement(): boolean;
 }
 
-export interface BlockState {
+export class BlockState {
 	getBlock(): Block;
 	getMaterial(): Material;
 }

@@ -1,5 +1,6 @@
-import { Entity } from "./entity";
+import type { Entity } from "./entity";
 
+// biome-ignore lint/complexity/noStaticOnlyClass: Miniblox's code, can't fix ts.
 export declare class Potions {
 	static moveSpeed: Potion;
 	static moveSlowdown: Potion;

@@ -60,7 +60,6 @@ export default class AntiBan extends Mod {
 		return await r.json();
 	}
 
-	// TODO(AntiBan): implement account gen functionality
 	public async getToken(): Promise<string> {
 		if (
 			this.genEnabled &&

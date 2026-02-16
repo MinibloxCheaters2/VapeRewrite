@@ -5,6 +5,7 @@ import { Chat } from "./chat.d.ts";
 import { PlayerController } from "./controller.js";
 import { ServerInfo } from "./serverInfo.js";
 import type { GameScene } from "./gameScene.js";
+import { Vector3 } from "three";
 
 export enum ConnectionState {
 	IDK = 0,
@@ -18,14 +19,14 @@ export enum ConnectionState {
 
 export interface GameInfo {
 	selectedSlot: number;
-	showSignEditor: any;
+	showSignEditor: Vector3 | null;
 	showDeathScreen?: boolean;
 }
 
 export declare class ResourceMonitor {
 	instantFPS: number;
 	filteredFPS: number;
-	/** note: this is always  */
+	/** note: this is always 0 */
 	instantPing: number;
 	filteredPing: number;
 	static fpsGraphUpdate: unknown | null;

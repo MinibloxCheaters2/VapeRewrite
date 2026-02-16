@@ -5,6 +5,7 @@ import KillAura from "../impl/blatant/KillAura.js";
 import NoSlow from "../impl/blatant/NoSlow.js";
 import Phase from "../impl/blatant/Phase.js";
 import Scaffold from "../impl/blatant/Scaffold.js";
+import Spider from "../impl/blatant/Spider.js";
 import TargetStrafe from "../impl/blatant/TargetStrafe.js";
 import Criticals from "../impl/combat/Criticals.js";
 import Velocity from "../impl/combat/Velocity.js";
@@ -12,6 +13,7 @@ import WTap from "../impl/combat/WTap.js";
 import HudManagerModule from "../impl/render/HudManager.js";
 import AntiBan from "../impl/utility/AntiBan.js";
 import AutoRespawn from "../impl/utility/AutoRespawn.js";
+import AutoSword from "../impl/utility/AutoSword.js";
 import FilterBypass from "../impl/utility/FilterBypass.js";
 import RejoinOnMute from "../impl/utility/RejoinOnMute.js";
 import ServerCrasher from "../impl/utility/ServerCrasher.js";
@@ -65,6 +67,8 @@ export default class ModuleManager {
 		new Blink(),
 		new FakeLag(),
 		this.hudManager,
+		new AutoSword(),
+		new Spider(),
 	] as const;
 
 	public static readonly moduleNames: string[] = this.modules.map(

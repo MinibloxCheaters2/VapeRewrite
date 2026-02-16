@@ -1,6 +1,5 @@
-import type { BlockPos } from "./blockpos";
-import type { Vector3 } from "three";
-import type { ItemStack, InventoryPlayer } from "./undefined";
+import type { Box3, Vector3 } from "three";
+import type { InventoryPlayer } from "./undefined";
 import type World from "./world";
 import type { RayTraceResult } from "./controller";
 import { Potion } from "./potion";
@@ -86,9 +85,32 @@ export declare class Potions {
 	static readonly saturation: Potion;
 }
 
+export interface Level {
+	owner: RankLevel;
+	admin: RankLevel;
+	goat: RankLevel;
+	janitor: RankLevel;
+	mod: RankLevel;
+	helper: RankLevel;
+	youtube: RankLevel;
+	builder: RankLevel;
+	og: RankLevel;
+	immortal: RankLevel;
+	legend: RankLevel;
+	pro: RankLevel;
+	[rank: string]: RankLevel;
+}
+
+export interface RankLevel {
+	/** CSS Color string */
+	color: string;
+	permLevel: number;
+	rankLevel: number;
+}
+
 // Rank system
 export declare const RANK: {
-	LEVEL: Record<string, { permLevel: number; [key: string]: any }>;
+	LEVEL: Level;
 };
 
 // Ray tracing
@@ -103,19 +125,19 @@ export declare function rayTraceBlocks(
 
 // Block collision utilities
 export declare function calculateXOffset(
-	boxes: any[],
-	boundingBox: any,
+	self: Box3,
+	other: Box3,
 	offset: number,
 ): number;
 
 export declare function calculateYOffset(
-	boxes: any[],
-	boundingBox: any,
+	self: Box3,
+	other: Box3,
 	offset: number,
 ): number;
 
 export declare function calculateZOffset(
-	boxes: any[],
-	boundingBox: any,
+	self: Box3,
+	other: Box3,
 	offset: number,
 ): number;

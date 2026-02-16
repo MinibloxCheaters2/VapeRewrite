@@ -58,11 +58,9 @@ export default class Fly extends Mod {
 	// State
 	private ticks = 0;
 	private warned = false;
-	private stopTicks = 0;
 
 	protected onEnable(): void {
 		this.ticks = 0;
-		this.warned = false;
 
 		const mode = this.modeSetting.value();
 
@@ -93,7 +91,7 @@ export default class Fly extends Mod {
 
 		// Infinite mode smooth stop
 		if (mode === "Infinite (Old AC)" && this.lessVerticalMovement.value()) {
-			this.stopTicks = 4;
+			let stopTicks = 4;
 			function handler() {
 				const { player } = Refs;
 				if (!player) {
@@ -101,9 +99,9 @@ export default class Fly extends Mod {
 				}
 
 				// Handle smooth stop for Infinite mode
-				if (this.stopTicks > 0) {
+				if (stopTicks > 0) {
 					player.motion.y = 0.18;
-					this.stopTicks--;
+					stopTicks--;
 				} else {
 					Bus.off("tick", handler);
 				}

@@ -1,5 +1,6 @@
 import { Box3, Vector3, Vector3Like } from "three/src/Three.Core.js";
 import { Entity } from "./entity";
+import { EnumFacing } from "./math/facing";
 
 export declare class PBBlockPos {
 	x: number;
@@ -32,11 +33,11 @@ export declare class BlockPos {
 
 	// Utility methods for block iteration
 	static getAllInBoxMutable(min: BlockPos, max: BlockPos): BlockPos[];
-	up(n?: number): BlockPos;
-	down(n?: number): BlockPos;
-	north(n?: number): BlockPos;
-	south(n?: number): BlockPos;
-	west(n?: number): BlockPos;
-	east(n?: number): BlockPos;
-	offset(facing: any, n?: number): BlockPos;
+	up(n: number = 1): BlockPos;
+	down(n: number = 1): BlockPos;
+	north(n: number = 1): BlockPos;
+	south(n: number = 1): BlockPos;
+	west(n: number = 1): BlockPos;
+	east(n: number = 1): BlockPos;
+	offset(facing: EnumFacing, n: number = 1): BlockPos;
 }

@@ -18,7 +18,7 @@ export declare class GameMode {
 	isSpectator(): boolean;
 }
 
-export interface Abilities {
+export class Abilities {
 	disableDamage: boolean;
 	isFlying: boolean;
 	allowFlying: boolean;

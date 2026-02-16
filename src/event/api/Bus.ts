@@ -31,13 +31,46 @@ export default class EventBus<Events extends Record<string, unknown>> {
 
 	on<K extends keyof Events>(
 		event: K,
-		listener: (payload: Events[K]) => void,
+		listener: Events[K] extends void
+			? () => void
+			: (payload: Events[K]) => void,
 		priority: number = Priority.NORMAL,
 	): void {
 		this.listeners[event] ??= [];
 		this.listeners[event]?.push({ handler: listener, priority });
 		// higher priority first
 		this.listeners[event]?.sort((a, b) => b.priority - a.priority);
+	}
+
+	once<K extends keyof Events>(
+		event: K,
+		listener: Events[K] extends void
+			? () => void
+			: (payload: Events[K]) => void,
+		priority: number = Priority.NORMAL,
+	): void {
+		const handler = ((payload: Events[K]) => {
+			listener(payload);
+			this.off(event, handler);
+		}) as Events[K] extends void
+			? () => void
+			: (payload: Events[K]) => void;
+		this.on(event, handler, priority);
+	}
+	onceB<K extends keyof Events>(
+		event: K,
+		listener: Events[K] extends void
+			? () => boolean
+			: (payload: Events[K]) => boolean,
+		priority: number = Priority.NORMAL,
+	): void {
+		const handler = ((payload: Events[K]) => {
+			const r = listener(payload);
+			if (r) this.off(event, handler);
+		}) as Events[K] extends void
+			? () => void
+			: (payload: Events[K]) => void;
+		this.on(event, handler, priority);
 	}
 
 	off<K extends keyof Events>(
@@ -124,6 +157,39 @@ export function Subscribe<K extends keyof ClientEvents>(
 		mdc: ClassMethodDecoratorContext<
 			unknown,
 			A extends void ? () => void : (e: A) => void
+		> & { name: string },
+	) => {
+		mdc.addInitializer(function () {
+			const t = this as Idk<Record<string, unknown>>;
+			t.__subscriptions ??= [];
+			const subscriptions: Subscription<ClientEvents>[] =
+				t.__subscriptions;
+			subscriptions.push({ event, method: mdc.name, priority });
+		});
+	};
+}
+
+/**
+ * Subscribes to an event asynchronously.
+ * > [!IMPORTANT]
+ * > ⚠️⚠️⚠️
+ * > AFTER YOU AWAIT TO SOMETHING THAT DOESN'T IMMEDIATELY RESOLVE, YOUR CHANGES TO THE EVENT WILL NOT APPLY.
+ * > ALL EVENTS DO NOT WAIT FOR YOUR LISTENER TO FINISH.
+ * > I KNOW ProgSKID-CC WILL USE THIS AND WONDER WHY HIS STUFF DOESN'T WORK, BUT HE PROBABLY WILL STILL WONDER WHY ANYWAY.
+ * > ⚠️⚠️⚠️
+ * @param event The event to subscribe to
+ * @param priority How important the event is
+ * @returns the actual method decorator
+ */
+export function SubscribeAsync<K extends keyof ClientEvents>(
+	event: K,
+	priority: number = Priority.NORMAL,
+) {
+	return <A extends ClientEvents[K]>(
+		_target: unknown,
+		mdc: ClassMethodDecoratorContext<
+			unknown,
+			A extends void ? () => Promise<void> : (e: A) => Promise<void>
 		> & { name: string },
 	) => {
 		mdc.addInitializer(function () {

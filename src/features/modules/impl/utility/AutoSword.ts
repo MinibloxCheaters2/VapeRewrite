@@ -1,6 +1,10 @@
-import { Subscribe } from "@/event/api/Bus";
+import { SubscribeAsync } from "@/event/api/Bus";
+import type CancelableWrapper from "@/event/api/CancelableWrapper";
+import type { ItemStack } from "@/features/sdk/types/items";
+import type { C2SPacket } from "@/features/sdk/types/packetTypes";
+import { c2s } from "@/utils/packetRefs";
 import Refs from "@/utils/refs";
-import { findTargets } from "@/utils/target";
+import waitTicks from "@/utils/wait";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 
@@ -10,6 +14,13 @@ export default class AutoSword extends Mod {
 
 	private rangeSetting = this.createSliderSetting("Range", 10, 3, 20, 0.5);
 	private swapBackSetting = this.createToggleSetting("Swap Back", true);
+	private swapDelaySetting = this.createSliderSetting(
+		"Swap Back Delay",
+		2,
+		2,
+		20,
+		1,
+	);
 	private prioritySetting = this.createDropdownSetting(
 		"Priority",
 		["Damage", "Durability"],
@@ -27,12 +38,16 @@ export default class AutoSword extends Mod {
 		return this.swapBackSetting.value();
 	}
 
+	get swapDelay() {
+		return this.swapDelaySetting.value();
+	}
+
 	get priority() {
 		return this.prioritySetting.value();
 	}
 
-	private isSword(item: any): boolean {
-		if (!item || !item.getItem) return false;
+	private isSword(item: ItemStack): boolean {
+		if (!item) return false;
 
 		const itemName = item.getItem().name?.toLowerCase() || "";
 		return itemName.includes("sword");
@@ -52,10 +67,10 @@ export default class AutoSword extends Mod {
 		return 0;
 	}
 
-	private getDurability(item: any): number {
+	private getDurability(item: ItemStack): number {
 		if (!item) return 0;
-		const maxDura = item.getMaxDamage?.() || 1;
-		return maxDura - (item.getItemDamage?.() || 0);
+		const max = item.getMaxDamage() || 1;
+		return max - (item.getItemDamage() || 0);
 	}
 
 	private findBestSword(): number | null {
@@ -119,14 +134,18 @@ export default class AutoSword extends Mod {
 		this.previousSlot = null;
 	}
 
-	@Subscribe("tick")
-	public onTick() {
-		const targets = findTargets(this.range);
-
-		if (targets.length > 0) {
+	// we can use `SubscribeAsync` because we don't modify the event after `await`ing.
+	@SubscribeAsync("sendPacket")
+	private async onPacket({ data: packet }: CancelableWrapper<C2SPacket>) {
+		if (
+			packet instanceof c2s("SPacketUseEntity") &&
+			packet.action === 1 /*ATTACK*/
+		) {
 			this.switchToSword();
-		} else if (this.swapBack && this.previousSlot !== null) {
-			this.swapBackToPrevious();
+			if (this.swapBack) {
+				await waitTicks(this.swapDelay);
+				this.swapBackToPrevious();
+			}
 		}
 	}
 }
