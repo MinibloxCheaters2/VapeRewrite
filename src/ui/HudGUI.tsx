@@ -2,7 +2,6 @@ import { createSignal, For, onCleanup, onMount, Show } from "solid-js";
 import { render } from "solid-js/web";
 import type HudElement from "@/features/hud/api/HudElement";
 import HudManager from "@/features/hud/api/HudManager";
-import { getName } from "@/features/modules/api/Module";
 import ModuleManager from "@/features/modules/api/ModuleManager";
 import { dragHandleAttrName } from "@/utils/names";
 import {
@@ -12,6 +11,7 @@ import {
 	ToggleComponent,
 } from "./components";
 import shadowWrapper from "./shadowWrapper";
+import { getName, ModeLike } from "@/features/config/Settings";
 
 const COLORS = {
 	main: "rgb(26, 25, 26)",
@@ -454,7 +454,7 @@ function HudSettings(props: { hud: HudElement }) {
 													onChange={(val) => {
 														const option =
 															setting.options.find(
-																(o) =>
+																(o: ModeLike) =>
 																	getName(
 																		o,
 																	) === val,

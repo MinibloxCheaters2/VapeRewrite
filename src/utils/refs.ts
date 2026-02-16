@@ -19,6 +19,8 @@ import type { ItemBlock, ItemSword, Items } from "../features/sdk/types/items";
 import type { Materials } from "../features/sdk/types/materials";
 import type { EnumFacing } from "../features/sdk/types/math/facing";
 import type { ClientWorld } from "../features/sdk/types/world";
+import remapObj from "./remapProxy";
+import mappings from "./mappings";
 
 // biome-ignore lint/complexity/noStaticOnlyClass: job
 class Refs {
@@ -80,15 +82,17 @@ class Refs {
 
 	/** Literally just `game.controller` */
 	static get playerController() {
-		return Refs.#initOrR(
-			Refs.#playerController,
-			() => Refs.game.controller,
+		return Refs.#initOrR(Refs.#playerController, () =>
+			remapObj(Refs.game.controller, mappings.playerController),
 		);
 	}
 
 	static get playerControllerMP() {
 		return Refs.#initOrR(Refs.#playerControllerMP, () =>
-			Interop.run((e) => e<PlayerControllerMP>("playerControllerMP")),
+			remapObj(
+				Interop.run((e) => e<PlayerControllerMP>("playerControllerMP")),
+				mappings.playerControllerMP,
+			),
 		);
 	}
 
@@ -137,8 +141,6 @@ class Refs {
 	}
 
 	static get game() {
-		// this.#game ??= runOnBridge(e => e<Game>("game"));
-		// return this.#game;
 		return Refs.#initOrR(Refs.#game, () => Interop.run((e) => e("game")));
 	}
 
@@ -149,8 +151,11 @@ class Refs {
 	}
 
 	static get world() {
-		return Refs.#initOrR(Refs.#world, () => Refs.game.world);
+		return Refs.#initOrR(Refs.#world, () =>
+			remapObj(Refs.game.world, mappings.world),
+		);
 	}
+
 	static get chat() {
 		return Refs.#initOrR(Refs.#chat, () => Refs.game.chat);
 	}

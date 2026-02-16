@@ -21,4 +21,6 @@ export const CHECK_UNMATCHED_REPLACEMENTS = false;
 export const CHECK_UNMATCHED_DUMPS = false;
 /** Logs when we're applying replacements. */
 export const LOG_APPLYING_REPLACEMENTS = false;
+/** Logs when our remap proxy remaps a field from its normal name to its obfuscated name, it logs as a debug level. */
+export const LOG_REMAPPING = false;
 //#endregion

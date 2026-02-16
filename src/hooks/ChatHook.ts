@@ -19,7 +19,7 @@ export default new (class ChatHook {
 			apply(orig, ts, args: [ChatData]) {
 				const modifiedArgs = args;
 				modifiedArgs[0][idSymbol] = crypto.randomUUID() as UUIDv4;
-				orig.apply(ts, args);
+				return Reflect.apply(orig, ts, args);
 			},
 			get(orig) {
 				return orig;

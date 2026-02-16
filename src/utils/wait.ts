@@ -25,9 +25,10 @@ export default function waitTicks(ticks: number) {
  * @returns a promise that resolves after a single tick.
  */
 export function waitTick() {
-	const t = 0;
+	let t = 0;
 	return new Promise<number>((res, _) => {
 		Bus.once("tick", () => {
+			t++;
 			res(t);
 		});
 	});
