@@ -95,7 +95,7 @@ jobs:
 
             mkdir -p assets
             echo "Downloading release assets"
-            jq -r '.assets[].browser_download_url' ../release.json | while read url; do
+            jq -r '.assets[].browser_download_url' release.json | while read url; do
               file=$(basename "$url")
               curl -L -o "assets/$file" "$url"
             done
