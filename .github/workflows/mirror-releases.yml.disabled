@@ -1,10 +1,108 @@
-# Syncs GitHub -> Codeberg (releases)
-# TODO: finish this
+# Syncs Codeberg -> GitHub (releases)
+# TODO: fix ts since I just pasted it from the workflow and updated some stuff
 
-on: [release]
+name: Mirror release
+
+on:
+  release:
+    types: [published, edited, deleted]
+  delete:
 
 jobs:
   mirror:
     runs-on: ubuntu-slim
+
     steps:
-      - run:
+      - name: Install gh (if missing)
+        run: |
+          if ! command -v gh >/dev/null; then
+            sudo apt update
+            sudo apt install -y gh
+          fi
+
+      - name: Mirror
+        env:
+          GH_TOKEN: ${{ secrets.TOKEN }}
+        run: |
+          GH_REPO='MinibloxCheaters2/VapeRewrite'
+          set -e
+          shopt -s nullglob
+
+          ACTION="${{ github.event.action }}"
+          TAG="${{ github.event.release.tag_name }}"
+          NAME="${{ github.event.release.name }}"
+          BODY="${{ github.event.release.body }}"
+          PRERELEASE="${{ github.event.release.prerelease }}"
+
+          echo "Action: $ACTION"
+          echo "Tag: $TAG"
+
+          if [ "$ACTION" = "deleted" ]; then
+            echo "Deleting GitHub release..."
+
+            # Delete release (if exists)
+            if gh release view "$TAG" --repo "$GH_REPO" >/dev/null 2>&1; then
+              gh release delete "$TAG" \
+                --repo "$GH_REPO" \
+                --yes
+            fi
+
+            exit 0
+          fi
+
+          # ---- CREATE OR EDIT ----
+
+          if gh release view "$TAG" --repo "$GH_REPO" >/dev/null 2>&1; then
+            echo "Editing existing release..."
+            gh release edit "$TAG" \
+              --repo "$GH_REPO" \
+              --title "$NAME" \
+              --notes "$BODY" \
+              $( [ "$PRERELEASE" = "true" ] && echo "--prerelease" )
+              echo "Syncing assets..."
+
+              # Delete existing assets
+              gh release view "$TAG" --repo "$GH_REPO" --json assets \
+                --jq '.assets[].name' | while read asset; do
+                  gh release delete-asset "$TAG" "$asset" \
+                    --repo "$GH_REPO" \
+                    --yes
+                done
+
+              # Download Forgejo assets
+              API="${{ github.server_url }}/api/v1/repos/${{ github.repository }}"
+              curl -s "$API/releases/tags/$TAG" > release.json
+
+              mkdir -p assets
+              cd assets
+              jq -r '.assets[].browser_download_url' ../release.json | while read url; do
+                file=$(basename "$url")
+                curl -L -o "$file" "$url"
+              done
+              cd ..
+
+              # Upload fresh assets
+              gh release upload "$TAG" assets/* \
+                --repo "$GH_REPO" \
+                --clobber
+          else
+            echo "Creating release..."
+
+            # Download Forgejo assets
+            API="${{ github.server_url }}/api/v1/repos/${{ github.repository }}"
+            echo "Downloading release data"
+            curl -s "$API/releases/tags/$TAG" > release.json
+
+            mkdir -p assets
+            echo "Downloading release assets"
+            jq -r '.assets[].browser_download_url' release.json | while read url; do
+              file=$(basename "$url")
+              curl -L -o "assets/$file" "$url"
+            done
+            gh release create "$TAG" \
+              --repo "$GH_REPO" \
+              --title "$NAME" \
+              --notes "$BODY" \
+              $( [ "$PRERELEASE" = "true" ] && echo "--prerelease" ) \
+              assets/*
+          fi
