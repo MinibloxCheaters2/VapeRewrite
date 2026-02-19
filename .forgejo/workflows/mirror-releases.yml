@@ -21,9 +21,9 @@ jobs:
 
       - name: Authenticate gh
         env:
-          GH_TOKEN: ${{ secrets.TOKEN }}
+          TOKEN: ${{ secrets.TOKEN }}
         run: |
-          echo "$GH_TOKEN" | gh auth login --with-token
+          echo "$TOKEN" | gh auth login --with-token
 
       - name: Mirror
         run: |
