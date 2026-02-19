@@ -12,12 +12,12 @@ jobs:
     runs-on: codeberg-tiny-lazy
 
     steps:
-    - name: Install gh (if missing)
-      run: |
-        if ! command -v gh >/dev/null; then
-          sudo apt update
-          sudo apt install -y gh
-        fi
+      - name: Install gh (if missing)
+        run: |
+          if ! command -v gh >/dev/null; then
+            sudo apt update
+            sudo apt install -y gh
+          fi
 
       - name: Authenticate gh
         env:
