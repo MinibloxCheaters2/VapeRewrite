@@ -1,4 +1,5 @@
 # Syncs Codeberg -> GitHub (releases)
+# I catgpt'd this because I'm lazy
 
 name: Mirror release
 
@@ -25,6 +26,7 @@ jobs:
         run: |
           GH_REPO='MinibloxCheaters2/VapeRewrite'
           set -e
+          shopt -s nullglob
 
           ACTION="${{ forgejo.event.action }}"
           TAG="${{ forgejo.event.release.tag_name }}"
@@ -44,10 +46,6 @@ jobs:
                 --repo "$GH_REPO" \
                 --yes
             fi
-
-            git clone --depth 1 https://x-access-token:${GH_TOKEN}@github.com/$GH_REPO repo
-            cd repo
-            git push origin :refs/tags/$TAG || true
 
             exit 0
           fi
@@ -89,9 +87,22 @@ jobs:
                 --clobber
           else
             echo "Creating release..."
+
+            # Download Forgejo assets
+            API="${{ forgejo.server_url }}/api/v1/repos/${{ forgejo.repository }}"
+            echo "Downloading release data"
+            curl -s "$API/releases/tags/$TAG" > release.json
+
+            mkdir -p assets
+            echo "Downloading release assets"
+            jq -r '.assets[].browser_download_url' ../release.json | while read url; do
+              file=$(basename "$url")
+              curl -L -o "assets/$file" "$url"
+            done
             gh release create "$TAG" \
               --repo "$GH_REPO" \
               --title "$NAME" \
               --notes "$BODY" \
-              $( [ "$PRERELEASE" = "true" ] && echo "--prerelease" )
+              $( [ "$PRERELEASE" = "true" ] && echo "--prerelease" ) \
+              assets/*
           fi
