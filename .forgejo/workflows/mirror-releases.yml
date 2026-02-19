@@ -19,13 +19,9 @@ jobs:
             sudo apt install -y gh
           fi
 
-      - name: Authenticate gh
-        env:
-          TOKEN: ${{ secrets.TOKEN }}
-        run: |
-          echo "$TOKEN" | GITHUB_TOKEN='' gh auth login --with-token
-
       - name: Mirror
+        env:
+          GH_TOKEN=${{ secrets.TOKEN }}
         run: |
           GH_REPO='MinibloxCheaters2/VapeRewrite'
           set -e
