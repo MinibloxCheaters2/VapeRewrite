@@ -1,7 +1,6 @@
 # Syncs Codeberg -> GitHub (releases)
 
 name: Mirror release
-on: [release]
 
 on:
   release:
