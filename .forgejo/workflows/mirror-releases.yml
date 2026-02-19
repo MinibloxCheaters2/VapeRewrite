@@ -8,7 +8,8 @@ on:
 
 jobs:
   mirror:
-    runs-on: ubuntu-latest
+    # idk if `-lazy` matters
+    runs-on: codeberg-tiny-lazy
 
     steps:
       - uses: actions/setup-gh@v1
