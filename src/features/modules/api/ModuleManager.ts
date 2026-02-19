@@ -14,9 +14,11 @@ import HudManagerModule from "../impl/render/HudManager.js";
 import AntiBan from "../impl/utility/AntiBan.js";
 import AutoRespawn from "../impl/utility/AutoRespawn.js";
 import AutoSword from "../impl/utility/AutoSword.js";
+import ChestStealer from "../impl/utility/ChestStealer.js";
 import FilterBypass from "../impl/utility/FilterBypass.js";
 import RejoinOnMute from "../impl/utility/RejoinOnMute.js";
 import ServerCrasher from "../impl/utility/ServerCrasher.js";
+import Test from "../impl/utility/Test.js";
 import NoFall from "../impl/world/NoFall.js";
 import Timer from "../impl/world/Timer.js";
 import type Category from "./Category.js";
@@ -69,6 +71,8 @@ export default class ModuleManager {
 		this.hudManager,
 		new AutoSword(),
 		new Spider(),
+		new ChestStealer(),
+		new Test(),
 	] as const;
 
 	public static readonly moduleNames: string[] = this.modules.map(

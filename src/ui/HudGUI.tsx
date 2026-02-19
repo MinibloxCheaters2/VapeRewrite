@@ -1,5 +1,6 @@
 import { createSignal, For, onCleanup, onMount, Show } from "solid-js";
 import { render } from "solid-js/web";
+import { getName, type ModeLike } from "@/features/config/Settings";
 import type HudElement from "@/features/hud/api/HudElement";
 import HudManager from "@/features/hud/api/HudManager";
 import ModuleManager from "@/features/modules/api/ModuleManager";
@@ -11,7 +12,6 @@ import {
 	ToggleComponent,
 } from "./components";
 import shadowWrapper from "./shadowWrapper";
-import { getName, ModeLike } from "@/features/config/Settings";
 
 const COLORS = {
 	main: "rgb(26, 25, 26)",

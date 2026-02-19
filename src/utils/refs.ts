@@ -19,8 +19,8 @@ import type { ItemBlock, ItemSword, Items } from "../features/sdk/types/items";
 import type { Materials } from "../features/sdk/types/materials";
 import type { EnumFacing } from "../features/sdk/types/math/facing";
 import type { ClientWorld } from "../features/sdk/types/world";
-import remapObj from "./remapProxy";
 import mappings from "./mappings";
+import remapObj from "./remapProxy";
 
 // biome-ignore lint/complexity/noStaticOnlyClass: job
 class Refs {

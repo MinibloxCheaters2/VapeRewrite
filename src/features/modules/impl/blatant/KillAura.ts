@@ -72,7 +72,7 @@ export default class KillAura extends Mod {
 				new (c2s("SPacketPlayerAction"))({
 					position: BlockPos.ORIGIN.toProto(),
 					facing: EnumFacing.DOWN.getIndex(),
-					action: 5, // PBAction,RELEASE_USE_ITEM
+					action: 5, // PBAction.RELEASE_USE_ITEM
 				}),
 			);
 			this.blocking = false;

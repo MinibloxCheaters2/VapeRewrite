@@ -1,6 +1,6 @@
 import { createSignal, For, Show } from "solid-js";
-import getResourceURL from "@/utils/cachedResourceURL";
 import { getName, type ModeLike } from "@/features/config/Settings";
+import getResourceURL from "@/utils/cachedResourceURL";
 
 const COLORS = {
 	main: "rgb(26, 25, 26)",

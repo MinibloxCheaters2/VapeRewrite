@@ -1,5 +1,14 @@
 import { createSignal } from "solid-js";
-import type { ColorSettingValue, ColorSliderSetting, DropdownSetting, ModeLike, ModuleSetting, SliderSetting, TextBoxSetting, ToggleSetting } from "./Settings";
+import type {
+	ColorSettingValue,
+	ColorSliderSetting,
+	DropdownSetting,
+	ModeLike,
+	ModuleSetting,
+	SliderSetting,
+	TextBoxSetting,
+	ToggleSetting,
+} from "./Settings";
 
 export default class Configurable {
 	/** Module settings */

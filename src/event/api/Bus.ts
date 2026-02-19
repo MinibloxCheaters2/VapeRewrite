@@ -171,6 +171,8 @@ export function Subscribe<K extends keyof ClientEvents>(
 
 /**
  * Subscribes to an event asynchronously.
+ * This has a race condition where if a new event gets emitted while you're waiting,
+ * you'll start the new event instead of waiting for the previous one to finish.
  * > [!IMPORTANT]
  * > ⚠️⚠️⚠️
  * > AFTER YOU AWAIT TO SOMETHING THAT DOESN'T IMMEDIATELY RESOLVE, YOUR CHANGES TO THE EVENT WILL NOT APPLY.

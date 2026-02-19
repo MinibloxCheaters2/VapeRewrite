@@ -121,6 +121,8 @@ export default class AutoSword extends Mod {
 		}
 
 		player.inventory.currentItem = swordSlot;
+		// this should work if my remap proxy works
+		Refs.playerControllerMP.syncItem();
 		game.info.selectedSlot = swordSlot;
 		this.lastSlotSwitch = now;
 	}
@@ -131,6 +133,7 @@ export default class AutoSword extends Mod {
 
 		player.inventory.currentItem = this.previousSlot;
 		game.info.selectedSlot = this.previousSlot;
+		Refs.playerControllerMP.syncItem();
 		this.previousSlot = null;
 	}
 
