@@ -23,7 +23,7 @@ jobs:
         env:
           TOKEN: ${{ secrets.TOKEN }}
         run: |
-          echo "$TOKEN" | gh auth login --with-token
+          echo "$TOKEN" | GITHUB_TOKEN='' gh auth login --with-token
 
       - name: Mirror
         run: |
