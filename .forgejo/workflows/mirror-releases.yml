@@ -21,7 +21,7 @@ jobs:
 
       - name: Mirror
         env:
-          GH_TOKEN=${{ secrets.TOKEN }}
+          GH_TOKEN: ${{ secrets.TOKEN }}
         run: |
           GH_REPO='MinibloxCheaters2/VapeRewrite'
           set -e
