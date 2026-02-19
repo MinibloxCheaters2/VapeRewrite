@@ -1,4 +1,5 @@
-# Syncs Codeberg -> GitHub
+# Syncs Codeberg -> GitHub (git)
+
 name: Push changes to GitHub mirror
 
 on: [push, workflow_dispatch]

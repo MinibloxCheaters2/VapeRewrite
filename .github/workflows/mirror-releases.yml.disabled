@@ -1,0 +1,10 @@
+# Syncs GitHub -> Codeberg (releases)
+# TODO: finish this
+
+on: [release]
+
+jobs:
+  mirror:
+    runs-on: ubuntu-slim
+    steps:
+      - run:
