@@ -1,10 +1,10 @@
 import { createSignal } from "solid-js";
 import type {
+	AnySetting,
 	ColorSettingValue,
 	ColorSliderSetting,
 	DropdownSetting,
 	ModeLike,
-	AnySetting,
 	SliderSetting,
 	TextBoxSetting,
 	ToggleSetting,

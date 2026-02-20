@@ -1,4 +1,4 @@
-import { CPacketTabComplete } from "./packets";
+import type { CPacketTabComplete } from "./packets";
 
 export declare interface ChatData {
 	text?: string;
