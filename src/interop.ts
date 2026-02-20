@@ -10,93 +10,6 @@ export interface Store {
 		event: E,
 		...payload: ClientEvents[E] extends void ? [] : [ClientEvents[E]]
 	): void;
-	/** Saves this config to a config named {@link name} */
-	saveConfig(name: string): Promise<void>;
-	/** Loads a config named {@link switched}, or the current config's name if not specified. */
-	loadConfig(switched?: string): Promise<void>;
-	/** exports the currently loaded config to the clipboard */
-	exportConfig(): void;
-	/** imports a config from the clipboard and overwrites the current config data with it */
-	importConfig(): Promise<void>;
-	listConfigs(): string[];
-}
-
-export class ModuleConfig {
-	// TODO: module settings
-	constructor(public toggled: boolean /*, settings: Setting[]*/) {}
-}
-
-export class Config {
-	public constructor(
-		/** a map of module name -> module config */
-		public modules: Record<string, ModuleConfig>,
-	) {}
-
-	public serialize(): string {
-		return JSON.stringify(this.modules);
-	}
-
-	public static deserialize(_name: string, json: string): Config {
-		const data: Record</* module name*/ string, ModuleConfig> =
-			JSON.parse(json);
-		return new Config(data);
-	}
-}
-
-export class NamedConfig extends Config {
-	public constructor(
-		/** the name of the config */
-		public name: string,
-		/** a map of module name -> module config */
-		public modules: Record<string, ModuleConfig>,
-	) {
-		super(modules);
-	}
-
-	public static deserialize(name: string, json: string): NamedConfig {
-		const data: Record</* module name*/ string, ModuleConfig> =
-			JSON.parse(json);
-		return new NamedConfig(name, data);
-	}
-}
-
-const CONFIG_KEY_PREFIX = "vapeConfig";
-
-function configKey(n: string): string {
-	return `${CONFIG_KEY_PREFIX}${n}`;
-}
-
-function isConfigKey(n: string): boolean {
-	return n.startsWith(CONFIG_KEY_PREFIX);
-}
-
-let loadedConfig: NamedConfig;
-/** Saves this config to a config named {@link name} */
-async function saveConfig(name: string): Promise<void> {
-	GM_setValue(configKey(name), loadedConfig.serialize());
-}
-/** Loads a config named {@link name}, or the current config's name if not specified. */
-async function loadConfig(name: string = loadedConfig.name): Promise<void> {
-	const cfg = GM_getValue(configKey(name), loadedConfig.serialize());
-	loadedConfig = NamedConfig.deserialize(name, cfg);
-}
-/** exports the currently loaded config to the clipboard */
-function exportConfig(): void {
-	navigator.clipboard.writeText(loadedConfig.serialize());
-}
-/** imports a config from the clipboard and overwrites the current config data with it */
-async function importConfig(): Promise<void> {
-	const cfg = await navigator.clipboard.readText();
-	if (!cfg) return; // this should never be `undefined`..? but original vape does this, so...
-	GM_setValue(configKey(loadedConfig.name), cfg); // set
-	loadConfig(); // reload
-}
-
-function listConfigs(): string[] {
-	// TODO
-	return GM_listValues()
-		.filter(isConfigKey)
-		.map((a) => a.slice(CONFIG_KEY_PREFIX.length));
 }
 
 function emitEvent<E extends keyof ClientEvents>(
@@ -111,11 +24,6 @@ const StoreInterop = {
 	initStore() {
 		unsafeWindow[storeName] = {
 			exposed,
-			saveConfig,
-			loadConfig,
-			exportConfig,
-			importConfig,
-			listConfigs,
 			emitEvent,
 		} satisfies Store;
 	},

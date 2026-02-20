@@ -63,7 +63,7 @@ export interface ColorSliderSetting extends BaseSetting<ColorSettingValue> {
 	setColor: (h: number, s: number, v: number, o: number) => void;
 }
 
-export type ModuleSetting =
+export type AnySetting =
 	| ToggleSetting
 	| SliderSetting
 	| DropdownSetting<ModeLike>

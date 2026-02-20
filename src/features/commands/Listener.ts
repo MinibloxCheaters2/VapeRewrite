@@ -38,6 +38,7 @@ export default new (class CommandListener {
 			if (r.getErrors().size > 0) {
 				Refs.chat.addChat({
 					text: `ERROR WHEN PARSING "${removedPrefix}": ${Array.from(r.getErrors().values()).join()}`,
+					color: "red",
 				});
 				return;
 			}
@@ -46,6 +47,7 @@ export default new (class CommandListener {
 			} catch (e) {
 				Refs.chat.addChat({
 					text: `ERROR WHEN EXECUTING "${removedPrefix}": ${e} (this may exclude some useful information, check developer console for more info)`,
+					color: "red",
 				});
 				logger.error(
 					`ERROR WHEN EXECUTING COMMAND "${removedPrefix}":`,

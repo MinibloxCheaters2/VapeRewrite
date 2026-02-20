@@ -4,15 +4,15 @@ import type {
 	ColorSliderSetting,
 	DropdownSetting,
 	ModeLike,
-	ModuleSetting,
+	AnySetting,
 	SliderSetting,
 	TextBoxSetting,
 	ToggleSetting,
 } from "./Settings";
 
 export default class Configurable {
-	/** Module settings */
-	public settings: ModuleSetting[] = [];
+	/** Settings */
+	public settings: AnySetting[] = [];
 
 	// Helper methods to create settings
 	protected createToggleSetting(

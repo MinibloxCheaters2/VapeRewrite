@@ -1,5 +1,6 @@
 import { createSignal, For, Show } from "solid-js";
 import { render } from "solid-js/web";
+import { listConfigs, saveConfig } from "@/features/config/configs";
 import getResourceURL from "@/utils/cachedResourceURL";
 import { dragHandleAttrName } from "@/utils/names";
 import { guiVisible } from "./guiState";
@@ -30,6 +31,7 @@ function ProfilesPanel() {
 	const [dragOffset, setDragOffset] = createSignal({ x: 0, y: 0 });
 	const [profiles, setProfiles] = createSignal<Profile[]>([
 		{ name: "default", active: true },
+		...listConfigs().map((n) => ({ name: n, active: false })),
 	]);
 
 	let windowRef: HTMLDivElement | undefined;
@@ -72,6 +74,8 @@ function ProfilesPanel() {
 			prev.map((p) => ({ ...p, active: p.name === profileName })),
 		);
 	};
+
+	const [configName, setConfigName] = createSignal("");
 
 	return (
 		<Show when={isVisible()}>
@@ -228,59 +232,45 @@ function ProfilesPanel() {
 				</div>
 
 				{/* Add profile button */}
-				<div
+
+				<input
+					type="text"
+					value={configName()}
+					onChange={(e) => setConfigName(e.target.value)}
+				/>
+
+				<button
 					style={{
-						height: "40px",
-						"border-top": `1px solid ${COLORS.divider}`,
 						display: "flex",
 						"align-items": "center",
-						"justify-content": "center",
+						height: "40px",
+						padding: "0 12px",
+						"background-color": COLORS.main,
+						cursor: "pointer",
+						transition: "background-color 0.16s linear",
+					}}
+					type="submit"
+					on:click={() => saveConfig(configName())}
+					on:pointerenter={(e) => {
+						e.currentTarget.style.backgroundColor =
+							COLORS.mainLight;
+					}}
+					on:pointerleave={(e) => {
+						e.currentTarget.style.backgroundColor = COLORS.main;
 					}}
 				>
-					<button
+					<span
 						style={{
-							width: "calc(100% - 24px)",
-							height: "28px",
-							"background-color": COLORS.mainLight,
-							border: "none",
-							"border-radius": "4px",
-							cursor: "pointer",
-							display: "flex",
-							"align-items": "center",
-							"justify-content": "center",
-							gap: "6px",
-							transition: "background-color 0.16s linear",
-						}}
-						type="button"
-						on:pointerenter={(e) => {
-							e.currentTarget.style.backgroundColor =
-								"rgba(255, 255, 255, 0.1)";
-						}}
-						on:pointerleave={(e) => {
-							e.currentTarget.style.backgroundColor =
-								COLORS.mainLight;
+							color: COLORS.text,
+							"font-size": "14px",
+							flex: "1",
+							"font-family": "Arial, sans-serif",
+							"font-weight": "normal",
 						}}
 					>
-						<img
-							src={getResourceURL("add")}
-							alt="Add"
-							style={{
-								width: "12px",
-								height: "12px",
-								filter: "brightness(0.6)",
-							}}
-						/>
-						<span
-							style={{
-								color: COLORS.textDark,
-								"font-size": "13px",
-								"font-family": "Arial, sans-serif",
-							}}
-						>
-							New Profile
-						</span>
-					</button>
-				</div>
+						Create
+					</span>
+				</button>
 			</div>
 		</Show>
 	);
