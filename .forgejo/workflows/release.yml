@@ -19,15 +19,10 @@ on:
         required: true
         type: choice
         options:
-          - unstable
-          - canary
           - alpha
-          - nightly
-          - public-dev
           - beta
-          - test-build
+          - rc
           - release
-          - LTS
       titleOverride:
         description: "Override title?"
         required: false
