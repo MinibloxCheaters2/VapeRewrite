@@ -1,0 +1,29 @@
+name: Build
+
+on:
+  push:
+    paths:
+      - src/**
+      - package.json
+      - patches/*.patch
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: codeberg-tiny
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install
+        run: bun install
+
+      - name: Build
+        run: bun run build:prod
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v6
+        with:
+          path: dist/*.js
