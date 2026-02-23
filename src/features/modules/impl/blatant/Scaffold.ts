@@ -147,7 +147,7 @@ export default class Scaffold extends Mod {
 		return new Vec3(hitX, hitY, hitZ);
 	}
 
-	@Subscribe("tick")
+	@Subscribe("gameTick")
 	onTick(): void {
 		const {
 			player,
@@ -164,8 +164,9 @@ export default class Scaffold extends Mod {
 			!BlockPos ||
 			!playerControllerMP ||
 			!playerController
-		)
+		) {
 			return;
+		}
 
 		this.tickCount++;
 

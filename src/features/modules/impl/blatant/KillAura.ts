@@ -97,7 +97,7 @@ export default class KillAura extends Mod {
 			first &&
 			Math.abs(checkYaw) > MAX_OFFSET_RAD &&
 			Math.abs(checkYaw) < deg2rad(this.angle)
-		)
+		) {
 			RotationManager.scheduleRotation(
 				new RotationPlan(
 					new Rotation(
@@ -106,6 +106,7 @@ export default class KillAura extends Mod {
 					),
 				),
 			);
+		}
 		// we don't send the attack packet silently,
 		// so the Criticals module will automatically send the packets BEFORE this one sends!
 		ClientSocket.sendPacket(
@@ -123,7 +124,7 @@ export default class KillAura extends Mod {
 		player[d](e);
 	}
 
-	@Subscribe("tick")
+	@Subscribe("gameTick")
 	onTick() {
 		// ghetto ahh method
 		let first = true;

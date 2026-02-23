@@ -2,7 +2,7 @@ import { CORE_REPLACEMENTS } from "./replacements/core/core";
 import { EXPOSE_REPLACEMENTS } from "./replacements/core/expose";
 import { PACKET_RECV_HOOK } from "./replacements/core/packetRecv";
 import { ROTATION_REPLACEMENTS } from "./replacements/core/rotation";
-import { TICK_LOOP_REPLACEMENT } from "./replacements/core/tickLoop";
+import { GAME_TICK_EVENT_REPLACEMENT, PLAYER_TICK_EVENT_REPLACEMENT } from "./replacements/core/tickEvent";
 import VERSION_REPLACEMENT from "./replacements/core/version";
 import { FORCE_ENABLE_REPLACEMENT } from "./replacements/flags";
 import ANTIBAN_REPLACEMENT from "./replacements/modules/antiban";
@@ -74,7 +74,8 @@ export const REPLACEMENTS = new Map<Match, Replacement>([
 	DEVELOPER_LEADERBOARD,
 	...NOSLOW_REPLACEMENTS,
 	...EXPOSE_REPLACEMENTS,
-	TICK_LOOP_REPLACEMENT,
+	GAME_TICK_EVENT_REPLACEMENT,
+	PLAYER_TICK_EVENT_REPLACEMENT,
 	VANISH_BYPASS,
 	STAFF_DETECTION,
 	[

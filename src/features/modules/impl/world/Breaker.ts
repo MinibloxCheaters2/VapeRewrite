@@ -85,7 +85,7 @@ export default class Breaker extends Mod {
 		}
 	}
 
-	@Subscribe("tick")
+	@Subscribe("gameTick")
 	public onTick() {
 		const now = Date.now();
 

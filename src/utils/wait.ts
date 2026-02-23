@@ -1,5 +1,5 @@
 /**
- * Provides utilities, mainly for use inside of
+ * Provides utilities, mainly for use inside of suspendable event handlers.
  * @module
  */
 import Bus from "@/Bus";
@@ -12,7 +12,7 @@ import Bus from "@/Bus";
 export default function waitTicks(ticks: number) {
 	let t = 0;
 	return new Promise<number>((res, _) => {
-		Bus.onceB("tick", () => {
+		Bus.onceB("gameTick", () => {
 			if (t++ >= ticks) {
 				res(t);
 				return true;
@@ -27,7 +27,7 @@ export default function waitTicks(ticks: number) {
 export function waitTick() {
 	let t = 0;
 	return new Promise<number>((res, _) => {
-		Bus.once("tick", () => {
+		Bus.once("gameTick", () => {
 			t++;
 			res(t);
 		});

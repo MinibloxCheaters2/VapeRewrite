@@ -153,7 +153,7 @@ export default new (class PacketQueueManager {
 		return mesh;
 	}
 
-	@Subscribe("tick")
+	@Subscribe("gameTick")
 	private onRender() {
 		if (!this.lagging) {
 			this.#hidePosBox();

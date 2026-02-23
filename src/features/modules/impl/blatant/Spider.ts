@@ -89,7 +89,7 @@ export default class Spider extends Mod {
 		return collidingBlocks.length > 0;
 	}
 
-	@Subscribe("tick")
+	@Subscribe("gameTick")
 	public onTick() {
 		const { player } = Refs;
 		if (!player) return;

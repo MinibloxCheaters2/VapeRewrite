@@ -78,7 +78,7 @@ export default class TargetStrafe extends Mod {
 		return this.onlyWhenMovingSetting.value();
 	}
 
-	@Subscribe("tick")
+	@Subscribe("gameTick")
 	public onTick() {
 		const { player } = Refs;
 		if (this.onlyOnGround && !player.onGround) return;

@@ -74,7 +74,7 @@ export default class LiquidWalk extends Mod {
 		return this.isInLiquid(player.pos.y);
 	}
 
-	@Subscribe("tick")
+	@Subscribe("gameTick")
 	public onTick() {
 		const { player } = Refs;
 		if (!player) return;

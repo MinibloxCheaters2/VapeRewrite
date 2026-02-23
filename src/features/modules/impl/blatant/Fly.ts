@@ -95,7 +95,7 @@ export default class Fly extends Mod {
 			function handler() {
 				const { player } = Refs;
 				if (!player) {
-					Bus.off("tick", handler);
+					Bus.off("gameTick", handler);
 				}
 
 				// Handle smooth stop for Infinite mode
@@ -103,16 +103,16 @@ export default class Fly extends Mod {
 					player.motion.y = 0.18;
 					stopTicks--;
 				} else {
-					Bus.off("tick", handler);
+					Bus.off("gameTick", handler);
 				}
 			}
-			Bus.on("tick", handler);
+			Bus.on("gameTick", handler);
 		}
 
 		this.ticks = 0;
 	}
 
-	@Subscribe("tick")
+	@Subscribe("gameTick")
 	public onTick() {
 		const mode = this.modeSetting.value();
 
@@ -175,8 +175,7 @@ export default class Fly extends Mod {
 			player.motion.y = goUp
 				? this.verticalSetting.value()
 				: -this.verticalSetting.value();
-		}
-		// Go up only every 2 ticks, barely helps.
+		} // Go up only every 2 ticks, barely helps.
 		else if (!this.lessVerticalMovement.value() || this.ticks % 2 === 0) {
 			player.motion.y = 0.18;
 		}

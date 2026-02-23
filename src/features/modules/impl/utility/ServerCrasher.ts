@@ -18,7 +18,7 @@ export default class ServerCrasher extends Mod {
 		this.z = 10;
 	}
 
-	@Subscribe("tick")
+	@Subscribe("gameTick")
 	onTick() {
 		for (let _ = 0; _ < PACKETS_PER_TICK; _++) {
 			this.x += SERVER_CRASHER_CHUNK_XZ_INCREMENT;

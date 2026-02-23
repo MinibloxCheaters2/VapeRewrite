@@ -11,6 +11,7 @@ import CancelableWrapper from "../event/api/CancelableWrapper";
 import type ClientEvents from "../event/api/Events";
 import ChatHook from "./ChatHook";
 import { MATCHED_DUMPS } from "./replacement";
+import Cancelable from "@/event/api/Cancelable";
 
 /** functions exposed by patches that modify the game script */
 export interface ExposedFromGame {
@@ -36,6 +37,9 @@ export interface ExposedFromGame {
 export default {
 	newCancelableWrapper<T>(data: T): CancelableWrapper<T> {
 		return new CancelableWrapper(data);
+	},
+	newCancelable(): Cancelable {
+		return new Cancelable();
 	},
 	emitEvent<E extends keyof ClientEvents>(
 		event: E,

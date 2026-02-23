@@ -29,7 +29,7 @@ export default class Test extends Mod {
 	}
 
 	// would use SubscribeAsync but tick gets fired too often...
-	@Subscribe("tick")
+	@Subscribe("gameTick")
 	private onTick() {
 		if (this.#waitCount > 0) {
 			this.#waitCount--;

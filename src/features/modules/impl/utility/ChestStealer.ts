@@ -117,7 +117,7 @@ export default class ChestStealer extends Mod {
 		const { playerController } = Refs;
 		if (!playerController || this.currentWindowId === null) return;
 
-		playerController.windowClick?.(
+		playerController.windowClick(
 			this.currentWindowId,
 			slotId,
 			0,
@@ -154,7 +154,7 @@ export default class ChestStealer extends Mod {
 		}
 	}
 
-	@Subscribe("tick")
+	@Subscribe("gameTick")
 	public onTick() {
 		const { playerController, player } = Refs;
 		if (!playerController || this.currentWindowId === null) {
