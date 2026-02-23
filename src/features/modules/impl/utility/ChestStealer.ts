@@ -122,7 +122,7 @@ export default class ChestStealer extends Mod {
 			slotId,
 			0,
 			0,
-			null,
+			Refs.player,
 		);
 	}
 
