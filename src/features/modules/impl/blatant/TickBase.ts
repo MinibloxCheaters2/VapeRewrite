@@ -31,13 +31,8 @@ export default class TickBase extends Mod {
 
 	@Subscribe("gameTick")
 	private onTick() {
-		const diff = Math.floor(
-			Math.abs(Date.now() - this.#lastBoost),
-		);
-		if (
-			diff >=
-				this.#boostDelay
-		) {
+		const diff = Math.floor(Math.abs(Date.now() - this.#lastBoost));
+		if (diff >= this.#boostDelay) {
 			this.tick = true;
 		}
 	}

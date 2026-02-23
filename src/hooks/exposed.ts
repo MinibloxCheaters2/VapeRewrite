@@ -3,6 +3,7 @@
  * @module
  */
 
+import Cancelable from "@/event/api/Cancelable";
 import dispatcher from "@/features/commands/api/CommandDispatcher";
 import ModuleManager from "@/features/modules/api/ModuleManager";
 import RotationManager from "@/utils/aiming/rotate";
@@ -11,7 +12,6 @@ import CancelableWrapper from "../event/api/CancelableWrapper";
 import type ClientEvents from "../event/api/Events";
 import ChatHook from "./ChatHook";
 import { MATCHED_DUMPS } from "./replacement";
-import Cancelable from "@/event/api/Cancelable";
 
 /** functions exposed by patches that modify the game script */
 export interface ExposedFromGame {
