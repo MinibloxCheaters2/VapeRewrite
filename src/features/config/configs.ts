@@ -7,7 +7,6 @@ export interface SerializedSetting<V> {
 	value: V;
 }
 
-
 // TODO: use ts
 function _serializeBaseSetting<V>(set: BaseSetting<V>): SerializedSetting<V> {
 	return {
