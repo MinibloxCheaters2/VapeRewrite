@@ -30,11 +30,11 @@
 		"solid-js": "^1.9.11"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.28.6",
-		"@babel/plugin-proposal-decorators": "^7.28.6",
+		"@babel/core": "^7.29.0",
+		"@babel/plugin-proposal-decorators": "^7.29.0",
 		"@babel/plugin-transform-react-jsx": "^7.28.6",
-		"@babel/plugin-transform-runtime": "^7.28.5",
-		"@babel/preset-env": "^7.28.6",
+		"@babel/plugin-transform-runtime": "^7.29.0",
+		"@babel/preset-env": "^7.29.0",
 		"@babel/preset-typescript": "^7.28.5",
 		"@rollup/plugin-babel": "^6.1.0",
 		"@rollup/plugin-commonjs": "^29.0.0",
@@ -45,9 +45,9 @@
 		"@types/three": "0.158.3",
 		"@unocss/postcss": "^66.6.0",
 		"@violentmonkey/types": "^0.3.2",
-		"autoprefixer": "^10.4.23",
+		"autoprefixer": "^10.4.24",
 		"babel-preset-solid": "^1.9.10",
-		"commander": "^14.0.2",
+		"commander": "^14.0.3",
 		"cross-env": "^10.1.0",
 		"del-cli": "^7.0.0",
 		"lint-staged": "^16.2.7",
@@ -62,7 +62,7 @@
 		"socket.io-client": "^4.8.3",
 		"typescript": "^5.9.3",
 		"unocss": "^66.6.0",
-		"@biomejs/biome": "^2.4.0"
+		"@biomejs/biome": "^2.4.4"
 	},
 	"lint-staged": {
 		"*.{ts,tsx,js,css}": [
