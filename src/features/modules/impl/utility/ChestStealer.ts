@@ -122,7 +122,7 @@ export default class ChestStealer extends Mod {
 			this.currentWindowId,
 			slotId,
 			0,
-			SlotActionType.PICKUP_LEFT,
+			SlotActionType.PICKUP_RIGHT,
 			Refs.player,
 		);
 	}
