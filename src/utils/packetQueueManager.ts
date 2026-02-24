@@ -13,6 +13,7 @@ import Rotation from "./aiming/rotation";
 import PacketUtil from "./PacketUtil";
 import { c2s } from "./packetRefs";
 import Refs from "./refs";
+import getPosFromPacket from "./posPacket";
 
 export class PacketRecord<T> {
 	constructor(
@@ -39,13 +40,11 @@ export default new (class PacketQueueManager {
 	#posBox: Mesh;
 
 	get serverPos(): PBFloatVector3 | undefined {
-		return (
+		return getPosFromPacket(
 			this.packetQueue.find(
-				(p) =>
-					p.packet instanceof c2s("SPacketPlayerPosLook") &&
-					p.packet.pos,
-			)?.packet as SPacketPlayerPosLook | undefined
-		)?.pos;
+				(p) => getPosFromPacket(p) !== undefined,
+			)?.packet,
+		);
 	}
 
 	get serverRot(): Rotation | undefined {

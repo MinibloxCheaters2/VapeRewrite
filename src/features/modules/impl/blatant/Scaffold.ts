@@ -102,7 +102,7 @@ export default class Scaffold extends Mod {
 	}
 
 	private getPossibleSides(pos: BlockPos): EnumFacing | null {
-		const { EnumFacing, game, Materials } = Refs;
+		const { EnumFacing, game, player, Materials } = Refs;
 		if (!EnumFacing || !game || !Materials) return null;
 
 		for (const side of EnumFacing.VALUES) {
@@ -118,7 +118,7 @@ export default class Scaffold extends Mod {
 				return side.getOpposite();
 			}
 		}
-		return null;
+		return player.getHorizontalFacing();
 	}
 
 	private getRandomHitVec(placePos: BlockPos, face: EnumFacing): Vector3 {
@@ -325,7 +325,7 @@ export default class Scaffold extends Mod {
 					hitVec,
 				)
 			) {
-				hud3D.swingArm?.();
+				hud3D.swingArm();
 
 				// Handle item stack
 				if (item.stackSize === 0) {
