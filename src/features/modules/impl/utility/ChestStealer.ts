@@ -121,7 +121,7 @@ export default class ChestStealer extends Mod {
 			this.currentWindowId,
 			slotId,
 			0,
-			0,
+			1,
 			Refs.player,
 		);
 	}
