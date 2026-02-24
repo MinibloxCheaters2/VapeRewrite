@@ -12,8 +12,8 @@ import type { AnyPacket, C2SPacket } from "../features/sdk/types/packetTypes";
 import Rotation from "./aiming/rotation";
 import PacketUtil from "./PacketUtil";
 import { c2s } from "./packetRefs";
-import Refs from "./refs";
 import getPosFromPacket from "./posPacket";
+import Refs from "./refs";
 
 export class PacketRecord<T> {
 	constructor(
@@ -41,9 +41,8 @@ export default new (class PacketQueueManager {
 
 	get serverPos(): PBFloatVector3 | undefined {
 		return getPosFromPacket(
-			this.packetQueue.find(
-				(p) => getPosFromPacket(p) !== undefined,
-			)?.packet,
+			this.packetQueue.find((p) => getPosFromPacket(p) !== undefined)
+				?.packet,
 		);
 	}
 

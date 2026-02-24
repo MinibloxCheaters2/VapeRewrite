@@ -1,4 +1,4 @@
-import * as packets from "./packets";
+import type * as packets from "./packets";
 
 /** SPacket / Serverbound packets */
 export type C2SPacket =

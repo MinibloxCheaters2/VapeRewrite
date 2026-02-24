@@ -1,6 +1,7 @@
 import { Subscribe } from "@/event/api/Bus";
 import type CancelableWrapper from "@/event/api/CancelableWrapper";
 import type { S2CPacket } from "@/features/sdk/types/packetTypes";
+import SlotActionType from "@/features/sdk/types/slotActionType";
 import { s2c } from "@/utils/packetRefs";
 import { getRandomArbitrary } from "@/utils/random";
 import Refs from "@/utils/refs";
@@ -121,7 +122,7 @@ export default class ChestStealer extends Mod {
 			this.currentWindowId,
 			slotId,
 			0,
-			1,
+			SlotActionType.PICKUP_LEFT,
 			Refs.player,
 		);
 	}

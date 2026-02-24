@@ -6,6 +6,7 @@ import type World from "./world";
 import type { ItemStack } from "./items";
 import type { BlockState } from "./world";
 import type { EnumFacing } from "./math/facing";
+import type SlotActionType from "./slotActionType";
 
 export declare class PlayerControllerMP {
 	lastSentSlot: number;
@@ -45,12 +46,18 @@ export declare class PlayerController {
 	): boolean;
 	// TODO: item or item stack?
 	sendUseItem(plr: EntityLivingBase, world: World, item: ItemStack): boolean;
-	/** **IMPORTANT**: USE DUMPS */
+	/**
+	 * @param windowID the ID of the window to click in
+	 * @param slotID the slot to put the item in
+	 * @param button the mouse button that was clicked (i.e. 0 for left, 1 for right, and the slot number if using swap mode)
+	 * @param mode the click mode it is recommended to use enum unless you need custom modes (i.e. for intentionally bugs).
+	 * @param player
+	 */
 	windowClick(
 		windowID: number,
 		slotID: number,
 		button: number,
-		mode: number,
+		mode: SlotActionType | number,
 		player: EntityPlayer,
 	): ItemStack;
 	/** @param entity the entity that was using the item */

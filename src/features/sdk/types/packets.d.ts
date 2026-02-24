@@ -1,10 +1,11 @@
-import { S2CPacket } from "./packetTypes";
+import type { S2CPacket } from "./packetTypes";
+import type SlotActionType from "./slotActionType";
 
-export class Message {
-	constructor(j?: object);
+export class Message<T extends object> {
+	constructor(data?: T);
 }
 
-export declare class SPacketLoginStart extends Message {
+export declare class SPacketLoginStart extends Message<SPacketLoginStart> {
 	session?: string;
 	hydration?: string;
 	metricsId: string;
@@ -12,7 +13,7 @@ export declare class SPacketLoginStart extends Message {
 	clientVersion: string;
 }
 
-export declare class PBItemStack extends Message {
+export declare class PBItemStack extends Message<PBItemStack> {
 	/**
 	 * @type {PBItemStack}
 	 */
@@ -24,31 +25,31 @@ export declare class PBItemStack extends Message {
 	data: string;
 }
 
-export declare class PBBlockPos extends Message {
+export declare class PBBlockPos extends Message<PBBlockPos> {
 	x: number;
 	y: number;
 	z: number;
 }
 
-export declare class PBVector3 extends Message {
+export declare class PBVector3 extends Message<PBVector3> {
 	x: number;
 	y: number;
 	z: number;
 }
 
-export declare class PBFloatVector3 extends Message {
+export declare class PBFloatVector3 extends Message<PBFloatVector3> {
 	x: number;
 	y: number;
 	z: number;
 	constructor(pos: { x: number; y: number; z: number });
 }
 
-export declare class CPacketEntityVelocity extends Message {
+export declare class CPacketEntityVelocity extends Message<CPacketEntityVelocity> {
 	id: number;
 	motion: PBFloatVector3;
 }
 
-export declare class CPacketChunkData extends Message {
+export declare class CPacketChunkData extends Message<CPacketChunkData> {
 	x: number;
 	z: number;
 	cells: PBCell[];
@@ -57,7 +58,7 @@ export declare class CPacketChunkData extends Message {
 	biomes: number[];
 }
 
-export declare class PBCell extends Message {
+export declare class PBCell extends Message<PBCell> {
 	y: number;
 	bitsPerEntry: number;
 	palette: number;
@@ -65,39 +66,39 @@ export declare class PBCell extends Message {
 	blockRefCount: number;
 }
 
-export declare class PBTileEntity extends Message {
+export declare class PBTileEntity extends Message<PBTileEntity> {
 	x: number;
 	y: number;
 	z: number;
 	nbt: Uint8Array;
 }
-export declare class CPacketEntityEquipment extends Message {
+export declare class CPacketEntityEquipment extends Message<CPacketEntityEquipment> {
 	id: number;
 	equipment: Equipment[];
 }
-export declare class Equipment extends Message {
+export declare class Equipment extends Message<Equipment> {
 	slot: Equipment_Slot;
 	item: PBItemStack;
 }
-export declare class SPacketUpdateInventory extends Message {
+export declare class SPacketUpdateInventory extends Message<SPacketUpdateInventory> {
 	main: PBItemStack[];
 	armor: PBItemStack[];
 	idkWhatThisIs: PBItemStack;
 }
-export declare class CPacketUpdateSign extends Message {
+export declare class CPacketUpdateSign extends Message<CPacketUpdateSign> {
 	pos: PBBlockPos;
 	lines: string[];
 }
-export declare class CPacketUpdateCommandBlock extends Message {
+export declare class CPacketUpdateCommandBlock extends Message<CPacketUpdateCommandBlock> {
 	pos: PBBlockPos;
 	command: string;
 	commands: string[];
 	repeat: boolean;
 }
-export declare class SPacketCloseWindow extends Message {
+export declare class SPacketCloseWindow extends Message<SPacketCloseWindow> {
 	windowId: number;
 }
-export declare class SPacketEntityAction extends Message {
+export declare class SPacketEntityAction extends Message<SPacketEntityAction> {
 	id: number;
 	sneak?: boolean;
 	sprinting?: boolean;
@@ -105,10 +106,10 @@ export declare class SPacketEntityAction extends Message {
 	fire?: boolean;
 	stopSleeping?: boolean;
 }
-export declare class SPacketPlayerAbilities extends Message {
+export declare class SPacketPlayerAbilities extends Message<SPacketPlayerAbilities> {
 	isFlying: boolean;
 }
-export declare class SPacketPlayerPosLook extends Message {
+export declare class SPacketPlayerPosLook extends Message<SPacketPlayerPosLook> {
 	pos?: PBFloatVector3;
 	yaw?: number;
 	pitch?: number;
@@ -121,94 +122,97 @@ export declare class Vector3 {
 	constructor(data: { x: number; y: number; z: number });
 }
 export declare class SPacketRespawn$1 {}
-export declare class SPacketOpenShop extends Message {}
-export declare class SPacketBreakBlock extends Message {
+export declare class SPacketOpenShop extends Message<SPacketOpenShop> {}
+export declare class SPacketBreakBlock extends Message<SPacketBreakBlock> {
 	location: PBBlockPos;
 	start: boolean;
 }
-export declare class SPacketClick extends Message {
+export declare class SPacketClick extends Message<SPacketClick> {
 	location: PBBlockPos;
 }
-export declare class SPacketPlaceBlock extends Message {
+export declare class SPacketPlaceBlock extends Message<SPacketPlaceBlock> {
 	positionIn: PBBlockPos;
 	side: PBEnumFacing;
 	hitX: number;
 	hitY: number;
 	hitZ: number;
 }
-export declare class SPacketUseItem extends Message {}
-export declare class SPacketClickWindow extends Message {
+export declare class SPacketUseItem extends Message<SPacketUseItem> {}
+export declare class SPacketClickWindow extends Message<SPacketClickWindow> {
 	windowId: number;
 	slotId: number;
 	button: number;
-	mode: number;
+	/**
+	 * the click mode, prefer using the enum unless you need a custom mode (i.e. exploiting bugs)
+	 */
+	mode: SlotActionType | number;
 	itemStack: PBItemStack;
 	transactionId: number;
 }
-export declare class SPacketPlayerAction extends Message {
+export declare class SPacketPlayerAction extends Message<SPacketPlayerAction> {
 	position: PBBlockPos;
 	facing: PBEnumFacing;
 	action: PBAction;
 }
-export declare class SPacketUseEntity extends Message {
+export declare class SPacketUseEntity extends Message<SPacketUseEntity> {
 	id: number;
 	action: SPacketUseEntity_Action;
 	hitVec?: PBFloatVector3;
 }
-export declare class SPacketMessage extends Message {
+export declare class SPacketMessage extends Message<SPacketMessage> {
 	text: string;
 }
-export declare class CPacketAnimation extends Message {
+export declare class CPacketAnimation extends Message<CPacketAnimation> {
 	id: number;
 	type: number;
 }
-export declare class CPacketBlockAction extends Message {
+export declare class CPacketBlockAction extends Message<CPacketBlockAction> {
 	blockPos: PBBlockPos;
 	instrument: number;
 	pitch: number;
 	blockId: number;
 }
-export declare class CPacketBlockUpdate extends Message {
+export declare class CPacketBlockUpdate extends Message<CPacketBlockUpdate> {
 	id: number;
 	x: number;
 	y: number;
 	z: number;
 	prerender?: boolean;
 }
-export declare class CPacketChangeServers extends Message {
+export declare class CPacketChangeServers extends Message<CPacketChangeServers> {
 	url: string;
 }
-export declare class CPacketCloseWindow extends Message {
+export declare class CPacketCloseWindow extends Message<CPacketCloseWindow> {
 	windowId: number;
 }
-export declare class CPacketConfirmTransaction extends Message {
+export declare class CPacketConfirmTransaction extends Message<CPacketConfirmTransaction> {
 	windowId: number;
 	uid: number;
 	accepted: boolean;
 }
-export declare class CPacketDestroyEntities extends Message {
+export declare class CPacketDestroyEntities extends Message<CPacketDestroyEntities> {
 	ids: number[];
 }
-export declare class CPacketDisconnect extends Message {
+export declare class CPacketDisconnect extends Message<CPacketDisconnect> {
 	reason: string;
 }
-export declare class CPacketEntityAction extends Message {
+export declare class CPacketEntityAction extends Message<CPacketEntityAction> {
 	id: number;
 	sneak?: boolean;
 	sprinting?: boolean;
 	punching?: boolean;
 	fire?: boolean;
 }
-export declare class CPacketEntityAttach extends Message {
+export declare class CPacketEntityAttach extends Message<CPacketEntityAttach> {
 	leash: number;
 	entity: number;
 	vehicle: number;
 }
-export declare class CPacketEntityMetadata extends Message {
+export declare class CPacketEntityMetadata extends Message<CPacketEntityMetadata> {
 	id: number;
 	data: PBWatchableObject[];
 }
-export declare class PBWatchableObject extends Message {
+export declare class PBWatchableObject extends Message<PBWatchableObject> {
 	dataValueId: number;
 	objectType: number;
 	intValue?: number;
@@ -218,7 +222,7 @@ export declare class PBWatchableObject extends Message {
 	itemStack?: PBItemStack;
 	blockPos?: PBBlockPos;
 }
-export declare class CPacketEntityPositionAndRotation extends Message {
+export declare class CPacketEntityPositionAndRotation extends Message<CPacketEntityPositionAndRotation> {
 	id: number;
 	pos?: PBVector3;
 	vel?: PBVector3;
@@ -226,7 +230,7 @@ export declare class CPacketEntityPositionAndRotation extends Message {
 	pitch?: number;
 	onGround?: boolean;
 }
-export declare class CPacketEntityRelativePositionAndRotation extends Message {
+export declare class CPacketEntityRelativePositionAndRotation extends Message<CPacketEntityRelativePositionAndRotation> {
 	id: number;
 	pos: PBVector3;
 	vel: PBVector3;
@@ -234,17 +238,17 @@ export declare class CPacketEntityRelativePositionAndRotation extends Message {
 	pitch: number;
 	onGround: boolean;
 }
-export declare class CPacketEntityStatus extends Message {
+export declare class CPacketEntityStatus extends Message<CPacketEntityStatus> {
 	entityId: number;
 	entityStatus: number;
 }
-export declare class CPacketExplosion extends Message {
+export declare class CPacketExplosion extends Message<CPacketExplosion> {
 	pos: PBFloatVector3;
 	strength: number;
 	blocks: PBBlockPos[];
 	playerPos?: PBFloatVector3;
 }
-export declare class PBCosmetics extends Message {
+export declare class PBCosmetics extends Message<PBCosmetics> {
 	skin: string;
 	cape: string;
 	aura: string;
@@ -252,7 +256,7 @@ export declare class PBCosmetics extends Message {
 	color: string;
 	hat: string;
 }
-export declare class CPacketServerInfo extends Message {
+export declare class CPacketServerInfo extends Message<CPacketServerInfo> {
 	serverId: string;
 	serverName: string;
 	serverVersion: string;
@@ -268,7 +272,7 @@ export declare class CPacketServerInfo extends Message {
 	metadata: string | null;
 	commandBlocksEnabled: boolean | null;
 }
-export declare class PlayerPermissionEntry extends Message {
+export declare class PlayerPermissionEntry extends Message<PlayerPermissionEntry> {
 	uuid: string;
 	username: string;
 	permissionLevel: number;
@@ -278,7 +282,7 @@ export declare class PlayerPermissionEntry extends Message {
 	verified: boolean | null;
 	toString(): string;
 }
-export declare class CPacketJoinGame extends Message {
+export declare class CPacketJoinGame extends Message<CPacketJoinGame> {
 	canConnect: boolean;
 	errorMessage: string;
 	tick: number;
@@ -291,14 +295,14 @@ export declare class CPacketJoinGame extends Message {
 	uuid: string;
 	dimension: number;
 }
-export declare class CPacketLeaderboard extends Message {
+export declare class CPacketLeaderboard extends Message<CPacketLeaderboard> {
 	id: string;
 	pos: PBVector3;
 	yaw: number | null;
 	title: string;
 	content: string[];
 }
-export declare class CPacketLocalStorage extends Message {
+export declare class CPacketLocalStorage extends Message<CPacketLocalStorage> {
 	action: CPacketLocalStorage_Action;
 	key: string;
 	value: string | null;
@@ -312,7 +316,7 @@ export declare const CPacketLocalStorage_Action: {
 	SET: number;
 	2: string;
 };
-export declare class CPacketMessage extends Message {
+export declare class CPacketMessage extends Message<CPacketMessage> {
 	text?: string;
 	id?: string;
 	color?: string;
@@ -320,16 +324,16 @@ export declare class CPacketMessage extends Message {
 	toast?: boolean;
 	timer?: number;
 }
-export declare class CPacketOpenShop extends Message {
+export declare class CPacketOpenShop extends Message<CPacketOpenShop> {
 	type: string;
 }
-export declare class CPacketOpenWindow extends Message {
+export declare class CPacketOpenWindow extends Message<CPacketOpenWindow> {
 	windowId: number;
 	guiID: string;
 	title?: string;
 	size?: number;
 }
-export declare class CPacketParticles extends Message {
+export declare class CPacketParticles extends Message<CPacketParticles> {
 	particleId: number;
 	longDistance?: boolean;
 	x?: number;
@@ -342,10 +346,10 @@ export declare class CPacketParticles extends Message {
 	count?: number;
 	particleArguments: number[];
 }
-export declare class CPacketPlayerList extends Message {
+export declare class CPacketPlayerList extends Message<CPacketPlayerList> {
 	players: PlayerData[];
 }
-export declare class PlayerData extends Message {
+export declare class PlayerData extends Message<PlayerData> {
 	id: number;
 	uuid: string;
 	permissionLevel: number;
@@ -356,19 +360,19 @@ export declare class PlayerData extends Message {
 	level?: number;
 	verified?: boolean;
 }
-export declare class CPacketPlayerPosLook extends Message {
+export declare class CPacketPlayerPosLook extends Message<CPacketPlayerPosLook> {
 	x: number;
 	y: number;
 	z: number;
 	yaw: number;
 	pitch: number;
 }
-export declare class CPacketPlayerPosition extends Message {
+export declare class CPacketPlayerPosition extends Message<CPacketPlayerPosition> {
 	x: number;
 	y: number;
 	z: number;
 }
-export declare class CPacketPlayerReconciliation extends Message {
+export declare class CPacketPlayerReconciliation extends Message<CPacketPlayerReconciliation> {
 	x: number;
 	y: number;
 	z: number;
@@ -377,41 +381,41 @@ export declare class CPacketPlayerReconciliation extends Message {
 	lastProcessedInput: number;
 	reset?: boolean;
 }
-export declare class CPacketPong extends Message {
+export declare class CPacketPong extends Message<CPacketPong> {
 	time: number;
 	mspt: number;
 	tick: number;
 }
-export declare class CPacketRespawn extends Message {
+export declare class CPacketRespawn extends Message<CPacketRespawn> {
 	notDeath?: boolean;
 	client?: boolean;
 	dimension?: number;
 }
-export declare class CPacketScoreboard extends Message {
+export declare class CPacketScoreboard extends Message<CPacketScoreboard> {
 	title: string;
 	content: ScoreboardContent[];
 }
-export declare class ScoreboardContent extends Message {
+export declare class ScoreboardContent extends Message<ScoreboardContent> {
 	columns: string[];
 }
-export declare class CPacketServerMetadata extends Message {
+export declare class CPacketServerMetadata extends Message<CPacketServerMetadata> {
 	metadata: string;
 }
-export declare class CPacketSetSlot extends Message {
+export declare class CPacketSetSlot extends Message<CPacketSetSlot> {
 	windowId: number;
 	slot: number;
 	slotData: PBItemStack;
 }
-export declare class CPacketSignEditorOpen extends Message {
+export declare class CPacketSignEditorOpen extends Message<CPacketSignEditorOpen> {
 	signPosition: PBBlockPos;
 }
-export declare class CPacketSoundEffect extends Message {
+export declare class CPacketSoundEffect extends Message<CPacketSoundEffect> {
 	sound: string;
 	location?: PBVector3;
 	volume?: number;
 	pitch?: number;
 }
-export declare class CPacketSpawnEntity extends Message {
+export declare class CPacketSpawnEntity extends Message<CPacketSpawnEntity> {
 	id: number;
 	type: number;
 	pos?: PBVector3;
@@ -423,14 +427,14 @@ export declare class CPacketSpawnEntity extends Message {
 	state?: number;
 	texture?: string;
 }
-export declare class CPacketSpawnExperienceOrb extends Message {
+export declare class CPacketSpawnExperienceOrb extends Message<CPacketSpawnExperienceOrb> {
 	id: number;
 	x: number;
 	y: number;
 	z: number;
 	xpValue: number;
 }
-export declare class CPacketSpawnPlayer extends Message {
+export declare class CPacketSpawnPlayer extends Message<CPacketSpawnPlayer> {
 	id: number;
 	name: string;
 	gamemode: string;
@@ -442,101 +446,101 @@ export declare class CPacketSpawnPlayer extends Message {
 	rank?: string;
 	socketId: string;
 }
-export declare class CPacketTabComplete extends Message {
+export declare class CPacketTabComplete extends Message<CPacketTabComplete> {
 	matches: string[];
 }
-export declare class CPacketTitle extends Message {
+export declare class CPacketTitle extends Message<CPacketTitle> {
 	title: string;
 	duration: number;
 }
-export declare class CPacketUpdateHealth extends Message {
+export declare class CPacketUpdateHealth extends Message<CPacketUpdateHealth> {
 	id: number;
 	hp?: number;
 	food?: number;
 	foodSaturation?: number;
 	oxygen?: number;
 }
-export declare class CPacketUpdateLeaderboard extends Message {
+export declare class CPacketUpdateLeaderboard extends Message<CPacketUpdateLeaderboard> {
 	id: string;
 	content: string[];
 }
-export declare class CPacketUpdateScoreboard extends Message {
+export declare class CPacketUpdateScoreboard extends Message<CPacketUpdateScoreboard> {
 	index: number;
 	columns: string[];
 }
-export declare class CPacketUpdateStatus extends Message {
+export declare class CPacketUpdateStatus extends Message<CPacketUpdateStatus> {
 	id: number;
 	mode?: number;
 	rank?: string;
 	color?: string;
 	hidePlayers?: boolean;
 }
-export declare class CPacketUpdate extends Message {
+export declare class CPacketUpdate extends Message<CPacketUpdate> {
 	tick: number;
 	t: number;
 	mspt: number;
 }
-export declare class CPacketWindowItems extends Message {
+export declare class CPacketWindowItems extends Message<CPacketWindowItems> {
 	windowId: number;
 	items: PBItemStack[];
 }
-export declare class CPacketWindowProperty extends Message {
+export declare class CPacketWindowProperty extends Message<CPacketWindowProperty> {
 	windowId: number;
 	varIndex: number;
 	varValue: number;
 }
-export declare class SPacketRespawn extends Message {}
+export declare class SPacketRespawn extends Message<SPacketRespawn> {}
 export declare class SPacketTabComplete$1 {
 	message: string;
 }
-export declare class SPacketCraftItem extends Message {
+export declare class SPacketCraftItem extends Message<SPacketCraftItem> {
 	data: string;
 }
-export declare class SPacketRequestChunk extends Message {
+export declare class SPacketRequestChunk extends Message<SPacketRequestChunk> {
 	x: number;
 	z: number;
 }
-export declare class SPacketAdminAction extends Message {
+export declare class SPacketAdminAction extends Message<SPacketAdminAction> {
 	action: {
 		case: undefined;
 	};
 }
-export declare class KickPlayer extends Message {}
-export declare class BanPlayer extends Message {
+export declare class KickPlayer extends Message<KickPlayer> {}
+export declare class BanPlayer extends Message<BanPlayer> {
 	uuid: string;
 }
-export declare class UnbanPlayer extends Message {
+export declare class UnbanPlayer extends Message<UnbanPlayer> {
 	uuid: string;
 }
-export declare class StopServer extends Message {}
-export declare class PromotePlayer extends Message {
+export declare class StopServer extends Message<StopServer> {}
+export declare class PromotePlayer extends Message<PromotePlayer> {
 	uuid: string;
 }
-export declare class DemotePlayer extends Message {
+export declare class DemotePlayer extends Message<DemotePlayer> {
 	uuid: string;
 }
-export declare class UpdateAccessControl extends Message {
+export declare class UpdateAccessControl extends Message<UpdateAccessControl> {
 	accessControl: string;
 }
-export declare class UpdateCheats extends Message {
+export declare class UpdateCheats extends Message<UpdateCheats> {
 	cheats: string;
 }
-export declare class UpdatePvP extends Message {
+export declare class UpdatePvP extends Message<UpdatePvP> {
 	enabled: boolean;
 }
-export declare class SPacketAnalytics extends Message {
+export declare class SPacketAnalytics extends Message<SPacketAnalytics> {
 	fps: number;
 	ping: number;
 }
-export declare class SPacketConfirmTransaction extends Message {
+export declare class SPacketConfirmTransaction extends Message<SPacketConfirmTransaction> {
 	windowId: number;
 	actionNumber: number;
 	accepted: boolean;
 }
-export declare class SPacketHeldItemChange extends Message {
+export declare class SPacketHeldItemChange extends Message<SPacketHeldItemChange> {
 	slot: number;
 }
-export declare class SPacketPlayerInput extends Message {
+export declare class SPacketPlayerInput extends Message<SPacketPlayerInput> {
 	sequenceNumber: number;
 	left: boolean;
 	right: boolean;
@@ -549,71 +553,71 @@ export declare class SPacketPlayerInput extends Message {
 	sprint: boolean;
 	pos: PBFloatVector3;
 }
-export declare class SPacketPing extends Message {
+export declare class SPacketPing extends Message<SPacketPing> {
 	time: number;
 }
-export declare class SPacketUpdateSign extends Message {
+export declare class SPacketUpdateSign extends Message<SPacketUpdateSign> {
 	pos: PBBlockPos;
 	lines: string[];
 }
-export declare class CPacketEntityEffect extends Message {
+export declare class CPacketEntityEffect extends Message<CPacketEntityEffect> {
 	id: number;
 	effectId: number;
 	amplifier: number;
 	duration: number;
 	hideParticles: boolean;
 }
-export declare class CPacketEntityProperties extends Message {
+export declare class CPacketEntityProperties extends Message<CPacketEntityProperties> {
 	id: number;
 	data: PBSnapshot[];
 }
-export declare class PBSnapshot extends Message {
+export declare class PBSnapshot extends Message<PBSnapshot> {
 	id: string;
 	value: number;
 	modifiers: PBModifier[];
 }
-export declare class PBModifier extends Message {
+export declare class PBModifier extends Message<PBModifier> {
 	id: string;
 	amount: number;
 	operation: number;
 }
-export declare class CPacketQueueNext extends Message {
+export declare class CPacketQueueNext extends Message<CPacketQueueNext> {
 	minigameId: string;
 	minigameConfig: string;
 }
-export declare class CPacketRemoveEntityEffect extends Message {
+export declare class CPacketRemoveEntityEffect extends Message<CPacketRemoveEntityEffect> {
 	id: number;
 	effectId: number;
 }
-export declare class CPacketSetExperience extends Message {
+export declare class CPacketSetExperience extends Message<CPacketSetExperience> {
 	experience: number;
 	experienceTotal: number;
 	level: number;
 }
-export declare class CPacketShopProperty extends Message {
+export declare class CPacketShopProperty extends Message<CPacketShopProperty> {
 	name?: string;
 	value?: string;
 }
-export declare class CPacketShopProperties extends Message {
+export declare class CPacketShopProperties extends Message<CPacketShopProperties> {
 	properties: CPacketShopProperty[];
 }
-export declare class CPacketUseBed extends Message {
+export declare class CPacketUseBed extends Message<CPacketUseBed> {
 	id: number;
 	bedPos: PBBlockPos;
 }
-export declare class CPacketTimeUpdate extends Message {
+export declare class CPacketTimeUpdate extends Message<CPacketTimeUpdate> {
 	totalTime: number;
 	worldTime: number;
 }
-export declare class ClientBoundCombined extends Message {
+export declare class ClientBoundCombined extends Message<ClientBoundCombined> {
 	packets: ClientBoundCombined_CPacket[];
 }
-export declare class ClientBoundCombined_CPacket extends Message {
+export declare class ClientBoundCombined_CPacket extends Message<ClientBoundCombined_CPacket> {
 	packet: S2CPacket;
 }
-export declare class SPacketEnchantItem extends Message {}
-export declare class SPacketQueueNext extends Message {}
-export declare class SPacketUpdateCommandBlock extends Message {
+export declare class SPacketEnchantItem extends Message<SPacketEnchantItem> {}
+export declare class SPacketQueueNext extends Message<SPacketQueueNext> {}
+export declare class SPacketUpdateCommandBlock extends Message<SPacketUpdateCommandBlock> {
 	pos: PBBlockPos;
 	command: string | null;
 	commands: string[] | null;
@@ -632,8 +636,10 @@ export declare const CPACKET_MAP: {
 		CPacketEntityAction: typeof CPacketEntityAction;
 		CPacketEntityEquipment: typeof CPacketEntityEquipment;
 		CPacketEntityMetadata: typeof CPacketEntityMetadata;
-		CPacketEntityPositionAndRotation: typeof CPacketEntityPositionAndRotation;
-		CPacketEntityRelativePositionAndRotation: typeof CPacketEntityRelativePositionAndRotation;
+		CPacketEntityPositionAndRotation:
+			typeof CPacketEntityPositionAndRotation;
+		CPacketEntityRelativePositionAndRotation:
+			typeof CPacketEntityRelativePositionAndRotation;
 		CPacketEntityStatus: typeof CPacketEntityStatus;
 		CPacketEntityVelocity: typeof CPacketEntityVelocity;
 		CPacketExplosion: typeof CPacketExplosion;
