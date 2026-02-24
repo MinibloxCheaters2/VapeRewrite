@@ -2,7 +2,7 @@ import { Subscribe } from "@/event/api/Bus";
 import type { Entity } from "@/features/sdk/types/entity";
 import RotationManager, { RotationPlan } from "@/utils/aiming/rotate";
 import Rotation from "@/utils/aiming/rotation";
-import PacketRefs, { c2s } from "@/utils/packetRefs";
+import PacketRefs from "@/utils/packetRefs";
 import deg2rad from "@/utils/radians";
 import Refs from "@/utils/refs";
 import { findTargets } from "@/utils/target";

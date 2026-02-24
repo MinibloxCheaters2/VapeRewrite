@@ -636,10 +636,8 @@ export declare const CPACKET_MAP: {
 		CPacketEntityAction: typeof CPacketEntityAction;
 		CPacketEntityEquipment: typeof CPacketEntityEquipment;
 		CPacketEntityMetadata: typeof CPacketEntityMetadata;
-		CPacketEntityPositionAndRotation:
-			typeof CPacketEntityPositionAndRotation;
-		CPacketEntityRelativePositionAndRotation:
-			typeof CPacketEntityRelativePositionAndRotation;
+		CPacketEntityPositionAndRotation: typeof CPacketEntityPositionAndRotation;
+		CPacketEntityRelativePositionAndRotation: typeof CPacketEntityRelativePositionAndRotation;
 		CPacketEntityStatus: typeof CPacketEntityStatus;
 		CPacketEntityVelocity: typeof CPacketEntityVelocity;
 		CPacketExplosion: typeof CPacketExplosion;

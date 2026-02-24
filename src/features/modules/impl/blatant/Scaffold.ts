@@ -175,7 +175,8 @@ export default class Scaffold extends Mod {
 		if (blockSlots.length === 0) return;
 
 		if (blockSlots.length >= 2 && this.cycleSpeed > 0) {
-			const selected = Math.floor(this.tickCount / this.cycleSpeed) %
+			const selected =
+				Math.floor(this.tickCount / this.cycleSpeed) %
 				blockSlots.length;
 			this.switchSlot(blockSlots[selected]);
 		} else {
