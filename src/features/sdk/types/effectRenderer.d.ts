@@ -1,3 +1,5 @@
+import type { ClientWorld, World } from "./world";
+
 declare class EntityFX extends Entity {
 	sprite: Sprite;
 	mesh_: Mesh;
@@ -95,7 +97,7 @@ declare class EnumParticleTypes {
 		ignoreRange: boolean,
 		argCount?: number,
 	);
-	static getParticleNames(): typeof EnumParticleTypes["PARTICLE_NAMES"];
+	static getParticleNames(): (typeof EnumParticleTypes)["PARTICLE_NAMES"];
 	getParticleName(): this["particleName"];
 	getParticleID(): this["particleID"];
 	getArgumentCount(): this["argumentCount"];
@@ -119,7 +121,7 @@ declare class EffectRenderer {
 		particleType: EnumParticleTypes,
 	): void;
 	spawnEffectParticle(
-		idkA: number,
+		world: ClientWorld,
 		particle: EnumParticleTypes,
 		xOff: number,
 		yOff: number,

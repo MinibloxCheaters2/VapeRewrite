@@ -38,6 +38,7 @@ import type { DamageSource } from "./damageSource";
 import type { Block, BlockChest } from "./blocks";
 import type { InventoryPlayer } from "./inventory";
 import type { Container } from "./container";
+import type { Team } from "./team";
 
 declare enum Perspective {
 	FIRST_PERSON,
@@ -143,7 +144,7 @@ declare class EntityPlayer extends EntityLivingBase {
 	operator: boolean;
 	effects: EffectsManager | null;
 	foodStats: FoodStats;
-	team: unknown | undefined;
+	team: Team | undefined;
 	actualName: string;
 	experienceLevel: number;
 	lastXPSound: number;

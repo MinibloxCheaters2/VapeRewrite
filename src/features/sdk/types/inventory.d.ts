@@ -1,5 +1,5 @@
-import { EntityPlayer } from "./entity";
-import { ItemStack } from "./items";
+import type { EntityPlayer } from "./entity";
+import type { ItemStack } from "./items";
 
 type Crafter = unknown;
 

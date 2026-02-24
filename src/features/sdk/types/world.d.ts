@@ -1,9 +1,13 @@
+import type { Vector3 } from "three";
 import type { BlockPos } from "./blockpos";
 import type { Block } from "./blocks";
+import type { Chunk } from "./chunk";
+import type { IChunkProvider } from "./chunkProvider";
 import type { Entity, EntityPlayer } from "./entity";
 import type { EnumDifficulty } from "./enums";
 import type { GameScene } from "./gameScene";
 import type { CPacketLeaderboard } from "./packets";
+import type { Game } from "./game";
 
 export class Material {
 	readonly air: boolean;
@@ -30,7 +34,7 @@ export declare class World {
 	unloadedEntityList: Map<number, Entity>;
 	loadedTileEntitiesMap: BlockPosMap;
 	tileEntitiesToBeRemoved: unknown[];
-	chunkProvider: ChunkProvider;
+	chunkProvider: IChunkProvider;
 	ambientTickCountdown: number;
 	scheduledUpdatesAreImmediate: boolean;
 	leaderboards: Map<string, CPacketLeaderboard>;
@@ -45,15 +49,15 @@ export declare class World {
 	constructor(dimension: number);
 	get isClient(): boolean;
 	get isServer(): boolean;
-	getActualHeight(): 128 | 256;
+	getActualHeight(): 256 | 128;
 	getVisibleChunks(): void;
 	getVisibleChunkCount(): void;
 	getTeams(): Team[];
-	addTeam(id: string, team: any): void;
+	addTeam(name: string, displayName: string): void;
 	removeTeam(id: string): void;
 	emptyTeam(id: string): void;
-	joinTeam(id: string, ...members: unknown[]): void;
-	leaveTeam(id: string, ...h: unknown[]): void;
+	joinTeam(id: string, ...members: EntityPlayer[]): void;
+	leaveTeam(id: string, ...members: EntityPlayer[]): void;
 	modifyTeam(id: string, which: string, value: string): void;
 	getMobLimit(): number;
 	getActiveChunkCount(): number;
@@ -72,21 +76,25 @@ export declare class World {
 		eZ: number,
 		clB: boolean,
 	): boolean;
-	getChunk(pos: BlockPos): any;
-	getChunkByID(u: any, h: any): any;
-	getBlock(pos: BlockPos): any;
-	getBlockState(pos: BlockPos): any;
-	setAir(u: any, h?: number): void;
-	setAirXYZ(u: any, h: any, p: any): void;
-	isAir(pos: BlockPos): any;
-	areaPassesCheck(u: any, h: any, p: any): boolean;
+	getChunk(pos: BlockPos): Chunk;
+	getChunkByID(x: number, z: number): Chunk;
+	getBlock(pos: BlockPos): Block;
+	getBlockState(pos: BlockPos): BlockState;
+	setAir(pos: BlockPos, h?: number): void;
+	setAirXYZ(x: number, y: number, z: number): void;
+	isAir(pos: BlockPos): boolean;
+	areaPassesCheck(
+		min: BlockPos,
+		max: BlockPos,
+		checkFn: (b: Block) => boolean,
+	): boolean;
 	setBlockState(pos: BlockPos, state: BlockState, p?: number): boolean;
 	setBlockRaw(pos: BlockPos, state: BlockState): void;
 	notifyBlockOfStateChange(pos: ChunkPos, idk: unknown): void;
 	notifyNeighborsOfStateChange(pos: ChunkPos, idk: unknown): void;
 	notifyNeighborsOfStateExcept(
 		u: ChunkPos,
-		idk: any,
+		idk: unknown,
 		facing: EnumFacing,
 	): void;
 	playSoundAtEntity(
@@ -96,20 +104,24 @@ export declare class World {
 		pitch?: number,
 	): void;
 	playSoundAtPosition(
-		pos: any,
+		pos: BlockPos,
 		volume: number | undefined,
 		pitch: number | undefined,
 		name: string,
 	): void;
-	playSound(pos: any, volume?: number, pitch?: number): void;
+	playSound(pos: BlockPos, volume?: number, pitch?: number): void;
 	playSoundAtPositionClientSidePredicted(
-		pos: any,
+		name: string,
 		vol: number | undefined,
 		pitch: number | undefined,
-		name: string,
-		y: any,
+		pos: BlockPos,
+		plr: EntityPlayer,
 	): void;
-	playPlaceSoundAtPositionClientSidePredicted(u: any, h: any, p: any): void;
+	playPlaceSoundAtPositionClientSidePredicted(
+		block: Block,
+		pos: Vector3,
+		plr: EntityPlayer,
+	): void;
 	spawnEntityInWorld(e: Entity): boolean;
 	setEntityState(_a: unknown, _b: unknown): void;
 	getEntityTracker(): void;
@@ -117,12 +129,17 @@ export declare class World {
 	onEntityAdded(entity: Entity): void;
 	markChunkDirty(pos: BlockPos): void;
 	addItem(_a: unknown, _b: unknown): null;
-	getEntityItem(u: Item, pos: Vector3, yOffset: number): any;
+	getEntityItem(u: Item, pos: Vector3, yOffset: number): EntityItem;
 	getServer(): void;
 	getConfigurationManager(): void;
 	resetUpdateEntityTick(): void;
-	getTopSolidOrLiquidBlock(pos: BlockPos): any;
-	canBlockBePlaced(u: any, pos: BlockPos, bl: boolean, _unused: unknown): any;
+	getTopSolidOrLiquidBlock(pos: BlockPos): BlockPos;
+	canBlockBePlaced(
+		block: Block,
+		pos: BlockPos,
+		bl: boolean,
+		_unused: unknown,
+	): boolean;
 	checkNoEntityCollision(box: Box3, _unused: unknown): boolean;
 	emitToAllNearExcept(
 		_a: unknown,
@@ -134,30 +151,37 @@ export declare class World {
 		_g: unknown,
 	): void;
 	playSoundToNearExcept(
-		_a: unknown,
-		_b: unknown,
-		_c: unknown,
-		_d: unknown,
-		_e: unknown,
+		player: EntityPlayer,
+		pos: BlockPos,
+		vol: number,
+		pitch: number,
+		name: string,
 	): void;
 	getCollidingBoundingBoxes(entity: Entity, box: Box3): Box3[];
 	isAnyLiquid(box: Box3): boolean;
 	isFlammableWithin(box: Box3): boolean;
 	handleMaterialAcceleration(box: Box3, _a: unknown, e: Entity): boolean;
-	getEntitiesWithinAABBExcludingEntity(u: any, h: any): any[];
-	getEntitiesInAABBexcluding(idk1: unknown, box: Box3, idk2: unknown): any[];
+	getEntitiesWithinAABBExcludingEntity(
+		excludedID: number,
+		box: Box3,
+	): Entity[];
+	getEntitiesInAABBexcluding(
+		excludedID: number | null,
+		box: Box3,
+		idk?: null,
+	): Entity[];
 	getDifficulty(): EnumDifficulty;
-	setDifficulty(u: EnumDifficulty): void;
+	setDifficulty(difficulty: EnumDifficulty): void;
 	updatePlayerInventory(_a: unknown): void;
 	onEntityRemoved(e: Entity): void;
 	removeEntity(e: Entity): void;
 	updateEntities(): void;
 	isValid(v: Vector3): boolean;
-	getTileEntity(pos: BlockPos): any;
+	getTileEntity(pos: BlockPos): TileEntity | null;
 	addTileEntity(u: TileEntity): void;
 	addTileEntities(entities: TileEntity[]): void;
 	removeTileEntity(pos: BlockPos): void;
-	markTileEntityForRemoval(u: any): void;
+	markTileEntityForRemoval(tileEntity: TileEntity): void;
 	unloadEntities(entities: Entity[]): void;
 	addBlockEvent(
 		pos: BlockPos,
@@ -166,23 +190,31 @@ export declare class World {
 		idk3: unknown,
 	): void;
 	reconcileBlock(_a: unknown, _b: unknown): void;
-	forceBlockUpdateTick(_a: unknown, _b: unknown): void;
+	forceBlockUpdateTick(block: Block, pos: BlockPos): void;
 	getRenderDistanceChunks(): void;
 	setActivePlayerChunksAndCheckLight(): void;
-	static doesBlockHaveSolidTopSurface(u: any, h: any): boolean;
+	static doesBlockHaveSolidTopSurface(world: World, pos: BlockPos): boolean;
 	isBlockNormalCube(pos: BlockPos, idk: boolean): boolean;
 	getLightBrightness(_a: unknown): 15 | -15;
 	isBlockIndirectlyGettingPowered(facing: EnumFacing): number;
-	isSidePowered(idk: unknown, idk2: unknown): boolean;
-	getRedstonePower(pos: BlockPos, idk: unknown): any;
-	getStrongPowerWithDirection(u: any, h: any): any;
+	isSidePowered(pos: BlockPos, idk: unknown): boolean;
+	getRedstonePower(pos: BlockPos, idk: unknown): number;
+	getStrongPowerWithDirection(pos: BlockPos, dir: EnumFacing): number;
 	isBlockPowered(u: BlockPos): boolean;
-	getStrongPower(pos: BlockPos, bl: boolean): any;
-	scheduleUpdate(u: any, h: any, p: any): void;
-	updateBlockTick(u: any, h: any, p: any, g: any): void;
-	getEntitiesWithinAABB(idk: unknown, box: Box3, p: any): Entity[];
-	findNearestEntityWithinAABB(idk: unknown, box: Box3, from_: Entity): any;
-	isBlockTickPending(u: any, h: any): boolean;
+	getStrongPower(pos: BlockPos, bl?: boolean): number;
+	scheduleUpdate(_a: unknown, _b: unknown, _c: unknown): void;
+	updateBlockTick(_a: unknown, _b: unknown, _c: unknown, _d: unknown): void;
+	getEntitiesWithinAABB(
+		eType: string | null,
+		box: Box3,
+		_?: unknown,
+	): Entity[];
+	findNearestEntityWithinAABB(
+		eType: string,
+		box: Box3,
+		from_: Entity,
+	): Entity | null;
+	isBlockTickPending(_a: unknown, _b: unknown): boolean;
 	updateComparatorOutputLevel(pos: BlockPos, idk: unknown): void;
 	spawnParticle(
 		particleType: EnumParticleTypes,
@@ -194,36 +226,66 @@ export declare class World {
 		idk3: unknown,
 		...v: unknown[]
 	): void;
-	getClosestPlayerToEntity(entity: Entity, max: number): any;
-	getClosestPlayer(x: number, y: number, z: number, max: number): any;
+	getClosestPlayerToEntity(entity: Entity, max: number): EntityPlayer | null;
+	getClosestPlayer(
+		x: number,
+		y: number,
+		z: number,
+		max: number,
+	): EntityPlayer | null;
 	isAnyPlayerWithinRangeAt(
 		x: number,
 		y: number,
 		z: number,
 		maxDist: number,
 	): boolean;
-	getSpawnPoint(): any;
-	countEntities(idk: unknown): number;
+	getSpawnPoint(): BlockPos;
+	countEntities(creatureClass: unknown): number;
 	getChunkProvider(): ChunkProvider;
-	getSpawnListEntryForTypeAt(u: any, h: any): any;
-	canCreatureTypeSpawnHere(u: any, h: any, p: any): boolean;
+	getSpawnListEntryForTypeAt(idk: unknown, idk2: unknown): unknown;
+	/**
+	 * @param idk1 passed to chunkProvider.getPossibleCreatures
+	 * @param idk if (creature.entityClass == idk.entityClass)
+	 */
+	canCreatureTypeSpawnHere(
+		idk1: unknown,
+		idk: {
+			entityClass: unknown;
+		},
+		idk2: unknown,
+	): boolean;
 	playersIterator(): MapIterator<EntityPlayer>;
 	getPlayerCount(): number;
-	getPlayerById(u: any): any;
-	getAllPlayerNames(): any[];
+	getPlayerById(id: number): EntityPlayer;
+	getAllPlayerNames(): string[];
 	getEntityCount(): number;
 	getLivingEntityCount(): number;
-	getLiveBlock(pos: BlockPos): any;
-	sendMessageToAllPlayers(u: any, h: any): void;
-	sendAnnouncementToAllPlayers(...u: any[]): void;
+	getLiveBlock(pos: BlockPos): LiveBlock;
+	sendMessageToAllPlayers(_a: unknown, _b: unknown): void;
+	sendAnnouncementToAllPlayers(..._a: unknown[]): void;
 	getBlockDensity(idk: unknown, box: Box3): number;
-	createExplosion(u: any, h: any, p: any, g: any, y: any, x: any): any;
-	newExplosion(u: any, h: any, p: any, g: any, y: any, x: any, S: any): any;
-	isAABBInMaterial(box: Box3, h: any): boolean;
+	createExplosion(
+		entity: Entity,
+		x: number,
+		y: number,
+		z: number,
+		explosionSize: number,
+		smoking: boolean,
+	): Explosion;
+	newExplosion(
+		exploder: Entity,
+		x: number,
+		y: number,
+		z: number,
+		explosionSize: number,
+		flaming: boolean,
+		smoking: boolean,
+	): Explosion;
+	isAABBInMaterial(box: Box3, material: Material): boolean;
 	updateEntity(entity: Entity, h?: boolean): void;
-	handleEvent(u: any): void;
+	handleEvent(_a: unknown): void;
 	isDaytime(): boolean;
-	canSeeSky(pos: BlockPos): any;
+	canSeeSky(pos: BlockPos): boolean;
 	ensureSpawnPoint(): void;
 	checkBlockCollision(box: Box3): boolean;
 	isSpawnChunk(x: number, y: number): boolean;
@@ -234,45 +296,61 @@ export declare class World {
 }
 
 export declare class ClientWorld extends World {
-	scene: GameScene;
+	private game: Game;
+	private scene: GameScene;
 	entityMesh: Map;
 	leaderboardToMesh: Map;
-	entitySpawnQueue: Entity[];
-	chunkRenderBlockUpdateListener;
+	private entitySpawnQueue: Entity[];
+	/** another relic, but this time I can't find it in MCP-919? */
+	chunkRenderBlockUpdateListener: undefined;
 	chunkProvider: ChunkProviderClient;
-	get isClient(): true;
-	get isServer(): false;
-	addPlayer(h: EntityPlayer): void;
+	constructor(game: Game, scene: GameScene, dimension: number);
+	get isClient(): boolean;
+	get isServer(): boolean;
+	addPlayer(plr: EntityPlayer): void;
+	addTileEntity(tile: TileEntity): void;
+	removeTileEntity(pos: BlockPos): void;
+	setBlockState(
+		pos: BlockPos,
+		state: BlockState,
+		flags?: number,
+		preRender?: boolean,
+	): boolean;
 	playSoundAtEntity(
 		entity: Entity,
 		name: string,
-		volume = 1,
-		pitch = 1,
+		volume?: number,
+		pitch?: number,
 	): void;
-	playSoundAtPosition(pos, volume = 1, pitch = 1, name: string): void;
-	playSound(pos, volume = 1, pitch = 1): void;
+	playSoundAtPosition(
+		name: string,
+		pos: BlockPos,
+		volume?: number,
+		pitch?: number,
+	): void;
+	playSound(name: string, volume?: number, pitch?: number): void;
 	displayBarrierParticles(x: number, y: number, z: number): void;
-	/** calls with `this` as the world argument {@linkcode EffectRenderer.spawnEffectParticle}. */
 	spawnParticle(
-		particleType: EnumParticleTypes,
-		xO: number,
-		yO: number,
-		zO: number,
+		particle: EnumParticleTypes,
+		xOff: number,
+		yOff: number,
+		zOff: number,
 		idk1: unknown,
 		idk2: unknown,
 		idk3: unknown,
+		pos: Vector3,
 		...v: unknown[]
 	): void;
+	getEntitiesWithinAABB(eType: string | null, box: Box3): Entity[];
 	update(): void;
-	spawnEntityInWorld(e: Entity): boolean;
-	onEntityAdded(h: Entity): void;
-	removeEntity(h: Entity): void;
-	onEntityRemoved(h: Entity): void;
-	removeEntityFromWorld(e: Entity): Entity;
+	spawnEntityInWorld(h: Entity): boolean;
+	onEntityAdded(entity: Entity): void;
+	removeEntity(entity: Entity): void;
+	onEntityRemoved(entity: Entity): void;
+	removeEntityFromWorld(entity: Entity): Entity;
 	removeAllEntities(): void;
-	// there's an extra parameter but I forgor
-	isBlockLoaded(pos: BlockPos): boolean;
-	handleBlockUpdate(pos: { x: number; y: number; z: number }): void;
+	isBlockLoaded(bp: BlockPos): boolean;
+	handleBlockUpdate(bpJSON: CPacketBlockUpdate): void;
 	getRenderDistanceChunks(): number;
 	clear(): void;
 }
