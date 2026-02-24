@@ -15,7 +15,7 @@ import type {
 	EntityLivingBase,
 } from "../features/sdk/types/entity";
 import type { Game } from "../features/sdk/types/game";
-import type { ItemBlock, ItemSword, Items } from "../features/sdk/types/items";
+import type { ItemBlock, Items, ItemSword } from "../features/sdk/types/items";
 import type { Materials } from "../features/sdk/types/materials";
 import type { EnumFacing } from "../features/sdk/types/math/facing";
 import type { ClientWorld } from "../features/sdk/types/world";
@@ -53,37 +53,45 @@ class Refs {
 	}
 
 	static get ItemSword(): typeof ItemSword {
-		return Refs.#initOrR(Refs.#ItemSword, () =>
-			Interop.run((e) => e<typeof ItemSword>("ItemSword")),
+		return Refs.#initOrR(
+			Refs.#ItemSword,
+			() => Interop.run((e) => e<typeof ItemSword>("ItemSword")),
 		);
 	}
 
 	static get Materials() {
-		return Refs.#initOrR(Refs.#Materials, () =>
-			Interop.run((e) => e<typeof Materials>("Materials")),
+		return Refs.#initOrR(
+			Refs.#Materials,
+			() => Interop.run((e) => e<typeof Materials>("Materials")),
 		);
 	}
 
 	static get Items() {
-		return Refs.#initOrR(Refs.#Items, () =>
-			Interop.run((e) => e<typeof Items>("Items")),
+		return Refs.#initOrR(
+			Refs.#Items,
+			() => Interop.run((e) => e<typeof Items>("Items")),
 		);
 	}
 	static get ItemBlock() {
-		return Refs.#initOrR(Refs.#ItemBlock, () =>
-			Interop.run((e) => e<typeof ItemBlock>("ItemBlock")),
+		return Refs.#initOrR(
+			Refs.#ItemBlock,
+			() => Interop.run((e) => e<typeof ItemBlock>("ItemBlock")),
 		);
 	}
 	static get hud3D() {
-		return Refs.#initOrR(Refs.#hud3D, () =>
-			Interop.run((e) => e<HUD3D>("hud3D")),
+		return Refs.#initOrR(
+			Refs.#hud3D,
+			() => Interop.run((e) => e<HUD3D>("hud3D")),
 		);
 	}
 
-	/** Literally just `game.controller` */
+	/**
+	 * Just `game.controller` with the remap proxy applied
+	 */
 	static get playerController() {
-		return Refs.#initOrR(Refs.#playerController, () =>
-			remapObj(Refs.game.controller, mappings.playerController),
+		return Refs.#initOrR(
+			Refs.#playerController,
+			() => remapObj(Refs.game.controller, mappings.playerController),
 		);
 	}
 
@@ -92,77 +100,103 @@ class Refs {
 			remapObj(
 				Interop.run((e) => e<PlayerControllerMP>("playerControllerMP")),
 				mappings.playerControllerMP,
-			),
-		);
+			));
 	}
 
 	static get BoxGeometry() {
-		return Refs.#initOrR(Refs.#BoxGeometry, () =>
-			Interop.run((e) =>
-				e<typeof BoxGeometry>(MATCHED_DUMPS.boxGeometry),
-			),
+		return Refs.#initOrR(
+			Refs.#BoxGeometry,
+			() =>
+				Interop.run((e) =>
+					e<typeof BoxGeometry>(MATCHED_DUMPS.boxGeometry)
+				),
 		);
 	}
 
 	static get Mesh() {
-		return Refs.#initOrR(Refs.#Mesh, () =>
-			Interop.run((e) => e<typeof Mesh>("Mesh")),
+		return Refs.#initOrR(
+			Refs.#Mesh,
+			() => Interop.run((e) => e<typeof Mesh>("Mesh")),
 		);
 	}
 
 	static get Vec3() {
-		return Refs.#initOrR(Refs.#Vec3, () =>
-			Interop.run((e) => e<typeof Vector3>("Vector3$1")),
+		return Refs.#initOrR(
+			Refs.#Vec3,
+			() => Interop.run((e) => e<typeof Vector3>("Vector3$1")),
 		);
 	}
 
 	static get BlockPos() {
-		return Refs.#initOrR(Refs.#BlockPos, () =>
-			Interop.run((e) => e<typeof BlockPos>("BlockPos")),
+		return Refs.#initOrR(
+			Refs.#BlockPos,
+			() => Interop.run((e) => e<typeof BlockPos>("BlockPos")),
 		);
 	}
 
 	static get EnumFacing() {
-		return Refs.#initOrR(Refs.#EnumFacing, () =>
-			Interop.run((e) => e<typeof EnumFacing>("EnumFacing")),
+		return Refs.#initOrR(
+			Refs.#EnumFacing,
+			() => Interop.run((e) => e<typeof EnumFacing>("EnumFacing")),
 		);
 	}
 
 	static get EntityLivingBase() {
-		return Refs.#initOrR(Refs.#EntityLivingBase, () =>
-			Interop.run((e) => e<typeof EntityLivingBase>("EntityLivingBase")),
+		return Refs.#initOrR(
+			Refs.#EntityLivingBase,
+			() =>
+				Interop.run((e) =>
+					e<typeof EntityLivingBase>("EntityLivingBase")
+				),
 		);
 	}
 
 	static get PBVector3() {
-		return Refs.#initOrR(Refs.#PBVector3, () =>
-			Interop.run((e) => e<PBVector3>("PBVector3")),
+		return Refs.#initOrR(
+			Refs.#PBVector3,
+			() => Interop.run((e) => e<PBVector3>("PBVector3")),
 		);
 	}
 
+	/**
+	 * Prefer using some of the getters in here instead of from this game object,
+	 * since some of them have a remapper proxy added, which automatically remaps non-obfuscated symbol names to their dumped version,
+	 * which you would have to do manually by indexing dumps and casting to `as "originalName"` so you get the typings.
+	 * | Old name             | New name              | Auto remapping |
+	 * |----------------------|-----------------------|----------------:|
+	 * | Refs.game.player     | Refs.player           | ✅             |
+	 * | Refs.game.world      | Refs.world            | ✅             |
+	 * | Refs.game.controller | Refs.playerController | ✅             |
+	 * | Refs.game.chat       | Refs.chat             | Not needed     |
+	 */
 	static get game() {
 		return Refs.#initOrR(Refs.#game, () => Interop.run((e) => e("game")));
 	}
 
 	static get ClientSocket(): typeof ClientSocket {
-		return Refs.#initOrR(Refs.#clientSocket, () =>
-			Interop.run((e) => e("ClientSocket")),
+		return Refs.#initOrR(
+			Refs.#clientSocket,
+			() => Interop.run((e) => e("ClientSocket")),
 		);
 	}
 
+	/** Refs.game.world with a remap proxy applied */
 	static get world() {
-		return Refs.#initOrR(Refs.#world, () =>
-			remapObj(Refs.game.world, mappings.world),
+		return Refs.#initOrR(
+			Refs.#world,
+			() => remapObj(Refs.game.world, mappings.world),
 		);
 	}
 
+	/** Convenience reference to Refs.game.chat */
 	static get chat() {
 		return Refs.#initOrR(Refs.#chat, () => Refs.game.chat);
 	}
 
 	static get player() {
-		return Refs.#initOrR(Refs.#player, () =>
-			Interop.run((e) => e<ClientEntityPlayer>("player")),
+		return Refs.#initOrR(
+			Refs.#player,
+			() => remapObj(Refs.game.player, mappings.ClientEntityPlayer),
 		);
 	}
 }

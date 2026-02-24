@@ -84,10 +84,8 @@ export default class TargetStrafe extends Mod {
 		if (this.onlyOnGround && !player.onGround) return;
 
 		if (this.onlyWhenMoving) {
-			const moveForwardDump = MATCHED_DUMPS.moveForward as "moveForward";
-			const moveStrafeDump = MATCHED_DUMPS.moveStrafe as "moveStrafe";
 			const isMoving =
-				player[moveForwardDump] !== 0 || player[moveStrafeDump] !== 0;
+				player.moveForward !== 0 || player.moveStrafe !== 0;
 			if (!isMoving) return;
 		}
 

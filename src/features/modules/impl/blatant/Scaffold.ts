@@ -175,8 +175,7 @@ export default class Scaffold extends Mod {
 		if (blockSlots.length === 0) return;
 
 		if (blockSlots.length >= 2 && this.cycleSpeed > 0) {
-			const selected =
-				Math.floor(this.tickCount / this.cycleSpeed) %
+			const selected = Math.floor(this.tickCount / this.cycleSpeed) %
 				blockSlots.length;
 			this.switchSlot(blockSlots[selected]);
 		} else {
@@ -193,10 +192,7 @@ export default class Scaffold extends Mod {
 			: null;
 
 		// Check if player is moving
-		const moveForwardDump = MATCHED_DUMPS.moveForward as "moveForward";
-		const moveStrafeDump = MATCHED_DUMPS.moveStrafe as "moveStrafe";
-		const isMoving =
-			player[moveForwardDump] !== 0 || player[moveStrafeDump] !== 0;
+		const isMoving = player.moveForward !== 0 || player.moveStrafe !== 0;
 
 		// Calculate positions
 		const playerX = Math.floor(player.pos.x);

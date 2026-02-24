@@ -1,10 +1,9 @@
-import { MATCHED_DUMPS } from "../hooks/replacement";
 import Refs from "./refs";
 
 export default function getMoveDirection(moveSpeed: number) {
 	const { player, Vec3 } = Refs;
-	let moveStrafe = Refs.player[MATCHED_DUMPS.moveStrafe as "moveStrafe"];
-	let moveForward = Refs.player[MATCHED_DUMPS.moveForward as "moveForward"];
+	let moveStrafe = Refs.player.moveStrafe;
+	let moveForward = Refs.player.moveForward;
 	let speed = moveStrafe * moveStrafe + moveForward * moveForward;
 	if (speed >= 0.0001) {
 		speed = Math.sqrt(speed);

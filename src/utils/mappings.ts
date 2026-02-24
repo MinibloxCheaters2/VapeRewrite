@@ -1,3 +1,7 @@
+/**
+ * Contains various mappings, these are used in the auto-remapping proxy so you don't have to think about using dumps ever again!
+ * @module
+ */
 import { MATCHED_DUMPS } from "@/hooks/replacement";
 import initOrR from "./initOrR";
 import type { Mapping } from "./remapProxy";
@@ -27,6 +31,7 @@ export default new (class Mappings {
 			[MATCHED_DUMPS.moveForward]: "moveForward",
 			[MATCHED_DUMPS.moveStrafe]: "moveStrafe",
 			[MATCHED_DUMPS.lastReportedYaw]: "lastReportedYaw",
+			[MATCHED_DUMPS.attackTargetEntityWithCurrentItem]: "attack",
 		}));
 	}
 })();

@@ -1,5 +1,4 @@
 import type { Entity } from "../features/sdk/types/entity.d.js";
-import { MATCHED_DUMPS } from "../hooks/replacement";
 import Refs from "./refs";
 
 export function getTeam(entity: Entity) {
@@ -9,14 +8,14 @@ export function getTeam(entity: Entity) {
 }
 
 export function findTargets(range = 6, _angle = 360, checkWalls = false) {
-	const { game, player, EntityLivingBase } = Refs;
+	const { player, EntityLivingBase, world } = Refs;
 	const localTeam = getTeam(player);
-	const entities = game.world[MATCHED_DUMPS.entities as "entities"];
 
 	const sqRange = range * range;
-	const entities2 = Array.from(entities.values());
+	// auto remapping proxy!
+	const entities = Array.from(world.entities.values());
 
-	const targets = entities2.filter((e) => {
+	const targets = entities.filter((e) => {
 		const base = e instanceof EntityLivingBase && e.id !== player.id;
 		if (!base) return false;
 		const distCheck = player.getDistanceSqToEntity(e) < sqRange;

@@ -1,5 +1,3 @@
-// the idea of this hook is to move some of the symbols into the window object so we can get them.
-
 import {
 	CHECK_UNMATCHED_DUMPS,
 	CHECK_UNMATCHED_REPLACEMENTS,

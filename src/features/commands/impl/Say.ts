@@ -1,5 +1,5 @@
 import { argument, literal, StringArgumentType } from "@wq2/brigadier-ts";
-import { c2s } from "@/utils/packetRefs";
+import PacketRefs from "@/utils/packetRefs";
 import Refs from "@/utils/refs";
 import dispatcher from "../api/CommandDispatcher";
 
@@ -9,7 +9,7 @@ dispatcher.register(
 			async (e) => {
 				const what = e.get<string>("what");
 				Refs.ClientSocket.sendPacket(
-					new (c2s("SPacketMessage"))({ text: what }),
+					new PacketRefs.s.SPacketMessage({ text: what }),
 				);
 			},
 		),

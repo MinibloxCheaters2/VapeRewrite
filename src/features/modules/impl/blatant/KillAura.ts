@@ -1,9 +1,8 @@
 import { Subscribe } from "@/event/api/Bus";
 import type { Entity } from "@/features/sdk/types/entity";
-import { MATCHED_DUMPS } from "@/hooks/replacement";
 import RotationManager, { RotationPlan } from "@/utils/aiming/rotate";
 import Rotation from "@/utils/aiming/rotation";
-import { c2s } from "@/utils/packetRefs";
+import PacketRefs, { c2s } from "@/utils/packetRefs";
 import deg2rad from "@/utils/radians";
 import Refs from "@/utils/refs";
 import { findTargets } from "@/utils/target";
@@ -54,9 +53,9 @@ export default class KillAura extends Mod {
 		if (this.autoBlock) {
 			if (!this.blocking) {
 				const { ClientSocket, playerControllerMP } = Refs;
-				const d = MATCHED_DUMPS.syncItem as "syncItem";
-				playerControllerMP[d]();
-				ClientSocket.sendPacket(new (c2s("SPacketUseItem"))());
+				// auto-remapping proxy!
+				playerControllerMP.syncItem();
+				ClientSocket.sendPacket(new PacketRefs.s.SPacketUseItem());
 				this.blocking = true;
 			}
 		} else this.blocking = false;
@@ -66,10 +65,10 @@ export default class KillAura extends Mod {
 		if (this.blocking) {
 			const { ClientSocket, BlockPos, EnumFacing, playerControllerMP } =
 				Refs;
-			const d = MATCHED_DUMPS.syncItem as "syncItem";
-			playerControllerMP[d]();
+			// auto-remapping proxy again lol
+			playerControllerMP.syncItem();
 			ClientSocket.sendPacket(
-				new (c2s("SPacketPlayerAction"))({
+				new PacketRefs.s.SPacketPlayerAction({
 					position: BlockPos.ORIGIN.toProto(),
 					facing: EnumFacing.DOWN.getIndex(),
 					action: 5, // PBAction.RELEASE_USE_ITEM
@@ -85,10 +84,8 @@ export default class KillAura extends Mod {
 		const hitVec = player.getEyePos().clone().clamp(box.min, box.max);
 
 		const aimPos = player.pos.clone().sub(e.pos);
-		const lastReportedYawN =
-			MATCHED_DUMPS.lastReportedYaw as "lastReportedYaw";
 		const newYaw = wrapAngleTo180_radians(
-			Math.atan2(aimPos.x, aimPos.z) - player[lastReportedYawN],
+			Math.atan2(aimPos.x, aimPos.z) - player.lastReportedYaw,
 		);
 		const checkYaw = wrapAngleTo180_radians(
 			Math.atan2(aimPos.x, aimPos.z) - player.yaw,
@@ -101,7 +98,7 @@ export default class KillAura extends Mod {
 			RotationManager.scheduleRotation(
 				new RotationPlan(
 					new Rotation(
-						player[lastReportedYawN] + newYaw,
+						player.lastReportedYaw + newYaw,
 						RotationManager.activeRotation.pitch,
 					),
 				),
@@ -110,7 +107,7 @@ export default class KillAura extends Mod {
 		// we don't send the attack packet silently,
 		// so the Criticals module will automatically send the packets BEFORE this one sends!
 		ClientSocket.sendPacket(
-			new (c2s("SPacketUseEntity"))({
+			new PacketRefs.s.SPacketUseEntity({
 				id: e.id,
 				action: 1,
 				hitVec: {
@@ -120,8 +117,8 @@ export default class KillAura extends Mod {
 				},
 			}),
 		);
-		const d = MATCHED_DUMPS.attackTargetEntityWithCurrentItem as "attack";
-		player[d](e);
+		// since we're using Refs.player directly instead of Refs.game.player, the call automatically gets remapped to the obfuscated name!
+		player.attack(e);
 	}
 
 	@Subscribe("gameTick")
