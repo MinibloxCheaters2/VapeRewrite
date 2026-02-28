@@ -1,5 +1,5 @@
 import type { BoxGeometry, Mesh, Vector3 } from "three";
-import type { HUD3D } from "@/features/sdk/types/hud";
+import type { Hud3D } from "@/features/sdk/types/hud";
 import type { PBVector3 } from "@/features/sdk/types/packets";
 import { MATCHED_DUMPS } from "@/hooks/replacement";
 import Interop from "../exposedO";
@@ -45,7 +45,7 @@ class Refs {
 	static #Items: typeof Items;
 	static #ItemBlock: typeof ItemBlock;
 	static #ItemSword: typeof ItemSword;
-	static #hud3D: HUD3D;
+	static #hud3D: Hud3D;
 
 	static #initOrR<T>(field: T, initializer: () => T) {
 		field ??= initializer();
@@ -76,7 +76,7 @@ class Refs {
 	}
 	static get hud3D() {
 		return Refs.#initOrR(Refs.#hud3D, () =>
-			Interop.run((e) => e<HUD3D>("hud3D")),
+			Interop.run((e) => e<Hud3D>("hud3D")),
 		);
 	}
 
@@ -175,6 +175,7 @@ class Refs {
 		return Refs.#initOrR(Refs.#chat, () => Refs.game.chat);
 	}
 
+	/** Refs.game.player with a remap proxy applied */
 	static get player() {
 		return Refs.#initOrR(Refs.#player, () =>
 			remapObj(Refs.game.player, mappings.ClientEntityPlayer),

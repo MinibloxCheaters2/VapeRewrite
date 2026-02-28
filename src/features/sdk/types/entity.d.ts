@@ -605,6 +605,7 @@ declare class Entity {
 	entityDropItem(stack: ItemStack, offsetY: number): EntityItem;
 	doesEntityNotTriggerPressurePlate(): boolean;
 	getHorizontalFacing(): EnumFacing;
+	/** gets the **BLOCK** position of the player. */
 	getPosition(): BlockPos;
 	getExplosionResistance(
 		u: unknown,

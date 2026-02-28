@@ -19,7 +19,7 @@ export class Block {
 	useNeighborBrightness: boolean;
 	blockParticleGravity: number;
 
-	getBoundingBox?(): Box3;
+	getBoundingBox(): Box3;
 
 	isFullBlock(): boolean;
 	isOpaqueCube(): boolean;
@@ -161,6 +161,16 @@ interface BlockHellPortal extends Block {}
 interface BlockCloud extends Block {}
 
 // this actually exposed in the window object like a few other objects (i.e. window.Buffer).
+// see:
+/*
+```ts
+let Blocks = te; // useless alias. using rollup for bundling and then doing this????
+Items.init();
+furnaceRecipes.registerRecipes();
+globalThis.Blocks = Blocks;
+//        ^^^^^^^^^^^^^^^^
+```
+*/
 export declare const Blocks: {
 	readonly idToBlock: Map<number, Block>;
 	readonly idToBlockState: Map<number, BlockState>;

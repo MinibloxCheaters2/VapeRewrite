@@ -1,4 +1,5 @@
 import { InventoryBasic } from "./inventory";
+import Slot from "./slot";
 
 // Container types
 export class Container {

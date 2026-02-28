@@ -152,7 +152,7 @@ export function Subscribe<K extends keyof ClientEvents>(
 	event: K,
 	priority: number = Priority.NORMAL,
 ) {
-	return <A extends ClientEvents[K]>(
+	return <A extends ClientEvents[K] = ClientEvents[K]>(
 		_target: unknown,
 		mdc: ClassMethodDecoratorContext<
 			unknown,

@@ -21,7 +21,7 @@ export default class ChestStealer extends Mod {
 	);
 	private randomDelayToggleSetting = this.createToggleSetting(
 		"Random Delay",
-		true,
+		false,
 	);
 	private maxRandomDelaySetting = this.createSliderSetting(
 		"Max Random (ms)",
@@ -174,7 +174,7 @@ export default class ChestStealer extends Mod {
 			return;
 		}
 
-		const slots = container.inventorySlots || [];
+		const slots = container.inventorySlots;
 		const playerInventoryStart = slots.length - 36;
 
 		let foundItem = false;
