@@ -4,7 +4,7 @@ import Interop from "@/exposedO";
 import type { BlockPos } from "@/features/sdk/types/blockpos";
 import type { EnumFacing } from "@/features/sdk/types/math/facing";
 import { MATCHED_DUMPS } from "@/hooks/replacement";
-import Refs from "@/utils/refs";
+import Refs from "@/utils/helpers/refs";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 
@@ -299,7 +299,7 @@ export default class Scaffold extends Mod {
 			if (this.tower && keyPressed?.("space") && player.onGround) {
 				const centerDist = Math.sqrt(
 					(player.pos.x - (playerX + 0.5)) ** 2 +
-						(player.pos.z - (playerZ + 0.5)) ** 2,
+					(player.pos.z - (playerZ + 0.5)) ** 2,
 				);
 
 				if (
