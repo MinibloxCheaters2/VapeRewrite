@@ -1,2 +1,2 @@
-export * from './movement/target'
-export { default } from './movement/target'
+export * from "./movement/target";
+export { default } from "./movement/target";

@@ -1,1 +1,1 @@
-export * from './time/random'
+export * from "./time/random";

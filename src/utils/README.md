@@ -1,28 +1,30 @@
-Project utils organization
-==========================
+# Project utils organization
 
 This directory contains small utility modules used across the project.
 
-Purpose
--------
+## Purpose
+
 - Provide a single barrel import at `src/utils` to make imports cleaner.
 
-How to use
-----------
+## How to use
+
 Import grouped utilities from the barrel:
 
 ```ts
-import { vec, wait, Logger } from 'src/utils'
+import { Logger, vec, wait } from "src/utils";
 ```
 
-Notes & next steps
-------------------
-- The barrel (`index.ts`) re-exports the most commonly used modules without moving files.
-- If you want to physically reorganize files into subfolders (e.g. `math/`, `net/`), I can move files and update imports across the repo.
-- Consider adding more focused barrel files for subfolders if you split the directory.
+## Notes & next steps
 
-Files currently exposed by the barrel
------------------------------------
+- The barrel (`index.ts`) re-exports the most commonly used modules without
+  moving files.
+- If you want to physically reorganize files into subfolders (e.g. `math/`,
+  `net/`), I can move files and update imports across the repo.
+- Consider adding more focused barrel files for subfolders if you split the
+  directory.
+
+## Files currently exposed by the barrel
+
 - vec, radians, random, wait
 - Logger, loggers
 - key

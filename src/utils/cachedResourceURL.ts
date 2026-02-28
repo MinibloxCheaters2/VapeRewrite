@@ -1,1 +1,1 @@
-export { default } from './helpers/cachedResourceURL'
+export { default } from "./helpers/cachedResourceURL";

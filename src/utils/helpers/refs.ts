@@ -1,15 +1,7 @@
-import type dump from "../../hooks/dump";
-import type { ExposedFromGame } from "../../hooks/exposed";
-import { fgExposedName, storeName } from "../mapping/names";
-
-import { MATCHED_DUMPS } from "@/hooks/replacement";
-import mappings from "../mapping/mappings";
-import remapObj from "./remapProxy";
-import Interop from "../../exposedO";
-
 import type { BoxGeometry, Mesh, Vector3 } from "three";
-import type { Hud3D } from "../../features/sdk/types/hud";
-import type { PBVector3 } from "../../features/sdk/types/packets";
+import type { AllBlocks } from "@/features/sdk/types/blocks";
+import { MATCHED_DUMPS } from "@/hooks/replacement";
+import Interop from "../../exposedO";
 import type { BlockPos } from "../../features/sdk/types/blockpos";
 import type { Chat } from "../../features/sdk/types/chat";
 import type { ClientSocket } from "../../features/sdk/types/clientSocket";
@@ -22,11 +14,18 @@ import type {
 	EntityLivingBase,
 } from "../../features/sdk/types/entity";
 import type { Game } from "../../features/sdk/types/game";
-import type { ItemBlock, ItemSword, Items } from "../../features/sdk/types/items";
+import type { Hud3D } from "../../features/sdk/types/hud";
+import type {
+	ItemBlock,
+	ItemSword,
+	Items,
+} from "../../features/sdk/types/items";
 import type { Materials } from "../../features/sdk/types/materials";
 import type { EnumFacing } from "../../features/sdk/types/math/facing";
+import type { PBVector3 } from "../../features/sdk/types/packets";
 import type { ClientWorld } from "../../features/sdk/types/world";
-import { AllBlocks } from "@/features/sdk/types/blocks";
+import mappings from "../mapping/mappings";
+import remapObj from "./remapProxy";
 
 // biome-ignore lint/complexity/noStaticOnlyClass: job
 class Refs {
@@ -66,7 +65,10 @@ class Refs {
 	}
 
 	static get Blocks(): AllBlocks {
-		return Refs.#initOrR(Refs.#Blocks, () => globalThis.Blocks as AllBlocks);
+		return Refs.#initOrR(
+			Refs.#Blocks,
+			() => globalThis.Blocks as AllBlocks,
+		);
 	}
 
 	static get Materials() {
@@ -111,7 +113,9 @@ class Refs {
 
 	static get BoxGeometry() {
 		return Refs.#initOrR(Refs.#BoxGeometry, () =>
-			Interop.run((e) => e<typeof BoxGeometry>(MATCHED_DUMPS.boxGeometry)),
+			Interop.run((e) =>
+				e<typeof BoxGeometry>(MATCHED_DUMPS.boxGeometry),
+			),
 		);
 	}
 

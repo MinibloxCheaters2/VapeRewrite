@@ -1,2 +1,2 @@
-export * from './mapping/names'
-export { default } from './mapping/names'
+export * from "./mapping/names";
+export { default } from "./mapping/names";

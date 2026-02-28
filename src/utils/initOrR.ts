@@ -1,1 +1,1 @@
-export { default } from './helpers/initOrR'
+export { default } from "./helpers/initOrR";

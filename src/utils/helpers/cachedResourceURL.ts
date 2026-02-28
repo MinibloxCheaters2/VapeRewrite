@@ -19,12 +19,12 @@ const dataURLCache: Record<string, string> = {};
  * that forbid fetching `blob:` in their CSP.
  */
 export default function getResourceURL(
-    name: string,
-    isBlobUrl: boolean = true,
+	name: string,
+	isBlobUrl: boolean = true,
 ) {
-    const cache = isBlobUrl ? blobURLCache : dataURLCache;
+	const cache = isBlobUrl ? blobURLCache : dataURLCache;
 
-    cache[name] ??= GM_getResourceURL(name, isBlobUrl);
+	cache[name] ??= GM_getResourceURL(name, isBlobUrl);
 
-    return cache[name];
+	return cache[name];
 }

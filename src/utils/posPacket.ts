@@ -1,2 +1,2 @@
-export * from './network/posPacket'
-export { default } from './network/posPacket'
+export * from "./network/posPacket";
+export { default } from "./network/posPacket";

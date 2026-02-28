@@ -1,2 +1,2 @@
-export * from './network/packetQueueManager'
-export { default } from './network/packetQueueManager'
+export * from "./network/packetQueueManager";
+export { default } from "./network/packetQueueManager";

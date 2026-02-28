@@ -1,2 +1,2 @@
-export * from './helpers/remapProxy'
-export { default } from './helpers/remapProxy'
+export * from "./helpers/remapProxy";
+export { default } from "./helpers/remapProxy";

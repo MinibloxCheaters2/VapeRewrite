@@ -76,7 +76,7 @@ export default class ModuleManager {
 		new ChestStealer(),
 		new Test(),
 		new TickBase(),
-		new ChestAura()
+		new ChestAura(),
 	] as const;
 
 	public static readonly moduleNames: string[] = this.modules.map(
