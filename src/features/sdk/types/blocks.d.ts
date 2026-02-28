@@ -171,7 +171,7 @@ globalThis.Blocks = Blocks;
 //        ^^^^^^^^^^^^^^^^
 ```
 */
-export declare const Blocks: {
+export type AllBlocks = {
 	readonly idToBlock: Map<number, Block>;
 	readonly idToBlockState: Map<number, BlockState>;
 	readonly blockStateToId: Map<BlockState, number>;

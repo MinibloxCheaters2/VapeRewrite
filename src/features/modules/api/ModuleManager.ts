@@ -15,6 +15,7 @@ import HudManagerModule from "../impl/render/HudManager.js";
 import AntiBan from "../impl/utility/AntiBan.js";
 import AutoRespawn from "../impl/utility/AutoRespawn.js";
 import AutoSword from "../impl/utility/AutoSword.js";
+import ChestAura from "../impl/utility/ChestAura.js";
 import ChestStealer from "../impl/utility/ChestStealer.js";
 import FilterBypass from "../impl/utility/FilterBypass.js";
 import RejoinOnMute from "../impl/utility/RejoinOnMute.js";
@@ -75,6 +76,7 @@ export default class ModuleManager {
 		new ChestStealer(),
 		new Test(),
 		new TickBase(),
+		new ChestAura()
 	] as const;
 
 	public static readonly moduleNames: string[] = this.modules.map(

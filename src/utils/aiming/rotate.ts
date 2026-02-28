@@ -7,9 +7,9 @@ import Bus from "@/Bus";
 import { Priority, Subscribe } from "@/event/api/Bus";
 import type CancelableWrapper from "@/event/api/CancelableWrapper";
 import type { C2SPacket } from "@/features/sdk/types/packetTypes";
-import packetQueueManager from "../packetQueueManager";
-import { c2s } from "../packetRefs";
-import Refs from "../refs";
+import packetQueueManager from "../network/packetQueueManager";
+import { c2s } from "../network/packetRefs";
+import Refs from "../helpers/refs";
 import Rotation from "./rotation";
 
 export class RotationPlan {
