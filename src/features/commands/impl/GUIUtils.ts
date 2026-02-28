@@ -4,7 +4,7 @@ import dispatcher from "../api/CommandDispatcher";
 
 dispatcher.register(
 	literal("enchant").executes(async (_) => {
-		Refs.game.displayGui({
+		Refs.game.player.displayGui({
 			getGuiID() {
 				return "enchanting_table";
 			},
@@ -14,7 +14,7 @@ dispatcher.register(
 
 dispatcher.register(
 	literal("craft").executes(async (_) => {
-		Refs.game.displayGui({
+		Refs.game.player.displayGui({
 			getGuiID() {
 				return "workbench";
 			},

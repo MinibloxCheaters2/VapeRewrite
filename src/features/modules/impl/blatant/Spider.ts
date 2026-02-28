@@ -3,6 +3,7 @@ import { Subscribe } from "@/event/api/Bus";
 import Refs from "@/utils/refs";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
+import { defaultFilter, oneInRange } from "@/utils";
 
 export default class Spider extends Mod {
 	public name = "Spider";
@@ -74,19 +75,11 @@ export default class Spider extends Mod {
 	}
 
 	private isCollidingHorizontally(): boolean {
-		const { player } = Refs;
-		if (!player) return false;
+		const { player, Vec3, BlockPos, game } = Refs;
+		// if (!player) return false;
 
-		const box = player.boundingBox;
-		const expandedBox = box.expandByVector(
-			new Refs.Vec3(this.wallDetectRange, 0, this.wallDetectRange),
-		);
-
-		const { game } = Refs;
-		if (!game) return false;
-
-		const collidingBlocks = game.world.getCollisionBoxes(expandedBox);
-		return collidingBlocks.length > 0;
+		const anyCollidingBlock = oneInRange(this.wallDetectRange, defaultFilter, 0);
+		return anyCollidingBlock !== undefined;
 	}
 
 	@Subscribe("gameTick")
@@ -102,7 +95,6 @@ export default class Spider extends Mod {
 			this.autoClimb || player.motion.y < 0 || player.onGround;
 
 		if (shouldClimb) {
-			// Climb Climb Climb!!
 			player.motion.y = this.climbSpeed;
 		}
 	}
