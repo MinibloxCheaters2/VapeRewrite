@@ -45,28 +45,29 @@ export function withBlockState<T>(
 	return (pos) => fn(world.getBlockState(pos));
 }
 
-export const dfltFilter: BlockFilter = (b) => isSolid(Refs.world.getBlock(b));
+export const defaultFilter: BlockFilter = (b) => isSolid(Refs.world.getBlock(b));
 
-export function allBlocksInRange(range: number): BlockPos[] {
+export function allBlocksInRange(hRange: number, vRange: number = hRange): BlockPos[] {
 	const { player, BlockPos } = Refs;
 	const min = new BlockPos(
-		player.pos.x - range,
-		player.pos.y - range,
-		player.pos.z - range,
+		player.pos.x - hRange,
+		player.pos.y - vRange,
+		player.pos.z - hRange,
 	);
 	const max = new BlockPos(
-		player.pos.x + range,
-		player.pos.y + range,
-		player.pos.z + range,
+		player.pos.x + hRange,
+		player.pos.y + vRange,
+		player.pos.z + hRange,
 	);
 	return BlockPos.getAllInBoxMutable(min, max);
 }
 
 export function oneInRange(
-	range: number,
+	hRange: number,
 	filter: BlockFilter,
+	vRange: number = hRange
 ): BlockPos | undefined {
-	const blocks = allBlocksInRange(range);
+	const blocks = allBlocksInRange(hRange, vRange);
 	const filtered = blocks.find(filter);
 	return filtered;
 }
@@ -79,7 +80,7 @@ export function allInRange(range: number, filter?: BlockFilter) {
 
 export function handleInRange(
 	range: number,
-	filter = dfltFilter,
+	filter = defaultFilter,
 	handler = blockHandlers.rightClick,
 ) {
 	const r = allInRange(range, filter);

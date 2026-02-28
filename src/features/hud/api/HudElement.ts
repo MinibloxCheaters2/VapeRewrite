@@ -3,11 +3,11 @@ import type {
 	ColorSliderSetting,
 	DropdownSetting,
 	ModeLike,
-	ModuleSetting,
+	AnySetting,
 	SliderSetting,
 	TextBoxSetting,
 	ToggleSetting,
-} from "@/features/modules/api/Module";
+} from "@/features/config/Settings";
 
 export interface HudPosition {
 	x: number;
@@ -22,7 +22,7 @@ export default abstract class HudElement {
 	public abstract name: string;
 
 	/** HUD element settings */
-	public settings: ModuleSetting[] = [];
+	public settings: AnySetting[] = [];
 
 	/** Position of the HUD element */
 	private positionSignal = createSignal<HudPosition>({ x: 100, y: 100 });
@@ -63,12 +63,12 @@ export default abstract class HudElement {
 	/**
 	 * Called when the HUD element is added
 	 */
-	public onAdd(): void {}
+	public onAdd(): void { }
 
 	/**
 	 * Called when the HUD element is removed
 	 */
-	public onRemove(): void {}
+	public onRemove(): void { }
 
 	// Helper methods to create settings
 	protected createToggleSetting(

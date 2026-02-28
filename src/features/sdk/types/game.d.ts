@@ -1,14 +1,13 @@
-import type { ClientEntityPlayer } from "./entity.d.ts";
-import "./packet.d.ts";
-import type { ClientWorld } from "./world";
-import { Chat } from "./chat.d.ts";
-import { PlayerController } from "./controller.js";
-import { ServerInfo } from "./serverInfo.js";
-import type { GameScene } from "./gameScene.js";
 import { Vector3 } from "three";
+import { ClientEntityPlayer } from "./entity";
+import { PlayerController } from "./controller";
+import { GameScene } from "./gameScene";
+import { ClientWorld } from "./world";
+import { Chat } from "./chat";
+import { ServerInfo } from "./serverInfo";
 
-export enum ConnectionState {
-	IDK = 0,
+export enum GameState {
+	TITLE_SCREEN = 0,
 	CONNECTING = 1,
 	CONNECTING_ATTEMPT = 2,
 	CONNECTION_ERROR = 3,
@@ -37,49 +36,57 @@ export declare class ResourceMonitor {
 export declare class Game {
 	player: ClientEntityPlayer;
 	controller: PlayerController;
-	// tickLoop: number;
 	gameScene: GameScene;
 	world: ClientWorld;
 	playerList: PlayerList;
 	unleash;
-	cubicBezier;
-	chunkRenderManager;
-	chunkManager;
+	cubicBezier: CubicBezier;
+	chunkRenderManager: ChunkRenderManager;
+	chunkManager: ClientChunkManager;
 	prevTime: number;
 	lastFixedUpdate: number;
 	renderLoopErrored: boolean;
 	chat: Chat;
+	resourceMonitor: ResourceMonitor;
 	info: GameInfo;
 	adIntervalId: number | null;
 	connectionAttempts: number;
-	_state: ConnectionState;
+	_state: GameState;
 	party: PartyClient;
 	scoreboardLines: string[];
 	scoreboardTitle: string;
 	delta: number;
 	serverInfo: ServerInfo;
-	resourceMonitor: ResourceMonitor;
-	get isCrazyGames(): boolean;
-	get isDiscordActivity(): boolean;
-	get isPoki(): boolean;
+	constructor();
+	static get isCrazyGames(): boolean;
+	static get isDiscordActivity(): boolean;
+	static get isPoki(): boolean;
 	get state(): this["_state"];
-	set state(value: ConnectionState);
-	init(): Promise<void>;
-	fixedUpdate(): void;
-	fixedUpdateTS(): void;
+	set state(value: GameState);
 	inGame(): boolean;
 	gameLoopStarted(): boolean;
-	static isActive(b: boolean = true): boolean;
-	static isChatting(): boolean;
+	/**
+	 * @param f1 does being in f1 mode count as activity?
+	 */
+	static isActive(f1?: boolean): boolean;
+	static isChatting(): Game["chat"]["showInput"];
 	static hasMenuOpen(): boolean;
+	init(): Promise<void>;
+	fixedUpdateTS(): void;
 	update(): void;
+	fixedUpdate(): void;
 	requestQueue(): void;
-	queue(name: string, config: object): Promise<void>;
+	/**
+	 * Queues for a mini game.
+	 * @param miniGameID the ID of the mini game to queue
+	 * @param mgConfig the config of the mini game
+	 */
+	queue(miniGameID: string, mgConfig: object): Promise<void>;
 	connectWithCode(code: string): void;
-	tryUpdateClient(serverIDToReconnectTo: string): void;
-	connect(customURL: string, useCustomURL = false, p = false): Promise<void>;
-	disconnect(reason?: unknown): Promise<void>;
-	onSocketDisconnect(reason?: unknown): void;
+	tryUpdateClient(serverID: string): void;
+	connect(idOrCustomURL: string, useCustomURL?: boolean, noAd?: boolean): Promise<void>;
+	disconnect(reason: string): void;
+	onSocketDisconnect(reason: string | null): void;
 	static isFullscreen(): boolean;
 	static enterFullscreen(): void;
 	unfocus(): void;
