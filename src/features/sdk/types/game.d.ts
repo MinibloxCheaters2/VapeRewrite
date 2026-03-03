@@ -84,7 +84,11 @@ export declare class Game {
 	queue(miniGameID: string, mgConfig: object): Promise<void>;
 	connectWithCode(code: string): void;
 	tryUpdateClient(serverID: string): void;
-	connect(idOrCustomURL: string, useCustomURL?: boolean, noAd?: boolean): Promise<void>;
+	connect(
+		idOrCustomURL: string,
+		useCustomURL?: boolean,
+		noAd?: boolean,
+	): Promise<void>;
 	disconnect(reason: string): void;
 	onSocketDisconnect(reason: string | null): void;
 	static isFullscreen(): boolean;

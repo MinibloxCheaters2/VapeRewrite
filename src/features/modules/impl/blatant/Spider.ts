@@ -1,9 +1,9 @@
 // idk if this works lmao
 import { Subscribe } from "@/event/api/Bus";
+import { defaultFilter, oneInRange } from "@/utils";
 import Refs from "@/utils/refs";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
-import { defaultFilter, oneInRange } from "@/utils";
 
 export default class Spider extends Mod {
 	public name = "Spider";
@@ -78,7 +78,11 @@ export default class Spider extends Mod {
 		const { player, Vec3, BlockPos, game } = Refs;
 		// if (!player) return false;
 
-		const anyCollidingBlock = oneInRange(this.wallDetectRange, defaultFilter, 0);
+		const anyCollidingBlock = oneInRange(
+			this.wallDetectRange,
+			defaultFilter,
+			0,
+		);
 		return anyCollidingBlock !== undefined;
 	}
 

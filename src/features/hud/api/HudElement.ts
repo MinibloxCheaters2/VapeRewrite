@@ -1,9 +1,9 @@
 import { createSignal, type JSX } from "solid-js";
 import type {
+	AnySetting,
 	ColorSliderSetting,
 	DropdownSetting,
 	ModeLike,
-	AnySetting,
 	SliderSetting,
 	TextBoxSetting,
 	ToggleSetting,
@@ -63,12 +63,12 @@ export default abstract class HudElement {
 	/**
 	 * Called when the HUD element is added
 	 */
-	public onAdd(): void { }
+	public onAdd(): void {}
 
 	/**
 	 * Called when the HUD element is removed
 	 */
-	public onRemove(): void { }
+	public onRemove(): void {}
 
 	// Helper methods to create settings
 	protected createToggleSetting(

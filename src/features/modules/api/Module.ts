@@ -2,9 +2,9 @@ import { createSignal } from "solid-js";
 import Bus from "@/Bus";
 import { addBind, removeBind, setBind } from "@/features/binds/handler";
 import Configurable from "@/features/config/Configurable";
+import type { BaseSetting } from "@/features/config/Settings";
 import { showNotification } from "@/ui/notifications";
 import type { Category } from "./Category";
-import { BaseSetting } from "@/features/config/Settings";
 
 const NO_BIND = "";
 
@@ -103,10 +103,10 @@ export default abstract class Mod extends Configurable {
 	}
 
 	/** Called when the module is enabled. */
-	protected onEnable(): void { }
+	protected onEnable(): void {}
 
 	/** Called when the module is disabled. */
-	protected onDisable(): void { }
+	protected onDisable(): void {}
 
 	/** Toggles this module without sending a notification. */
 	public toggleSilently(): void {

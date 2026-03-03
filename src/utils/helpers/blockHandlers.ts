@@ -45,9 +45,13 @@ export function withBlockState<T>(
 	return (pos) => fn(world.getBlockState(pos));
 }
 
-export const defaultFilter: BlockFilter = (b) => isSolid(Refs.world.getBlock(b));
+export const defaultFilter: BlockFilter = (b) =>
+	isSolid(Refs.world.getBlock(b));
 
-export function allBlocksInRange(hRange: number, vRange: number = hRange): BlockPos[] {
+export function allBlocksInRange(
+	hRange: number,
+	vRange: number = hRange,
+): BlockPos[] {
 	const { player, BlockPos } = Refs;
 	const min = new BlockPos(
 		player.pos.x - hRange,
@@ -65,7 +69,7 @@ export function allBlocksInRange(hRange: number, vRange: number = hRange): Block
 export function oneInRange(
 	hRange: number,
 	filter: BlockFilter,
-	vRange: number = hRange
+	vRange: number = hRange,
 ): BlockPos | undefined {
 	const blocks = allBlocksInRange(hRange, vRange);
 	const filtered = blocks.find(filter);
