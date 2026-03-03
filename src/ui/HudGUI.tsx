@@ -14,15 +14,17 @@ import {
 import shadowWrapper from "./shadowWrapper";
 
 const COLORS = {
-	main: "rgb(26, 25, 26)",
-	mainLight: "rgb(30, 29, 30)",
-	mainDark: "rgb(24, 23, 24)",
-	text: "rgb(200, 200, 200)",
-	textDark: "rgb(150, 150, 150)",
-	textDarker: "rgb(100, 100, 100)",
-	accent: "rgb(5, 134, 105)",
-	hover: "rgb(30, 29, 30)",
-	divider: "rgba(255, 255, 255, 0.072)",
+	main: "rgba(18, 18, 22, 0.75)",
+	mainLight: "rgba(28, 28, 35, 0.8)",
+	mainDark: "rgba(12, 12, 16, 0.85)",
+	text: "rgba(220, 220, 230, 0.95)",
+	textDark: "rgba(160, 160, 180, 0.85)",
+	textDarker: "rgba(100, 100, 120, 0.7)",
+	accent: "rgba(5, 134, 105, 0.9)",
+	accentGlow: "rgba(5, 134, 105, 0.3)",
+	hover: "rgba(40, 40, 50, 0.6)",
+	divider: "rgba(255, 255, 255, 0.05)",
+	glass: "rgba(255, 255, 255, 0.02)",
 };
 
 // HUD Manager Panel (horizontal bar at bottom)
@@ -116,13 +118,14 @@ function HudManagerPanel() {
 					left: `${position().x}px`,
 					top: `${position().y}px`,
 					"background-color": COLORS.main,
-					"border-radius": "8px",
+					"border-radius": "10px",
 					"box-shadow":
-						"0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)",
+						"0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.05)",
 					"z-index": "10002",
 					overflow: "visible",
 					"user-select": "none",
-					"backdrop-filter": "blur(10px)",
+					"backdrop-filter": "blur(20px) saturate(180%)",
+					border: "1px solid rgba(255, 255, 255, 0.08)",
 					padding: "8px",
 					display: "flex",
 					gap: "8px",
@@ -160,7 +163,7 @@ function HudManagerPanel() {
 						height: "32px",
 						"background-color": COLORS.accent,
 						border: "none",
-						"border-radius": "6px",
+						"border-radius": "8px",
 						cursor: "pointer",
 						display: "flex",
 						"align-items": "center",
@@ -168,15 +171,18 @@ function HudManagerPanel() {
 						color: "white",
 						"font-size": "20px",
 						"font-weight": "bold",
-						transition: "opacity 0.16s linear",
+						transition: "all 0.16s cubic-bezier(0.4, 0, 0.2, 1)",
+						"box-shadow": `0 0 12px ${COLORS.accentGlow}`,
 					}}
 					type="button"
 					on:click={() => setShowAddMenu(!showAddMenu())}
 					on:pointerenter={(e) => {
-						e.currentTarget.style.opacity = "0.8";
+						e.currentTarget.style.transform = "scale(1.05)";
+						e.currentTarget.style.boxShadow = `0 0 16px ${COLORS.accent}`;
 					}}
 					on:pointerleave={(e) => {
-						e.currentTarget.style.opacity = "1";
+						e.currentTarget.style.transform = "scale(1)";
+						e.currentTarget.style.boxShadow = `0 0 12px ${COLORS.accentGlow}`;
 					}}
 				>
 					+
@@ -187,14 +193,14 @@ function HudManagerPanel() {
 					style={{
 						width: "32px",
 						height: "32px",
-						"background-color": COLORS.mainLight,
-						border: "none",
-						"border-radius": "6px",
+						"background-color": COLORS.hover,
+						border: "1px solid rgba(255, 255, 255, 0.08)",
+						"border-radius": "8px",
 						cursor: selectedHud() ? "pointer" : "not-allowed",
 						display: "flex",
 						"align-items": "center",
 						"justify-content": "center",
-						transition: "background-color 0.16s linear",
+						transition: "all 0.16s cubic-bezier(0.4, 0, 0.2, 1)",
 						opacity: selectedHud() ? "1" : "0.3",
 					}}
 					type="button"
@@ -205,13 +211,15 @@ function HudManagerPanel() {
 					on:pointerenter={(e) => {
 						if (selectedHud()) {
 							e.currentTarget.style.backgroundColor =
-								COLORS.hover;
+								COLORS.mainLight;
+							e.currentTarget.style.transform = "scale(1.05)";
 						}
 					}}
 					on:pointerleave={(e) => {
 						if (selectedHud()) {
 							e.currentTarget.style.backgroundColor =
-								COLORS.mainLight;
+								COLORS.hover;
+							e.currentTarget.style.transform = "scale(1)";
 						}
 					}}
 				>
@@ -230,16 +238,16 @@ function HudManagerPanel() {
 					style={{
 						width: "32px",
 						height: "32px",
-						"background-color": "rgb(180, 50, 50)",
-						border: "none",
-						"border-radius": "6px",
+						"background-color": "rgba(180, 50, 50, 0.8)",
+						border: "1px solid rgba(255, 100, 100, 0.3)",
+						"border-radius": "8px",
 						cursor: selectedHud() ? "pointer" : "not-allowed",
 						display: "flex",
 						"align-items": "center",
 						"justify-content": "center",
 						color: "white",
 						"font-size": "18px",
-						transition: "opacity 0.16s linear",
+						transition: "all 0.16s cubic-bezier(0.4, 0, 0.2, 1)",
 						opacity: selectedHud() ? "1" : "0.3",
 					}}
 					type="button"
@@ -247,12 +255,15 @@ function HudManagerPanel() {
 					on:click={() => selectedHud() && handleDeleteHud()}
 					on:pointerenter={(e) => {
 						if (selectedHud()) {
-							e.currentTarget.style.opacity = "0.8";
+							e.currentTarget.style.transform = "scale(1.05)";
+							e.currentTarget.style.boxShadow =
+								"0 0 12px rgba(180, 50, 50, 0.5)";
 						}
 					}}
 					on:pointerleave={(e) => {
 						if (selectedHud()) {
-							e.currentTarget.style.opacity = "1";
+							e.currentTarget.style.transform = "scale(1)";
+							e.currentTarget.style.boxShadow = "none";
 						}
 					}}
 				>
@@ -303,9 +314,11 @@ function HudManagerPanel() {
 							bottom: "48px",
 							left: "40px",
 							"background-color": COLORS.mainDark,
-							"border-radius": "6px",
+							"border-radius": "8px",
 							"box-shadow":
-								"0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)",
+								"0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.08)",
+							"backdrop-filter": "blur(20px) saturate(180%)",
+							border: "1px solid rgba(255, 255, 255, 0.08)",
 							padding: "4px",
 							"min-width": "150px",
 						}}
@@ -393,7 +406,7 @@ function HudManagerPanel() {
 
 function HudSettings(props: { hud: HudElement }) {
 	return (
-		<div>
+		<div style={{ "background-color": "transparent" }}>
 			<Show
 				when={props.hud.settings.length > 0}
 				fallback={

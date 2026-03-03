@@ -7,6 +7,7 @@ import { MATCHED_DUMPS } from "@/hooks/replacement";
 import Refs from "@/utils/helpers/refs";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
+import { dynamicIsland } from "../../DynamicIsland";
 
 export default class Scaffold extends Mod {
 	public name = "Scaffold";
@@ -35,6 +36,10 @@ export default class Scaffold extends Mod {
 	private oldHeldSlot?: number;
 	private tickCount = 0;
 	private lastScaffoldY: number | null = null;
+	private initialBlocks = 0;
+	private lastScaffoldPos: Vector3 | null = null;
+	private lastScaffoldTime = 0;
+	private scaffoldSpeed = 0;
 
 	get tower() {
 		return this.towerSetting.value();
@@ -63,6 +68,10 @@ export default class Scaffold extends Mod {
 		}
 		this.tickCount = 0;
 		this.lastScaffoldY = null;
+		this.initialBlocks = this.countBlocks();
+		this.lastScaffoldPos = null;
+		this.lastScaffoldTime = Date.now();
+		this.scaffoldSpeed = 0;
 	}
 
 	protected onDisable(): void {
@@ -71,6 +80,35 @@ export default class Scaffold extends Mod {
 			this.switchSlot(this.oldHeldSlot);
 		}
 		this.lastScaffoldY = null;
+
+		// Hide Dynamic Island
+		try {
+			if (dynamicIsland) {
+				dynamicIsland.hide();
+			}
+		} catch (_e) {
+			// Dynamic Island not available
+		}
+	}
+
+	private countBlocks(): number {
+		const { player, ItemBlock } = Refs;
+		if (!player) return 0;
+
+		let count = 0;
+		for (let i = 0; i < 9; i++) {
+			const item = player.inventory.main[i];
+			if (
+				item &&
+				item.item instanceof ItemBlock &&
+				item.item.block?.getBoundingBox &&
+				item.item.block.getBoundingBox().max.y === 1 &&
+				item.item.name !== "tnt"
+			) {
+				count += item.stackSize || 0;
+			}
+		}
+		return count;
 	}
 
 	private switchSlot(slot: number): void {
@@ -331,6 +369,84 @@ export default class Scaffold extends Mod {
 			}
 
 			if (places++ > this.placesPerTick) break; // Only place one block per tick
+		}
+
+		// Update speed calculation
+		const currentTime = Date.now();
+		const currentPos = player.pos.clone();
+
+		if (this.lastScaffoldPos && currentTime - this.lastScaffoldTime > 0) {
+			const timeDiff = (currentTime - this.lastScaffoldTime) / 1000;
+			const distance = Math.sqrt(
+				(currentPos.x - this.lastScaffoldPos.x) ** 2 +
+					(currentPos.z - this.lastScaffoldPos.z) ** 2,
+			);
+			this.scaffoldSpeed = distance / timeDiff;
+			this.lastScaffoldPos = currentPos.clone();
+			this.lastScaffoldTime = currentTime;
+		} else if (!this.lastScaffoldPos) {
+			this.lastScaffoldPos = currentPos.clone();
+			this.lastScaffoldTime = currentTime;
+		}
+
+		// Show Dynamic Island with block count and speed
+		try {
+			if (dynamicIsland) {
+				const currentBlocks = this.countBlocks();
+				const progress =
+					this.initialBlocks > 0
+						? currentBlocks / this.initialBlocks
+						: 0;
+
+				dynamicIsland.show({
+					duration: 0,
+					width: 280,
+					height: 75,
+					elements: [
+						{
+							type: "text",
+							content: "Scaffolding",
+							x: 0,
+							y: -20,
+							color: "#fff",
+							size: 14,
+							bold: true,
+						},
+						{
+							type: "text",
+							content:
+								currentBlocks +
+								"/" +
+								this.initialBlocks +
+								" blocks",
+							x: 0,
+							y: -2,
+							color: "#aaa",
+							size: 11,
+						},
+						{
+							type: "text",
+							content: `${this.scaffoldSpeed.toFixed(1)} b/s`,
+							x: 0,
+							y: 12,
+							color: "#0FB3A0",
+							size: 11,
+						},
+						{
+							type: "progress",
+							value: progress,
+							x: 0,
+							y: 28,
+							width: 240,
+							height: 4,
+							color: "#0FB3A0",
+							rounded: true,
+						},
+					],
+				});
+			}
+		} catch (_e) {
+			// Dynamic Island not available
 		}
 	}
 }

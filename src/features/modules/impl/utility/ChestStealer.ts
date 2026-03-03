@@ -7,6 +7,7 @@ import { getRandomArbitrary } from "@/utils/random";
 import Refs from "@/utils/refs";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
+import { dynamicIsland } from "../../DynamicIsland";
 
 export default class ChestStealer extends Mod {
 	public name = "ChestStealer";
@@ -46,6 +47,8 @@ export default class ChestStealer extends Mod {
 	private lastClickTime = 0;
 	private currentWindowId: number | null = null;
 	private stolenItems = 0;
+	private initialItemCount = 0;
+	private showChestCloseIsland = false;
 
 	get delay() {
 		return this.delaySetting.value();
@@ -133,6 +136,66 @@ export default class ChestStealer extends Mod {
 			this.currentWindowId = packet.windowId;
 			this.lastClickTime = Date.now();
 			this.stolenItems = 0;
+			this.initialItemCount = 0;
+			this.showChestCloseIsland = true;
+
+			// Count initial items
+			setTimeout(() => {
+				const { player } = Refs;
+				if (!player) return;
+				const container = player.openContainer;
+				if (!container) return;
+
+				const slots = container.inventorySlots;
+				const playerInventoryStart = slots.length - 36;
+
+				for (let i = 0; i < playerInventoryStart; i++) {
+					const slot = slots[i];
+					if (!slot) continue;
+					const stack = slot.getStack?.();
+					if (!stack || !stack.getItem) continue;
+					const itemName = stack.getItem().name || "unknown";
+					if (!this.isBlacklisted(itemName)) {
+						this.initialItemCount++;
+					}
+				}
+
+				// Show chest opened on Dynamic Island
+				try {
+					console.log(
+						"ChestStealer showing chest opened, items:",
+						this.initialItemCount,
+					);
+					if (dynamicIsland) {
+						dynamicIsland.show({
+							duration: 2000,
+							width: 300,
+							height: 70,
+							elements: [
+								{
+									type: "text",
+									content: "Chest Opened",
+									x: 0,
+									y: -15,
+									color: "#ffd700",
+									size: 15,
+									bold: true,
+								},
+								{
+									type: "text",
+									content: `${this.initialItemCount} items found`,
+									x: 0,
+									y: 12,
+									color: "#fff",
+									size: 12,
+								},
+							],
+						});
+					}
+				} catch (_e) {
+					// Dynamic Island not available
+				}
+			}, 50);
 
 			if (this.notify) {
 				Refs.chat.addChat({
@@ -150,6 +213,32 @@ export default class ChestStealer extends Mod {
 						color: "yellow",
 					});
 				}
+
+				// Show closed message if not already shown
+				try {
+					if (dynamicIsland && this.showChestCloseIsland) {
+						dynamicIsland.show({
+							duration: 1000,
+							width: 260,
+							height: 50,
+							elements: [
+								{
+									type: "text",
+									content: "✓ Chest Closed",
+									x: 0,
+									y: 0,
+									color: "#0FB3A0",
+									size: 14,
+									bold: true,
+								},
+							],
+						});
+						this.showChestCloseIsland = false;
+					}
+				} catch (_e) {
+					// Dynamic Island not available
+				}
+
 				this.currentWindowId = null;
 			}
 		}
@@ -193,11 +282,112 @@ export default class ChestStealer extends Mod {
 				this.lastClickTime = now;
 				this.stolenItems++;
 				foundItem = true;
+
+				// Show progress on Dynamic Island
+				try {
+					console.log(
+						"ChestStealer showing progress:",
+						this.stolenItems,
+						"/",
+						this.initialItemCount,
+					);
+					if (dynamicIsland && this.initialItemCount > 0) {
+						const remaining =
+							this.initialItemCount - this.stolenItems;
+						const progress =
+							this.initialItemCount > 0
+								? this.stolenItems / this.initialItemCount
+								: 0;
+						const speed = (1000 / this.delay).toFixed(1);
+
+						dynamicIsland.show({
+							duration: 0,
+							width: 320,
+							height: 85,
+							elements: [
+								{
+									type: "text",
+									content: "ChestSteal",
+									x: 0,
+									y: -25,
+									color: "#fff",
+									size: 15,
+									bold: true,
+								},
+								{
+									type: "progress",
+									value: progress,
+									x: 0,
+									y: -8,
+									width: 280,
+									height: 8,
+									color: "#ffd700",
+									rounded: true,
+								},
+								{
+									type: "text",
+									content:
+										this.stolenItems +
+										" / " +
+										this.initialItemCount,
+									x: -110,
+									y: 10,
+									color: "#ffd700",
+									size: 12,
+									bold: true,
+								},
+								{
+									type: "text",
+									content: `${remaining} left`,
+									x: 40,
+									y: 10,
+									color: "#888",
+									size: 11,
+								},
+								{
+									type: "text",
+									content: `${speed} items/s`,
+									x: 0,
+									y: 28,
+									color: "#0FB3A0",
+									size: 10,
+								},
+							],
+						});
+					}
+				} catch (_e) {
+					// Dynamic Island not available
+				}
+
 				break;
 			}
 		}
 
 		if (!foundItem && this.autoClose && this.closeWhenEmpty) {
+			// Show completion on Dynamic Island
+			try {
+				if (dynamicIsland && this.stolenItems > 0) {
+					dynamicIsland.show({
+						duration: 500,
+						width: 260,
+						height: 50,
+						elements: [
+							{
+								type: "text",
+								content: "✓ Chest Closed",
+								x: 0,
+								y: 0,
+								color: "#0FB3A0",
+								size: 14,
+								bold: true,
+							},
+						],
+					});
+				}
+			} catch (_e) {
+				// Dynamic Island not available
+			}
+
 			this.closeContainer();
 			this.currentWindowId = null;
 		}

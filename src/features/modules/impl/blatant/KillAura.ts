@@ -8,6 +8,7 @@ import Refs from "@/utils/refs";
 import { findTargets } from "@/utils/target";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
+import { dynamicIsland } from "../../DynamicIsland";
 
 function wrapAngleTo180_radians(angle: number): number {
 	let ang = angle;
@@ -31,6 +32,8 @@ export default class KillAura extends Mod {
 	public category = Category.BLATANT;
 	// private attackDelay = Date.now();
 	private blocking = false;
+	private lastAttackTime = 0;
+	private killauraShowingDI = false;
 
 	// Settings
 	private rangeSetting = this.createSliderSetting("Range", 6, 3, 10, 0.5);
@@ -125,11 +128,103 @@ export default class KillAura extends Mod {
 	onTick() {
 		// ghetto ahh method
 		let first = true;
-		for (const target of findTargets(this.range)) {
+		const targets = findTargets(this.range);
+		let attacked = 0;
+
+		for (const target of targets) {
 			this.block();
 			this.sendAttack(target, first);
 			first = false;
 			this.unblock();
+			attacked++;
+		}
+
+		// Update last attack time when attacking
+		if (attacked > 0) {
+			this.lastAttackTime = Date.now();
+		}
+
+		// Show Dynamic Island with target info (with 1 second grace period)
+		try {
+			console.log("KillAura checking DI, targets:", targets.length);
+			if (dynamicIsland) {
+				const timeSinceLastAttack = Date.now() - this.lastAttackTime;
+				if (
+					targets.length > 0 &&
+					targets[0] &&
+					timeSinceLastAttack < 1000
+				) {
+					const target = targets[0] as any; // Cast to any since findTargets returns EntityLivingBase
+					const health = target.getHealth?.() || 0;
+					const maxHealth = target.getMaxHealth?.() || 20;
+					// Remove rich text formatting
+					const cleanName = (target.name || "Unknown").replace(
+						/\\[a-z]+\\/g,
+						"",
+					);
+
+					dynamicIsland.show({
+						duration: 0,
+						width: 300,
+						height: 60,
+						elements: [
+							{
+								type: "text",
+								content: cleanName,
+								x: 0,
+								y: -12,
+								color: "#fff",
+								size: 15,
+								bold: true,
+							},
+							{
+								type: "text",
+								content:
+									Math.round(health) +
+									"/" +
+									maxHealth +
+									" HP",
+								x: 0,
+								y: 8,
+								color: "#aaa",
+								size: 11,
+							},
+							{
+								type: "progress",
+								value: health / maxHealth,
+								x: 0,
+								y: 22,
+								width: 260,
+								height: 4,
+								color: "#ff4444",
+								rounded: true,
+							},
+						],
+					});
+					this.killauraShowingDI = true;
+				} else if (
+					timeSinceLastAttack >= 1000 &&
+					this.killauraShowingDI
+				) {
+					// Only hide if Killaura was showing it
+					dynamicIsland.hide();
+					this.killauraShowingDI = false;
+				}
+			}
+		} catch (_e) {
+			// Dynamic Island not available
+		}
+	}
+
+	protected onDisable(): void {
+		// Hide Dynamic Island if Killaura was showing it
+		try {
+			if (this.killauraShowingDI && dynamicIsland) {
+				dynamicIsland.hide();
+				this.killauraShowingDI = false;
+			}
+		} catch (_e) {
+			// Dynamic Island not available
 		}
 	}
 }

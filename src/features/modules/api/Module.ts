@@ -4,6 +4,7 @@ import { addBind, removeBind, setBind } from "@/features/binds/handler";
 import Configurable from "@/features/config/Configurable";
 import type { BaseSetting } from "@/features/config/Settings";
 import { showNotification } from "@/ui/notifications";
+import { dynamicIsland } from "../DynamicIsland";
 import type { Category } from "./Category";
 
 const NO_BIND = "";
@@ -122,6 +123,48 @@ export default abstract class Mod extends Configurable {
 			"info",
 			2000,
 		);
+
+		// Show Dynamic Island if enabled (show for both enable and disable)
+		try {
+			console.log("Dynamic Island check:", dynamicIsland);
+			if (dynamicIsland) {
+				dynamicIsland.show({
+					duration: 1000,
+					width: 300,
+					height: 60,
+					elements: [
+						{
+							type: "text",
+							content: this.name,
+							x: 10,
+							y: -8,
+							color: "#fff",
+							size: 18,
+							bold: true,
+						},
+						{
+							type: "text",
+							content: this.enabled ? "ENABLED" : "DISABLED",
+							x: 10,
+							y: 12,
+							color: this.enabled ? "#0FB3A0" : "#ff4444",
+							size: 12,
+							bold: true,
+						},
+						{
+							type: "toggle",
+							state: this.enabled,
+							x: -100,
+							y: 0,
+							size: 30,
+							animate: true,
+						},
+					],
+				});
+			}
+		} catch (e) {
+			console.error("Dynamic Island error:", e);
+		}
 	}
 
 	private set state(value: boolean) {

@@ -6,14 +6,17 @@ import { guiVisible } from "./guiState";
 import shadowWrapper from "./shadowWrapper";
 
 const COLORS = {
-	main: "rgb(26, 25, 26)",
-	mainLight: "rgb(30, 29, 30)",
-	mainDark: "rgb(24, 23, 24)",
-	text: "rgb(200, 200, 200)",
-	textDark: "rgb(150, 150, 150)",
-	textDarker: "rgb(100, 100, 100)",
-	accent: "rgb(5, 134, 105)",
-	divider: "rgba(255, 255, 255, 0.072)",
+	main: "rgba(18, 18, 22, 0.75)",
+	mainLight: "rgba(28, 28, 35, 0.8)",
+	mainDark: "rgba(12, 12, 16, 0.85)",
+	text: "rgba(220, 220, 230, 0.95)",
+	textDark: "rgba(160, 160, 180, 0.85)",
+	textDarker: "rgba(100, 100, 120, 0.7)",
+	accent: "rgba(5, 134, 105, 0.9)",
+	accentGlow: "rgba(5, 134, 105, 0.3)",
+	hover: "rgba(40, 40, 50, 0.6)",
+	divider: "rgba(255, 255, 255, 0.05)",
+	glass: "rgba(255, 255, 255, 0.02)",
 };
 
 export const [settingsPanelVisible, setSettingsPanelVisible] =
@@ -69,24 +72,24 @@ function SettingsPanel() {
 					top: `${position().y}px`,
 					width: "300px",
 					"background-color": COLORS.main,
-					"border-radius": "5px",
+					"border-radius": "8px",
 					"box-shadow":
-						"0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)",
+						"0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.05)",
 					"z-index": "10001",
 					overflow: "hidden",
 					"user-select": "none",
-					"backdrop-filter": "blur(10px)",
+					"backdrop-filter": "blur(20px) saturate(180%)",
+					border: "1px solid rgba(255, 255, 255, 0.08)",
 				}}
 				on:pointerdown={handlePointerDown}
 			>
-				{/* Blur background */}
+				{/* Gradient background */}
 				<div
 					style={{
 						position: "absolute",
-						inset: "-48px -48px",
-						"backdrop-filter": "blur(24px)",
-						"background-size": "cover",
-						opacity: "0.3",
+						inset: "0",
+						background:
+							"linear-gradient(135deg, rgba(5, 134, 105, 0.03) 0%, rgba(0, 0, 0, 0) 100%)",
 						"pointer-events": "none",
 						"z-index": "-1",
 					}}
@@ -102,6 +105,7 @@ function SettingsPanel() {
 						padding: "0 12px",
 						cursor: dragging() ? "grabbing" : "grab",
 						"border-bottom": `1px solid ${COLORS.divider}`,
+						background: COLORS.glass,
 					}}
 				>
 					<span
@@ -110,6 +114,7 @@ function SettingsPanel() {
 							"font-size": "13px",
 							flex: "1",
 							"font-family": "Arial, sans-serif",
+							"letter-spacing": "0.3px",
 						}}
 					>
 						Settings
@@ -124,16 +129,20 @@ function SettingsPanel() {
 							display: "flex",
 							"align-items": "center",
 							"justify-content": "center",
-							opacity: "0.7",
-							transition: "opacity 0.16s linear",
+							opacity: "0.6",
+							transition:
+								"all 0.16s cubic-bezier(0.4, 0, 0.2, 1)",
+							"border-radius": "4px",
 						}}
 						type="button"
 						on:click={() => setSettingsPanelVisible(false)}
 						on:pointerenter={(e) => {
 							e.currentTarget.style.opacity = "1";
+							e.currentTarget.style.background = COLORS.hover;
 						}}
 						on:pointerleave={(e) => {
-							e.currentTarget.style.opacity = "0.7";
+							e.currentTarget.style.opacity = "0.6";
+							e.currentTarget.style.background = "none";
 						}}
 					>
 						<img

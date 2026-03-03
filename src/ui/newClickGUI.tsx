@@ -22,18 +22,20 @@ import {
 } from "./components";
 import { guiVisible, isCategoryWindowVisible } from "./guiState";
 
-// Color palette matching Lua design
+// Futuristic minimal color palette with transparency
 const COLORS = {
-	main: "rgb(26, 25, 26)",
-	mainLight: "rgb(30, 29, 30)",
-	mainDark: "rgb(24, 23, 24)",
-	text: "rgb(200, 200, 200)",
-	textDark: "rgb(150, 150, 150)",
-	textDarker: "rgb(100, 100, 100)",
-	accent: "rgb(5, 134, 105)",
-	hover: "rgb(30, 29, 30)",
-	divider: "rgba(255, 255, 255, 0.072)",
-	dividerDark: "rgba(48, 48, 48, 0.52)",
+	main: "rgba(18, 18, 22, 0.75)",
+	mainLight: "rgba(28, 28, 35, 0.8)",
+	mainDark: "rgba(12, 12, 16, 0.85)",
+	text: "rgba(220, 220, 230, 0.95)",
+	textDark: "rgba(160, 160, 180, 0.85)",
+	textDarker: "rgba(100, 100, 120, 0.7)",
+	accent: "rgba(5, 134, 105, 0.9)",
+	accentGlow: "rgba(5, 134, 105, 0.3)",
+	hover: "rgba(40, 40, 50, 0.6)",
+	divider: "rgba(255, 255, 255, 0.05)",
+	dividerDark: "rgba(255, 255, 255, 0.08)",
+	glass: "rgba(255, 255, 255, 0.02)",
 };
 
 import getResourceURL from "@/utils/cachedResourceURL";
@@ -154,14 +156,15 @@ function CategoryWindow(props: CategoryWindowProps) {
 					width: "220px",
 					height: `${windowHeight()}px`,
 					"background-color": COLORS.main,
-					"border-radius": "5px",
+					"border-radius": "8px",
 					"box-shadow":
-						"0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)",
+						"0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.05)",
 					"z-index": "10000",
 					overflow: "hidden",
 					"user-select": "none",
-					transition: "height 0.16s linear",
-					"backdrop-filter": "blur(10px)",
+					transition: "height 0.16s cubic-bezier(0.4, 0, 0.2, 1)",
+					"backdrop-filter": "blur(20px) saturate(180%)",
+					border: "1px solid rgba(255, 255, 255, 0.08)",
 				}}
 				on:pointerdown={handlePointerDown}
 				on:contextmenu={handleContextMenu}
@@ -170,10 +173,9 @@ function CategoryWindow(props: CategoryWindowProps) {
 				<div
 					style={{
 						position: "absolute",
-						inset: "-48px -48px",
-						"backdrop-filter": "blur(24px)",
-						"background-size": "cover",
-						opacity: "0.3",
+						inset: "0",
+						background:
+							"linear-gradient(135deg, rgba(5, 134, 105, 0.03) 0%, rgba(0, 0, 0, 0) 100%)",
 						"pointer-events": "none",
 						"z-index": "-1",
 					}}
@@ -185,13 +187,16 @@ function CategoryWindow(props: CategoryWindowProps) {
 					style={{
 						display: "flex",
 						"align-items": "center",
-						height: "41px",
+						height: "40px",
 						padding: "0 12px",
 						cursor: dragging() ? "grabbing" : "grab",
 						"border-bottom": expanded()
 							? `1px solid ${COLORS.divider}`
 							: "none",
 						position: "relative",
+						background: expanded() ? COLORS.glass : "transparent",
+						transition:
+							"background 0.16s cubic-bezier(0.4, 0, 0.2, 1)",
 					}}
 				>
 					<img
@@ -200,7 +205,7 @@ function CategoryWindow(props: CategoryWindowProps) {
 						style={{
 							width: "16px",
 							height: "16px",
-							filter: "brightness(0) invert(0.8)",
+							filter: "brightness(0) invert(0.85) drop-shadow(0 0 4px rgba(5, 134, 105, 0.3))",
 							"pointer-events": "none",
 						}}
 					/>
@@ -226,16 +231,20 @@ function CategoryWindow(props: CategoryWindowProps) {
 							display: "flex",
 							"align-items": "center",
 							"justify-content": "center",
-							transition: "opacity 0.16s linear",
-							opacity: "0.7",
+							transition:
+								"all 0.16s cubic-bezier(0.4, 0, 0.2, 1)",
+							opacity: "0.6",
+							"border-radius": "6px",
 						}}
 						type="button"
 						on:click={() => setExpanded(!expanded())}
 						on:pointerenter={(e) => {
 							e.currentTarget.style.opacity = "1";
+							e.currentTarget.style.background = COLORS.glass;
 						}}
 						on:pointerleave={(e) => {
-							e.currentTarget.style.opacity = "0.7";
+							e.currentTarget.style.opacity = "0.6";
+							e.currentTarget.style.background = "none";
 						}}
 					>
 						<img
@@ -313,14 +322,17 @@ function ModuleButton(props: { mod: Mod; onExpandChange: () => void }) {
 					"background-color": toggled()
 						? COLORS.accent
 						: hovered() || expanded()
-							? COLORS.mainLight
-							: COLORS.main,
+							? COLORS.hover
+							: "transparent",
 					"border-bottom": toggled()
 						? `1px solid ${COLORS.dividerDark}`
 						: "none",
 					cursor: "pointer",
 					position: "relative",
-					transition: "background-color 0.16s linear",
+					transition: "all 0.16s cubic-bezier(0.4, 0, 0.2, 1)",
+					"box-shadow": toggled()
+						? `inset 0 0 20px ${COLORS.accentGlow}`
+						: "none",
 				}}
 				on:pointerenter={() => setHovered(true)}
 				on:pointerleave={() => setHovered(false)}
@@ -330,16 +342,17 @@ function ModuleButton(props: { mod: Mod; onExpandChange: () => void }) {
 				<span
 					style={{
 						color: toggled()
-							? "rgb(255, 255, 255)"
+							? "rgba(255, 255, 255, 0.98)"
 							: hovered() || expanded()
 								? COLORS.text
 								: COLORS.textDark,
-						"font-size": "14px",
+						"font-size": "13px",
 						flex: "1",
 						"margin-left": "12px",
-						transition: "color 0.16s linear",
+						transition: "color 0.16s cubic-bezier(0.4, 0, 0.2, 1)",
 						"font-family": "Arial, sans-serif",
-						"font-weight": toggled() ? "700" : "normal",
+						"font-weight": toggled() ? "600" : "normal",
+						"letter-spacing": "0.3px",
 					}}
 				>
 					{name}
@@ -355,21 +368,27 @@ function ModuleButton(props: { mod: Mod; onExpandChange: () => void }) {
 							display: "flex",
 							"align-items": "center",
 							"justify-content": "center",
-							"background-color": "rgba(255, 255, 255, 0.08)",
-							"border-radius": "4px",
-							"font-size": "12px",
+							"background-color": "rgba(255, 255, 255, 0.06)",
+							"border-radius": "5px",
+							"font-size": "11px",
 							color: COLORS.textDarker,
 							"margin-right": "8px",
 							cursor: "pointer",
-							transition: "background-color 0.16s linear",
+							transition:
+								"all 0.16s cubic-bezier(0.4, 0, 0.2, 1)",
 							"font-family": "Arial, sans-serif",
+							border: "1px solid rgba(255, 255, 255, 0.08)",
 						}}
 						on:pointerenter={(e) => {
 							e.currentTarget.style.backgroundColor =
-								"rgba(255, 255, 255, 0.12)";
+								"rgba(5, 134, 105, 0.15)";
+							e.currentTarget.style.borderColor =
+								"rgba(5, 134, 105, 0.3)";
 						}}
 						on:pointerleave={(e) => {
 							e.currentTarget.style.backgroundColor =
+								"rgba(255, 255, 255, 0.06)";
+							e.currentTarget.style.borderColor =
 								"rgba(255, 255, 255, 0.08)";
 						}}
 						on:click={(e) => {
@@ -450,6 +469,7 @@ function ModuleButton(props: { mod: Mod; onExpandChange: () => void }) {
 					style={{
 						"background-color": COLORS.mainDark,
 						"border-top": `1px solid ${COLORS.divider}`,
+						"backdrop-filter": "blur(10px)",
 					}}
 				>
 					<ModuleSettings
@@ -464,7 +484,7 @@ function ModuleButton(props: { mod: Mod; onExpandChange: () => void }) {
 
 function ModuleSettings(props: { mod: Mod; onExpandChange: () => void }) {
 	return (
-		<div style={{ "background-color": COLORS.mainDark }}>
+		<div style={{ "background-color": "transparent" }}>
 			<Show
 				when={props.mod.settings.length > 0}
 				fallback={

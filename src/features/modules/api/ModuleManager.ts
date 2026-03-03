@@ -1,3 +1,4 @@
+import DynamicIslandModule from "../DynamicIsland.js";
 import Blink from "../impl/blatant/Blink.js";
 import FakeLag from "../impl/blatant/FakeLag.js";
 import Fly from "../impl/blatant/Fly.js";
@@ -77,6 +78,7 @@ export default class ModuleManager {
 		new Test(),
 		new TickBase(),
 		new ChestAura(),
+		new DynamicIslandModule(),
 	] as const;
 
 	public static readonly moduleNames: string[] = this.modules.map(

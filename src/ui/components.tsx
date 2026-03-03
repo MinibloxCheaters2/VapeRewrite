@@ -3,16 +3,18 @@ import { getName, type ModeLike } from "@/features/config/Settings";
 import getResourceURL from "@/utils/cachedResourceURL";
 
 const COLORS = {
-	main: "rgb(26, 25, 26)",
-	mainLight: "rgb(30, 29, 30)",
-	mainDark: "rgb(24, 23, 24)",
-	text: "rgb(200, 200, 200)",
-	textDark: "rgb(150, 150, 150)",
-	textDarker: "rgb(100, 100, 100)",
-	accent: "rgb(5, 134, 105)",
-	hover: "rgb(30, 29, 30)",
-	divider: "rgba(255, 255, 255, 0.072)",
-	dividerDark: "rgba(48, 48, 48, 0.52)",
+	main: "rgba(18, 18, 22, 0.75)",
+	mainLight: "rgba(28, 28, 35, 0.8)",
+	mainDark: "rgba(12, 12, 16, 0.85)",
+	text: "rgba(220, 220, 230, 0.95)",
+	textDark: "rgba(160, 160, 180, 0.85)",
+	textDarker: "rgba(100, 100, 120, 0.7)",
+	accent: "rgba(5, 134, 105, 0.9)",
+	accentGlow: "rgba(5, 134, 105, 0.3)",
+	hover: "rgba(40, 40, 50, 0.6)",
+	divider: "rgba(255, 255, 255, 0.05)",
+	dividerDark: "rgba(255, 255, 255, 0.08)",
+	glass: "rgba(255, 255, 255, 0.02)",
 };
 
 // Toggle component
@@ -31,11 +33,9 @@ export function ToggleComponent(props: {
 				"align-items": "center",
 				height: "40px",
 				padding: "0 12px",
-				"background-color": hovered()
-					? COLORS.mainLight
-					: COLORS.mainDark,
+				"background-color": hovered() ? COLORS.hover : "transparent",
 				cursor: "pointer",
-				transition: "background-color 0.16s linear",
+				transition: "all 0.16s cubic-bezier(0.4, 0, 0.2, 1)",
 			}}
 			on:pointerenter={() => setHovered(true)}
 			on:pointerleave={() => setHovered(false)}
@@ -44,9 +44,10 @@ export function ToggleComponent(props: {
 			<span
 				style={{
 					color: COLORS.textDark,
-					"font-size": "14px",
+					"font-size": "13px",
 					flex: "1",
 					"font-family": "Arial, sans-serif",
+					"letter-spacing": "0.3px",
 				}}
 			>
 				{props.name}
@@ -60,19 +61,22 @@ export function ToggleComponent(props: {
 						: "rgba(255, 255, 255, 0.08)",
 					"border-radius": "9px",
 					position: "relative",
-					transition: "background-color 0.16s linear",
+					transition: "all 0.16s cubic-bezier(0.4, 0, 0.2, 1)",
+					"box-shadow": props.enabled
+						? `0 0 8px ${COLORS.accentGlow}`
+						: "none",
 				}}
 			>
 				<div
 					style={{
 						width: "14px",
 						height: "14px",
-						"background-color": COLORS.text,
+						"background-color": "rgba(255, 255, 255, 0.95)",
 						"border-radius": "50%",
 						position: "absolute",
 						top: "2px",
 						left: props.enabled ? "16px" : "2px",
-						transition: "left 0.16s linear",
+						transition: "left 0.16s cubic-bezier(0.4, 0, 0.2, 1)",
 					}}
 				/>
 			</div>
@@ -131,7 +135,7 @@ export function SliderComponent(props: {
 			style={{
 				height: "50px",
 				padding: "0 12px",
-				"background-color": COLORS.mainDark,
+				"background-color": "transparent",
 			}}
 			on:pointerenter={() => setHovered(true)}
 			on:pointerleave={() => setHovered(false)}
@@ -149,6 +153,7 @@ export function SliderComponent(props: {
 						color: COLORS.textDark,
 						"font-size": "11px",
 						"font-family": "Arial, sans-serif",
+						"letter-spacing": "0.3px",
 					}}
 				>
 					{props.name}
@@ -158,6 +163,7 @@ export function SliderComponent(props: {
 						color: COLORS.textDark,
 						"font-size": "11px",
 						"font-family": "Arial, sans-serif",
+						"letter-spacing": "0.3px",
 					}}
 				>
 					{props.value}
@@ -170,6 +176,7 @@ export function SliderComponent(props: {
 					height: "2px",
 					"background-color": "rgba(255, 255, 255, 0.1)",
 					cursor: "pointer",
+					"border-radius": "1px",
 				}}
 				on:pointerdown={handlePointerDown}
 			>
@@ -237,7 +244,7 @@ export function DropdownComponent(props: {
 	};
 
 	return (
-		<div style={{ "background-color": COLORS.mainDark }}>
+		<div style={{ "background-color": "transparent" }}>
 			<div
 				style={{
 					display: "flex",
@@ -245,10 +252,10 @@ export function DropdownComponent(props: {
 					height: "40px",
 					padding: "0 12px",
 					"background-color": hovered()
-						? COLORS.mainLight
-						: COLORS.mainDark,
+						? COLORS.hover
+						: "transparent",
 					cursor: "pointer",
-					transition: "background-color 0.16s linear",
+					transition: "all 0.16s cubic-bezier(0.4, 0, 0.2, 1)",
 				}}
 				on:pointerenter={() => setHovered(true)}
 				on:pointerleave={() => setHovered(false)}
@@ -257,9 +264,10 @@ export function DropdownComponent(props: {
 				<span
 					style={{
 						color: COLORS.textDark,
-						"font-size": "14px",
+						"font-size": "13px",
 						flex: "1",
 						"font-family": "Arial, sans-serif",
+						"letter-spacing": "0.3px",
 					}}
 				>
 					{props.name}
@@ -267,9 +275,10 @@ export function DropdownComponent(props: {
 				<span
 					style={{
 						color: COLORS.textDarker,
-						"font-size": "14px",
+						"font-size": "13px",
 						"margin-right": "8px",
 						"font-family": "Arial, sans-serif",
+						"letter-spacing": "0.3px",
 					}}
 				>
 					{getName(props.value)}
@@ -284,12 +293,19 @@ export function DropdownComponent(props: {
 						transform: expanded()
 							? "rotate(0deg)"
 							: "rotate(180deg)",
-						transition: "transform 0.16s linear",
+						transition:
+							"transform 0.16s cubic-bezier(0.4, 0, 0.2, 1)",
 					}}
 				/>
 			</div>
 			<Show when={expanded()}>
-				<div style={{ "background-color": "rgb(22, 21, 22)" }}>
+				<div
+					style={{
+						"background-color": "rgba(12, 12, 16, 0.5)",
+						"border-radius": "8px",
+						margin: "0 8px 8px 8px",
+					}}
+				>
 					<For each={props.options}>
 						{(option) => (
 							<div
@@ -301,9 +317,11 @@ export function DropdownComponent(props: {
 									cursor: "pointer",
 									"background-color":
 										option === props.value
-											? "rgba(255, 255, 255, 0.05)"
+											? "rgba(5, 134, 105, 0.2)"
 											: "transparent",
-									transition: "background-color 0.16s linear",
+									transition:
+										"all 0.16s cubic-bezier(0.4, 0, 0.2, 1)",
+									"border-radius": "6px",
 								}}
 								on:click={() => {
 									props.onChange(option);
@@ -318,7 +336,7 @@ export function DropdownComponent(props: {
 								on:pointerenter={(e) => {
 									if (option !== props.value) {
 										e.currentTarget.style.backgroundColor =
-											"rgba(255, 255, 255, 0.03)";
+											"rgba(255, 255, 255, 0.05)";
 									}
 								}}
 								on:pointerleave={(e) => {
@@ -332,10 +350,15 @@ export function DropdownComponent(props: {
 									style={{
 										color:
 											option === props.value
-												? COLORS.text
+												? COLORS.accent
 												: COLORS.textDark,
 										"font-size": "13px",
 										"font-family": "Arial, sans-serif",
+										"letter-spacing": "0.3px",
+										"font-weight":
+											option === props.value
+												? "600"
+												: "normal",
 									}}
 								>
 									{getName(option)}
@@ -364,7 +387,7 @@ export function TextBoxComponent(props: {
 			style={{
 				height: "50px",
 				padding: "0 12px",
-				"background-color": COLORS.mainDark,
+				"background-color": "transparent",
 				display: "flex",
 				"flex-direction": "column",
 				"justify-content": "center",
@@ -376,6 +399,7 @@ export function TextBoxComponent(props: {
 					"font-size": "11px",
 					"margin-bottom": "6px",
 					"font-family": "Arial, sans-serif",
+					"letter-spacing": "0.3px",
 				}}
 			>
 				{props.name}
@@ -389,15 +413,17 @@ export function TextBoxComponent(props: {
 					height: "24px",
 					padding: "0 8px",
 					"background-color": focused()
-						? COLORS.mainLight
+						? "rgba(40, 40, 50, 0.6)"
 						: "rgba(255, 255, 255, 0.05)",
-					border: "none",
-					"border-radius": "4px",
+					border: focused()
+						? "1px solid rgba(5, 134, 105, 0.3)"
+						: "1px solid rgba(255, 255, 255, 0.08)",
+					"border-radius": "6px",
 					color: COLORS.text,
 					"font-size": "13px",
 					"font-family": "Arial, sans-serif",
 					outline: "none",
-					transition: "background-color 0.16s linear",
+					transition: "all 0.16s cubic-bezier(0.4, 0, 0.2, 1)",
 				}}
 				on:input={(e) => props.onChange(e.currentTarget.value)}
 				on:focus={() => setFocused(true)}
@@ -540,7 +566,7 @@ export function ColorSliderComponent(props: {
 	document.addEventListener("pointerup", handlePointerUp);
 
 	return (
-		<div style={{ "background-color": COLORS.mainDark }}>
+		<div style={{ "background-color": "transparent" }}>
 			<div
 				style={{
 					display: "flex",
@@ -556,6 +582,7 @@ export function ColorSliderComponent(props: {
 						color: COLORS.textDark,
 						"font-size": "11px",
 						"font-family": "Arial, sans-serif",
+						"letter-spacing": "0.3px",
 					}}
 				>
 					{props.name}
@@ -574,7 +601,14 @@ export function ColorSliderComponent(props: {
 				/>
 			</div>
 			<Show when={expanded()}>
-				<div style={{ padding: "12px" }}>
+				<div
+					style={{
+						padding: "12px",
+						"background-color": "rgba(12, 12, 16, 0.5)",
+						"border-radius": "8px",
+						margin: "0 8px 8px 8px",
+					}}
+				>
 					{/* Saturation/Value Picker */}
 					<div
 						ref={svPickerRef}

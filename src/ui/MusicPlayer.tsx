@@ -385,15 +385,27 @@ function MusicPlayer() {
 									? "440px"
 									: "160px"
 								: "80px",
-							"background-color": "rgba(26, 25, 26, 0.95)",
+							"background-color": "rgba(18, 18, 22, 0.75)",
 							"border-radius": "16px",
 							"box-shadow":
-								"0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)",
-							"backdrop-filter": "blur(10px)",
+								"0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.05)",
+							"backdrop-filter": "blur(20px) saturate(180%)",
+							border: "1px solid rgba(255, 255, 255, 0.08)",
 							overflow: "hidden",
 							transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
 						}}
 					>
+						{/* Gradient background */}
+						<div
+							style={{
+								position: "absolute",
+								inset: "0",
+								background:
+									"linear-gradient(135deg, rgba(5, 134, 105, 0.03) 0%, rgba(0, 0, 0, 0) 100%)",
+								"pointer-events": "none",
+								"z-index": "-1",
+							}}
+						/>
 						{/* Cover image - always visible */}
 						<div
 							style={{
