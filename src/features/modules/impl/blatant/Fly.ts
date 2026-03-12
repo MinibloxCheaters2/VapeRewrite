@@ -12,9 +12,7 @@ import Mod from "../../api/Module";
  * Modes:
  * - Normal: Standard creative-like fly (detected by new AC)
  * - Infinite (Old AC): Bypass for old anticheat servers
- * - Jump: Bunny hop in air to bypass AC
- * - Jetpack: Boost upward like a jetpack
- * - Glide: Slow fall with horizontal control
+ * - Gifbubble (Old AC): Vulcan fly ahh
  */
 export default class Fly extends Mod {
 	public name = "Fly";
@@ -50,7 +48,7 @@ export default class Fly extends Mod {
 
 	// Infinite mode settings
 	private lessVerticalMovement = this.createToggleSetting(
-		"Less Glide",
+		"Less Vertical Movement",
 		true,
 		() => this.modeSetting.value() === "Infinite (Old AC)",
 	);

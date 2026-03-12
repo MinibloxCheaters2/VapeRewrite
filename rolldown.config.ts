@@ -2,6 +2,9 @@ import { isAbsolute, relative, resolve } from "node:path";
 import { readPackageUp } from "read-package-up";
 import { defineConfig, ExternalOption } from "rolldown";
 import userscript from "rolldown-plugin-userscript";
+import swc from "rolldown-plugin-swc";
+import { withFilter } from "rolldown/filter";
+import solidJsxOxc from 'solid-jsx-oxc';   // if it exposes one; otherwise write thin wrapper
 
 const { packageJson } = (await readPackageUp())!;
 
@@ -23,8 +26,38 @@ export default defineConfig(
 					.replace("process.env.VERSION", packageJson.version)
 					.replace("process.env.NAME", REAL_CLIENT_NAME);
 				return newMeta;
+			}, {
+				threadNumber: 8
 			}),
+			// Babel and ESBuild supports 2023-11 decorators
+			// but babel is slow (single-threaded) and ESBuild is garbage (Golang :puke:)
+			// SWC supports decorators but only 2022-03
+			withFilter(
+				swc({
+					jsc: {
+						parser: { decorators: true, syntax: "typescript" },
+						transform: { decoratorVersion: "2022-03" }
+					}
+				}),
+				// Only run this transform if the file contains a decorator (and if it's a JS or TS file).
+				{ transform: { code: "@Subscribe", moduleType: ["js", "ts"] } }
+			),// Use the Oxc-based transform instead of @rolldown-plugin/solid
+			solidJsxOxc({
+				// options similar to babel-preset-solid
+				generate: 'dom',        // or 'ssr' / 'hydrate'
+				hydratable: true,
+				// etc.
+			}),
+			// withFilter(solid(), {
+			// 	transform: { moduleType: ["jsx", "tsx"] }
+			// })
 		],
+		transform: {
+			assumptions: {
+				setPublicClassFields: true,
+				noDocumentAll: true
+			}
+		},
 		external: defineExternal(["@violentmonkey/dom"]),
 		output: {
 			format: "iife",
@@ -35,6 +68,9 @@ export default defineConfig(
 			minify: process.env.NODE_ENV === "production",
 			sourcemap: "inline",
 		},
+		resolve: {
+			tsconfigFilename: "./tsconfig.json"
+		}
 	}
 );
 

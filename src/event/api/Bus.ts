@@ -154,18 +154,16 @@ export function Subscribe<K extends keyof ClientEvents>(
 ) {
 	return <A extends ClientEvents[K] = ClientEvents[K]>(
 		_target: unknown,
-		mdc: ClassMethodDecoratorContext<
-			unknown,
-			A extends void ? () => void : (e: A) => void
-		> & { name: string },
+		propertyKey: string,
+		_descriptor: TypedPropertyDescriptor<
+			A extends void ? () => void : (payload: ClientEvents[K]) => void
+		>,
 	) => {
-		mdc.addInitializer(function () {
-			const t = this as Idk<Record<string, unknown>>;
-			t.__subscriptions ??= [];
-			const subscriptions: Subscription<ClientEvents>[] =
-				t.__subscriptions;
-			subscriptions.push({ event, method: mdc.name, priority });
-		});
+		const t = _target as Idk<Record<string, unknown>>;
+		t.__subscriptions ??= [];
+		const subscriptions: Subscription<ClientEvents>[] =
+			t.__subscriptions;
+		subscriptions.push({ event, method: propertyKey, priority });
 	};
 }
 
@@ -189,17 +187,15 @@ export function SubscribeAsync<K extends keyof ClientEvents>(
 ) {
 	return <A extends ClientEvents[K]>(
 		_target: unknown,
-		mdc: ClassMethodDecoratorContext<
-			unknown,
-			A extends void ? () => Promise<void> : (e: A) => Promise<void>
-		> & { name: string },
+		propertyKey: string,
+		_descriptor: TypedPropertyDescriptor<
+			A extends void ? () => void : (payload: ClientEvents[K]) => void
+		>,
 	) => {
-		mdc.addInitializer(function () {
-			const t = this as Idk<Record<string, unknown>>;
-			t.__subscriptions ??= [];
-			const subscriptions: Subscription<ClientEvents>[] =
-				t.__subscriptions;
-			subscriptions.push({ event, method: mdc.name, priority });
-		});
+		const t = _target as Idk<Record<string, unknown>>;
+		t.__subscriptions ??= [];
+		const subscriptions: Subscription<ClientEvents>[] =
+			t.__subscriptions;
+		subscriptions.push({ event, method: propertyKey, priority });
 	};
 }

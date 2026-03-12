@@ -1,6 +1,7 @@
 import Refs from "@/utils/refs";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
+import { ClientEntityPlayer } from "@/features/sdk/types/entity";
 
 /**
  * Timer Module - Accelerates game tick rate
@@ -83,7 +84,7 @@ export default class Timer extends Mod {
 		const { player } = Refs;
 		if (!player) return;
 
-		const playerProto = Object.getPrototypeOf(player);
+		const playerProto = Object.getPrototypeOf(player) as ClientEntityPlayer;
 		if (!playerProto) return;
 
 		// Restore original function
