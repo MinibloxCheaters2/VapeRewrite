@@ -14,6 +14,8 @@
 // @grant       GM_addStyle
 // @grant       GM_getValue
 // @grant       GM_setValue
+// @grant       GM_listValues
+// @grant       GM_getResourceURL
 // @grant       unsafeWindow
 // @version     process.env.VERSION
 // @author      process.env.AUTHOR

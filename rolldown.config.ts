@@ -29,18 +29,18 @@ export default defineConfig(
 			}, {
 				threadNumber: 8
 			}),
-			// Babel and ESBuild supports 2023-11 decorators
+			// Babel, ESBuild, and SWC supports 2023-11 decorators
 			// but babel is slow (single-threaded) and ESBuild is garbage (Golang :puke:)
-			// SWC supports decorators but only 2022-03
+			// SWC is the option. Can't sadly use
 			withFilter(
 				swc({
 					jsc: {
 						parser: { decorators: true, syntax: "typescript" },
-						transform: { decoratorVersion: "2022-03" }
+						transform: { decoratorVersion: "2023-11" }
 					}
 				}),
 				// Only run this transform if the file contains a decorator (and if it's a JS or TS file).
-				{ transform: { code: "@Subscribe", moduleType: ["js", "ts"] } }
+				{ transform: { code: "@Subscribe", moduleType: ["js", "ts", "jsx", "tsx"] } }
 			),
 			withFilter(solid(), {
 				transform: { moduleType: ["jsx", "tsx"] }
