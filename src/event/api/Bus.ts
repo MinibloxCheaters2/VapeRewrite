@@ -161,8 +161,7 @@ export function Subscribe<K extends keyof ClientEvents>(
 	) => {
 		const t = _target as Idk<Record<string, unknown>>;
 		t.__subscriptions ??= [];
-		const subscriptions: Subscription<ClientEvents>[] =
-			t.__subscriptions;
+		const subscriptions: Subscription<ClientEvents>[] = t.__subscriptions;
 		subscriptions.push({ event, method: propertyKey, priority });
 	};
 }
@@ -194,8 +193,7 @@ export function SubscribeAsync<K extends keyof ClientEvents>(
 	) => {
 		const t = _target as Idk<Record<string, unknown>>;
 		t.__subscriptions ??= [];
-		const subscriptions: Subscription<ClientEvents>[] =
-			t.__subscriptions;
+		const subscriptions: Subscription<ClientEvents>[] = t.__subscriptions;
 		subscriptions.push({ event, method: propertyKey, priority });
 	};
 }

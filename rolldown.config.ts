@@ -3,8 +3,8 @@ import { readPackageUp } from "read-package-up";
 import { defineConfig, ExternalOption } from "rolldown";
 import userscript from "rolldown-plugin-userscript";
 import swc from "rolldown-plugin-swc";
+import solid from "@wq2/rolldown-plugin-solid-oxc";
 import { withFilter } from "rolldown/filter";
-import solidJsxOxc from 'solid-jsx-oxc';   // if it exposes one; otherwise write thin wrapper
 
 const { packageJson } = (await readPackageUp())!;
 
@@ -41,16 +41,10 @@ export default defineConfig(
 				}),
 				// Only run this transform if the file contains a decorator (and if it's a JS or TS file).
 				{ transform: { code: "@Subscribe", moduleType: ["js", "ts"] } }
-			),// Use the Oxc-based transform instead of @rolldown-plugin/solid
-			solidJsxOxc({
-				// options similar to babel-preset-solid
-				generate: 'dom',        // or 'ssr' / 'hydrate'
-				hydratable: true,
-				// etc.
-			}),
-			// withFilter(solid(), {
-			// 	transform: { moduleType: ["jsx", "tsx"] }
-			// })
+			),
+			withFilter(solid(), {
+				transform: { moduleType: ["jsx", "tsx"] }
+			})
 		],
 		transform: {
 			assumptions: {

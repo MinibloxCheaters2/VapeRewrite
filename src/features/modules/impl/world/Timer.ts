@@ -1,7 +1,7 @@
+import type { ClientEntityPlayer } from "@/features/sdk/types/entity";
 import Refs from "@/utils/refs";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
-import { ClientEntityPlayer } from "@/features/sdk/types/entity";
 
 /**
  * Timer Module - Accelerates game tick rate
