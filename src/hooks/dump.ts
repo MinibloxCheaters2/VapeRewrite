@@ -1,6 +1,12 @@
 const DUMP_REGEXES = {
 	moveForward: /this\.([a-zA-Z]+)=\([a-zA-Z]+\.(up|down)/m,
 	moveStrafe: /this\.([a-zA-Z]+)=\([a-zA-Z]+\.right/m,
+	// PathNavigateGround#isPositionClear
+	iterator: /of\s*BlockPos\.([a-zA-Z]+)\(/,
+	// EntityBoat#update
+	normalizeAngle: /([a-zA-Z]+)\(([a-zA-Z]+)\s*-\s*this.yaw\)/,
+	// PlayerMovement#checkHeadInBlock
+	position: /BlockPos\.fromVector\(controls\.([a-zA-Z]+)\)/,
 	keyPressedPlayer:
 		/function\s+([a-zA-Z]*)\(([a-zA-Z]*)\)\s*\{\n*\s*return\s+keyPressed/m,
 	// World#getLivingEntityCount
@@ -25,6 +31,11 @@ const DUMP_REGEXES = {
 	addShaderToMaterialWorld: /ShaderManager\.([a-zA-Z]*)\(this\.materialWorld/,
 	materialTransparentWorld:
 		/this\.([a-zA-Z]*)\s*=\s*this\.materialTransparent\.clone\(/,
+	// Shader Manager
+	potionAmplifiers: /PotionHelper\.([a-zA-Z]+)\.set\(Potions\.([a-zA-Z]+)\.getId\(\),\s*"5"\)/,
+	getFlag: /([a-zA-Z]+)\(([a-zA-Z]+)\)\s*{\s*\n*return\s*\(this\.dataWatcher\.getWatchableObjectByte\(0\)&1<<([a-zA-Z]+)\)!=0}/,
+	setFlag: /setSprinting\(u\)\s*\{\n*\s*this\.([a-zA-Z]+)\([0-9]+,\s*([a-zA-Z]+)\)/,
+	isInvisibleToPlayer: /!u\.world\.isBlockLoaded\(BlockPos\.fromVector\(u.pos\)\)\s*\|\|\n*\s*u\.([a-zA-Z]*)\(player\)/m
 };
 
 export type DumpKey = keyof typeof DUMP_REGEXES;
