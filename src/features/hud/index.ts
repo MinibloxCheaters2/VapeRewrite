@@ -12,5 +12,5 @@ export function initHudSystem() {
 	HudManager.registerHudType(KeystrokesHud);
 }
 
-export { HudManager };
 export { default as HudElement } from "./api/HudElement";
+export { HudManager };

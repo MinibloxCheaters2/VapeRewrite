@@ -45,7 +45,7 @@ export default class Timer extends Mod {
 
 		// Get the player's fixedUpdate method
 		const playerProto = Object.getPrototypeOf(player);
-		if (!playerProto || !playerProto.fixedUpdate) return;
+		if (!playerProto?.fixedUpdate) return;
 
 		// Store original function
 		this.originalFixedUpdate = playerProto.fixedUpdate;

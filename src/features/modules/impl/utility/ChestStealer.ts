@@ -184,7 +184,7 @@ export default class ChestStealer extends Mod {
 			if (!slot) continue;
 
 			const stack = slot.getStack?.();
-			if (!stack || !stack.getItem) continue;
+			if (!stack?.getItem) continue;
 
 			const itemName = stack.getItem().name || "unknown";
 
