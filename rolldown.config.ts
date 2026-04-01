@@ -36,6 +36,7 @@ export default defineConfig(
 				swc({
 					jsc: {
 						parser: { decorators: true, syntax: "typescript" },
+						//@ts-expect-error: SWC supports this now
 						transform: { decoratorVersion: "2023-11" }
 					}
 				}),
