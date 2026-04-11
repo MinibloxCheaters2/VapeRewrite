@@ -23,7 +23,7 @@ Simply put:
   - Impact ONLY UPDATED after I fixed Vape myself
     (to make a Criticals bypass for Sigma Rebase in KitPvP, *which I never did*)
     and then he557 made a USELESS fork of Vape that removed a few features and never added new features.
-    - ProgMEM-CC couldn't even finish the desync exploit implementation I 99% completed for them ON THEIR OWN
+    - ProgMEM-CC couldn't even finish the desync exploit implementation I 99% completed for him.
 - [Spherical](https://codeberg.org/Miniblox/Spherical) is supposed to be the new base for Vape
   whenever it finishes (never), but motivation makes it hard to overcome really big road blockers:
   - I also got sidetracked(ish) with trying to make Spherical in Kotlin/JS.
