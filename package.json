@@ -1,54 +1,54 @@
 {
-  "name": "vape-rewrite",
-  "version": "0.0.0",
-  "description": "",
-  "author": "Seized and Desisted",
-  "license": "AGPL-3.0-only",
-  "private": true,
-  "type": "module",
-  "engines": {
-    "node": ">=18"
-  },
-  "scripts": {
-    "dev": "rolldown -wc",
-    "clean": "del-cli dist",
-    "ci": "run-s lint",
-    "build:js": "rolldown -c",
-    "build:prod": "cross-env NODE_ENV=production run-s ci build:js",
-    "build": "cross-env NODE_ENV=production run-s clean build:prod",
-    "devbuild": "run-s clean dev",
-    "lint": "biome check",
-    "lint:fix": "biome check --fix"
-  },
-  "dependencies": {
-    "@violentmonkey/dom": "^2.2.1",
-    "@wq2/brigadier-ts": "^1.0.8",
-    "oxc-minify": "^0.125.0",
-    "rolldown": "canary",
-    "solid-js": "^1.9.11"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "^2.4.4",
-    "@types/three": "0.158.3",
-    "@violentmonkey/types": "^0.3.2",
-    "@wq2/rolldown-plugin-solid-oxc": "^0.1.2",
-    "cross-env": "^10.1.0",
-    "del-cli": "^7.0.0",
-    "lint-staged": "^16.3.0",
-    "npm-run-all": "^4.1.5",
-    "read-package-up": "^12.0.0",
-    "@wq2/rolldown-plugin-swc": "^0.0.2",
-    "rolldown-plugin-userscript": "1.1.1",
-    "socket.io-client": "^4.8.3",
-    "typescript": "^6.0.2",
-    "unocss": "^66.6.2"
-  },
-  "lint-staged": {
-    "*.{ts,tsx,js,css}": [
-      "biome check --fix"
-    ]
-  },
-  "trustedDependencies": [
-    "@swc/core"
-  ]
+	"name": "vape-rewrite",
+	"version": "0.0.0",
+	"description": "",
+	"author": "Seized and Desisted",
+	"license": "AGPL-3.0-only",
+	"private": true,
+	"type": "module",
+	"engines": {
+		"node": ">=18"
+	},
+	"scripts": {
+		"dev": "rolldown -wc",
+		"clean": "del-cli dist",
+		"ci": "run-s lint",
+		"build:js": "rolldown -c",
+		"build:prod": "cross-env NODE_ENV=production run-s ci build:js",
+		"build": "cross-env NODE_ENV=production run-s clean build:prod",
+		"devbuild": "run-s clean dev",
+		"lint": "biome check",
+		"lint:fix": "biome check --fix"
+	},
+	"dependencies": {
+		"@violentmonkey/dom": "^2.2.1",
+		"@wq2/brigadier-ts": "^1.0.8",
+		"oxc-minify": "^0.125.0",
+		"rolldown": "canary",
+		"solid-js": "^1.9.11"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.4.4",
+		"@types/three": "0.158.3",
+		"@violentmonkey/types": "^0.3.2",
+		"@wq2/rolldown-plugin-solid-oxc": "^0.1.2",
+		"cross-env": "^10.1.0",
+		"del-cli": "^7.0.0",
+		"lint-staged": "^16.3.0",
+		"npm-run-all": "^4.1.5",
+		"read-package-up": "^12.0.0",
+		"@wq2/rolldown-plugin-swc": "^0.0.2",
+		"rolldown-plugin-userscript": "1.1.1",
+		"socket.io-client": "^4.8.3",
+		"typescript": "^6.0.2",
+		"unocss": "^66.6.2"
+	},
+	"lint-staged": {
+		"*.{ts,tsx,js,css}": [
+			"biome check --fix"
+		]
+	},
+	"trustedDependencies": [
+		"@swc/core"
+	]
 }
