@@ -13,10 +13,16 @@ export default function getPosFromPacket(
 	packet: SPacketPlayerInput,
 ): SimpleVec3; // not optional
 export default function getPosFromPacket(
-	packet: C2SPacket,
+	packet: SPacketPlayerPosLook | undefined,
+): SimpleVec3 | undefined; // doesn't always have the position in it
+export default function getPosFromPacket(
+	packet: SPacketPlayerInput | undefined,
+): SimpleVec3; // not optional
+export default function getPosFromPacket(
+	packet: C2SPacket | undefined,
 ): SimpleVec3 | undefined;
 export default function getPosFromPacket(
-	packet: C2SPacket,
+	packet: C2SPacket | undefined,
 ): SimpleVec3 | undefined {
 	if (packet instanceof c2s("SPacketPlayerPosLook") && packet.pos) {
 		return SimpleVec3.fromFloatVec3(packet.pos);

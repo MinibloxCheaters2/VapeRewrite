@@ -1,29 +1,25 @@
 import type { BoxGeometry, Mesh, Vector3 } from "three";
+import Interop from "@/exposedO";
+import type { BlockPos } from "@/features/sdk/types/blockpos";
 import type { AllBlocks } from "@/features/sdk/types/blocks";
-import { MATCHED_DUMPS } from "@/hooks/replacement";
-import Interop from "../../exposedO";
-import type { BlockPos } from "../../features/sdk/types/blockpos";
-import type { Chat } from "../../features/sdk/types/chat";
-import type { ClientSocket } from "../../features/sdk/types/clientSocket";
+import type { Chat } from "@/features/sdk/types/chat";
+import type { ClientSocket } from "@/features/sdk/types/clientSocket";
 import type {
 	PlayerController,
 	PlayerControllerMP,
-} from "../../features/sdk/types/controller";
+} from "@/features/sdk/types/controller";
 import type {
 	ClientEntityPlayer,
 	EntityLivingBase,
-} from "../../features/sdk/types/entity";
-import type { Game } from "../../features/sdk/types/game";
-import type { Hud3D } from "../../features/sdk/types/hud";
-import type {
-	ItemBlock,
-	ItemSword,
-	Items,
-} from "../../features/sdk/types/items";
-import type { Materials } from "../../features/sdk/types/materials";
-import type { EnumFacing } from "../../features/sdk/types/math/facing";
-import type { PBVector3 } from "../../features/sdk/types/packets";
-import type { ClientWorld } from "../../features/sdk/types/world";
+} from "@/features/sdk/types/entity";
+import type { Game } from "@/features/sdk/types/game";
+import type { Hud3D } from "@/features/sdk/types/hud";
+import type { ItemBlock, ItemSword, Items } from "@/features/sdk/types/items";
+import type { Materials } from "@/features/sdk/types/materials";
+import type { EnumFacing } from "@/features/sdk/types/math/facing";
+import type { PBVector3 } from "@/features/sdk/types/packets";
+import type { ClientWorld } from "@/features/sdk/types/world";
+import { MATCHED_DUMPS } from "@/hooks/replacement";
 import mappings from "../mapping/mappings";
 import remapObj from "./remapProxy";
 
@@ -67,7 +63,9 @@ class Refs {
 	static get Blocks(): AllBlocks {
 		return Refs.#initOrR(
 			Refs.#Blocks,
-			() => globalThis.Blocks as AllBlocks,
+			() =>
+				(globalThis as typeof globalThis & { Blocks: AllBlocks })
+					.Blocks,
 		);
 	}
 
@@ -114,7 +112,8 @@ class Refs {
 	static get BoxGeometry() {
 		return Refs.#initOrR(Refs.#BoxGeometry, () =>
 			Interop.run((e) =>
-				e<typeof BoxGeometry>(MATCHED_DUMPS.boxGeometry),
+				// biome-ignore lint/style/noNonNullAssertion: this exists, unless the dump doesn't match.
+				e<typeof BoxGeometry>(MATCHED_DUMPS.boxGeometry!),
 			),
 		);
 	}
@@ -159,7 +158,7 @@ class Refs {
 	 * Prefer using some of the getters in here instead of from this game object,
 	 * since some of them have a remapper proxy added, which automatically remaps non-obfuscated symbol names to their dumped version,
 	 * which you would have to do manually by indexing dumps and casting to `as "originalName"` so you get the typings.
-	 * | Old name             | New name              | Auto remapping |
+	 * | `game.` version      | `Refs` version        | Auto remapping |
 	 * |----------------------|-----------------------|----------------:|
 	 * | Refs.game.player     | Refs.player           | ✅             |
 	 * | Refs.game.world      | Refs.world            | ✅             |
@@ -167,7 +166,8 @@ class Refs {
 	 * | Refs.game.chat       | Refs.chat             | Not needed     |
 	 */
 	static get game() {
-		return Refs.#initOrR(Refs.#game, () => Interop.run((e) => e("game")));
+		// biome-ignore lint/style/noNonNullAssertion: this always exists because it's initialized when the game script loads.
+		return Refs.#initOrR(Refs.#game, () => Interop.run((e) => e("game")))!;
 	}
 
 	static get ClientSocket(): typeof ClientSocket {
@@ -190,9 +190,10 @@ class Refs {
 
 	/** Refs.game.player with a remap proxy applied */
 	static get player() {
+		// biome-ignore lint/style/noNonNullAssertion: it's only null when the game script hasn't been loaded yet.
 		return Refs.#initOrR(Refs.#player, () =>
 			remapObj(Refs.game.player, mappings.ClientEntityPlayer),
-		);
+		)!;
 	}
 }
 

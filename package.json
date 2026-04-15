@@ -1,72 +1,55 @@
 {
-	"name": "vape-rewrite",
-	"version": "0.0.0",
-	"description": "",
-	"author": "Seized and Desisted",
-	"license": "AGPL-3.0-only",
-	"private": true,
-	"type": "module",
-	"engines": {
-		"node": ">=18"
-	},
-	"scripts": {
-		"dev": "rollup -wc",
-		"clean": "del-cli dist",
-		"ci": "run-s lint",
-		"build:js": "rollup -c",
-		"build:prod": "cross-env NODE_ENV=production run-s ci build:js",
-		"build": "cross-env NODE_ENV=production run-s clean build:prod",
-		"devbuild": "run-s clean dev",
-		"postinstall": "patch-package",
-		"lint": "biome check",
-		"lint:fix": "biome check --fix"
-	},
-	"dependencies": {
-		"@babel/runtime": "^7.28.6",
-		"@violentmonkey/dom": "^2.2.1",
-		"@wq2/brigadier-ts": "^1.0.7",
-		"rollup": "4.59.0",
-		"rollup-plugin-tsconfig-paths": "^1.5.2",
-		"solid-js": "^1.9.11"
-	},
-	"devDependencies": {
-		"@babel/core": "^7.29.0",
-		"@babel/plugin-proposal-decorators": "^7.29.0",
-		"@babel/plugin-transform-react-jsx": "^7.28.6",
-		"@babel/plugin-transform-runtime": "^7.29.0",
-		"@babel/preset-env": "^7.29.0",
-		"@babel/preset-typescript": "^7.28.5",
-		"@rollup/plugin-babel": "^6.1.0",
-		"@rollup/plugin-commonjs": "^29.0.0",
-		"@rollup/plugin-json": "^6.1.0",
-		"@rollup/plugin-node-resolve": "^16.0.3",
-		"@rollup/plugin-replace": "^6.0.3",
-		"@rollup/plugin-terser": "^0.4.4",
-		"@types/three": "0.158.3",
-		"@unocss/postcss": "^66.6.0",
-		"@violentmonkey/types": "^0.3.2",
-		"autoprefixer": "^10.4.24",
-		"babel-preset-solid": "^1.9.10",
-		"commander": "^14.0.3",
-		"cross-env": "^10.1.0",
-		"del-cli": "^7.0.0",
-		"lint-staged": "^16.2.7",
-		"npm-run-all": "^4.1.5",
-		"patch-package": "^8.0.1",
-		"postcss": "^8.5.6",
-		"postcss-calc": "^10.1.1",
-		"postcss-nested": "^7.0.2",
-		"read-package-up": "^12.0.0",
-		"rollup-plugin-postcss": "^4.0.2",
-		"rollup-plugin-userscript": "^1.1.0",
-		"socket.io-client": "^4.8.3",
-		"typescript": "^5.9.3",
-		"unocss": "^66.6.0",
-		"@biomejs/biome": "^2.4.4"
-	},
-	"lint-staged": {
-		"*.{ts,tsx,js,css}": [
-			"biome check --fix"
-		]
-	}
+  "name": "vape-rewrite",
+  "version": "0.0.0",
+  "description": "",
+  "author": "Seized and Desisted",
+  "license": "AGPL-3.0-only",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "dev": "rolldown -wc",
+    "clean": "del-cli dist",
+    "ci": "run-s lint",
+    "build:js": "rolldown -c",
+    "build:prod": "cross-env NODE_ENV=production run-s ci build:js",
+    "build": "cross-env NODE_ENV=production run-s clean build:prod",
+    "devbuild": "run-s clean dev",
+    "lint": "biome check",
+    "lint:fix": "biome check --fix"
+  },
+  "dependencies": {
+    "@violentmonkey/dom": "^2.2.1",
+    "@wq2/brigadier-ts": "^1.0.8",
+    "oxc-minify": "^0.125.0",
+    "rolldown": "canary",
+    "solid-js": "^1.9.11"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.4",
+    "@types/three": "0.158.3",
+    "@violentmonkey/types": "^0.3.2",
+    "@wq2/rolldown-plugin-solid-oxc": "^0.1.0-alpha.16",
+    "@wq2/solid-jsx-oxc": "^0.1.0-alpha.15",
+    "cross-env": "^10.1.0",
+    "del-cli": "^7.0.0",
+    "lint-staged": "^16.3.0",
+    "npm-run-all": "^4.1.5",
+    "read-package-up": "^12.0.0",
+    "@wq2/rolldown-plugin-swc": "^0.0.2",
+    "rolldown-plugin-userscript": "1.1.1",
+    "socket.io-client": "^4.8.3",
+    "typescript": "^6.0.2",
+    "unocss": "^66.6.2"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,css}": [
+      "biome check --fix"
+    ]
+  },
+  "trustedDependencies": [
+    "@swc/core"
+  ]
 }

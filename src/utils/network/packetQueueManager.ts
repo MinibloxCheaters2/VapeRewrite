@@ -40,7 +40,7 @@ export class PacketOutcome<P> {
 
 export default new (class PacketQueueManager {
 	private packetQueue: PacketRecord<C2SPacket>[] = [];
-	#posBox: Mesh;
+	#posBox?: Mesh;
 
 	get serverPos(): PBFloatVector3 | undefined {
 		return getPosFromPacket(
@@ -71,9 +71,14 @@ export default new (class PacketQueueManager {
 	/**
 	 * @returns `Date.now() - this.packetQueue[0].time`, or `0` if `this.lagging` is false.
 	 */
-	laggingFor(): number {
+	laggingFor(filter?: (pkt: PacketRecord<C2SPacket>) => boolean): number {
 		if (!this.lagging) return 0;
-		return Date.now() - this.packetQueue[0].time;
+		const item =
+			filter !== undefined
+				? this.packetQueue.find((a) => filter(a))
+				: this.packetQueue[0];
+		if (item === undefined) return 0;
+		return Date.now() - item.time;
 	}
 
 	/** this doesn't remove the packet from the packet queue since I'm lazy, you do that yourself. this just sends the packet. */
@@ -131,6 +136,7 @@ export default new (class PacketQueueManager {
 	#updatePosBox() {
 		if (!this.lagging) return;
 		if (!this.serverPos) return;
+		if (!this.#posBox) return;
 		this.#posBox.visible = true;
 		this.#posBox.position.set(
 			this.serverPos.x,

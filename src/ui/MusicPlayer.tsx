@@ -187,17 +187,24 @@ function MusicPlayer() {
 		return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
 	};
 
-	const setupAudioAnalyser = (audioElement: HTMLAudioElement) => {
+	const setupAudioAnalyser = (
+		audioElement: HTMLAudioElement & {
+			_audioSource?: MediaElementAudioSourceNode;
+		},
+	) => {
 		try {
 			// Don't recreate if already connected
-			if ((audioElement as any)._audioSource) {
+			if (audioElement._audioSource) {
 				console.log("Audio source already connected");
 				return;
 			}
 
 			if (!globalMusicState.audioContext) {
+				const wnd = window as typeof window & {
+					webkitAudioContext: typeof AudioContext;
+				};
 				globalMusicState.audioContext = new (
-					window.AudioContext || (window as any).webkitAudioContext
+					wnd.AudioContext ?? wnd.webkitAudioContext
 				)();
 				console.log("AudioContext created");
 			}
@@ -217,7 +224,7 @@ function MusicPlayer() {
 			globalMusicState.analyser.connect(
 				globalMusicState.audioContext.destination,
 			);
-			(audioElement as any)._audioSource = source;
+			audioElement._audioSource = source;
 			console.log("Audio source connected to analyser and destination");
 		} catch (error) {
 			console.error("Failed to setup audio analyser:", error);

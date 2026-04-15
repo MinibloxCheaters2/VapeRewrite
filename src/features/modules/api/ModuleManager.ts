@@ -18,6 +18,7 @@ import AutoSword from "../impl/utility/AutoSword.js";
 import ChestAura from "../impl/utility/ChestAura.js";
 import ChestStealer from "../impl/utility/ChestStealer.js";
 import FilterBypass from "../impl/utility/FilterBypass.js";
+import PingSpoof from "../impl/utility/PingSpoof.js";
 import RejoinOnMute from "../impl/utility/RejoinOnMute.js";
 import ServerCrasher from "../impl/utility/ServerCrasher.js";
 import Test from "../impl/utility/Test.js";
@@ -77,6 +78,7 @@ export default class ModuleManager {
 		new Test(),
 		new TickBase(),
 		new ChestAura(),
+		new PingSpoof(),
 	] as const;
 
 	public static readonly moduleNames: string[] = this.modules.map(

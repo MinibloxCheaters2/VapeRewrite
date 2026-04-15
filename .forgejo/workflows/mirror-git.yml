@@ -26,5 +26,5 @@ jobs:
           TOKEN: ${{ secrets.TOKEN }}
         run: |
           URL="https://${USER}:${TOKEN}@github.com/MinibloxCheaters2/VapeRewrite.git"
-          git push "$URL" --prune --all
+          git push "$URL" --mirror
           git push "$URL" --tags

@@ -1,3 +1,4 @@
+import type { ClientEntityPlayer } from "@/features/sdk/types/entity";
 import Refs from "@/utils/refs";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
@@ -44,7 +45,7 @@ export default class Timer extends Mod {
 
 		// Get the player's fixedUpdate method
 		const playerProto = Object.getPrototypeOf(player);
-		if (!playerProto || !playerProto.fixedUpdate) return;
+		if (!playerProto?.fixedUpdate) return;
 
 		// Store original function
 		this.originalFixedUpdate = playerProto.fixedUpdate;
@@ -83,7 +84,7 @@ export default class Timer extends Mod {
 		const { player } = Refs;
 		if (!player) return;
 
-		const playerProto = Object.getPrototypeOf(player);
+		const playerProto = Object.getPrototypeOf(player) as ClientEntityPlayer;
 		if (!playerProto) return;
 
 		// Restore original function

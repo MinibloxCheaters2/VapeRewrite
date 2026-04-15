@@ -75,9 +75,6 @@ export default class Spider extends Mod {
 	}
 
 	private isCollidingHorizontally(): boolean {
-		const { player, Vec3, BlockPos, game } = Refs;
-		// if (!player) return false;
-
 		const anyCollidingBlock = oneInRange(
 			this.wallDetectRange,
 			defaultFilter,

@@ -7,8 +7,8 @@ export default class Rotation {
 		public pitch: number,
 	) {}
 
-	static fromPacket(p: SPacketPlayerPosLook): Rotation | undefined {
-		if (p.yaw !== undefined && p.pitch !== undefined) {
+	static fromPacket(p?: SPacketPlayerPosLook): Rotation | undefined {
+		if (p?.yaw !== undefined && p?.pitch !== undefined) {
 			return new Rotation(p.yaw, p.pitch);
 		}
 	}
