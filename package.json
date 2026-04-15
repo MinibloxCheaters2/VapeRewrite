@@ -28,7 +28,7 @@
 		"solid-js": "^1.9.11"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^2.4.4",
+		"@biomejs/biome": "^2.4.12",
 		"@types/three": "0.158.3",
 		"@violentmonkey/types": "^0.3.2",
 		"@wq2/rolldown-plugin-solid-oxc": "^0.1.2",
