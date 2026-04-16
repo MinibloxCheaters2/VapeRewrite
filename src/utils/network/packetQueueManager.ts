@@ -1,10 +1,7 @@
 // TODO: support queueing S2C packets?
 
 import type { Material, Mesh } from "three";
-import type {
-	PBFloatVector3,
-	SPacketPlayerPosLook,
-} from "@/features/sdk/types/packets";
+import type { PBFloatVector3 } from "@/features/sdk/types/packets";
 import Bus from "../../Bus";
 import { Priority, Subscribe } from "../../event/api/Bus";
 import type CancelableWrapper from "../../event/api/CancelableWrapper";
@@ -12,7 +9,7 @@ import type {
 	AnyPacket,
 	C2SPacket,
 } from "../../features/sdk/types/packetTypes";
-import Rotation from "../aiming/rotation";
+import Rotation, { type IRotation } from "../aiming/rotation";
 import Refs from "../helpers/refs";
 import PacketUtil from "./PacketUtil";
 import { c2s } from "./packetRefs";
@@ -51,12 +48,9 @@ export default new (class PacketQueueManager {
 
 	get serverRot(): Rotation | undefined {
 		return Rotation.fromPacket(
-			this.packetQueue.find(
-				(p) =>
-					p.packet instanceof c2s("SPacketPlayerPosLook") &&
-					p.packet.yaw !== undefined &&
-					p.packet.pitch !== undefined,
-			)?.packet as SPacketPlayerPosLook | undefined,
+			this.packetQueue.find(Rotation.hasRotation)?.packet as
+				| IRotation
+				| undefined,
 		);
 	}
 
@@ -136,7 +130,10 @@ export default new (class PacketQueueManager {
 	#updatePosBox() {
 		if (!this.lagging) return;
 		if (!this.serverPos) return;
-		if (!this.#posBox) return;
+		if (!this.#posBox) {
+			this.#initPosBox();
+			this.#posBox = this.#posBox as unknown as Mesh;
+		}
 		this.#posBox.visible = true;
 		this.#posBox.position.set(
 			this.serverPos.x,

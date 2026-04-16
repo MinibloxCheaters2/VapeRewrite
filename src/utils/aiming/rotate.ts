@@ -40,12 +40,10 @@ export default new (class RotationManager {
 	// only handles packets that weren't canceled above (i.e. from packet queue manager)
 	@Subscribe("sendPacket", Priority.READ_FINAL_STATE)
 	private onPacket({ data: packet }: CancelableWrapper<C2SPacket>) {
-		if (
-			packet instanceof c2s("SPacketPlayerPosLook") &&
-			packet.yaw !== undefined &&
-			packet.pitch !== undefined
-		) {
-			this.#trackedRot = Rotation.fromPacket(packet);
+		if (packet instanceof c2s("SPacketPlayerPosLook")) {
+			if (Rotation.hasRotation(packet))
+				// biome-ignore lint/style/noNonNullAssertion: we know it's not undefined
+				this.#trackedRot = Rotation.fromPacket(packet)!;
 			const plan = this.#currentPlan;
 			if (plan) {
 				if (plan.resetIn <= 0) {
