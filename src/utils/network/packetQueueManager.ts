@@ -35,14 +35,21 @@ export class PacketOutcome<P> {
 	) {}
 }
 
+enum PreAction {
+	PASS,
+	FLUSH,
+	GO,
+}
+
 export default new (class PacketQueueManager {
 	private packetQueue: PacketRecord<C2SPacket>[] = [];
 	#posBox?: Mesh;
 
 	get serverPos(): PBFloatVector3 | undefined {
 		return getPosFromPacket(
-			this.packetQueue.find((p) => getPosFromPacket(p.packet) !== undefined)
-				?.packet,
+			this.packetQueue.find(
+				(p) => getPosFromPacket(p.packet) !== undefined,
+			)?.packet,
 		);
 	}
 
@@ -91,22 +98,24 @@ export default new (class PacketQueueManager {
 		});
 	}
 
-	#preProcessing(pkt: C2SPacket): "pass" | "flush" | undefined {
-		if (pkt instanceof c2s("SPacketMessage")) return "pass";
-		if (pkt instanceof c2s("SPacketRespawn")) return "flush";
+	#preProcessing(pkt: C2SPacket): PreAction {
+		if (pkt instanceof c2s("SPacketMessage")) return PreAction.PASS;
+		if (pkt instanceof c2s("SPacketRespawn")) return PreAction.FLUSH;
+		return PreAction.GO;
 	}
 
 	@Subscribe("sendPacket", Priority.FINAL_DECISION)
 	private onPacket(e: CancelableWrapper<C2SPacket>) {
 		if (e.canceled) return;
 		switch (this.#preProcessing(e.data)) {
-			case "pass":
+			case PreAction.PASS:
 				return;
-			case "flush":
-				this.packetQueue.push(new PacketRecord(e.data, Date.now()));
-				e.cancel();
+			case PreAction.FLUSH:
+				// this.packetQueue.push(new PacketRecord(e.data, Date.now()));
+				// e.cancel(); // what was I thinking while doing this :sob:
+				this.flush();
 				return;
-			case undefined:
+			case PreAction.GO:
 				break;
 		}
 

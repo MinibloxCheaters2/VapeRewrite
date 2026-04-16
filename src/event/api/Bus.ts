@@ -97,7 +97,7 @@ export default class EventBus<Events extends Record<string, unknown>> {
 		const handlers = this.listeners[event];
 		if (handlers) {
 			for (const { handler } of handlers) {
-				if (payload.length > 0) {
+				if (payload?.[0]) {
 					handler(payload[0]);
 				} else {
 					(handler as () => void)();
