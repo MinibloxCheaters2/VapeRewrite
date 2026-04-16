@@ -1,15 +1,13 @@
 // ==UserScript==
 // @name        process.env.NAME
 // @namespace   https://codeberg.org/Miniblox
-// @description The Vape UserScript, but rewritten.
+// @description The Vape UserScript, but rewritten
 // @license     AGPL-3.0-or-later
 // @homepageURL https://codeberg.org/Miniblox/VapeRewrite
 // @match       https://miniblox.io/*
 // @match       https://miniblox.org/*
 // @match       https://miniblox.online/*
 // @match       https://bloxbattles.io/*
-// @match       https://blockcraft.victorwei.com/*
-// @match       https://blockcraft.online/*
 // @icon        https://miniblox.io/favicon.png
 // @grant       GM_addStyle
 // @grant       GM_getValue
