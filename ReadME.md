@@ -30,8 +30,7 @@ Simply put:
   - While the RegExp based replacing in Vape is horrible and annoying for both users (no "paste code into developer console to inject"), and even developers
     (if kept to the bare minimum), it is effectively a necessary evil:
     - How are you going to do packet modifications if you only have access to the builtin globals?
-    - *many* classes, methods, variables, etc. are not exposed from the one game object that we have access to.
-      This means you would have to find viable replacements
+    - *many* classes, methods, variables, etc. are not exposed from the one game object that we have access to. This means you would have to find viable replacements
 
 ## A note on developer console injection
 
@@ -47,6 +46,6 @@ $ bun run dev
 # Build the script (also minifies the code)
 $ bun run build
 
-# Lint
+# Lint (checks for errors)
 $ bun run lint
 ```
