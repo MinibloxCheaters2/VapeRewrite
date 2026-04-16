@@ -25,7 +25,7 @@ else {
 		nsp: "/",
 		data: [v.typeName, w]
 	};
-	const cWrap = ${EXPOSED}.newCancelableWrapper(k.packet.value);
+	const cWrap = ${EXPOSED}.newCancelableWrapper(w);
 	${EXPOSED}.emitEvent("receivePacket", cWrap);
 		if (!cWrap.canceled)
 	ClientSocket.netSim.schedule( () => this.emit("decoded", k))
