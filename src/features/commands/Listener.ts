@@ -65,14 +65,12 @@ export default new (class CommandListener {
 			const suggestions = await dispatcher.getCompletionSuggestions(r);
 			const applied = suggestions.getList().map((s) => {
 				const words = removedPrefix.split(" ");
-				const last = words[words.length - 1];
 
 				const suggestionText = s.getText();
-				const completion = suggestionText.substring(last.length);
 
 				return words.length <= 1
-					? `${COMMAND_PREFIX}${completion}`
-					: completion;
+					? `${COMMAND_PREFIX}${suggestionText}`
+					: suggestionText;
 			});
 			Refs.chat.autoCompleteReceived(
 				new (s2c("CPacketTabComplete"))({
