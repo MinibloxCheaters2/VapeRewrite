@@ -41,7 +41,7 @@ export default new (class PacketQueueManager {
 
 	get serverPos(): PBFloatVector3 | undefined {
 		return getPosFromPacket(
-			this.packetQueue.find((p) => getPosFromPacket(p) !== undefined)
+			this.packetQueue.find((p) => getPosFromPacket(p.packet) !== undefined)
 				?.packet,
 		);
 	}
