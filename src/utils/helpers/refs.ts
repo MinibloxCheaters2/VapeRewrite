@@ -21,132 +21,138 @@ import type { PBVector3 } from "@/features/sdk/types/packets";
 import type { ClientWorld } from "@/features/sdk/types/world";
 import { MATCHED_DUMPS } from "@/hooks/replacement";
 import mappings from "../mapping/mappings";
-import initOrR from "./initOrR";
 import remapObj from "./remapProxy";
 
-function uninitialized<T>(): T {
-	return undefined as unknown as T;
-}
+// biome-ignore lint/complexity/noStaticOnlyClass: job
+class Refs {
+	// all of these variables are just for caching.
+	static #game: Game;
+	static #world?: ClientWorld;
+	static #player: ClientEntityPlayer;
+	static #chat: Chat;
+	static #Vec3?: typeof Vector3;
+	static #clientSocket: typeof ClientSocket;
+	static #PBVector3: PBVector3;
+	static #BlockPos: typeof BlockPos;
+	static #EnumFacing: typeof EnumFacing;
+	// TODO: ts like really annoying so uh maybe a better solution?
+	static #EntityLivingBase: typeof EntityLivingBase;
+	// for PlayerController, use `game.controller`
+	static #playerController: PlayerController;
+	static #playerControllerMP: PlayerControllerMP;
+	static #BoxGeometry: typeof BoxGeometry;
+	static #Mesh: typeof Mesh;
+	static #Materials: typeof Materials;
+	static #Items: typeof Items;
+	static #ItemBlock: typeof ItemBlock;
+	static #ItemSword: typeof ItemSword;
+	static #hud3D: Hud3D;
+	static #Blocks: AllBlocks;
 
-const game = uninitialized<Game>();
-const world = uninitialized<ClientWorld>();
-const player = uninitialized<ClientEntityPlayer>();
-const chat = uninitialized<Chat>();
-const Vec3 = uninitialized<typeof Vector3>();
-const clientSocket = uninitialized<typeof ClientSocket>();
-const cachedPBVector3 = uninitialized<PBVector3>();
-const cachedBlockPos = uninitialized<typeof BlockPos>();
-const cachedEnumFacing = uninitialized<typeof EnumFacing>();
-const cachedEntityLivingBase = uninitialized<typeof EntityLivingBase>();
-const playerController = uninitialized<PlayerController>();
-const playerControllerMP = uninitialized<PlayerControllerMP>();
-const cachedBoxGeometry = uninitialized<typeof BoxGeometry>();
-const cachedMesh = uninitialized<typeof Mesh>();
-const cachedMaterials = uninitialized<typeof Materials>();
-const cachedItems = uninitialized<typeof Items>();
-const cachedItemBlock = uninitialized<typeof ItemBlock>();
-const cachedItemSword = uninitialized<typeof ItemSword>();
-const hud3D = uninitialized<Hud3D>();
-const Blocks = uninitialized<AllBlocks>();
+	static #initOrR<T>(field: T, initializer: () => T) {
+		field ??= initializer();
+		return field;
+	}
 
-const Refs = {
-	get ItemSword(): typeof ItemSword {
-		return initOrR(cachedItemSword, () =>
+	static get ItemSword(): typeof ItemSword {
+		return Refs.#initOrR(Refs.#ItemSword, () =>
 			Interop.run((e) => e<typeof ItemSword>("ItemSword")),
 		);
-	},
+	}
 
-	get Blocks(): AllBlocks {
-		return initOrR(
-			Blocks,
+	static get Blocks(): AllBlocks {
+		return Refs.#initOrR(
+			Refs.#Blocks,
 			() =>
 				(globalThis as typeof globalThis & { Blocks: AllBlocks })
 					.Blocks,
 		);
-	},
+	}
 
-	get Materials() {
-		return initOrR(cachedMaterials, () =>
+	static get Materials() {
+		return Refs.#initOrR(Refs.#Materials, () =>
 			Interop.run((e) => e<typeof Materials>("Materials")),
 		);
-	},
+	}
 
-	get Items() {
-		return initOrR(cachedItems, () =>
+	static get Items() {
+		return Refs.#initOrR(Refs.#Items, () =>
 			Interop.run((e) => e<typeof Items>("Items")),
 		);
-	},
-	get ItemBlock() {
-		return initOrR(cachedItemBlock, () =>
+	}
+	static get ItemBlock() {
+		return Refs.#initOrR(Refs.#ItemBlock, () =>
 			Interop.run((e) => e<typeof ItemBlock>("ItemBlock")),
 		);
-	},
-	get hud3D() {
-		return initOrR(hud3D, () => Interop.run((e) => e<Hud3D>("hud3D")));
-	},
+	}
+	static get hud3D() {
+		return Refs.#initOrR(Refs.#hud3D, () =>
+			Interop.run((e) => e<Hud3D>("hud3D")),
+		);
+	}
 
 	/**
 	 * Just `game.controller` with the remap proxy applied
 	 */
-	get playerController() {
-		return initOrR(playerController, () =>
+	static get playerController() {
+		return Refs.#initOrR(Refs.#playerController, () =>
 			remapObj(Refs.game.controller, mappings.playerController),
 		);
-	},
+	}
 
-	get playerControllerMP() {
-		return initOrR(playerControllerMP, () =>
+	static get playerControllerMP() {
+		return Refs.#initOrR(Refs.#playerControllerMP, () =>
 			remapObj(
 				Interop.run((e) => e<PlayerControllerMP>("playerControllerMP")),
 				mappings.playerControllerMP,
 			),
 		);
-	},
+	}
 
-	get BoxGeometry() {
-		return initOrR(cachedBoxGeometry, () =>
+	static get BoxGeometry() {
+		return Refs.#initOrR(Refs.#BoxGeometry, () =>
 			Interop.run((e) =>
 				// biome-ignore lint/style/noNonNullAssertion: this exists, unless the dump doesn't match.
 				e<typeof BoxGeometry>(MATCHED_DUMPS.boxGeometry!),
 			),
 		);
-	},
+	}
 
-	get Mesh() {
-		return initOrR(cachedMesh, () =>
+	static get Mesh() {
+		return Refs.#initOrR(Refs.#Mesh, () =>
 			Interop.run((e) => e<typeof Mesh>("Mesh")),
 		);
-	},
+	}
 
-	get Vec3() {
-		return initOrR(Vec3, () =>
+	static get Vec3() {
+		return Refs.#initOrR(Refs.#Vec3, () =>
 			Interop.run((e) => e<typeof Vector3>("Vector3$1")),
 		);
-	},
+	}
 
-	get BlockPos() {
-		return initOrR(cachedBlockPos, () =>
+	static get BlockPos() {
+		return Refs.#initOrR(Refs.#BlockPos, () =>
 			Interop.run((e) => e<typeof BlockPos>("BlockPos")),
 		);
-	},
+	}
 
-	get EnumFacing() {
-		return initOrR(cachedEnumFacing, () =>
+	static get EnumFacing() {
+		return Refs.#initOrR(Refs.#EnumFacing, () =>
 			Interop.run((e) => e<typeof EnumFacing>("EnumFacing")),
 		);
-	},
+	}
 
-	get EntityLivingBase() {
-		return initOrR(cachedEntityLivingBase, () =>
+	static get EntityLivingBase() {
+		return Refs.#initOrR(Refs.#EntityLivingBase, () =>
 			Interop.run((e) => e<typeof EntityLivingBase>("EntityLivingBase")),
 		);
-	},
+	}
 
-	get PBVector3() {
-		return initOrR(cachedPBVector3, () =>
+	static get PBVector3() {
+		return Refs.#initOrR(Refs.#PBVector3, () =>
 			Interop.run((e) => e<PBVector3>("PBVector3")),
 		);
-	},
+	}
 
 	/**
 	 * Prefer using some of the getters in here instead of from this game object,
@@ -159,32 +165,34 @@ const Refs = {
 	 * | Refs.game.controller | Refs.playerController | ✅             |
 	 * | Refs.game.chat       | Refs.chat             | Not needed     |
 	 */
-	get game() {
-		return initOrR(game, () => Interop.run((e) => e("game")));
-	},
+	static get game() {
+		return Refs.#initOrR(Refs.#game, () => Interop.run((e) => e("game")));
+	}
 
-	get ClientSocket() {
-		return initOrR(clientSocket, () =>
+	static get ClientSocket() {
+		return Refs.#initOrR(Refs.#clientSocket, () =>
 			Interop.run((e) => e("ClientSocket")),
 		);
-	},
+	}
 
 	/** Refs.game.world with a remap proxy applied */
-	get world() {
-		return initOrR(world, () => remapObj(Refs.game.world, mappings.world));
-	},
+	static get world() {
+		return Refs.#initOrR(Refs.#world, () =>
+			remapObj(Refs.game.world, mappings.world),
+		);
+	}
 
 	/** Convenience reference to Refs.game.chat */
-	get chat() {
-		return initOrR(chat, () => Refs.game.chat);
-	},
+	static get chat() {
+		return Refs.#initOrR(Refs.#chat, () => Refs.game.chat);
+	}
 
 	/** Refs.game.player with a remap proxy applied */
-	get player() {
-		return initOrR(player, () =>
+	static get player() {
+		return Refs.#initOrR(Refs.#player, () =>
 			remapObj(Refs.game.player, mappings.ClientEntityPlayer),
 		);
-	},
-};
+	}
+}
 
 export default Refs;
