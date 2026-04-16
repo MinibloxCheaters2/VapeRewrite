@@ -26,10 +26,10 @@ import remapObj from "./remapProxy";
 // biome-ignore lint/complexity/noStaticOnlyClass: job
 class Refs {
 	// all of these variables are just for caching.
-	static #game?: Game;
+	static #game: Game;
 	static #world?: ClientWorld;
-	static #player?: ClientEntityPlayer;
-	static #chat?: Chat;
+	static #player: ClientEntityPlayer;
+	static #chat: Chat;
 	static #Vec3?: typeof Vector3;
 	static #clientSocket: typeof ClientSocket;
 	static #PBVector3: PBVector3;
@@ -166,11 +166,10 @@ class Refs {
 	 * | Refs.game.chat       | Refs.chat             | Not needed     |
 	 */
 	static get game() {
-		// biome-ignore lint/style/noNonNullAssertion: this always exists because it's initialized when the game script loads.
-		return Refs.#initOrR(Refs.#game, () => Interop.run((e) => e("game")))!;
+		return Refs.#initOrR(Refs.#game, () => Interop.run((e) => e("game")));
 	}
 
-	static get ClientSocket(): typeof ClientSocket {
+	static get ClientSocket() {
 		return Refs.#initOrR(Refs.#clientSocket, () =>
 			Interop.run((e) => e("ClientSocket")),
 		);
@@ -190,10 +189,9 @@ class Refs {
 
 	/** Refs.game.player with a remap proxy applied */
 	static get player() {
-		// biome-ignore lint/style/noNonNullAssertion: it's only null when the game script hasn't been loaded yet.
 		return Refs.#initOrR(Refs.#player, () =>
 			remapObj(Refs.game.player, mappings.ClientEntityPlayer),
-		)!;
+		);
 	}
 }
 
