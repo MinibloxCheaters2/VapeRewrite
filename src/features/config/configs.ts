@@ -18,7 +18,6 @@ function serializeBaseSetting<V>(set: BaseSetting<V>): SerializedSetting<V> {
 }
 
 export class ModuleConfig {
-	// TODO: module settings
 	constructor(
 		public enabled: boolean,
 		public settings: SerializedSetting<unknown>[],
@@ -81,7 +80,7 @@ export function isConfigKey(n: string): boolean {
 	return n.startsWith(CONFIG_KEY_PREFIX);
 }
 
-let loadedConfig = new NamedConfig("default", serializeModules());
+export let loadedConfig = new NamedConfig("default", {});
 
 /** Saves this config to a config named {@link name} */
 export function saveConfig(name: string) {
@@ -131,4 +130,37 @@ export function listConfigs(): string[] {
 	return GM_listValues()
 		.filter(isConfigKey)
 		.map((a) => a.slice(CONFIG_KEY_PREFIX.length));
+}
+
+/** Updates the loadedConfig to reflect the current state of modules and settings */
+export function updateLoadedConfig(moduleName?: string, settingName?: string) {
+	if (!moduleName) {
+		// Full update
+		loadedConfig.modules = serializeModules();
+		return;
+	}
+
+	const mod = ModuleManager.findModule(P.byName(moduleName));
+	if (!mod) return;
+
+	if (!settingName) {
+		// Update entire module
+		loadedConfig.modules[moduleName] = ModuleConfig.from(mod);
+		return;
+	}
+
+	// Update specific setting
+	const setting = mod.settings.find((s) => s.name === settingName);
+	if (!setting) return;
+
+	const serialized = serializeBaseSetting<unknown>(setting);
+	const moduleConfig = loadedConfig.modules[moduleName];
+	if (moduleConfig) {
+		const index = moduleConfig.settings.findIndex(
+			(s) => s.name === settingName,
+		);
+		if (index !== -1) {
+			moduleConfig.settings[index] = serialized;
+		}
+	}
 }

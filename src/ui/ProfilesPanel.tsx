@@ -1,6 +1,6 @@
 import { createSignal, For, Show } from "solid-js";
 import { render } from "solid-js/web";
-import { listConfigs, saveConfig } from "@/features/config/configs";
+import { listConfigs, loadConfig, saveConfig } from "@/features/config/configs";
 import getResourceURL from "@/utils/cachedResourceURL";
 import { dragHandleAttrName } from "@/utils/names";
 import { guiVisible } from "./guiState";
@@ -70,9 +70,11 @@ function ProfilesPanel() {
 	const isVisible = () => guiVisible() && profilesPanelVisible();
 
 	const selectProfile = (profileName: string) => {
+		saveConfig(configName());
 		setProfiles((prev) =>
 			prev.map((p) => ({ ...p, active: p.name === profileName })),
 		);
+		loadConfig(profileName);
 	};
 
 	const [configName, setConfigName] = createSignal("");

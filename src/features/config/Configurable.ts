@@ -1,4 +1,6 @@
 import { createSignal } from "solid-js";
+import Mod from "../modules/api/Module";
+import { updateLoadedConfig } from "./configs";
 import type {
 	AnySetting,
 	ColorSettingValue,
@@ -20,12 +22,15 @@ export default class Configurable {
 		defaultValue = false,
 		visible?: () => boolean,
 	): ToggleSetting {
-		const [value, setValue] = createSignal(defaultValue);
+		const [value, setValueSignal] = createSignal(defaultValue);
 		const setting: ToggleSetting = {
 			name,
 			type: "toggle",
 			value,
-			setValue,
+			setValue: (value) => {
+				setValueSignal(value);
+				if (this instanceof Mod) updateLoadedConfig(this.name, name);
+			},
 			visible,
 		};
 		this.settings.push(setting);
@@ -40,12 +45,16 @@ export default class Configurable {
 		step?: number,
 		visible?: () => boolean,
 	): SliderSetting {
-		const [value, setValue] = createSignal(defaultValue);
+		const [value, setValueSignal] = createSignal(defaultValue);
 		const setting: SliderSetting = {
 			name,
 			type: "slider",
 			value,
-			setValue,
+			setValue: (value) => {
+				setValueSignal(value);
+				if (this instanceof Mod)
+					updateLoadedConfig((this as Mod).name, name);
+			},
 			min,
 			max,
 			step,
@@ -58,19 +67,25 @@ export default class Configurable {
 	protected createDropdownSetting<V extends ModeLike = string>(
 		name: string,
 		options: V[],
-		defaultValue?: (typeof options)[0],
+		defaultValue: V = options[0],
 		visible?: () => boolean,
 	): DropdownSetting<V> {
-		const [value, setValue] = createSignal(defaultValue ?? options[0]);
+		const [value, setValueSignal] = createSignal(
+			defaultValue ?? options[0],
+		);
 		const setting: DropdownSetting<V> = {
 			name,
 			type: "dropdown",
 			value,
-			setValue,
+			setValue: (value) => {
+				setValueSignal(() => value);
+				if (this instanceof Mod)
+					updateLoadedConfig((this as Mod).name, name);
+			},
 			options,
 			visible,
 		};
-		this.settings.push(setting);
+		this.settings.push(setting as unknown as DropdownSetting<ModeLike>);
 		return setting;
 	}
 
@@ -80,12 +95,16 @@ export default class Configurable {
 		placeholder?: string,
 		visible?: () => boolean,
 	): TextBoxSetting {
-		const [value, setValue] = createSignal(defaultValue);
+		const [value, setValueSignal] = createSignal(defaultValue);
 		const setting: TextBoxSetting = {
 			name,
 			type: "textbox",
 			value,
-			setValue,
+			setValue: (value) => {
+				setValueSignal(value);
+				if (this instanceof Mod)
+					updateLoadedConfig((this as Mod).name, name);
+			},
 			placeholder,
 			visible,
 		};
@@ -103,18 +122,25 @@ export default class Configurable {
 		},
 		visible?: () => boolean,
 	): ColorSliderSetting {
-		const [color, setColor] = createSignal(value);
+		const [color, setColorSignal] = createSignal(value);
 
 		const setting: ColorSliderSetting = {
 			name,
 			type: "colorslider",
 			value: color,
-			setValue: setColor,
+			setValue: (value) => {
+				setColorSignal(value);
+				if (this instanceof Mod)
+					updateLoadedConfig((this as Mod).name, name);
+			},
 			hue: () => color().h,
 			sat: () => color().s,
 			opacity: () => color().o,
-			setColor: (h: number, s: number, v: number, o: number) =>
-				setColor({ h, s, v, o }),
+			setColor: (h: number, s: number, v: number, o: number) => {
+				setColorSignal({ h, s, v, o });
+				if (this instanceof Mod)
+					updateLoadedConfig((this as Mod).name, name);
+			},
 			visible,
 		};
 		this.settings.push(setting);

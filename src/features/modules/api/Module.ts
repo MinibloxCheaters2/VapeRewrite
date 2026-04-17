@@ -2,6 +2,7 @@ import { createSignal } from "solid-js";
 import Bus from "@/Bus";
 import { addBind, removeBind, setBind } from "@/features/binds/handler";
 import Configurable from "@/features/config/Configurable";
+import { updateLoadedConfig } from "@/features/config/configs";
 import type { BaseSetting } from "@/features/config/Settings";
 import { showNotification } from "@/ui/notifications";
 import type { Category } from "./Category";
@@ -139,6 +140,7 @@ export default abstract class Mod extends Configurable {
 		} else {
 			this.onDisableInternal();
 		}
+		updateLoadedConfig(this.name);
 	}
 
 	get enabled(): boolean {
