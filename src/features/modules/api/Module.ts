@@ -29,7 +29,7 @@ export default abstract class Mod extends Configurable {
 		name: "Module bind signal",
 	});
 
-	#keyID: string;
+	#keyID?: string;
 
 	get KEY_ID() {
 		this.#keyID ??= `mod${this.name}`;

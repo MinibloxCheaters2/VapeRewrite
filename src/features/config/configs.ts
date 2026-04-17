@@ -1,3 +1,5 @@
+import { MAIN_LOGGER as logger } from "@/utils";
+import type Mod from "../modules/api/Module";
 import ModuleManager, { P } from "../modules/api/ModuleManager";
 import type { BaseSetting } from "./Settings";
 
@@ -7,8 +9,7 @@ export interface SerializedSetting<V> {
 	value: V;
 }
 
-// TODO: use ts
-function _serializeBaseSetting<V>(set: BaseSetting<V>): SerializedSetting<V> {
+function serializeBaseSetting<V>(set: BaseSetting<V>): SerializedSetting<V> {
 	return {
 		name: set.name,
 		type: set.type,
@@ -22,6 +23,18 @@ export class ModuleConfig {
 		public enabled: boolean,
 		public settings: SerializedSetting<unknown>[],
 	) {}
+	static from(mod: Mod): ModuleConfig {
+		const settings = mod.settings.map((x) =>
+			serializeBaseSetting<unknown>(x),
+		);
+		return new ModuleConfig(mod.enabled, settings);
+	}
+}
+
+function serializeModules(): Record<string, ModuleConfig> {
+	return Object.fromEntries(
+		ModuleManager.modules.map((x) => [x.name, ModuleConfig.from(x)]),
+	);
 }
 
 export class Config {
@@ -68,22 +81,24 @@ export function isConfigKey(n: string): boolean {
 	return n.startsWith(CONFIG_KEY_PREFIX);
 }
 
-let loadedConfig: NamedConfig = new NamedConfig("default", {});
+let loadedConfig = new NamedConfig("default", serializeModules());
 
 /** Saves this config to a config named {@link name} */
-export async function saveConfig(name: string): Promise<void> {
+export function saveConfig(name: string) {
 	GM_setValue(configKey(name), loadedConfig.serialize());
 }
 
 /** Loads a config named {@link name}, or the current config's name if not specified. */
-export async function loadConfig(
-	name: string = loadedConfig.name,
-): Promise<void> {
+export function loadConfig(name: string = loadedConfig.name) {
 	const cfg = GM_getValue(configKey(name), loadedConfig.serialize());
 	loadedConfig = NamedConfig.deserialize(name, cfg);
 
 	for (const [name, config] of Object.entries(loadedConfig.modules)) {
 		const mod = ModuleManager.findModule(P.byName(name));
+		if (mod === undefined) {
+			logger.warn("Module not found while loading config:", mod);
+			continue;
+		}
 		mod.enabled = config.enabled;
 		// catgpt optimization gg
 		const lookup = new Map(config.settings.map((s) => [s.name, s.value]));
@@ -113,7 +128,6 @@ export async function importConfig(): Promise<void> {
 }
 
 export function listConfigs(): string[] {
-	// TODO
 	return GM_listValues()
 		.filter(isConfigKey)
 		.map((a) => a.slice(CONFIG_KEY_PREFIX.length));

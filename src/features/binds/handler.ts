@@ -38,6 +38,7 @@ export function setBind(
 		callback: callback ?? old.callback,
 		id,
 	});
+	return true;
 }
 
 export function removeBind(key: string, id: string): boolean {
