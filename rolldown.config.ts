@@ -22,8 +22,8 @@ export default defineConfig(
 		input: "src/index.ts",
 		plugins: [
 			// Babel, ESBuild, and SWC supports 2023-11 decorators
-			// but babel is slow (single-threaded) and ESBuild is garbage (Golang :puke:)
-			// SWC is the option. Can't sadly use
+			// ESBuild is written in Go (garbage collector) and Babel is written in JS (not native),
+			// I chose SWC.
 			withFilter(
 				swc({
 					jsc: {
