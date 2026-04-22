@@ -23,6 +23,7 @@ jobs:
         run: bun run build:js
 
       - name: Upload artifacts
-        uses: forgejo/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
-          path: dist/*.js
+          path: dist/vape-rewrite.user.js
+          archive: false
