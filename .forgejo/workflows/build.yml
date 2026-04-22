@@ -23,7 +23,7 @@ jobs:
         run: bun run build:js
 
       - name: Upload artifacts
-        uses: codeberg.org/Miniblox/upload-artifact-test@main
+        uses: https://codeberg.org/Miniblox/upload-artifact-test.git
         with:
           path: dist/vape-rewrite.user.js
           archive: false
