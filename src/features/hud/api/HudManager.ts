@@ -1,5 +1,5 @@
 import { createSignal } from "solid-js";
-import type HudElement from "./HudElement";
+import type HudElement from "./BaseHudElement";
 
 class HudManager {
 	private hudElements: HudElement[] = [];

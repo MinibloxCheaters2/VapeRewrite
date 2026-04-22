@@ -1,6 +1,6 @@
 import { createSignal } from "solid-js";
 import Refs from "@/utils/refs";
-import HudElement from "../api/HudElement";
+import HudElement from "../api/JSXHudElement";
 
 export default class FPSHud extends HudElement {
 	public name = "FPS";

@@ -1,4 +1,4 @@
-import { createSignal, type JSX } from "solid-js";
+import { createSignal } from "solid-js";
 import type {
 	AnySetting,
 	ColorSliderSetting,
@@ -14,7 +14,7 @@ export interface HudPosition {
 	y: number;
 }
 
-export default abstract class HudElement {
+export default abstract class BaseHudElement {
 	/** The unique ID of this HUD element */
 	public id: string = "";
 
@@ -53,12 +53,6 @@ export default abstract class HudElement {
 	set visible(value: boolean) {
 		this.visibleSignal[1](value);
 	}
-
-	/**
-	 * Render the HUD element content
-	 * @returns JSX element to render
-	 */
-	public abstract render(): JSX.Element;
 
 	/**
 	 * Called when the HUD element is added

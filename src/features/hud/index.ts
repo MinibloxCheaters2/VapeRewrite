@@ -12,5 +12,7 @@ export function initHudSystem() {
 	HudManager.registerHudType(KeystrokesHud);
 }
 
-export { default as HudElement } from "./api/HudElement";
+export { default as BaseHudElement } from "./api/BaseHudElement";
+export { default as CanvasHudElement } from "./api/CanvasHudElement";
+export { default as JSXHudElement } from "./api/JSXHudElement";
 export { HudManager };

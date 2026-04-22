@@ -1,5 +1,5 @@
 import { createSignal } from "solid-js";
-import HudElement from "../api/HudElement";
+import HudElement from "../api/JSXHudElement";
 
 export default class CPSHud extends HudElement {
 	public name = "CPS";

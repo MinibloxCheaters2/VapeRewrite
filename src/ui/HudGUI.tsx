@@ -1,8 +1,9 @@
 import { createSignal, For, onCleanup, onMount, Show } from "solid-js";
 import { render } from "solid-js/web";
 import { getName, type ModeLike } from "@/features/config/Settings";
-import type HudElement from "@/features/hud/api/HudElement";
+import type BaseHudElement from "@/features/hud/api/BaseHudElement";
 import HudManager from "@/features/hud/api/HudManager";
+import JSXHudElement from "@/features/hud/api/JSXHudElement";
 import ModuleManager from "@/features/modules/api/ModuleManager";
 import { dragHandleAttrName } from "@/utils/names";
 import {
@@ -78,7 +79,7 @@ function HudManagerPanel() {
 
 	const selectedHud = HudManager.selectedHudAccessor;
 
-	const handleAddHud = (hudClass: new () => HudElement) => {
+	const handleAddHud = (hudClass: new () => BaseHudElement) => {
 		const hud = new hudClass();
 		HudManager.addHudElement(hud);
 		setShowAddMenu(false);
@@ -391,7 +392,7 @@ function HudManagerPanel() {
 	);
 }
 
-function HudSettings(props: { hud: HudElement }) {
+function HudSettings(props: { hud: BaseHudElement }) {
 	return (
 		<div>
 			<Show
@@ -492,7 +493,7 @@ function HudSettings(props: { hud: HudElement }) {
 }
 
 // HUD Element Renderer
-function HudElementRenderer(props: { hud: HudElement }) {
+function HudElementRenderer(props: { hud: JSXHudElement }) {
 	const [dragging, setDragging] = createSignal(false);
 	const [dragOffset, setDragOffset] = createSignal({ x: 0, y: 0 });
 
@@ -575,7 +576,7 @@ function HudContainer() {
 
 	return (
 		<>
-			<For each={hudElements()}>
+			<For each={hudElements().filter(x => x instanceof JSXHudElement)}>
 				{(hud) => <HudElementRenderer hud={hud} />}
 			</For>
 			<HudManagerPanel />

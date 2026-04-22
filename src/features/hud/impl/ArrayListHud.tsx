@@ -2,7 +2,7 @@ import { createSignal, For } from "solid-js";
 import { REAL_CLIENT_NAME } from "@/Client";
 import ModuleManager from "@/features/modules/api/ModuleManager";
 import getResourceURL from "@/utils/cachedResourceURL";
-import HudElement from "../api/HudElement";
+import HudElement from "../api/JSXHudElement";
 
 function hsvToRgb(h: number, s: number, v: number, o = 1): string {
 	const i = Math.floor(h * 6);
@@ -96,7 +96,7 @@ export default class ArrayListHud extends HudElement {
 	private showLogoSetting = this.createToggleSetting("Show Logo", true);
 
 	private rainbowOffsetSignal = createSignal(0);
-	#rainbowInterval: number;
+	#rainbowInterval?: number;
 
 	public onAdd(): void {
 		// Start rainbow animation
@@ -104,7 +104,7 @@ export default class ArrayListHud extends HudElement {
 			this.rainbowOffsetSignal[1](
 				(this.rainbowOffsetSignal[0]() + 0.002) % 1,
 			);
-		}, 16) as unknown as number; // :sob:
+		}, 16); // :sob:
 
 		// Store interval for cleanup
 		this.#rainbowInterval = interval;
@@ -150,10 +150,8 @@ export default class ArrayListHud extends HudElement {
 			return modules
 				.filter((a) => a.enabled())
 				.sort((a, b) => {
-					const aLen =
-						a.name.length + (a.tag() ? a.tag()?.length + 3 : 0);
-					const bLen =
-						b.name.length + (b.tag() ? b.tag()?.length + 3 : 0);
+					const aLen = a.name.length + ((a.tag()?.length ?? -3) + 3);
+					const bLen = b.name.length + ((b.tag()?.length ?? -3) + 3);
 					return bLen - aLen;
 				});
 		};
