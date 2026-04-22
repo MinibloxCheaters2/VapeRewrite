@@ -10,19 +10,22 @@ import type {
 
 export type CPacketMap = typeof CPACKET_MAP;
 export type SPacketMap = typeof SPACKET_MAP;
+export type CPacketName = keyof CPacketMap;
+export type SPacketName = keyof SPacketMap;
 export type AnyPacketMap = CPacketMap & SPacketMap;
+export type AnyPacketName = keyof AnyPacketMap;
 
 /** todo: supporting abbreviated names? i.e. PacketRefs.s.SPacketSomething -> PacketRefs.s.Something */
 function makeProxyRef<T extends CPacketMap | SPacketMap, V = T[keyof T]>(
 	obj: T,
-	getUncached: (k: string | symbol) => V,
+	getUncached: (k: keyof T) => V,
 ) {
 	return new Proxy<T>(obj, {
 		get(target, v) {
 			const orig = Reflect.get(target, v) as V;
 			let r = orig;
 			if (!orig) {
-				r = getUncached(v);
+				r = getUncached(v as keyof T);
 				Reflect.set(target, v, r);
 			}
 			return r;
@@ -31,7 +34,7 @@ function makeProxyRef<T extends CPacketMap | SPacketMap, V = T[keyof T]>(
 }
 
 function getC2SUncached<
-	K extends keyof SPacketMap,
+	K extends SPacketName,
 	V extends SPacketMap[K] = SPacketMap[K],
 >(ref: K): V {
 	if (typeof ref === "symbol") {
@@ -39,7 +42,7 @@ function getC2SUncached<
 	}
 	return Interop.run((evl) => {
 		const pkt = evl<V>(ref);
-		PacketRefs.c[ref as string] = pkt;
+		PacketRefs.s[ref] = pkt;
 		return pkt;
 	});
 }
@@ -72,7 +75,7 @@ export function c2s<
 	K extends keyof SPacketMap,
 	V extends SPacketMap[K] = SPacketMap[K],
 >(ref: K): V {
-	return PacketRefs.s[ref as string] as V;
+	return PacketRefs.s[ref] as V;
 }
 
 /**
@@ -94,9 +97,9 @@ export function s2c<
 
 const PacketRefs = {
 	/** Client -> Server packets */
-	c: makeProxyRef({} as CPacketMap, getC2SUncached),
+	s: makeProxyRef({} as SPacketMap, getC2SUncached),
 	/** Server -> Client packets */
-	s: makeProxyRef({} as SPacketMap, getS2CUncached),
+	c: makeProxyRef({} as CPacketMap, getS2CUncached),
 };
 
 export default PacketRefs;

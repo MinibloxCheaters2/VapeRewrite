@@ -17,6 +17,7 @@ export default function waitTicks(ticks: number) {
 				res(t);
 				return true;
 			}
+			return false;
 		});
 	});
 }

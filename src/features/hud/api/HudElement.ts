@@ -126,7 +126,7 @@ export default abstract class HudElement {
 			options,
 			visible,
 		};
-		this.settings.push(setting);
+		this.settings.push(setting as unknown as DropdownSetting<ModeLike>);
 		return setting;
 	}
 

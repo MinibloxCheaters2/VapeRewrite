@@ -35,6 +35,7 @@ export function isSolid(b: Block) {
 
 export function withBlock<T>(fn: (block: Block) => T): (pos: BlockPos) => T {
 	const { world } = Refs;
+	if (world === undefined) throw new Error("Can't call withBlock(fn) while not in world");
 	return (pos) => fn(world.getBlock(pos));
 }
 
@@ -42,11 +43,13 @@ export function withBlockState<T>(
 	fn: (block: BlockState) => T,
 ): (pos: BlockPos) => T {
 	const { world } = Refs;
+	if (world === undefined) throw new Error("Can't call withBlockState(fn) while not in world");
 	return (pos) => fn(world.getBlockState(pos));
 }
 
 export const defaultFilter: BlockFilter = (b) =>
-	isSolid(Refs.world.getBlock(b));
+	// biome-ignore lint/style/noNonNullAssertion: you shouldn't call this while the world is null anyways
+	isSolid(Refs.world!.getBlock(b));
 
 export function allBlocksInRange(
 	hRange: number,
