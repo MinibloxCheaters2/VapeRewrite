@@ -1,4 +1,5 @@
 import { Subscribe } from "@/event/api/Bus";
+import type { BlockPos } from "@/features/sdk/types/blockpos";
 import type { Block } from "@/features/sdk/types/blocks";
 import {
 	type BlockHandler,
@@ -9,7 +10,6 @@ import {
 import Refs from "@/utils/refs";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
-import { BlockPos } from "@/features/sdk/types/blockpos";
 
 export default class Breaker extends Mod {
 	name = "Breaker";
