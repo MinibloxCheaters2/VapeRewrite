@@ -40,7 +40,7 @@ const DUMP_REGEXES = {
 		/setSprinting\(u\)\s*\{\n*\s*this\.([a-zA-Z]+)\([0-9]+,\s*([a-zA-Z]+)\)/,
 	isInvisibleToPlayer:
 		/!u\.world\.isBlockLoaded\(BlockPos\.fromVector\(u.pos\)\)\s*\|\|\n*\s*u\.([a-zA-Z]*)\(player\)/m,
-};
+} as const;
 
 export type DumpKey = keyof typeof DUMP_REGEXES;
 

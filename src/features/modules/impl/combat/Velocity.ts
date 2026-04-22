@@ -6,6 +6,14 @@ import Refs from "@/utils/refs";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 
+function motionOrReduce<T extends "x" | "y" | "z">(
+	axis: T,
+	n: number,
+	reduce: number,
+) {
+	return reduce === 0 ? Refs.player.motion[axis] : n * reduce;
+}
+
 export default class Velocity extends Mod {
 	public name = "Velocity";
 	public category = Category.COMBAT;
@@ -33,18 +41,21 @@ export default class Velocity extends Mod {
 
 			const pH = this.horizontal / 100;
 			const pV = this.vertical / 100;
-			packet.motion.x *= pH;
-			packet.motion.y *= pV;
-			packet.motion.z *= pH;
+			packet.motion.x *= motionOrReduce("x", packet.motion.x, pH);
+			packet.motion.y *= motionOrReduce("y", packet.motion.y, pV);
+			packet.motion.z *= motionOrReduce("z", packet.motion.z, pH);
 		}
 		if (packet instanceof s2c("CPacketExplosion") && packet.playerPos) {
-			if (this.horizontal === 0 && this.vertical === 0) e.cancel();
+			if (this.horizontal === 0 && this.vertical === 0) {
+				packet.playerPos = undefined;
+				return;
+			}
 
 			const pH = this.horizontal / 100;
 			const pV = this.vertical / 100;
-			packet.playerPos.x *= pH;
-			packet.playerPos.y *= pV;
-			packet.playerPos.z *= pH;
+			packet.playerPos.x = motionOrReduce("x", packet.playerPos.x, pH);
+			packet.playerPos.y = motionOrReduce("y", packet.playerPos.y, pV);
+			packet.playerPos.z = motionOrReduce("z", packet.playerPos.z, pH);
 		}
 	}
 }

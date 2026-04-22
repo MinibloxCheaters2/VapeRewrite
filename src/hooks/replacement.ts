@@ -34,11 +34,17 @@ type DumpKey2Name = Record<DumpKey, string | undefined>;
 
 export let MATCHED_DUMPS: DumpKey2Name;
 
+function fixedEntries<K extends string | number | symbol, V>(
+	x: Record<K, V>,
+): [K, V][] {
+	return Object.entries(x) as [K, V][]; // holy who wrote these typings LOL, there should be an extra type parameter for the key :sob:
+}
+
 export default function modifyCode(code: string): string {
 	MATCHED_DUMPS ??= {} as DumpKey2Name;
 	let modified = code;
 
-	for (const [name, regex] of Object.entries(DUMPS)) {
+	for (const [name, regex] of fixedEntries(DUMPS)) {
 		const matched = modified.match(regex);
 		if (matched?.[1]) {
 			MATCHED_DUMPS[name] = matched[1];

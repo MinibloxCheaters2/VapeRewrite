@@ -21,7 +21,7 @@ export const CHECK_UNMATCHED_REPLACEMENTS = UPDATING_MODE;
 /** Checks for unmatched dumps, and if found, logs the unmatched dumps into the console. */
 export const CHECK_UNMATCHED_DUMPS = UPDATING_MODE;
 /** Logs when we're applying replacements. */
-export const LOG_APPLYING_REPLACEMENTS = false;
+export const LOG_APPLYING_REPLACEMENTS = true;
 /** Logs when our remap proxy remaps a field from its normal name to its obfuscated name, it logs as a debug level. */
 export const LOG_REMAPPING = false;
 //#endregion

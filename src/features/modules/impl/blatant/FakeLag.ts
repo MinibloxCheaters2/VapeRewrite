@@ -52,24 +52,14 @@ export default class FakeLag extends Mod {
 
 	#flushPreconditions(packet: C2SPacket): boolean {
 		if (this.#flushOnAction) {
-			if (
-				packet instanceof c2s("SPacketEntityAction") &&
-				packet.id === Refs.player.id
-			) {
-				return true;
-			}
-			if (packet instanceof c2s("SPacketUseEntity")) {
-				return true;
-			}
-			if (packet instanceof c2s("SPacketUseItem")) {
-				return true;
-			}
-			if (packet instanceof c2s("SPacketPlayerAction")) {
-				return true;
-			}
-			if (packet instanceof c2s("SPacketUpdateSign")) {
-				return true;
-			}
+			return (
+				(packet instanceof c2s("SPacketEntityAction") &&
+					packet.id === Refs.player.id) ||
+				packet instanceof c2s("SPacketUseEntity") ||
+				packet instanceof c2s("SPacketUseItem") ||
+				packet instanceof c2s("SPacketPlayerAction") ||
+				packet instanceof c2s("SPacketUpdateSign")
+			);
 		}
 
 		return false;

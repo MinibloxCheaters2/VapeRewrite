@@ -7,10 +7,10 @@ import initOrR from "../helpers/initOrR";
 import type { Mapping } from "../helpers/remapProxy";
 
 export default new (class Mappings {
-	#playerController: Mapping;
-	#playerControllerMP: Mapping;
-	#world: Mapping;
-	#ClientEntityPlayer: Mapping;
+	#playerController?: Mapping;
+	#playerControllerMP?: Mapping;
+	#world?: Mapping;
+	#ClientEntityPlayer?: Mapping;
 	get playerController() {
 		return initOrR(this.#playerController, () => ({
 			[MATCHED_DUMPS.windowClick]: "windowClick",
