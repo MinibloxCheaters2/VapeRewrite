@@ -384,7 +384,8 @@ function HudManagerPanel() {
 								{selectedHud()?.name} Settings
 							</span>
 						</div>
-						<HudSettings hud={selectedHud()} />
+						{/** biome-ignore lint/style/noNonNullAssertion: selectedHud is confirmed to not be null in this `<Show>` condition */}
+						<HudSettings hud={selectedHud()!} />
 					</div>
 				</Show>
 			</div>
@@ -576,7 +577,7 @@ function HudContainer() {
 
 	return (
 		<>
-			<For each={hudElements().filter(x => x instanceof JSXHudElement)}>
+			<For each={hudElements().filter((x) => x instanceof JSXHudElement)}>
 				{(hud) => <HudElementRenderer hud={hud} />}
 			</For>
 			<HudManagerPanel />
