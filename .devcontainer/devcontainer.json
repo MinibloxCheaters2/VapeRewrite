@@ -1,5 +1,4 @@
 {
-	"name": "Vape Rewrite development container",
 	"image": "mcr.microsoft.com/devcontainers/base:ubuntu",
 	"features": {
 		"ghcr.io/devcontainer-community/devcontainer-features/biomejs.dev:1": {},
