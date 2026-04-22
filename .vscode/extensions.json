@@ -1,0 +1,15 @@
+{
+	"recommendations": [
+		"biomejs.biome", // we use this for linting
+		"streetsidesoftware.code-spell-checker",
+		"bierner.github-markdown-preview",
+		"editorconfig.editorconfig"
+	],
+	"unwantedRecommendations": [
+		// this is NOT a website
+		"firefox-devtools.vscode-firefox-debug",
+		"ms-edgedevtools.vscode-edge-devtools",
+		// I use Biome
+		"dbaeumer.vscode-eslint"
+	]
+}

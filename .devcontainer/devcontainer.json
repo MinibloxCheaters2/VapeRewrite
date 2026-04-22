@@ -1,0 +1,21 @@
+{
+	"name": "Vape Rewrite development container",
+	"image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+	"features": {
+		"ghcr.io/devcontainer-community/devcontainer-features/biomejs.dev:1": {},
+		"ghcr.io/devcontainer-community/devcontainer-features/bun.sh:1": {}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"biomejs.biome",
+				"streetsidesoftware.code-spell-checker",
+				"bierner.github-markdown-preview",
+				"editorconfig.editorconfig"
+			]
+		}
+	},
+
+	// Install all dependencies
+	"postCreateCommand": "bun install"
+}
