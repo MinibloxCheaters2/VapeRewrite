@@ -5,8 +5,6 @@
 // @license     AGPL-3.0-or-later
 // @homepageURL https://codeberg.org/Miniblox/VapeRewrite
 // @match       https://miniblox.io/*
-// @match       https://miniblox.org/*
-// @match       https://miniblox.online/*
 // @match       https://bloxbattles.io/*
 // @icon        https://miniblox.io/favicon.png
 // @grant       GM_addStyle
