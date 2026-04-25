@@ -7,9 +7,11 @@ import { MATCHED_DUMPS } from "@/hooks/replacement";
 import initOrR from "../helpers/initOrR";
 import type { Mapping } from "../helpers/remapProxy";
 
-function ofDumps<K extends DumpKey>(...ks: K[]) {
+function ofDumps<K extends DumpKey>(...ks: K[]): Record<K, string> {
 	return Object.fromEntries(
-		ks.map((k) => [MATCHED_DUMPS[k], k]).filter(([k]) => k !== undefined),
+		ks
+			.map((k) => [MATCHED_DUMPS[k], k] as const)
+			.filter(([k]) => k !== undefined),
 	);
 }
 
@@ -19,10 +21,10 @@ export default new (class Mappings {
 	#world?: Mapping;
 	#ClientEntityPlayer?: Mapping;
 	get playerController() {
-		return initOrR(this.#playerController, ofDumps("windowClick"));
+		return initOrR(this.#playerController, () => ofDumps("windowClick"));
 	}
 	get playerControllerMP() {
-		return initOrR(this.#playerControllerMP, ofDumps("syncItem"));
+		return initOrR(this.#playerControllerMP, () => ofDumps("syncItem"));
 	}
 	get world() {
 		return initOrR(this.#world, () => ofDumps("entities"));
