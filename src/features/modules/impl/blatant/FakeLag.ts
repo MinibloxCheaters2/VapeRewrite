@@ -1,15 +1,15 @@
 import { Subscribe } from "@/event/api/Bus";
 import type { Entity } from "@/features/sdk/types/entity";
 import type { C2SPacket } from "@/features/sdk/types/packetTypes";
+import Refs from "@/utils/helpers/refs";
+import { SimpleVec3 } from "@/utils/math/vec";
+import { findTargets } from "@/utils/movement/target";
 import packetQueueManager, {
 	Action,
 	type PacketOutcome,
-} from "@/utils/packetQueueManager";
-import { c2s } from "@/utils/packetRefs";
-import { getRandomArbitrary } from "@/utils/random";
-import Refs from "@/utils/refs";
-import { findTargets } from "@/utils/target";
-import { SimpleVec3 } from "@/utils/vec";
+} from "@/utils/network/packetQueueManager";
+import { c2s } from "@/utils/network/packetRefs";
+import { getRandomArbitrary } from "@/utils/time/random";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 

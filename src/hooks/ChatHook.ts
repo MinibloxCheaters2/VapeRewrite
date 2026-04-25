@@ -4,7 +4,7 @@
  */
 
 import type { Chat, ChatData, ChatLog } from "@/features/sdk/types/chat";
-import Refs from "@/utils/refs";
+import Refs from "@/utils/helpers/refs";
 
 const idSymbol = Symbol();
 

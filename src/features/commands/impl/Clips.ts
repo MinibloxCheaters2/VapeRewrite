@@ -1,5 +1,5 @@
 import { argument, FloatArgumentType, literal } from "@wq2/brigadier-ts";
-import Refs from "@/utils/refs";
+import Refs from "@/utils/helpers/refs";
 import dispatcher from "../api/CommandDispatcher";
 
 dispatcher.register(

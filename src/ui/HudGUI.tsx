@@ -5,7 +5,7 @@ import type BaseHudElement from "@/features/hud/api/BaseHudElement";
 import HudManager from "@/features/hud/api/HudManager";
 import JSXHudElement from "@/features/hud/api/JSXHudElement";
 import ModuleManager from "@/features/modules/api/ModuleManager";
-import { dragHandleAttrName } from "@/utils/names";
+import { dragHandleAttrName } from "@/utils/mapping/names";
 import {
 	ColorSliderComponent,
 	DropdownComponent,

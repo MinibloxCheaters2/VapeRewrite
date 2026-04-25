@@ -1,5 +1,5 @@
 import { type MultipleReplacements, Shift } from "@/hooks/replacementTypes";
-import { EXPOSED } from "@/utils/patchHelper";
+import { EXPOSED } from "@/utils/helpers/patchHelper";
 
 export const CORE_REPLACEMENTS: MultipleReplacements = [
 	[

@@ -1,8 +1,8 @@
 import { createSignal, For, Show } from "solid-js";
 import { render } from "solid-js/web";
 import { listConfigs, loadConfig, saveConfig } from "@/features/config/configs";
-import getResourceURL from "@/utils/cachedResourceURL";
-import { dragHandleAttrName } from "@/utils/names";
+import getResourceURL from "@/utils/helpers/cachedResourceURL";
+import { dragHandleAttrName } from "@/utils/mapping/names";
 import { guiVisible } from "./guiState";
 import shadowWrapper from "./shadowWrapper";
 

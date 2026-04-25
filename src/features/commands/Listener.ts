@@ -8,9 +8,9 @@ import { COMMAND_PREFIX } from "@/Client";
 import { Subscribe } from "@/event/api/Bus";
 import type CancelableWrapper from "@/event/api/CancelableWrapper";
 import type { C2SPacket } from "@/features/sdk/types/packetTypes";
-import logger from "@/utils/loggers";
-import { c2s, s2c } from "@/utils/packetRefs";
-import Refs from "@/utils/refs";
+import Refs from "@/utils/helpers/refs";
+import logger from "@/utils/logging/loggers";
+import { c2s, s2c } from "@/utils/network/packetRefs";
 import dispatcher from "./api/CommandDispatcher";
 
 export default new (class CommandListener {

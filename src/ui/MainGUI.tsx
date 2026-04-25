@@ -5,8 +5,8 @@ import {
 	type CategoryInfo,
 	categoryInfoSet,
 } from "@/features/modules/api/Category";
-import getResourceURL from "@/utils/cachedResourceURL";
-import { dragHandleAttrName } from "@/utils/names";
+import getResourceURL from "@/utils/helpers/cachedResourceURL";
+import { dragHandleAttrName } from "@/utils/mapping/names";
 import {
 	guiVisible,
 	isCategoryWindowVisible,

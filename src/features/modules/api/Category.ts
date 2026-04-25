@@ -1,4 +1,4 @@
-import getResourceURL from "@/utils/cachedResourceURL";
+import getResourceURL from "@/utils/helpers/cachedResourceURL";
 
 export enum Category {
 	COMBAT,

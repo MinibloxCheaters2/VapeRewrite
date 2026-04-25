@@ -3,7 +3,7 @@
  * @module
  */
 
-import { fgExposedName, storeName } from "@/utils/names";
+import { fgExposedName, storeName } from "@/utils/mapping/names";
 
 function replaceAndCopyFunction<OP, OR>(
 	oldFunc: (...args: OP[]) => OR,

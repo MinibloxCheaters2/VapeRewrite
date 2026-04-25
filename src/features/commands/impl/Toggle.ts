@@ -1,6 +1,6 @@
 import { argument, literal } from "@wq2/brigadier-ts";
 import type Mod from "@/features/modules/api/Module";
-import Refs from "@/utils/refs";
+import Refs from "@/utils/helpers/refs";
 import ModuleArgumentType from "../api/brigadier/ModuleArgumentType";
 import dispatcher from "../api/CommandDispatcher";
 

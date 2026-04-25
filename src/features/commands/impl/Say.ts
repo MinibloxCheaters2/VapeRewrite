@@ -1,6 +1,6 @@
 import { argument, literal, StringArgumentType } from "@wq2/brigadier-ts";
-import PacketRefs from "@/utils/packetRefs";
-import Refs from "@/utils/refs";
+import Refs from "@/utils/helpers/refs";
+import PacketRefs from "@/utils/network/packetRefs";
 import dispatcher from "../api/CommandDispatcher";
 
 dispatcher.register(

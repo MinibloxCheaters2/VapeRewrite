@@ -2,9 +2,9 @@ import { Subscribe } from "@/event/api/Bus";
 import type CancelableWrapper from "@/event/api/CancelableWrapper";
 import type { S2CPacket } from "@/features/sdk/types/packetTypes";
 import SlotActionType from "@/features/sdk/types/slotActionType";
-import { s2c } from "@/utils/packetRefs";
-import { getRandomArbitrary } from "@/utils/random";
-import Refs from "@/utils/refs";
+import Refs from "@/utils/helpers/refs";
+import { s2c } from "@/utils/network/packetRefs";
+import { getRandomArbitrary } from "@/utils/time/random";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 

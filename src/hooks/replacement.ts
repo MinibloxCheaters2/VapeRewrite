@@ -3,7 +3,7 @@ import {
 	CHECK_UNMATCHED_REPLACEMENTS,
 	LOG_APPLYING_REPLACEMENTS,
 } from "../debugControls";
-import logger from "../utils/loggers";
+import logger from "../utils/logging/loggers";
 import DUMPS, { type DumpKey } from "./dump";
 import { REPLACEMENTS } from "./replacements";
 import { type Replacement, Shift } from "./replacementTypes";

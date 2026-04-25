@@ -7,7 +7,7 @@ import {
 	type SuggestionsBuilder,
 } from "@wq2/brigadier-ts";
 import type { EntityPlayer } from "@/features/sdk/types/entity";
-import Refs from "@/utils/refs";
+import Refs from "@/utils/helpers/refs";
 
 export const PLAYER_NOT_FOUND = new CommandErrorType(
 	(found) => `Player "${found}" not found`,

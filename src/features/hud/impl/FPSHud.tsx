@@ -1,5 +1,5 @@
 import { createSignal } from "solid-js";
-import Refs from "@/utils/refs";
+import Refs from "@/utils/helpers/refs";
 import HudElement from "../api/JSXHudElement";
 
 export default class FPSHud extends HudElement {

@@ -1,5 +1,5 @@
 import type { C2SPacket, S2CPacket } from "@/features/sdk/types/packetTypes";
-import type { PacketOutcome } from "@/utils/packetQueueManager";
+import type { PacketOutcome } from "@/utils/network/packetQueueManager";
 import type Cancelable from "./Cancelable";
 import type CancelableWrapper from "./CancelableWrapper";
 

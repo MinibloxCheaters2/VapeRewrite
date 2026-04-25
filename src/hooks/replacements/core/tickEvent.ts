@@ -1,5 +1,5 @@
 import { Shift, type SingleReplacement } from "@/hooks/replacementTypes";
-import { EXPOSED } from "@/utils/patchHelper";
+import { EXPOSED } from "@/utils/helpers/patchHelper";
 
 export const GAME_TICK_EVENT_REPLACEMENT: SingleReplacement = [
 	"fixedUpdate(){game.world.",

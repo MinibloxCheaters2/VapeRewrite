@@ -1,6 +1,6 @@
 import { createSignal, For } from "solid-js";
 import { render } from "solid-js/web";
-import getResourceURL from "@/utils/cachedResourceURL";
+import getResourceURL from "@/utils/helpers/cachedResourceURL";
 import shadowWrapper from "./shadowWrapper";
 
 const COLORS = {

@@ -1,5 +1,5 @@
 import { Shift, type SingleReplacement } from "@/hooks/replacementTypes";
-import { EXPOSED } from "@/utils/patchHelper";
+import { EXPOSED } from "@/utils/helpers/patchHelper";
 
 // ClientDecoder#add
 export const PACKET_RECV_HOOK: SingleReplacement = [

@@ -6,8 +6,8 @@
  */
 
 import { Subscribe } from "@/event/api/Bus";
-import { c2s } from "@/utils/packetRefs";
-import Refs from "@/utils/refs";
+import Refs from "@/utils/helpers/refs";
+import { c2s } from "@/utils/network/packetRefs";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 

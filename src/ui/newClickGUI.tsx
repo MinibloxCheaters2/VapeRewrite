@@ -36,8 +36,8 @@ const COLORS = {
 	dividerDark: "rgba(48, 48, 48, 0.52)",
 };
 
-import getResourceURL from "@/utils/cachedResourceURL";
-import { dragHandleAttrName } from "@/utils/names";
+import getResourceURL from "@/utils/helpers/cachedResourceURL";
+import { dragHandleAttrName } from "@/utils/mapping/names";
 import shadowWrapper from "./shadowWrapper";
 
 interface CategoryWindowProps {

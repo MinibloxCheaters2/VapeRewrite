@@ -1,6 +1,6 @@
 import { literal } from "@wq2/brigadier-ts";
 import ModuleManager from "@/features/modules/api/ModuleManager";
-import Refs from "@/utils/refs";
+import Refs from "@/utils/helpers/refs";
 import dispatcher from "../api/CommandDispatcher";
 
 dispatcher.register(

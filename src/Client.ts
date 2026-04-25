@@ -1,4 +1,4 @@
-import { randomIntInclusive } from "./utils/random";
+import { randomIntInclusive } from "./utils/time/random";
 
 export const COMMAND_PREFIX = "." as const;
 

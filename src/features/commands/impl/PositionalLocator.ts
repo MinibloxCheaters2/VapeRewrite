@@ -4,8 +4,8 @@ import { Subscribe } from "@/event/api/Bus";
 import type CancelableWrapper from "@/event/api/CancelableWrapper";
 import type { EntityPlayer } from "@/features/sdk/types/entity";
 import type { S2CPacket } from "@/features/sdk/types/packetTypes";
-import { s2c } from "@/utils/packetRefs";
-import Refs from "@/utils/refs";
+import Refs from "@/utils/helpers/refs";
+import { s2c } from "@/utils/network/packetRefs";
 import PlayerArgumentType from "../api/brigadier/PlayerArgumentType";
 import dispatcher from "../api/CommandDispatcher";
 

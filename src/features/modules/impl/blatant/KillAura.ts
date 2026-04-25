@@ -2,10 +2,10 @@ import { Subscribe } from "@/event/api/Bus";
 import type { Entity } from "@/features/sdk/types/entity";
 import RotationManager, { RotationPlan } from "@/utils/aiming/rotate";
 import Rotation from "@/utils/aiming/rotation";
-import PacketRefs from "@/utils/packetRefs";
-import deg2rad from "@/utils/radians";
-import Refs from "@/utils/refs";
-import { findTargets } from "@/utils/target";
+import Refs from "@/utils/helpers/refs";
+import deg2rad from "@/utils/math/radians";
+import { findTargets } from "@/utils/movement/target";
+import PacketRefs from "@/utils/network/packetRefs";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 

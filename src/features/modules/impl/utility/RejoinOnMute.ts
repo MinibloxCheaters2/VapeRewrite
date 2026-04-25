@@ -1,8 +1,8 @@
 import { Subscribe } from "@/event/api/Bus";
 import type CancelableWrapper from "@/event/api/CancelableWrapper";
 import type { C2SPacket } from "@/features/sdk/types/packetTypes";
-import { s2c } from "@/utils/packetRefs";
-import Refs from "@/utils/refs";
+import Refs from "@/utils/helpers/refs";
+import { s2c } from "@/utils/network/packetRefs";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 

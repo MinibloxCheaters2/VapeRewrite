@@ -1,4 +1,4 @@
-import { DMP, MOD_MANAGER } from "@/utils/patchHelper";
+import { DMP, MOD_MANAGER } from "@/utils/helpers/patchHelper";
 import { type MultipleReplacements, Shift } from "../../replacementTypes";
 
 const PHASE = `${MOD_MANAGER}.phase`;

@@ -1,6 +1,6 @@
 import { Subscribe } from "@/event/api/Bus";
-import Refs from "@/utils/refs";
-import { findTargets } from "@/utils/target";
+import Refs from "@/utils/helpers/refs";
+import { findTargets } from "@/utils/movement/target";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 

@@ -1,6 +1,6 @@
 import { Subscribe } from "@/event/api/Bus";
 import type { C2SPacket } from "@/features/sdk/types/packetTypes";
-import { Action, type PacketOutcome } from "@/utils/packetQueueManager";
+import { Action, type PacketOutcome } from "@/utils/network/packetQueueManager";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 

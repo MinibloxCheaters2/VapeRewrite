@@ -1,5 +1,5 @@
 import { type MultipleReplacements, Shift } from "@/hooks/replacementTypes";
-import { ROTATION_MANAGER } from "@/utils/patchHelper";
+import { ROTATION_MANAGER } from "@/utils/helpers/patchHelper";
 
 const ACTIVE_YAW = `${ROTATION_MANAGER}.activeRotation.yaw`;
 

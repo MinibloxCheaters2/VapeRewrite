@@ -1,8 +1,8 @@
 import Bus from "@/Bus";
 import { Subscribe } from "@/event/api/Bus";
-import isKeyDown from "@/utils/key";
-import getMoveDirection from "@/utils/movement";
-import Refs from "@/utils/refs";
+import Refs from "@/utils/helpers/refs";
+import isKeyDown from "@/utils/input/key";
+import getMoveDirection from "@/utils/movement/movement";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 

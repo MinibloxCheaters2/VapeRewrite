@@ -1,7 +1,7 @@
 import { createSignal, For } from "solid-js";
 import { REAL_CLIENT_NAME } from "@/Client";
 import ModuleManager from "@/features/modules/api/ModuleManager";
-import getResourceURL from "@/utils/cachedResourceURL";
+import getResourceURL from "@/utils/helpers/cachedResourceURL";
 import HudElement from "../api/JSXHudElement";
 
 function hsvToRgb(h: number, s: number, v: number, o = 1): string {

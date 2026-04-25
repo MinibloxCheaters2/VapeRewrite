@@ -1,6 +1,6 @@
 import { createSignal } from "solid-js";
 import { addBind } from "@/features/binds/handler";
-import logger from "@/utils/loggers";
+import logger from "@/utils/logging/loggers";
 
 // Global GUI visibility state - default hidden (open with \ key)
 export const [guiVisible, setGuiVisible] = createSignal(false);
