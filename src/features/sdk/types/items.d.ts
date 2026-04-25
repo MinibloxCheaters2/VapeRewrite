@@ -1,7 +1,7 @@
 import { Vector3 } from "three";
 import type { Entity } from "./entity";
-import { World } from "./world";
 import { EnumFacing } from "./math/facing";
+import { World } from "./world";
 
 // Base Item class
 export class Item {

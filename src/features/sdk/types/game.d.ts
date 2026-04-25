@@ -1,10 +1,10 @@
 import { Vector3 } from "three";
-import { ClientEntityPlayer } from "./entity";
-import { PlayerController } from "./controller";
-import { GameScene } from "./gameScene";
-import { ClientWorld } from "./world";
 import { Chat } from "./chat";
+import { PlayerController } from "./controller";
+import { ClientEntityPlayer } from "./entity";
+import { GameScene } from "./gameScene";
 import { ServerInfo } from "./serverInfo";
+import { ClientWorld } from "./world";
 
 export enum GameState {
 	TITLE_SCREEN = 0,

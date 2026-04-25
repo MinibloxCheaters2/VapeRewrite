@@ -5,9 +5,9 @@ import type { Chunk } from "./chunk";
 import type { IChunkProvider } from "./chunkProvider";
 import type { Entity, EntityPlayer } from "./entity";
 import type { EnumDifficulty } from "./enums";
+import type { Game } from "./game";
 import type { GameScene } from "./gameScene";
 import type { CPacketLeaderboard } from "./packets";
-import type { Game } from "./game";
 
 export class Material {
 	readonly air: boolean;

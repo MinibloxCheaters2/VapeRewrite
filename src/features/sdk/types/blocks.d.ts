@@ -1,8 +1,8 @@
-import type { Material } from "./materials";
-import type { BlockPos } from "./blockpos";
-import type World from "./world";
-import type { AxisAlignedBB } from "./aliases";
 import type { Box3 } from "three";
+import type { AxisAlignedBB } from "./aliases";
+import type { BlockPos } from "./blockpos";
+import type { Material } from "./materials";
+import type World from "./world";
 import type { BlockState } from "./world";
 
 export class Block {

@@ -1,10 +1,26 @@
+import type {
+	Box3Helper,
+	Group,
+	Mesh,
+	Object3D,
+	Quaternion,
+	Vector3,
+} from "three";
+import type { AxisAlignedBB } from "./aliases";
+import type { BlockPos } from "./blockpos";
+import type { Block, BlockChest } from "./blocks";
+import type { Container } from "./container";
+import type { DamageSource } from "./damageSource";
 import type { Game } from "./game";
 import type { Abilities, GameMode } from "./gamemode";
+import type { InventoryPlayer } from "./inventory";
+import type { EnumFacing } from "./math/facing";
 import type {
 	CPacketPlayerReconciliation,
 	CPacketRespawn,
 	SPacketPlayerInput,
 } from "./packets";
+import type { Team } from "./team";
 import type {
 	AttributeMap,
 	CombatTracker,
@@ -22,23 +38,7 @@ import type {
 	Profile,
 	TileEntitySign,
 } from "./undefined";
-import type {
-	Box3Helper,
-	Group,
-	Mesh,
-	Object3D,
-	Quaternion,
-	Vector3,
-} from "three";
 import type World from "./world";
-import type { BlockPos } from "./blockpos";
-import type { AxisAlignedBB } from "./aliases";
-import type { EnumFacing } from "./math/facing";
-import type { DamageSource } from "./damageSource";
-import type { Block, BlockChest } from "./blocks";
-import type { InventoryPlayer } from "./inventory";
-import type { Container } from "./container";
-import type { Team } from "./team";
 
 declare enum Perspective {
 	FIRST_PERSON,

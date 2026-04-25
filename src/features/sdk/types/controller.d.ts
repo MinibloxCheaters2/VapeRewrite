@@ -1,12 +1,12 @@
 import type { Vector3 } from "three";
 import type { BlockPos } from "./blockpos";
 import type { Entity, EntityLivingBase, EntityPlayer } from "./entity";
-import type { PBItemStack } from "./packets";
-import type World from "./world";
 import type { ItemStack } from "./items";
-import type { BlockState } from "./world";
 import type { EnumFacing } from "./math/facing";
+import type { PBItemStack } from "./packets";
 import type SlotActionType from "./slotActionType";
+import type World from "./world";
+import type { BlockState } from "./world";
 
 export declare class PlayerControllerMP {
 	lastSentSlot: number;

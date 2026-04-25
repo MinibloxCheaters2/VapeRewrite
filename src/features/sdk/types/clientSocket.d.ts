@@ -1,5 +1,5 @@
-import { C2SPacket } from "./packetTypes";
 import type { Socket } from "socket.io-client";
+import { C2SPacket } from "./packetTypes";
 
 export declare interface EventMap {
 	disconnect: string;
