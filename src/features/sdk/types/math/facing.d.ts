@@ -1,5 +1,5 @@
-import { Vector3 } from "three/src/Three.Core.js";
-import { Axis, AxisDirection } from "./axis";
+import type { Vector3 } from "three/src/Three.Core.js";
+import type { Axis, AxisDirection } from "./axis";
 
 declare class EnumFacing {
 	index: number;

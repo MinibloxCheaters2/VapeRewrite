@@ -1,5 +1,5 @@
-import { EnumFacing } from "./facing";
-import { Plane } from "./plane";
+import type { EnumFacing } from "./facing";
+import type { Plane } from "./plane";
 
 declare class Axis {
 	name: string;
