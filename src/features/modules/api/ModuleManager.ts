@@ -21,6 +21,7 @@ import FilterBypass from "../impl/utility/FilterBypass.js";
 import PingSpoof from "../impl/utility/PingSpoof.js";
 import RejoinOnMute from "../impl/utility/RejoinOnMute.js";
 import ServerCrasher from "../impl/utility/ServerCrasher.js";
+import Sprint from "../impl/utility/Sprint.js";
 import Test from "../impl/utility/Test.js";
 import NoFall from "../impl/world/NoFall.js";
 import Timer from "../impl/world/Timer.js";
@@ -79,6 +80,7 @@ export default class ModuleManager {
 		new TickBase(),
 		new ChestAura(),
 		new PingSpoof(),
+		new Sprint(),
 	] as const;
 
 	public static readonly moduleNames: string[] = this.modules.map(
