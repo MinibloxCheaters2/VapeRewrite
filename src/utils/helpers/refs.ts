@@ -30,7 +30,7 @@ class Refs {
 	static #world?: ClientWorld;
 	static #player: ClientEntityPlayer;
 	static #chat: Chat;
-	static #Vec3?: typeof Vector3;
+	static #Vec3: typeof Vector3;
 	static #clientSocket: typeof ClientSocket;
 	static #PBVector3: PBVector3;
 	static #BlockPos: typeof BlockPos;
