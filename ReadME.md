@@ -1,10 +1,10 @@
 # VapeRewrite
 
 A new UserScript for Vape! This time, I'm not slacking.
-I hope that, **until I finish this**, I will not be maintaining Vape OR Impact **anymore** (other than **VERY MINOR** changes).
+I hope that, **until I finish this**, I will not be maintaining Vape OR Impact **anymore** (other than **VERY MINOR** changes)
 
 
-## Roadmap
+## Roadmap for VapeRewrite
 
 - [x] ClickGUI (yes, this is really important, because it's one of the main reasons I want to use Impact over vape)
 - [x] Basic modules (i.e. Velocity, KillAura, KeepSprint, Sprint, etc.)
@@ -33,13 +33,13 @@ Simply put:
 
 ## A note on developer console injection
 
-Once I get to a point where I am ready to experiment with new things,
-I will most likely try to use wang's hooking method to make a new "hooking backend" that partially supports developer console injection.
+Once I get to a point where I am ready to experiment with new code,
+I will most likely try to use wang's hooking method to make a new "hooking backend" that will partially support developer console injection.
 
-## Development
+## Development using Bun
 
 ``` shell
-# Compile and watch
+# Compile and watch (executes)
 $ bun run dev
 
 # Build the script (also minifies the code)
