@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        process.env.NAME
 // @namespace   https://codeberg.org/Miniblox
-// @description The Vape UserScript, but rewritten
+// @description Vape UserScript: The Rewrite
 // @license     AGPL-3.0-or-later
 // @homepageURL https://codeberg.org/Miniblox/VapeRewrite
 // @match       https://miniblox.io/*
