@@ -9,6 +9,7 @@ export function getTeam(entity: Entity) {
 
 export function findTargets(range = 6, _angle = 360, checkWalls = false) {
 	const { player, EntityLivingBase, world } = Refs;
+	if (world === undefined) throw new Error("findTargets called while world is null");
 	const localTeam = getTeam(player);
 
 	const sqRange = range * range;
