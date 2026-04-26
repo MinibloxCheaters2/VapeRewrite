@@ -36,6 +36,7 @@ export default class KillAura extends Mod {
 	private rangeSetting = this.createSliderSetting("Range", 6, 3, 10, 0.5);
 	private angleSetting = this.createSliderSetting("Angle", 360, 1, 360, 1);
 	private autoBlockSetting = this.createToggleSetting("Auto Block", true);
+	private wallCheckSetting = this.createToggleSetting("Wall Check", false);
 
 	get range() {
 		return this.rangeSetting.value();
@@ -47,6 +48,10 @@ export default class KillAura extends Mod {
 
 	get autoBlock() {
 		return this.autoBlockSetting.value();
+	}
+
+	get wallCheck() {
+		return this.wallCheckSetting.value();
 	}
 
 	block() {
@@ -117,7 +122,6 @@ export default class KillAura extends Mod {
 				},
 			}),
 		);
-		// since we're using Refs.player directly instead of Refs.game.player, the call automatically gets remapped to the obfuscated name!
 		player.attack(e);
 	}
 
@@ -125,7 +129,11 @@ export default class KillAura extends Mod {
 	onTick() {
 		// ghetto ahh method
 		let first = true;
-		for (const target of findTargets(this.range)) {
+		for (const target of findTargets(
+			this.range,
+			this.angle,
+			this.wallCheck,
+		)) {
 			this.block();
 			this.sendAttack(target, first);
 			first = false;
