@@ -8,7 +8,7 @@ export default class AutoClicker extends Mod {
 	category = Category.COMBAT;
 
 	@Subscribe("gameTick")
-	#onTick() {
+	private onTick() {
 		const { playerController, player } = Refs;
 		if (playerController.objectMouseOver.block || player.isUsingItem())
 			return;
