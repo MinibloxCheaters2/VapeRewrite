@@ -3,24 +3,23 @@
 A new UserScript for Vape! This time, I'm not slacking.
 I hope that, **until I finish this**, I will not be maintaining Vape OR Impact **anymore** (other than **VERY MINOR** changes)
 
-
 ## Roadmap for VapeRewrite
 
 - [x] ClickGUI (yes, this is really important, because it's one of the main reasons I want to use Impact over vape)
-- [x] Basic modules (i.e. Velocity, KillAura, KeepSprint, Sprint, etc.)
-- [x] Desync implementation (for fly)
-- [ ] whatever else is on the issue list thing
+- [x] Basic modules such as (Velocity, KillAura, KeepSprint, Sprint, etc.)
+- [x] Desync implementation
+- [ ] Whatever else is on the issue list
 
-## Why a new base?
+## So why a new base?
 
 Simply put:
-- Vape code is cluttered.
-  All inside one .js file,
+- Vape code is very cluttered.
+  All inside one .js file (5000+ lines),
   and 90% of the code you're editing is inside a string which has no syntax highlighting,
   and not even basic syntax error checking.
-- I want this to be good enough, that there's no reason to maintain Impact.
-  - Impact ONLY UPDATED after I fixed Vape myself
-    (to make a Criticals bypass for Sigma Rebase in KitPvP, *which I never did*)
+- I want this to be good enough, that there would be no reason to maintain Impact.
+  - Impact was ONLY UPDATED after I fixed Vape myself
+    (to make a Crits bypass for Sigma Rebase in KitPvP, *which I never did*)
     and then he557 made a USELESS fork of Vape that removed a few features and never added any new features.
     - ProgMEM-CC couldn't even finish the desync exploit implementation I 99.9% completed for him.
 - [Spherical](https://codeberg.org/Miniblox/Spherical) is supposed to be the new base for Vape
