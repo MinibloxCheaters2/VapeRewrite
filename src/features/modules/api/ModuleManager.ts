@@ -8,6 +8,7 @@ import Scaffold from "../impl/blatant/Scaffold.js";
 import Spider from "../impl/blatant/Spider.js";
 import TargetStrafe from "../impl/blatant/TargetStrafe.js";
 import TickBase from "../impl/blatant/TickBase.js";
+import AutoClicker from "../impl/combat/AutoClicker.js";
 import Criticals from "../impl/combat/Criticals.js";
 import Velocity from "../impl/combat/Velocity.js";
 import WTap from "../impl/combat/WTap.js";
@@ -81,6 +82,7 @@ export default class ModuleManager {
 		new ChestAura(),
 		new PingSpoof(),
 		new Sprint(),
+		new AutoClicker()
 	] as const;
 
 	public static readonly moduleNames: string[] = this.modules.map(
