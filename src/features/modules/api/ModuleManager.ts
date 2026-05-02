@@ -12,6 +12,7 @@ import AutoClicker from "../impl/combat/AutoClicker.js";
 import Criticals from "../impl/combat/Criticals.js";
 import Velocity from "../impl/combat/Velocity.js";
 import WTap from "../impl/combat/WTap.js";
+import Breaker from "../impl/minigames/Breaker.js";
 import HudManagerModule from "../impl/render/HudManager.js";
 import AntiBan from "../impl/utility/AntiBan.js";
 import AutoRespawn from "../impl/utility/AutoRespawn.js";
@@ -82,7 +83,8 @@ export default class ModuleManager {
 		new ChestAura(),
 		new PingSpoof(),
 		new Sprint(),
-		new AutoClicker()
+		new AutoClicker(),
+		new Breaker(),
 	] as const;
 
 	public static readonly moduleNames: string[] = this.modules.map(

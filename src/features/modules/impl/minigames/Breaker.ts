@@ -40,7 +40,8 @@ export default class Breaker extends Mod {
 	}
 
 	#handlerForBlock(block: Block): BlockHandler {
-		// TODO(Breaker): no one would want to really use breaker outside of EggWars, but we should add a sort of packet mine for this.
+		// TODO(Breaker): no one would want to really use breaker outside of EggWars,
+		//  but we should add a sort of packet mine for this.
 		return block === Refs.Blocks.dragon_egg
 			? blockHandlers.rightClick
 			: blockHandlers.breakBlock;
@@ -57,8 +58,8 @@ export default class Breaker extends Mod {
 		}
 		handleInRange(
 			this.#range,
-			withBlock(this.#shouldBreakBlock),
-			blockHandlers.rightClick,
+			this.#shouldBreakBlockPos,
+			withBlock(this.#handlerForBlock),
 		);
 	}
 }
