@@ -10,7 +10,7 @@ import Mod from "../../api/Module";
 
 export default class ChestStealer extends Mod {
 	public name = "ChestStealer";
-	public category = Category.UTILITY;
+	public category = Category.MINIGAMES;
 
 	private delaySetting = this.createSliderSetting(
 		"Delay (ms)",
