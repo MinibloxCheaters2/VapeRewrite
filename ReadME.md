@@ -5,7 +5,7 @@ I hope that, **until I finish this**, I will not be maintaining Vape OR Impact *
 
 ## Roadmap for VapeRewrite
 
-- [x] ClickGUI (yes, this is really important, because it's one of the main reasons I want to use Impact over vape)
+- [x] ClickGUI (yes, this is really important, because it's one of the main reasons I want to use Impact over Vape)
 - [x] Basic modules such as (Velocity, KillAura, KeepSprint, Sprint, etc.)
 - [x] Desync implementation
 - [ ] Whatever else is on the issue list
@@ -35,7 +35,7 @@ Simply put:
 Once I get to a point where I am ready to experiment with new code,
 I will most likely try to use wang's hooking method to make a new "hooking backend" that will partially support developer console injection.
 
-## Development using Bun
+## Development - Bun
 
 ``` shell
 # Compile and watch (executes)
