@@ -11,6 +11,7 @@ import type { BlockPos } from "./blockpos";
 import type { Block, BlockChest } from "./blocks";
 import type { Container } from "./container";
 import type { DamageSource } from "./damageSource";
+import type { EnumCreatureAttribute } from "./enums";
 import type { Game } from "./game";
 import type { Abilities, GameMode } from "./gamemode";
 import type { InventoryPlayer } from "./inventory";
@@ -28,7 +29,6 @@ import type {
 	ContainerPlayer,
 	DataWatcher,
 	EffectsManager,
-	EnumCreatureAttribute,
 	FoodStats,
 	GameProfile,
 	Inventory,

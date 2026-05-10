@@ -1,7 +1,7 @@
-import { Vector3 } from "three";
+import type { Vector3 } from "three";
 import type { Entity } from "./entity";
-import { EnumFacing } from "./math/facing";
-import { World } from "./world";
+import type { EnumFacing } from "./math/facing";
+import type { World } from "./world";
 
 // Base Item class
 export class Item {
@@ -72,9 +72,9 @@ export class ItemBow extends Item {
 	maxItemUseDuration: number;
 }
 
-// ItemArmor - Armor pieces
 export class ItemArmor extends Item {
 	armorType: number;
+	/** **IMPORTANT**: USE DUMPS OR AUTO REMAP PROXY */
 	damageReduceAmount: number;
 	maxDamage: number;
 	renderIndex: number;
@@ -86,7 +86,6 @@ export class ItemArmor extends Item {
 	hasColor(stack: ItemStack): boolean;
 }
 
-// ItemFood - Food items
 export class ItemFood extends Item {
 	healAmount: number;
 	saturationModifier: number;
@@ -97,7 +96,6 @@ export class ItemFood extends Item {
 	getSaturationModifier(stack: ItemStack): number;
 }
 
-// ItemTool - Tools (pickaxe, axe, shovel, hoe)
 export class ItemTool extends Item {
 	efficiencyOnProperMaterial: number;
 	damageVsEntity: number;
@@ -107,17 +105,15 @@ export class ItemTool extends Item {
 	getStrVsBlock(stack: ItemStack, block: Block): number;
 }
 
-// ItemPickaxe - Pickaxes
-export class ItemPickaxe extends ItemTool {
-	// Inherits from ItemTool
+export class ItemPickaxe extends ItemTool {}
+
+export class ItemAppleGold extends ItemFood {}
+
+export interface EnchantmentData {
+	id: number;
+	lvl: number;
 }
 
-// ItemAppleGold - Golden apples
-export class ItemAppleGold extends ItemFood {
-	// Inherits from ItemFood
-}
-
-// ItemStack - Stack of items
 export class ItemStack {
 	item: Item;
 	stackSize: number;
@@ -125,7 +121,7 @@ export class ItemStack {
 
 	getItem(): Item;
 	getDisplayName(): string;
-	getEnchantmentTagList(): unknown[];
+	getEnchantmentTagList(): EnchantmentData[] | null;
 	hasEffect(): boolean;
 	isItemEnchanted(): boolean;
 	isItemEnchantable(): boolean;

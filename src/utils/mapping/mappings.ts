@@ -20,6 +20,7 @@ export default new (class Mappings {
 	#playerControllerMP?: Mapping;
 	#world?: Mapping;
 	#ClientEntityPlayer?: Mapping;
+	#ItemArmor?: Mapping;
 	get playerController() {
 		return initOrR(this.#playerController, () => ofDumps("windowClick"));
 	}
@@ -28,6 +29,9 @@ export default new (class Mappings {
 	}
 	get world() {
 		return initOrR(this.#world, () => ofDumps("entities"));
+	}
+	get ItemArmor() {
+		return initOrR(this.#ItemArmor, () => ofDumps("damageReduceAmount"));
 	}
 	get ClientEntityPlayer() {
 		return initOrR(this.#ClientEntityPlayer, () =>

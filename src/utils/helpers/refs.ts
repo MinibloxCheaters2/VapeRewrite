@@ -8,13 +8,19 @@ import type {
 	PlayerController,
 	PlayerControllerMP,
 } from "@/features/sdk/types/controller";
+import type { Enchantments } from "@/features/sdk/types/enchantments";
 import type {
 	ClientEntityPlayer,
 	EntityLivingBase,
 } from "@/features/sdk/types/entity";
 import type { Game } from "@/features/sdk/types/game";
 import type { Hud3D } from "@/features/sdk/types/hud";
-import type { ItemBlock, ItemSword, Items } from "@/features/sdk/types/items";
+import type {
+	ItemArmor,
+	ItemBlock,
+	ItemSword,
+	Items,
+} from "@/features/sdk/types/items";
 import type { Materials } from "@/features/sdk/types/materials";
 import type { EnumFacing } from "@/features/sdk/types/math/facing";
 import type { PBVector3 } from "@/features/sdk/types/packets";
@@ -48,6 +54,8 @@ class Refs {
 	static #ItemSword: typeof ItemSword;
 	static #hud3D: Hud3D;
 	static #Blocks: AllBlocks;
+	static #ItemArmor: typeof ItemArmor;
+	static #Enchantments: typeof Enchantments;
 
 	static #initOrR<T>(field: T, initializer: () => T) {
 		field ??= initializer();
@@ -57,6 +65,16 @@ class Refs {
 	static get ItemSword(): typeof ItemSword {
 		return Refs.#initOrR(Refs.#ItemSword, () =>
 			Interop.run((e) => e<typeof ItemSword>("ItemSword")),
+		);
+	}
+	static get ItemArmor(): typeof ItemArmor {
+		return Refs.#initOrR(Refs.#ItemArmor, () =>
+			Interop.run((e) => e<typeof ItemArmor>("ItemArmor")),
+		);
+	}
+	static get Enchantments(): typeof Enchantments {
+		return Refs.#initOrR(Refs.#Enchantments, () =>
+			Interop.run((e) => e<typeof Enchantments>("Enchantments")),
 		);
 	}
 
