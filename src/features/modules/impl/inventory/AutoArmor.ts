@@ -10,7 +10,7 @@ import Category from "../../api/Category";
 import Mod from "../../api/Module";
 
 function getItemStrength(stack: ItemStack) {
-	if (stack == null) return 0;
+	if (stack === null) return 0;
 	const itemBase = stack.getItem();
 	let base = 1;
 	const { ItemSword, ItemArmor, Enchantments } = Refs;
@@ -43,7 +43,7 @@ function getArmorSlot(armorSlot: number, slots: (Slot | null)[]) {
 	const { ItemArmor } = Refs; // *slight* optimization, doesn't matter that much since it just stops you from constantly hitting cache
 	for (let i = 0; i < 40; i++) {
 		const stack = slots[i]?.getStack();
-		if (stack === undefined) continue;
+		if (!stack) continue;
 		const item = stack.getItem();
 
 		if (item instanceof ItemArmor && 3 - item.armorType === armorSlot) {
