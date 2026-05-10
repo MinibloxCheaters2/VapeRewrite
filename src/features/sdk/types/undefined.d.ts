@@ -6,7 +6,6 @@
 //#region Required
 export type Inventory = unknown;
 export type InventoryEnderChest = unknown;
-export type ContainerPlayer = unknown;
 export type PotionEffect = unknown;
 //#endregion
 //#region Additional

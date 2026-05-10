@@ -20,11 +20,11 @@ export abstract class Enchantment {
 	/**
 	 * Initialized in {@linkcode Enchantment.init init} to be every non-null enchantment in {@linkcode Enchantment.enchantmentsList enchantmentsList}
 	 */
-	static readonly enchantmentsBookList: Enchantment[] = [];
+	static readonly enchantmentsBookList: Enchantment[];
 	/** "map array" of enchantment ID -> enchantment object. used for checking duplicates in the constructor */
-	static readonly enchantmentsList: Enchantment[] = [];
-	/** map of enchantment name -> enchantment. in MCP-919, string would be a resource location. */
-	static readonly locationEnchantments = new Map<string, Enchantment>();
+	static readonly enchantmentsList: Enchantment[];
+	/** map of enchantment name -> enchantment. in MCP-919, the map key would be a resource location. */
+	static readonly locationEnchantments: Map<string, Enchantment>;
 	readonly effectId: number;
 	readonly weight: number;
 	readonly type: EnumEnchantmentType;

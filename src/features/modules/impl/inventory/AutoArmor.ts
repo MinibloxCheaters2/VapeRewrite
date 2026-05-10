@@ -60,6 +60,7 @@ function getArmorSlot(armorSlot: number, slots: (Slot | null)[]) {
 export default class AutoArmor extends Mod {
 	name = "AutoArmor";
 	category = Category.INVENTORY;
+
 	@Subscribe("gameTick")
 	private onTick() {
 		const { player, playerController } = Refs;
@@ -68,7 +69,7 @@ export default class AutoArmor extends Mod {
 			const slots = player.inventoryContainer.inventorySlots;
 			const slot = getArmorSlot(i, slots);
 			if (slot !== i) {
-				if (slots[i].getHasStack()) dropItem(i);
+				if (slots[i]?.getHasStack()) dropItem(i);
 				playerController.windowClick(
 					player.openContainer.windowId,
 					slot,

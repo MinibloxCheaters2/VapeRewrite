@@ -1,6 +1,6 @@
 import type { EntityPlayer } from "../entity";
-import type { InventoryBasic } from "../inventory";
-import { ItemStack } from "../items";
+import type { InventoryBasic, InventoryPlayer } from "../inventory";
+import type { ItemStack } from "../items";
 import type Slot from "../slot";
 import type { ICrafting } from "../undefined";
 
@@ -29,40 +29,23 @@ export class Container {
 	 * seems to only be used with dragging in GuiContainer.
 	 * @param a 0-2, which correspond to PICKUP_LEFT, PICKUP_RIGHT, and SWAP.
 	 * @param b seems to only be used with this.dragSplittingLimit
-	 * @returns
+	 * @returns `(a & 3) | ((b & 3) << 2)`
 	 */
-	static getButtonType(a: number, b: number) {
-		return (a & 3) | ((b & 3) << 2);
-	}
-	static isValidDragMode(mode: number, player: EntityPlayer) {
-		if (mode === 0 || mode === 1) {
-			return true;
-		} else {
-			return mode === 2 && player.abilities.creative;
-		}
-	}
-	resetDrag() {
-		this.dragEvent = 0;
-		this.dragSlots.clear();
-	}
+	static getButtonType(a: number, b: number): number;
+	/**
+	 * Checks if a drag mode is valid for the player.
+	 * @param mode the drag mode
+	 * @param player the player executing this drag mode
+	 * @returns if the drag mode is valid (mode 0 and 1 are unconditionally permitted, and mode 2 is only permitted when in creative)
+	 */
+	static isValidDragMode(mode: number, player: EntityPlayer): boolean;
+	/** resets the drag state variables. sets {@linkcode Container.dragEvent dragEvent} to 0 and clears all items in {@linkcode Container.dragSlots dragSlots} */
+	resetDrag(): void;
 	static canAddItemToSlot(
 		slot: Slot,
 		other: Slot,
 		stackSizeMatters: boolean,
-	) {
-		let g = slot == null || !slot.getHasStack();
-		if (
-			slot?.getHasStack() &&
-			other?.isItemEqual(slot.getStack()) &&
-			ItemStack.areItemStackTagsEqual(slot.getStack(), other)
-		) {
-			g |=
-				slot.getStack().stackSize +
-					(stackSizeMatters ? 0 : other.stackSize) <=
-				other.getMaxStackSize();
-		}
-		return g;
-	}
+	): boolean;
 	static computeStackSize(
 		slots: Set<Slot>,
 		dragMode: number,
@@ -87,8 +70,8 @@ export class Container {
 	onCraftMatrixChanged(_u): void;
 	putStackInSlot(id: number, stack: ItemStack): void;
 	putStacksInSlots(stacks: ItemStack[]): void;
-	updateProgressBar(_u, _h) {}
-	getNextTransactionID(_u): number;
+	updateProgressBar(_id: number, _data: number): void;
+	getNextTransactionID(_player: InventoryPlayer): number;
 	getCanCraft(player: EntityPlayer): boolean;
 	setCanCraft(target: EntityPlayer, canCraft: boolean): void;
 	mergeItemStack(

@@ -10,6 +10,7 @@ import type { AxisAlignedBB } from "./aliases";
 import type { BlockPos } from "./blockpos";
 import type { Block, BlockChest } from "./blocks";
 import type { Container } from "./container";
+import type { ContainerPlayer } from "./container/ContainerPlayer";
 import type { DamageSource } from "./damageSource";
 import type { EnumCreatureAttribute } from "./enums";
 import type { Game } from "./game";
@@ -26,7 +27,6 @@ import type {
 	AttributeMap,
 	CombatTracker,
 	CommandBlockLogic,
-	ContainerPlayer,
 	DataWatcher,
 	EffectsManager,
 	FoodStats,
