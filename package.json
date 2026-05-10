@@ -24,7 +24,7 @@
 		"@violentmonkey/dom": "^2.2.1",
 		"@wq2/brigadier-ts": "^1.0.8",
 		"oxc-minify": "^0.129.0",
-		"rolldown": "1.0.0",
+		"rolldown": "canary",
 		"solid-js": "^1.9.11"
 	},
 	"devDependencies": {
