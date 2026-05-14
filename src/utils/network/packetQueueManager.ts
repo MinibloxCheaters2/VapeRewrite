@@ -1,14 +1,10 @@
 // TODO: support queueing S2C packets?
 
-import type { PBFloatVector3 } from "@wq2/miniblox-sdk";
+import type { AnyPacket, C2SPacket, PBFloatVector3 } from "@wq2/miniblox-sdk";
 import type { Material, Mesh } from "three";
 import Bus from "../../Bus";
 import { Priority, Subscribe } from "../../event/api/Bus";
 import type CancelableWrapper from "../../event/api/CancelableWrapper";
-import type {
-	AnyPacket,
-	C2SPacket,
-} from "../../features/sdk/types/packetTypes";
 import Rotation, { type IRotation } from "../aiming/rotation";
 import Refs from "../helpers/refs";
 import PacketUtil from "./PacketUtil";

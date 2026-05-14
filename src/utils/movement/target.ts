@@ -1,4 +1,4 @@
-import type { Entity } from "../../features/sdk/types/entity.d.js";
+import type { Entity } from "@wq2/miniblox-sdk";
 import Refs from "../helpers/refs";
 
 export function getTeam(entity: Entity) {

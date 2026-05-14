@@ -2,11 +2,8 @@
  * contains a cache to packet references.
  * @module
  */
+import type { CPACKET_MAP, SPACKET_MAP } from "@wq2/miniblox-sdk";
 import Interop from "../../exposedO";
-import type {
-	CPACKET_MAP,
-	SPACKET_MAP,
-} from "../../features/sdk/types/packets";
 
 export type CPacketMap = typeof CPACKET_MAP;
 export type SPacketMap = typeof SPACKET_MAP;

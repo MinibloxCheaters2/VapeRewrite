@@ -1,4 +1,4 @@
-import type { C2SPacket } from "../../features/sdk/types/packetTypes";
+import type { C2SPacket } from "@wq2/miniblox-sdk";
 import Refs from "../helpers/refs";
 
 export default {
