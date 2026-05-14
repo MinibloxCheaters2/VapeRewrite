@@ -1,7 +1,6 @@
+import { type S2CPacket, SlotActionType } from "@wq2/miniblox-sdk";
 import { Subscribe } from "@/event/api/Bus";
 import type CancelableWrapper from "@/event/api/CancelableWrapper";
-import type { S2CPacket } from "@/features/sdk/types/packetTypes";
-import SlotActionType from "@/features/sdk/types/slotActionType";
 import Refs from "@/utils/helpers/refs";
 import { s2c } from "@/utils/network/packetRefs";
 import { getRandomArbitrary } from "@/utils/time/random";

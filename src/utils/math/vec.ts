@@ -1,5 +1,5 @@
+import type { PBFloatVector3 } from "@wq2/miniblox-sdk";
 import type { Vector3 } from "three";
-import type { PBFloatVector3 } from "@/features/sdk/types/packets";
 
 /** A really basic Vector3 class. */
 export class SimpleVec3 {

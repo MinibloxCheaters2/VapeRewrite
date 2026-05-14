@@ -1,8 +1,7 @@
+import type { BlockPos, EnumFacing } from "@wq2/miniblox-sdk";
 import type { Vector3 } from "three";
 import { Subscribe } from "@/event/api/Bus";
 import Interop from "@/exposedO";
-import type { BlockPos } from "@/features/sdk/types/blockpos";
-import type { EnumFacing } from "@/features/sdk/types/math/facing";
 import { MATCHED_DUMPS } from "@/hooks/replacement";
 import Refs from "@/utils/helpers/refs";
 import Category from "../../api/Category";

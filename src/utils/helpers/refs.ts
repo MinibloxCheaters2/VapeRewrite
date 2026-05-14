@@ -1,30 +1,26 @@
-import type { BoxGeometry, Mesh, Vector3 } from "three";
-import Interop from "@/exposedO";
-import type { BlockPos } from "@/features/sdk/types/blockpos";
-import type { AllBlocks } from "@/features/sdk/types/blocks";
-import type { Chat } from "@/features/sdk/types/chat";
-import type { ClientSocket } from "@/features/sdk/types/clientSocket";
 import type {
-	PlayerController,
-	PlayerControllerMP,
-} from "@/features/sdk/types/controller";
-import type { Enchantments } from "@/features/sdk/types/enchantments";
-import type {
+	AllBlocks,
+	BlockPos,
+	Chat,
 	ClientEntityPlayer,
+	ClientSocket,
+	ClientWorld,
+	Enchantments,
 	EntityLivingBase,
-} from "@/features/sdk/types/entity";
-import type { Game } from "@/features/sdk/types/game";
-import type { Hud3D } from "@/features/sdk/types/hud";
-import type {
+	EnumFacing,
+	Game,
+	Hud3D,
 	ItemArmor,
 	ItemBlock,
 	ItemSword,
 	Items,
-} from "@/features/sdk/types/items";
-import type { Materials } from "@/features/sdk/types/materials";
-import type { EnumFacing } from "@/features/sdk/types/math/facing";
-import type { PBVector3 } from "@/features/sdk/types/packets";
-import type { ClientWorld } from "@/features/sdk/types/world";
+	Materials,
+	PBVector3,
+	PlayerController,
+	PlayerControllerMP,
+} from "@wq2/miniblox-sdk";
+import type { BoxGeometry, Mesh, Vector3 } from "three";
+import Interop from "@/exposedO";
 import { MATCHED_DUMPS } from "@/hooks/replacement";
 import mappings from "../mapping/mappings";
 import remapObj from "./remapProxy";

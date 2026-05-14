@@ -1,4 +1,4 @@
-import type { AnyPacket } from "@/features/sdk/types/packetTypes";
+import type { AnyPacket } from "@wq2/miniblox-sdk";
 
 export interface IRotation {
 	yaw: number;

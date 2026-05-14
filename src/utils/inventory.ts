@@ -1,4 +1,4 @@
-import SlotActionType from "@/features/sdk/types/slotActionType";
+import { SlotActionType } from "@wq2/miniblox-sdk";
 import Refs from "./helpers/refs";
 
 export function dropItem(index: number) {

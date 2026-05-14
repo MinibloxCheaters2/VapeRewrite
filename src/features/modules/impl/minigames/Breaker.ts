@@ -1,6 +1,5 @@
+import type { Block, BlockPos } from "@wq2/miniblox-sdk";
 import { Subscribe } from "@/event/api/Bus";
-import type { BlockPos } from "@/features/sdk/types/blockpos";
-import type { Block } from "@/features/sdk/types/blocks";
 import {
 	type BlockHandler,
 	blockHandlers,

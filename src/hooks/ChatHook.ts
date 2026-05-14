@@ -3,7 +3,7 @@
  * @module
  */
 
-import type { Chat, ChatData, ChatLog } from "@/features/sdk/types/chat";
+import type { Chat, ChatData, ChatLog } from "@wq2/miniblox-sdk";
 import Refs from "@/utils/helpers/refs";
 
 const idSymbol = Symbol();

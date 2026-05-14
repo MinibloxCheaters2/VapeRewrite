@@ -1,5 +1,5 @@
+import type { Entity } from "@wq2/miniblox-sdk";
 import { Subscribe } from "@/event/api/Bus";
-import type { Entity } from "@/features/sdk/types/entity";
 import RotationManager, { RotationPlan } from "@/utils/aiming/rotate";
 import Rotation from "@/utils/aiming/rotation";
 import Refs from "@/utils/helpers/refs";

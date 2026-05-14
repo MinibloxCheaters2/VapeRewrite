@@ -1,6 +1,4 @@
-import type { BlockPos } from "@/features/sdk/types/blockpos";
-import type { Block } from "@/features/sdk/types/blocks";
-import type { BlockState } from "@/features/sdk/types/world";
+import type { Block, BlockPos, BlockState } from "@wq2/miniblox-sdk";
 import PacketRefs from "../network/packetRefs";
 import Refs from "./refs";
 

@@ -28,6 +28,7 @@
 		"solid-js": "^1.9.12"
 	},
 	"devDependencies": {
+		"@wq2/miniblox-sdk": "^0.0.1",
 		"@biomejs/biome": "^2.4.15",
 		"@types/three": "0.158.3",
 		"@violentmonkey/types": "^0.3.3",

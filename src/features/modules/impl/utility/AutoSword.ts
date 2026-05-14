@@ -1,7 +1,6 @@
+import type { C2SPacket, ItemStack } from "@wq2/miniblox-sdk";
 import { SubscribeAsync } from "@/event/api/Bus";
 import type CancelableWrapper from "@/event/api/CancelableWrapper";
-import type { ItemStack } from "@/features/sdk/types/items";
-import type { C2SPacket } from "@/features/sdk/types/packetTypes";
 import Refs from "@/utils/helpers/refs";
 import { c2s } from "@/utils/network/packetRefs";
 import waitTicks from "@/utils/time/wait";

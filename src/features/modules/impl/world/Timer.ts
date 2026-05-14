@@ -1,4 +1,4 @@
-import type { ClientEntityPlayer } from "@/features/sdk/types/entity";
+import type { ClientEntityPlayer } from "@wq2/miniblox-sdk";
 import Refs from "@/utils/helpers/refs";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";

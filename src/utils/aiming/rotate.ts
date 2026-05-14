@@ -3,10 +3,10 @@
  * @module
  */
 
+import type { C2SPacket } from "@wq2/miniblox-sdk";
 import Bus from "@/Bus";
 import { Priority, Subscribe } from "@/event/api/Bus";
 import type CancelableWrapper from "@/event/api/CancelableWrapper";
-import type { C2SPacket } from "@/features/sdk/types/packetTypes";
 import Refs from "../helpers/refs";
 import packetQueueManager from "../network/packetQueueManager";
 import { c2s } from "../network/packetRefs";

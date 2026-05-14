@@ -1,7 +1,7 @@
 // TODO: support queueing S2C packets?
 
+import type { PBFloatVector3 } from "@wq2/miniblox-sdk";
 import type { Material, Mesh } from "three";
-import type { PBFloatVector3 } from "@/features/sdk/types/packets";
 import Bus from "../../Bus";
 import { Priority, Subscribe } from "../../event/api/Bus";
 import type CancelableWrapper from "../../event/api/CancelableWrapper";

@@ -1,8 +1,8 @@
 import type {
+	C2SPacket,
 	SPacketPlayerInput,
 	SPacketPlayerPosLook,
-} from "@/features/sdk/types/packets";
-import type { C2SPacket } from "@/features/sdk/types/packetTypes";
+} from "@wq2/miniblox-sdk";
 import { SimpleVec3 } from "../math/vec";
 import { c2s } from "./packetRefs";
 

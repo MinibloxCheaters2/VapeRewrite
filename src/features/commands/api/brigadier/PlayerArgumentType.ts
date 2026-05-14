@@ -6,7 +6,7 @@ import {
 	type Suggestions,
 	type SuggestionsBuilder,
 } from "@wq2/brigadier-ts";
-import type { EntityPlayer } from "@/features/sdk/types/entity";
+import type { EntityPlayer } from "@wq2/miniblox-sdk";
 import Refs from "@/utils/helpers/refs";
 
 export const PLAYER_NOT_FOUND = new CommandErrorType(
