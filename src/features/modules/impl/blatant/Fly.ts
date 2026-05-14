@@ -81,7 +81,7 @@ export default class Fly extends Mod {
 		const mode = this.modeSetting.value();
 
 		// Smooth stop for certain modes
-		if (mode === "Normal" && player) {
+		if (mode === "Normal") {
 			// Clamp motion to prevent sudden drops
 			player.motion.x = Math.max(Math.min(player.motion.x, 0.3), -0.3);
 			player.motion.z = Math.max(Math.min(player.motion.z, 0.3), -0.3);
@@ -90,21 +90,16 @@ export default class Fly extends Mod {
 		// Infinite mode smooth stop
 		if (mode === "Infinite (Old AC)" && this.lessVerticalMovement.value()) {
 			let stopTicks = 4;
-			function handler() {
+			Bus.onceB("gameTick", () => {
 				const { player } = Refs;
-				if (!player) {
-					Bus.off("gameTick", handler);
-				}
 
 				// Handle smooth stop for Infinite mode
 				if (stopTicks > 0) {
 					player.motion.y = 0.18;
 					stopTicks--;
-				} else {
-					Bus.off("gameTick", handler);
 				}
-			}
-			Bus.on("gameTick", handler);
+				return stopTicks <= 0;
+			});
 		}
 
 		this.ticks = 0;
@@ -122,14 +117,11 @@ export default class Fly extends Mod {
 				this.infiniteFly();
 				break;
 			case "Gifbubble (Old AC)":
+				this.infiniteFly2();
 				break;
 		}
 	}
 
-	/**
-	 * Normal Fly - Standard creative-like fly
-	 * Uses desync to attempt bypass
-	 */
 	private normalFly(): void {
 		const { player } = Refs;
 		const dir = getMoveDirection(this.speedSetting.value());
@@ -177,6 +169,22 @@ export default class Fly extends Mod {
 		else if (!this.lessVerticalMovement.value() || this.ticks % 2 === 0) {
 			player.motion.y = 0.18;
 		}
+	}
+
+	// Old fly from https://codeberg.org/Miniblox/Vape/commit/25ddc2ddf59b334966eda0187ccebd1a12d86351, apparently still works, so why not?
+	private infiniteFly2(): void {
+		const { player } = Refs;
+		this.ticks++;
+
+		const dir = getMoveDirection(0.39);
+
+		player.motion.x = dir.x;
+		player.motion.y = isKeyDown("shift")
+			? -this.verticalSetting.value()
+			: this.ticks < 18 && this.ticks % 6 < 4
+				? 4
+				: -0.14;
+		player.motion.z = dir.z;
 	}
 
 	public getTag(): string {
