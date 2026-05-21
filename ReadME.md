@@ -41,9 +41,9 @@ I will most likely try to use wang's hooking method to make a new "hooking backe
 # Compile and watch (executes)
 $ bun run dev
 
-# Build the script (also minifies the code)
+# To build script and minify the code
 $ bun run build
 
-# Lint (checks for errors)
+# Linting to check for any errors
 $ bun run lint
 ```
