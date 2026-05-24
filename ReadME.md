@@ -1,16 +1,16 @@
 # VapeRewrite
 
-A new UserScript for Vape! This time, I'm not slacking.
-I hope that, **until I finish this**, I will not be maintaining Vape OR Impact **anymore** (other than **VERY MINOR** changes)
+A new Userscript for Vape! This time, I'm not slacking.
+While this is in progress, Vape and Impact will receive no updates beyond critical fixes.
 
-## Roadmap for VapeRewrite
+## Roadmap
 
 - [x] ClickGUI (yes, this is really important, because it's one of the main reasons I want to use Impact over Vape)
 - [x] Basic modules such as (Velocity, KillAura, KeepSprint, Sprint, etc.)
 - [x] Desync implementation
-- [ ] Whatever else is on the issue list
+- [ ] Remaining issues
 
-## So why a new base?
+## So why does VapeRewrite need a new base?
 
 Simply put:
 - Vape code is very cluttered.
@@ -35,7 +35,7 @@ Simply put:
 Once I get to a point where I am ready to experiment with new code,
 I will most likely try to use wang's hooking method to make a new "hooking backend" that will partially support developer console injection.
 
-## Development - Bun
+## Development Requires [Bun](https://bun.sh).
 
 ``` shell
 # Compile and watch (executes)
