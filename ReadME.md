@@ -5,10 +5,10 @@ While this is in progress, Vape and Impact will receive no updates beyond critic
 
 ## Roadmap
 
-- [x] ClickGUI (yes, this is really important, because it's one of the main reasons I want to use Impact over Vape)
-- [x] Basic modules such as (Velocity, KillAura, KeepSprint, Sprint, etc.)
+- [x] A Useable ClickGUI (yes, this is really important, because it's one of the main reasons I want to use Impact over Vape)
+- [x] Basic modules such as (Velocity, KillAura, KeepSprint, Sprint, etc)
 - [x] Desync implementation
-- [ ] Remaining issues
+- [ ] Any remaining issues
 
 ## So why does VapeRewrite need a new base?
 
