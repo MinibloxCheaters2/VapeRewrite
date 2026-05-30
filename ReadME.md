@@ -35,7 +35,7 @@ Simply put:
 Once I get to a point where I am ready to experiment with new code,
 I will most likely try to use wang's hooking method to make a new "hooking backend" that will partially support developer console injection.
 
-## Development Requires [Bun](https://bun.sh).
+## Development Requires [Bun](https://bun.sh)
 
 ``` shell
 # Compile and watch (executes)
