@@ -15,8 +15,6 @@
 // @grant       unsafeWindow
 // @version     process.env.VERSION
 // @author      process.env.AUTHOR
-// @require     https://cdn.jsdelivr.net/npm/@violentmonkey/dom@2
-// @require     https://cdn.jsdelivr.net/npm/@wq2/ui@0.10.5
 // @resource    bind https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/misc/bind.png
 // @resource    expand https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/misc/expand.png
 // @resource    expand-right https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/misc/expand-right.png

@@ -17,70 +17,62 @@ export const REAL_CLIENT_NAME =
 		? ("Baby Oil Rewrite" as const)
 		: ("Vape Rewrite" as const);
 
-export default defineConfig(
-	{
-		input: "src/index.ts",
-		plugins: [
-			// Babel, ESBuild, and SWC supports 2023-11 decorators
-			// ESBuild is written in Go (garbage collector) and Babel is written in JS (not native),
-			// I chose SWC.
-			withFilter(
-				swc({
-					jsc: {
-						parser: { decorators: true, syntax: "typescript" },
-						transform: { decoratorVersion: "2023-11" }
-					}
-				}),
-				// Only run this transform if the file contains a decorator (and if it's a JS or TS file).
-				{ transform: { code: "@Subscribe", moduleType: ["js", "ts", "jsx", "tsx"] } }
-			),
-			withFilter(solid(), {
-				transform: { moduleType: ["jsx", "tsx"] }
+export default defineConfig({
+	input: "src/index.ts",
+	plugins: [
+		// Babel, ESBuild, and SWC supports 2023-11 decorators
+		// ESBuild is written in Go (garbage collector) and Babel is written in JS (not native),
+		// I chose SWC.
+		withFilter(
+			swc({
+				jsc: {
+					parser: { decorators: true, syntax: "typescript" },
+					transform: { decoratorVersion: "2023-11" },
+				},
 			}),
-			// this MUST be before UserScript, so the comments from it won't be removed.
-			process.env.NODE_ENV === "production" ? minify() : undefined,
-			userscript((meta: string) => {
+			// Only run this transform if the file contains a decorator (and if it's a JS or TS file).
+			{
+				transform: {
+					code: "@Subscribe",
+					moduleType: ["js", "ts", "jsx", "tsx"],
+				},
+			},
+		),
+		withFilter(solid(), {
+			transform: { moduleType: ["jsx", "tsx"] },
+		}),
+		// this MUST be before UserScript, so the comments from it won't be removed.
+		process.env.NODE_ENV === "production" ? minify() : undefined,
+		userscript(
+			(meta: string) => {
 				const newMeta = meta
-					.replace("process.env.AUTHOR", packageJson.author?.name ?? "Unspecified")
+					.replace(
+						"process.env.AUTHOR",
+						packageJson.author?.name ?? "Unspecified",
+					)
 					.replace("process.env.VERSION", packageJson.version)
 					.replace("process.env.NAME", REAL_CLIENT_NAME);
 				return newMeta;
-			}, {
-				threadNumber: 8
-			}),
-		],
-		transform: {
-			assumptions: {
-				setPublicClassFields: true,
-				noDocumentAll: true
-			}
-		},
-		external: defineExternal(["@violentmonkey/dom"]),
-		output: {
-			format: "iife",
-			file: `dist/vape-rewrite.user.js`,
-			globals: {
-				"@violentmonkey/dom": "VM",
 			},
-			minify: false,
-			sourcemap: "inline",
+			{
+				threadNumber: 8,
+			},
+		),
+	],
+	transform: {
+		assumptions: {
+			setPublicClassFields: true,
+			noDocumentAll: true,
 		},
-		resolve: {
-			tsconfigFilename: "./tsconfig.json"
-		}
-	}
-);
-
-function defineExternal(externals: ((string | ((id: string) => boolean)) | RegExp)[]): ExternalOption {
-	return (id) =>
-		externals.some((pattern) => {
-			if (typeof pattern === "function") return pattern(id);
-			if (pattern instanceof RegExp) {
-				return pattern.test(id);
-			}
-			if (isAbsolute(pattern)) {
-				return !relative(pattern, resolve(id)).startsWith("..");
-			}
-			return id === pattern || id.startsWith(pattern + "/");
-		});
-}
+	},
+	output: {
+		format: "iife",
+		file: `dist/vape-rewrite.user.js`,
+		globals: {},
+		minify: false,
+		sourcemap: "inline",
+	},
+	resolve: {
+		tsconfigFilename: "./tsconfig.json",
+	},
+});

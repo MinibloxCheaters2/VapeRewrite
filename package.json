@@ -21,7 +21,6 @@
 		"lint:fix": "biome check --fix"
 	},
 	"dependencies": {
-		"@violentmonkey/dom": "^2.2.1",
 		"@wq2/event-bus": "^0.0.4",
 		"@wq2/brigadier-ts": "^1.0.8",
 		"oxc-minify": "^0.129.0",
