@@ -19,6 +19,7 @@ export interface SliderSetting extends BaseSetting<number> {
 	min: number;
 	max: number;
 	step?: number;
+	unit?: string;
 }
 
 export interface Tagged {

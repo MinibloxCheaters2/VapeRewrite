@@ -8,6 +8,7 @@ import {
 } from "solid-js";
 import { render } from "solid-js/web";
 import Category, {
+	type CategoryData,
 	type CategoryInfo,
 	categoryInfoSet,
 } from "@/features/modules/api/Category";
@@ -55,6 +56,7 @@ function CategoryWindow(props: CategoryWindowProps) {
 	const [updateTrigger, setUpdateTrigger] = createSignal(0);
 
 	const modules = ModuleManager.findModules(
+		//@ts-expect-error: When compiled, TypeScript enums with number values have string aliases. `Enum[Enum["K"] = 0] = "K";`
 		P.byCategory(Category[props.category]),
 	);
 
@@ -510,7 +512,9 @@ function ModuleSettings(props: { mod: Mod; onExpandChange: () => void }) {
 													value={setting.value()}
 													min={setting.min}
 													max={setting.max}
+													step={setting.step}
 													onChange={setting.setValue}
+													unit={setting.unit}
 												/>
 											);
 										case "dropdown":
@@ -566,14 +570,14 @@ export function initNewClickGUI() {
 	shadowWrapper.wrapper.appendChild(container);
 
 	const priority = {
-		combat: 2,
-		blatant: 3,
-		render: 4,
-		utility: 5,
-		world: 6,
-		inventory: 7,
-		minigames: 8,
-	} as const;
+		Combat: 2,
+		Blatant: 3,
+		Render: 4,
+		Utility: 5,
+		World: 6,
+		Inventory: 7,
+		Minigames: 8,
+	} as Record<CategoryData["name"], number>;
 
 	let catIdx = 0;
 	for (const [cat, info] of Object.entries(categoryInfoSet).sort(

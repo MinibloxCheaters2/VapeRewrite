@@ -21,7 +21,7 @@ export default class Fly extends Mod {
 	// Mode selection
 	private modeSetting = this.createDropdownSetting(
 		"Mode",
-		["Normal", "Infinite (Old AC)", "Gifbubble (Old AC)"],
+		["Normal", "Infinite (Old AC)"],
 		"Normal",
 	);
 
@@ -32,7 +32,7 @@ export default class Fly extends Mod {
 		0.05,
 		2.0,
 		0.01,
-		() => this.modeSetting.value() !== "Gifbubble (Old AC)",
+		() => this.modeSetting.value() === "Normal",
 	);
 	private verticalSetting = this.createSliderSetting(
 		"Vertical",
@@ -40,10 +40,6 @@ export default class Fly extends Mod {
 		0.05,
 		1.0,
 		0.01,
-		() => {
-			const mode = this.modeSetting.value();
-			return mode !== "Gifbubble (Old AC)"; // Hide for Glide mode
-		},
 	);
 
 	// Infinite mode settings
@@ -116,9 +112,6 @@ export default class Fly extends Mod {
 			case "Infinite (Old AC)":
 				this.infiniteFly();
 				break;
-			case "Gifbubble (Old AC)":
-				this.infiniteFly2();
-				break;
 		}
 	}
 
@@ -169,22 +162,6 @@ export default class Fly extends Mod {
 		else if (!this.lessVerticalMovement.value() || this.ticks % 2 === 0) {
 			player.motion.y = 0.18;
 		}
-	}
-
-	// Old fly from https://codeberg.org/Miniblox/Vape/commit/25ddc2ddf59b334966eda0187ccebd1a12d86351, apparently still works, so why not?
-	private infiniteFly2(): void {
-		const { player } = Refs;
-		this.ticks++;
-
-		const dir = getMoveDirection(0.39);
-
-		player.motion.x = dir.x;
-		player.motion.y = isKeyDown("shift")
-			? -this.verticalSetting.value()
-			: this.ticks < 18 && this.ticks % 6 < 4
-				? 4
-				: -0.14;
-		player.motion.z = dir.z;
 	}
 
 	public getTag(): string {

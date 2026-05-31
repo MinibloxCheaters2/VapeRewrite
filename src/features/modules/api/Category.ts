@@ -11,7 +11,7 @@ export enum Category {
 }
 export default Category;
 
-interface CategoryData {
+export interface CategoryData {
 	/**
 	 * resource name of the category's icon. make sure to update `meta.js` to add `@resource {icon name} https://link.to/icon.png` if it's not already there!
 	 */
@@ -69,6 +69,7 @@ export class CategoryInfo {
 export const categoryInfoSet: Record<Category, CategoryInfo> =
 	Object.fromEntries(
 		Object.entries(categoryDataSet).map(([k, v]) => {
+			//@ts-expect-error: Numerical TypeScript enums have aliases for their names, it produces `Enum[Enum["KEY"] = 0] = "KEY";`
 			const c = Category[k];
 			return [c, new CategoryInfo(v)];
 		}),

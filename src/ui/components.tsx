@@ -88,6 +88,8 @@ export function SliderComponent(props: {
 	max: number;
 	onChange: (value: number) => void;
 	tooltip?: string;
+	unit?: string;
+	step?: number;
 }) {
 	const [dragging, setDragging] = createSignal(false);
 	const [hovered, setHovered] = createSignal(false);
@@ -153,15 +155,45 @@ export function SliderComponent(props: {
 				>
 					{props.name}
 				</span>
-				<span
+				<input
+					type="range"
+					min={props.min}
+					max={props.max}
+					step={props.step ?? 1}
 					style={{
 						color: COLORS.textDark,
 						"font-size": "11px",
 						"font-family": "Arial, sans-serif",
 					}}
-				>
-					{props.value}
-				</span>
+					value={props.value}
+					alt={props.tooltip}
+					onChange={(e) => props.onChange(e.target.valueAsNumber)}
+				/>
+				{/*allows the value to go out of bounds if the user really needs a specific value. this is a cool feature I wish more clients had.*/}
+				<input
+					type="number"
+					style={{
+						color: COLORS.textDark,
+						"font-size": "11px",
+						"font-family": "Arial, sans-serif",
+					}}
+					value={props.value}
+					alt={props.tooltip}
+					onChange={(e) => props.onChange(e.target.valueAsNumber)}
+				/>
+				<Show when={props.unit}>
+					{(unit) => (
+						<span
+							style={{
+								color: COLORS.textDark,
+								"font-size": "11px",
+								"font-family": "Arial, sans-serif",
+							}}
+						>
+							{unit()}
+						</span>
+					)}
+				</Show>
 			</div>
 			<div
 				ref={sliderRef}

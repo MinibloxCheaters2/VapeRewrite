@@ -33,7 +33,12 @@ import type Mod from "./Module.js";
 
 /** some basic predicates for finding modules */
 export const P = {
-	/** filters to find a specific module by the same name (`===` operator) */
+	/**
+	 * Filters to find a specific module by the same name (`===` operator).
+	 * If you need to reference another module, make a `static readonly` variable for it in `ModuleManager`.
+	 * It is more performant to get a field from the ModuleManager
+	 * than to iterate over all modules and find one with the same name (O(1) for getting a field vs O(n) for iteration).
+	 */
 	byName: (name: string) => (module: Mod) => module.name === name,
 	/** filters to find a specific module in the same state (mod.enabled === enabled) */
 	byEnabled: (enabled: boolean) => (module: Mod) =>
@@ -46,13 +51,13 @@ export const P = {
 export default class ModuleManager {
 	// only important ish modules (ones that will get referenced in other modules)
 	// should be as a variable instead of in the array
-	public static readonly antiBan = new AntiBan();
-	public static readonly noSlow = new NoSlow();
-	public static readonly phase = new Phase();
-	public static readonly scaffold = new Scaffold();
-	public static readonly hudManager = new HudManagerModule();
+	static readonly antiBan = new AntiBan();
+	static readonly noSlow = new NoSlow();
+	static readonly phase = new Phase();
+	static readonly scaffold = new Scaffold();
+	static readonly hudManager = new HudManagerModule();
 
-	constructor() {
+	private constructor() {
 		throw new Error("everything in module manager is static lol");
 	}
 
@@ -89,17 +94,24 @@ export default class ModuleManager {
 		new AutoArmor(),
 	] as const;
 
-	public static readonly moduleNames: string[] = this.modules.map(
-		(m) => m.name,
-	);
+	/** Each module's name */
+	static readonly moduleNames: string[] = this.modules.map((m) => m.name);
 
-	public static findModule(
-		predicate: (module: Mod) => boolean,
-	): Mod | undefined {
+	/**
+	 * Finds a module that matches the given predicate.
+	 * @param predicate The predicate to match modules against.
+	 * @returns The module that matches the predicate, or undefined if no module matches.
+	 */
+	static findModule(predicate: (module: Mod) => boolean): Mod | undefined {
 		return ModuleManager.modules.find(predicate);
 	}
 
-	public static findModules(predicate: (module: Mod) => boolean): Mod[] {
+	/**
+	 * Finds all modules that match the given predicate.
+	 * @param predicate The predicate to match modules against.
+	 * @returns An array of modules that match the predicate.
+	 */
+	static findModules(predicate: (module: Mod) => boolean): Mod[] {
 		return ModuleManager.modules.filter(predicate);
 	}
 }
