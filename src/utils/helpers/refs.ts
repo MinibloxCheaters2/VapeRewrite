@@ -34,7 +34,7 @@ class Refs {
 	static #chat: Chat;
 	static #Vec3: typeof Vector3;
 	static #clientSocket: typeof ClientSocket;
-	static #PBVector3: PBVector3;
+	static #PBVector3: typeof PBVector3;
 	static #BlockPos: typeof BlockPos;
 	static #EnumFacing: typeof EnumFacing;
 	// TODO: ts like really annoying so uh maybe a better solution?
@@ -164,7 +164,7 @@ class Refs {
 
 	static get PBVector3() {
 		return Refs.#initOrR(Refs.#PBVector3, () =>
-			Interop.run((e) => e<PBVector3>("PBVector3")),
+			Interop.run((e) => e<typeof PBVector3>("PBVector3")),
 		);
 	}
 
