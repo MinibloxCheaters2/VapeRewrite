@@ -30,11 +30,27 @@
 
 #new-clickgui-container .clickgui-scrollbar::-webkit-scrollbar-thumb,
 #hud-gui-container .clickgui-scrollbar::-webkit-scrollbar-thumb {
-	background: rgba(255, 255, 255, 0.25);
+	background: transparent;
 	border-radius: 2px;
 }
 
 #new-clickgui-container .clickgui-scrollbar::-webkit-scrollbar-thumb:hover,
 #hud-gui-container .clickgui-scrollbar::-webkit-scrollbar-thumb:hover {
-	background: rgba(255, 255, 255, 0.4);
+	background: transparent;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+	-webkit-appearance: none; /* removes default light style */
+	margin: 0;
+	background: transparent; /* dark background */
+	color: #ccc; /* lighter arrow color */
+	width: 16px;
+	height: 16px;
+	border-left: 1px solid #555;
+}
+
+input[type="number"]::-webkit-inner-spin-button:hover,
+input[type="number"]::-webkit-outer-spin-button:hover {
+	background: transparent;
 }
