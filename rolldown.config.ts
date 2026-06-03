@@ -1,6 +1,5 @@
-import { isAbsolute, relative, resolve } from "node:path";
 import { readPackageUp } from "read-package-up";
-import { defineConfig, ExternalOption } from "rolldown";
+import { defineConfig } from "rolldown";
 import userscript from "rolldown-plugin-userscript";
 import swc from "@wq2/rolldown-plugin-swc";
 import solid from "@wq2/rolldown-plugin-solid-oxc";
@@ -68,7 +67,6 @@ export default defineConfig({
 	output: {
 		format: "iife",
 		file: `dist/vape-rewrite.user.js`,
-		globals: {},
 		minify: false,
 		sourcemap: "inline",
 	},

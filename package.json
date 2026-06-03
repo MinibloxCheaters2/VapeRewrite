@@ -15,7 +15,7 @@
 		"ci": "run-s lint",
 		"build:js": "rolldown -c",
 		"build:prod": "cross-env NODE_ENV=production run-s ci build:js",
-		"build": "cross-env NODE_ENV=production run-s clean build:prod",
+		"build": "cross-env NODE_ENV=production run-s build:prod",
 		"devbuild": "run-s clean dev",
 		"lint": "biome check",
 		"lint:fix": "biome check --fix"
