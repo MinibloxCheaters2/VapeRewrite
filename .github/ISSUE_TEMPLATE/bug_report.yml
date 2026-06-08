@@ -1,5 +1,5 @@
 name: Bug report
-description: Report a bug
+description: Report a bug in Vape Rewrite
 labels: "is/a bug"
 assignees: "bab"
 
@@ -25,10 +25,10 @@ body:
       label: Console logs
       description: |
         If the bug is i.e. sometimes you get frozen, it might be that a module is throwing errors inside of a tick event handler!
-        Either way, if you see console logs that look like they might be relevant to the bug, add them here!
+        Either way, if you see console logs that look like they might be relevant to the bug, please add them here!
   - type: textarea
     attributes:
       label: Additional information (optional)
-      description: "Add any extra information that you think might help. Pro tip: 'please fix this bug' doesn't help."
+      description: "Add any extra information that you think might help solve the issue. Pro tip: 'please fix this bug' doesn't help."
       placeholder:
         It only happens maybe every 6 or 7 seconds.
