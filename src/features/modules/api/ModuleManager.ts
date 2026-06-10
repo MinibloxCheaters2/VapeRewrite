@@ -18,6 +18,7 @@ import ChestAura from "../impl/minigames/ChestAura.js";
 import ChestStealer from "../impl/minigames/ChestStealer.js";
 import HudManagerModule from "../impl/render/HudManager.js";
 import AntiBan from "../impl/utility/AntiBan.js";
+import AutoRejoin from "../impl/utility/AutoRejoin.js";
 import AutoRespawn from "../impl/utility/AutoRespawn.js";
 import AutoSword from "../impl/utility/AutoSword.js";
 import FilterBypass from "../impl/utility/FilterBypass.js";
@@ -94,6 +95,7 @@ export default class ModuleManager {
 		new Breaker(),
 		new AutoArmor(),
 		new PacketLogger(),
+		new AutoRejoin(),
 	] as const;
 
 	/** Each module's name */
