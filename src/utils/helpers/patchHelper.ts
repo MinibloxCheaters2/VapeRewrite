@@ -1,5 +1,5 @@
 import { MATCHED_DUMPS } from "@/hooks/replacement";
-import { type DumpKey } from "../../hooks/dump";
+import type { DumpKey } from "../../hooks/dump";
 import type { ExposedFromGame } from "../../hooks/exposed";
 import { fgExposedName, storeName } from "../mapping/names";
 
