@@ -10,6 +10,7 @@ import VERSION_REPLACEMENT from "./replacements/core/version";
 import { FORCE_ENABLE_REPLACEMENT } from "./replacements/flags";
 import ANTIBAN_REPLACEMENT from "./replacements/modules/antiban";
 import { NOSLOW_REPLACEMENTS } from "./replacements/modules/noslow";
+import { PHASE_REPLACEMENTS } from "./replacements/modules/phase";
 import {
 	ADVANCED_BROWSE_PLANETS_MODAL,
 	DEVELOPER_LEADERBOARD,
@@ -91,4 +92,5 @@ export const REPLACEMENTS = new Map<Match, Replacement>([
 	PACKET_RECV_HOOK,
 	VERSION_REPLACEMENT,
 	...ROTATION_REPLACEMENTS,
+	...PHASE_REPLACEMENTS,
 ]);
