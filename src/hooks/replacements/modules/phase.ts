@@ -18,7 +18,7 @@ export const PHASE_REPLACEMENTS: MultipleReplacements = [
 		{
 			replacement: `${PHASE}.enabled
 				&& !${SCAFFOLD}.enabled
-				&& ${dumpBy("keyPressedPlayer")}("Shift")
+				&& keyPressedPlayer("Shift")
 					? g.y
 					: calculateYOffset(A,this.getEntityBoundingBox(),g.y)
 				`,

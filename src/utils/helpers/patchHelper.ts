@@ -14,10 +14,6 @@ export const FG_EXPOSED = `window["${fgExposedName}"]` as const;
 export function DMP<T extends DumpKey>(n: T) {
 	return `${EXPOSED}.dump.${n}` as const;
 }
-/** returns the text that the dump matched */
-export function dumpBy<T extends DumpKey>(t: T): string | undefined {
-	return MATCHED_DUMPS[t];
-}
 
 /**
  * exposes {@linkcode name} to the {@linkcode ExposedFromGame} inside of {@linkcode STORE}
