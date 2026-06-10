@@ -8,18 +8,72 @@ export const SHOW_USERNAMES_WITH_HIDDEN_CHARS: SingleReplacement = [
 	},
 ];
 
-const optionsReplacement = /*js*/ `var _n;
-let Options$1 = (_n = class {
-	static reset() {
-		this.resetVideo(), this.resetControls(), this.sound.reset()
-	}
-	static resetVideo() {
-		this.fov.reset(), this.resolution.reset(), this.renderDistance.reset(), this.particles.reset(), this.stars.reset(), this.dynamicFOV.reset(), this.textureMaterial.reset(), this.fastRender.reset(), this.autoFullscreen.reset(), this.clouds.reset(), this.cullChunks.reset(), this.aura.reset(), this.trail.reset(), this.auraAll.reset(), this.trailAll.reset()
-	}
-	static resetControls() {
-		this.mouseSensitivity.reset(), this.scrollSensitivity.reset(), this.touchSensitivity.reset(), this.invertScroll.reset()
-	}
-}, I(_n, "debug", new Option("Debug", !1)), I(_n, "fov", new SliderOption("FOV", 50, 150, 85)), I(_n, "mouseSensitivity", new SliderOption("Mouse Sensitivity", 1, 300, 100)), I(_n, "scrollSensitivity", new SliderOption("Scroll Sensitivity", 1, 300, 200)), I(_n, "touchSensitivity", new SliderOption("Touch Sensitivity", 1, 300, 100)), I(_n, "renderDistance", new SliderOption("Render Distance ", 2, 10, 3)), I(_n, "particles", new SliderOption("Particles", 0, 100, 20)), I(_n, "resolution", new SliderOption("Resolution Scale", 10, 200, 100)), I(_n, "invertScroll", new Option("Invert Scroll", !1)), I(_n, "autoJump", new Option("Auto Jump", !0)), I(_n, "cullChunks", new Option("Cull Chunks", !0)), I(_n, "clouds", new Option("Clouds", !1)), I(_n, "fastRender", new Option("Fast Render", !0)), I(_n, "fastEntities", new Option("Fast Entities", !1)), I(_n, "dynamicFOV", new Option("Dynamic FOV", !0)), I(_n, "autoFullscreen", new Option("Auto Fullscreen ", !1)), I(_n, "stars", new Option("Stars", !0)), I(_n, "fog", new Option("Fog", !0)), I(_n, "bobbing", new Option("Bobbing", !0)), I(_n, "textureMaterial", new SelectOption$1("Material Texture", ["Basic", "Lambert", "Phong", "Standard", "Toon"], "Lambert")), I(_n, "aura", new SelectOption$1("Aura", ["None", "Rain", "Tornado", "Halo", "Planet", "Inferno"], "None")), I(_n, "trail", new SelectOption$1("Trail", ["None", "Flame", "Rain", "Heart"], "None")), I(_n, "auraAll", new Option("Aura To All Players", !1)), I(_n, "trailAll", new Option("Trail To All Players", !1)), I(_n, "sound", new SoundOptions), I(_n, "cinematicMode", !1), I(_n, "streamerMode", new Option("Streamer Mode", !1, !1)), I(_n, "enableZoom", new Option("Enable Zoom", !1, !1)), I(_n, "zoomLevel", new SliderOption("Zoom Level", 1, 15, 3, 1, !1)), I(_n, "f1Mode", new Option("F1 Mode", !1, !1)), _n);`;
+const optionsReplacement = /*js*/ `var nn;
+nn = class {
+  static reset() {
+    this.resetVideo();
+    this.resetControls();
+    this.sound.reset();
+  }
+  static resetVideo() {
+    this.fov.reset();
+    this.resolution.reset();
+    this.renderDistance.reset();
+    this.particles.reset();
+    this.stars.reset();
+    this.dynamicFOV.reset();
+    this.textureMaterial.reset();
+    this.fastRender.reset();
+    this.autoFullscreen.reset();
+    this.clouds.reset();
+    this.cullChunks.reset();
+    this.aura.reset();
+    this.trail.reset();
+    this.auraAll.reset();
+    this.trailAll.reset();
+  }
+  static resetControls() {
+    this.mouseSensitivity.reset();
+    this.scrollSensitivity.reset();
+    this.touchSensitivity.reset();
+    this.invertScroll.reset();
+  }
+};
+I(nn, "debug", new Option("Debug", false));
+I(nn, "fov", new SliderOption("FOV", 50, 150, 85));
+I(nn, "mouseSensitivity", new SliderOption("Mouse Sensitivity", 1, 300, 100));
+I(nn, "scrollSensitivity", new SliderOption("Scroll Sensitivity", 1, 300, 200));
+I(nn, "touchSensitivity", new SliderOption("Touch Sensitivity", 1, 300, 100));
+I(nn, "renderDistance", new SliderOption("Render Distance ", 2, 8, 3));
+I(nn, "particles", new SliderOption("Particles", 0, 100, 20));
+I(nn, "resolution", new SliderOption("Resolution Scale", 10, 200, 100));
+I(nn, "invertScroll", new Option("Invert Scroll", false));
+I(nn, "autoJump", new Option("Auto Jump", true));
+I(nn, "cullChunks", new Option("Cull Chunks", true));
+I(nn, "clouds", new Option("Clouds", false));
+I(nn, "fastRender", new Option("Fast Render", true));
+I(nn, "fastEntities", new Option("Fast Entities", false));
+I(nn, "dynamicFOV", new Option("Dynamic FOV", true));
+I(nn, "autoFullscreen", new Option("Auto Fullscreen ", false));
+I(nn, "stars", new Option("Stars", true));
+I(nn, "fog", new Option("Fog", true));
+I(nn, "godRays", new Option("God Rays", false));
+I(nn, "waterShaders", new Option("Water Shaders", false));
+I(nn, "waterLightRefraction", new Option("Water Light Refraction", false));
+I(nn, "bobbing", new Option("Bobbing", true));
+I(nn, "textureMaterial", new SelectOption$1("Material Texture", ["Basic", "Lambert", "Phong", "Standard", "Toon"], "Lambert"));
+I(nn, "sound", new SoundOptions());
+I(nn, "cinematicMode", false);
+I(nn, "streamerMode", new Option("Streamer Mode", false, false));
+I(nn, "enableZoom", new Option("Enable Zoom", false, false));
+I(nn, "zoomLevel", new SliderOption("Zoom Level", 1, 15, 3, 1, false));
+I(nn, "textureMaterial", new SelectOption$1("Material Texture", ["Basic", "Lambert", "Phong", "Standard", "Toon"], "Lambert"));
+I(nn, "aura", new SelectOption$1("Aura", ["None", "Rain", "Tornado", "Halo", "Planet", "Inferno"], "None"));
+I(nn, "trail", new SelectOption$1("Trail", ["None", "Flame", "Rain", "Heart"], "None"));
+I(nn, "auraAll", new Option("Aura To All Players", false));
+I(nn, "trailAll", new Option("Trail To All Players", false));
+I(nn, "f1Mode", new Option("F1 Mode", false, false));
+let Options$1 = nn;`;
 
 const auraReplacements = `}), jsxRuntimeExports.jsx(ToggleButton, {
 			option: Options$1.fog
@@ -37,7 +91,7 @@ const auraReplacements = `}), jsxRuntimeExports.jsx(ToggleButton, {
 			option: Options$1.trailAll`;
 
 export const EXTRA_OPTIONS: SingleReplacement = [
-	/var\s+_+\w+\s*;\s*let\s+Options\$1\s*=\s*\(_+\w+\s*=\s*class\s*\{[\s\S]*?\}\s*,[\s\S]*?\)\s*;/g,
+	/var\s+\w+\s*;\s*let\s+Options\$?1\s*=\s*\(\w+\s*=\s*class\s*\{[\s\S]*?\}\s*,[\s\S]*?\)\s*;/g,
 	{
 		replacement: optionsReplacement,
 		shift: Shift.REPLACE,
