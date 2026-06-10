@@ -1,4 +1,5 @@
-import type dump from "../../hooks/dump";
+import { MATCHED_DUMPS } from "@/hooks/replacement";
+import { DumpKey } from "../../hooks/dump";
 import type { ExposedFromGame } from "../../hooks/exposed";
 import { fgExposedName, storeName } from "../mapping/names";
 
@@ -10,8 +11,12 @@ export const ROTATION_MANAGER = `${EXPOSED}.RotationManager` as const;
 export const FG_EXPOSED = `window["${fgExposedName}"]` as const;
 
 /** makes a string that accesses a dump */
-export function DMP<T extends keyof typeof dump>(n: T) {
+export function DMP<T extends DumpKey>(n: T) {
 	return `${EXPOSED}.dump.${n}` as const;
+}
+/** returns the text that the dump matched */
+export function dumpBy<T extends DumpKey>(t: T): string | undefined {
+	return MATCHED_DUMPS[t];
 }
 
 /**

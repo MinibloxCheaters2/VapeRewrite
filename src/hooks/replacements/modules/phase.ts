@@ -1,4 +1,4 @@
-import { DMP, MOD_MANAGER } from "@/utils/helpers/patchHelper";
+import { DMP, dumpBy, MOD_MANAGER } from "@/utils/helpers/patchHelper";
 import { type MultipleReplacements, Shift } from "../../replacementTypes";
 
 const PHASE = `${MOD_MANAGER}.phase`;
@@ -18,7 +18,7 @@ export const PHASE_REPLACEMENTS: MultipleReplacements = [
 		{
 			replacement: `${PHASE}.enabled
 				&& !${SCAFFOLD}.enabled
-				&& ${DMP("keyPressedPlayer")}("Shift")
+				&& ${dumpBy("keyPressedPlayer")}("Shift")
 					? g.y
 					: calculateYOffset(A,this.getEntityBoundingBox(),g.y)
 				`,
