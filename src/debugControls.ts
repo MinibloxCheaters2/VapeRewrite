@@ -15,13 +15,13 @@ export const NO_STORE_NAME_RANDOMIZATION = false;
 export const NO_FG_EXPOSED_RANDOMIZATION = false;
 //#endregion
 //#region Hooks
-const UPDATING_MODE = true;
+const UPDATING_MODE = false;
 /** Checks for unmatched replacements, and if found, logs the unmatched replacements into the console */
 export const CHECK_UNMATCHED_REPLACEMENTS = UPDATING_MODE;
 /** Checks for unmatched dumps, and if found, logs the unmatched dumps into the console. */
 export const CHECK_UNMATCHED_DUMPS = UPDATING_MODE;
 /** Logs when we're applying replacements. */
-export const LOG_APPLYING_REPLACEMENTS = true;
+export const LOG_APPLYING_REPLACEMENTS = false;
 /** Logs when our remap proxy remaps a field from its normal name to its obfuscated name, it logs as a debug level. */
 export const LOG_REMAPPING = false;
 //#endregion

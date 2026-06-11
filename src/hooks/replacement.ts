@@ -48,8 +48,8 @@ export default function modifyCode(code: string): string {
 		const matched = modified.match(regex);
 		if (matched?.[1]) {
 			MATCHED_DUMPS[name] = matched[1];
-			for (let [, { replacement }] of REPLACEMENTS.entries()) {
-				replacement = replacement.replaceAll(name, matched[1]);
+			for (const [_, v] of REPLACEMENTS.entries()) {
+				v.replacement = v.replacement.replaceAll(name, matched[1]);
 			}
 		} else if (CHECK_UNMATCHED_DUMPS) {
 			logger.warn(`Unmatched dump: ${name} with regex`, regex);
