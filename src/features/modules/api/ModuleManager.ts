@@ -16,6 +16,7 @@ import AutoArmor from "../impl/inventory/AutoArmor.js";
 import Breaker from "../impl/minigames/Breaker.js";
 import ChestAura from "../impl/minigames/ChestAura.js";
 import ChestStealer from "../impl/minigames/ChestStealer.js";
+import MurderMystery from "../impl/minigames/MurderMystery.js";
 import HudManagerModule from "../impl/render/HudManager.js";
 import AntiBan from "../impl/utility/AntiBan.js";
 import AutoRejoin from "../impl/utility/AutoRejoin.js";
@@ -96,6 +97,7 @@ export default class ModuleManager {
 		new AutoArmor(),
 		new PacketLogger(),
 		new AutoRejoin(),
+		new MurderMystery(),
 	] as const;
 
 	/** Each module's name */

@@ -12,6 +12,8 @@ import type {
 	Hud3D,
 	ItemArmor,
 	ItemBlock,
+	ItemBow,
+	ItemStack,
 	ItemSword,
 	Items,
 	Materials,
@@ -48,6 +50,8 @@ class Refs {
 	static #Items: typeof Items;
 	static #ItemBlock: typeof ItemBlock;
 	static #ItemSword: typeof ItemSword;
+	static #ItemStack: typeof ItemStack;
+	static #ItemBow: typeof ItemBow;
 	static #hud3D: Hud3D;
 	static #Blocks: AllBlocks;
 	static #ItemArmor: typeof ItemArmor;
@@ -68,6 +72,19 @@ class Refs {
 			Interop.run((e) => e<typeof ItemArmor>("ItemArmor")),
 		);
 	}
+
+	static get ItemStack(): typeof ItemStack {
+		return Refs.#initOrR(Refs.#ItemStack, () =>
+			Interop.run((e) => e<typeof ItemStack>("ItemStack")),
+		);
+	}
+
+	static get ItemBow(): typeof ItemBow {
+		return Refs.#initOrR(Refs.#ItemBow, () =>
+			Interop.run((e) => e<typeof ItemBow>("ItemBow")),
+		);
+	}
+
 	static get Enchantments(): typeof Enchantments {
 		return Refs.#initOrR(Refs.#Enchantments, () =>
 			Interop.run((e) => e<typeof Enchantments>("Enchantments")),
