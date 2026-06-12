@@ -9,9 +9,17 @@ export enum Priority {
 	READ_FINAL_STATE = -3,
 }
 
-import EventBus, { type EventDict, Subscribe } from "@wq2/event-bus";
+import EventBus, { Subscribe as origSubscribe } from "@wq2/event-bus";
+import type ClientEvents from "./Events";
 export default EventBus;
-export * from "@wq2/event-bus";
+// export type { EventDict } from "@wq2/event-bus";
+
+export function Subscribe<K extends keyof ClientEvents>(
+	event: K,
+	priority: number = Priority.NORMAL,
+) {
+	return origSubscribe<ClientEvents, K>(event, priority);
+}
 
 /**
  * Subscribes to an event asynchronously.
@@ -27,10 +35,10 @@ export * from "@wq2/event-bus";
  * @param priority How important the event is
  * @returns the actual method decorator
  */
-export function SubscribeAsync<E extends EventDict, K extends keyof E>(
+export function SubscribeAsync<K extends keyof ClientEvents>(
 	event: K,
 	priority: number = Priority.NORMAL,
-): <A extends E[K] = E[K]>(
+): <A extends ClientEvents[K] = ClientEvents[K]>(
 	_target: unknown,
 	mdc: ClassMethodDecoratorContext<
 		unknown,
@@ -39,5 +47,5 @@ export function SubscribeAsync<E extends EventDict, K extends keyof E>(
 		name: string;
 	},
 ) => void {
-	return Subscribe<E, K>(event, priority);
+	return Subscribe<K>(event, priority);
 }
