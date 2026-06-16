@@ -20,8 +20,8 @@ Simply put:
 - I want this to be good enough, that there would be no reason to maintain Impact.
   - Impact was ONLY UPDATED after I fixed Vape myself
     (to make a Crits bypass for Sigma Rebase in KitPvP, *which I never did*)
-    and then he557 made a USELESS fork of Vape that removed a few features and never added any new features.
-    - ProgMEM-CC couldn't even finish the desync exploit implementation I 99.9% completed for him.
+    and then he557 made a USELESS fork that removed a few features. But never added new features to Vape.
+    - ProgMEM-CC couldn't even finish the desync exploit implementation I 99.99% completed for him.
 - [Spherical](https://codeberg.org/Miniblox/Spherical) is supposed to be the new base for Vape
   whenever it finishes (never), but motivation makes it hard to overcome really big road blockers:
   - I also got sidetracked(ish) with trying to make Spherical in Kotlin/JS.
