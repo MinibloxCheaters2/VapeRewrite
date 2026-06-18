@@ -1,4 +1,4 @@
-import { Subscribe } from "@/event/api/Bus";
+import { Subscribe } from "@/event/Bus";
 import Refs from "@/utils/helpers/refs";
 import { findTargets } from "@/utils/movement/target";
 import Category from "../../api/Category";

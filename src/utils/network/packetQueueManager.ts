@@ -3,8 +3,8 @@
 import type { AnyPacket, C2SPacket, PBFloatVector3 } from "@wq2/miniblox-sdk";
 import type { Material, Mesh } from "three";
 import Bus from "../../Bus";
-import { Priority, Subscribe } from "../../event/api/Bus";
-import type CancelableWrapper from "../../event/api/CancelableWrapper";
+import { Priority, Subscribe } from "../../event/Bus";
+import type CancelableWrapper from "../../event/CancelableWrapper";
 import Rotation, { type IRotation } from "../aiming/rotation";
 import Refs from "../helpers/refs";
 import PacketUtil from "./PacketUtil";

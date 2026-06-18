@@ -1,5 +1,5 @@
 import Bus from "./Bus";
-import type ClientEvents from "./event/api/Events";
+import type ClientEvents from "./event/Events";
 import exposed from "./hooks/exposed";
 import { storeName } from "./utils/mapping/names";
 

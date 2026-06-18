@@ -1,9 +1,10 @@
-import type { Entity } from "@wq2/miniblox-sdk";
-import { Subscribe } from "@/event/api/Bus";
+import type { EntityLivingBase } from "@wq2/miniblox-sdk";
+import { Subscribe } from "@/event/Bus";
 import RotationManager, { RotationPlan } from "@/utils/aiming/rotate";
 import Rotation from "@/utils/aiming/rotation";
 import Refs from "@/utils/helpers/refs";
 import deg2rad from "@/utils/math/radians";
+import { SETTING } from "@/utils/movement/MovementCorrection";
 import { findTargets } from "@/utils/movement/target";
 import PacketRefs from "@/utils/network/packetRefs";
 import Category from "../../api/Category";
@@ -37,6 +38,14 @@ export default class KillAura extends Mod {
 	private angleSetting = this.createSliderSetting("Angle", 360, 1, 360, 1);
 	private autoBlockSetting = this.createToggleSetting("Auto Block", true);
 	private wallCheckSetting = this.createToggleSetting("Wall Check", false);
+	private movementCorrectionSetting = this.createDropdownSetting(
+		"Movement Correction",
+		SETTING,
+	);
+
+	get movementCorrection() {
+		return this.movementCorrectionSetting.value();
+	}
 
 	get range() {
 		return this.rangeSetting.value();
@@ -83,7 +92,7 @@ export default class KillAura extends Mod {
 		}
 	}
 
-	sendAttack(e: Entity, first: boolean) {
+	sendAttack(e: EntityLivingBase, first: boolean) {
 		const { ClientSocket, player } = Refs;
 		const box = e.getEntityBoundingBox();
 		const hitVec = player.getEyePos().clone().clamp(box.min, box.max);
@@ -95,6 +104,7 @@ export default class KillAura extends Mod {
 		const checkYaw = wrapAngleTo180_radians(
 			Math.atan2(aimPos.x, aimPos.z) - player.yaw,
 		);
+
 		if (
 			first &&
 			Math.abs(checkYaw) > MAX_OFFSET_RAD &&
@@ -106,9 +116,11 @@ export default class KillAura extends Mod {
 						player.lastReportedYaw + newYaw,
 						RotationManager.activeRotation.pitch,
 					),
+					this.movementCorrection.value,
 				),
 			);
 		}
+
 		// we don't send the attack packet silently,
 		// so the Criticals module will automatically send the packets BEFORE this one sends!
 		ClientSocket.sendPacket(
@@ -120,6 +132,10 @@ export default class KillAura extends Mod {
 					y: hitVec.y,
 					z: hitVec.z,
 				},
+				//@ts-expect-error: it's new
+				yaw: RotationManager.activeRotation.yaw,
+				pitch: RotationManager.activeRotation.pitch,
+				sequence: player.inputSequenceNumber,
 			}),
 		);
 		player.attack(e);

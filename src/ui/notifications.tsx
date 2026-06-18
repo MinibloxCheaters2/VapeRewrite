@@ -1,15 +1,21 @@
-import { createSignal, For } from "solid-js";
+import { createSignal, For, onCleanup, onMount } from "solid-js";
 import { render } from "solid-js/web";
 import getResourceURL from "@/utils/helpers/cachedResourceURL";
 import shadowWrapper from "./shadowWrapper";
 
 const COLORS = {
 	main: "rgb(26, 25, 26)",
-	text: "rgb(200, 200, 200)",
-	accent: "rgb(5, 134, 105)",
+	text: "rgb(209, 209, 209)",
+	textDark: "rgb(170, 170, 170)",
 };
 
 type NotificationType = "info" | "warning" | "alert";
+
+const PROGRESS_COLORS: Record<NotificationType, string> = {
+	alert: "rgb(250, 50, 56)",
+	warning: "rgb(236, 129, 43)",
+	info: "rgb(220, 220, 220)",
+};
 
 interface Notification {
 	id: number;
@@ -35,7 +41,7 @@ export function showNotification(
 
 	setTimeout(() => {
 		setNotifications((prev) => prev.filter((n) => n.id !== id));
-	}, duration);
+	}, duration + 400);
 }
 
 function NotificationContainer() {
@@ -43,111 +49,171 @@ function NotificationContainer() {
 		<div
 			style={{
 				position: "fixed",
-				bottom: "20px",
-				right: "20px",
+				inset: "0",
 				"z-index": "10002",
-				display: "flex",
-				"flex-direction": "column",
-				gap: "8px",
 				"pointer-events": "none",
 			}}
 		>
 			<For each={notifications()}>
-				{(notification) => (
-					<NotificationItem notification={notification} />
+				{(notification, index) => (
+					<NotificationItem
+						notification={notification}
+						offset={29 + 78 * (index() + 1)}
+					/>
 				)}
 			</For>
 		</div>
 	);
 }
 
-function NotificationItem(props: { notification: Notification }) {
+function NotificationItem(props: {
+	notification: Notification;
+	offset: number;
+}) {
+	const [exiting, setExiting] = createSignal(false);
+	const [mounted, setMounted] = createSignal(false);
+
+	onMount(() => {
+		requestAnimationFrame(() => {
+			setMounted(true);
+		});
+	});
+
+	const timer = setTimeout(() => {
+		setExiting(true);
+	}, props.notification.duration);
+
+	onCleanup(() => clearTimeout(timer));
+
 	return (
 		<div
 			style={{
-				width: "300px",
-				"background-color": COLORS.main,
+				position: "absolute",
+				right: "0",
+				top: `calc(100% - ${props.offset}px)`,
+				width: "266px",
+				height: "75px",
+				"background-color": "rgba(26, 25, 26, 0.5)",
 				"border-radius": "5px",
 				"box-shadow":
 					"0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)",
-				padding: "12px 16px",
-				display: "flex",
-				"align-items": "center",
-				gap: "12px",
+				overflow: "hidden",
 				"pointer-events": "auto",
-				"backdrop-filter": "blur(10px)",
-				animation: "slideIn 0.3s ease-out",
+				animation: exiting()
+					? "ntSlideOut 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards"
+					: "ntSlideIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards",
 			}}
 		>
-			{/* Blur background */}
-			<div
-				style={{
-					position: "absolute",
-					inset: "-48px -48px",
-					"backdrop-filter": "blur(24px)",
-					"background-size": "cover",
-					opacity: "0.3",
-					"pointer-events": "none",
-					"z-index": "-1",
-				}}
-			/>
-
 			<img
 				src={getResourceURL(props.notification.type)}
 				alt=""
 				style={{
-					width: "20px",
-					height: "20px",
-					filter: "brightness(0) invert(0.8)",
+					position: "absolute",
+					left: "-1px",
+					top: "-1px",
+					width: "60px",
+					height: "60px",
 				}}
 			/>
-			<div style={{ flex: "1" }}>
-				<div
-					style={{
-						color: COLORS.text,
-						"font-size": "13px",
-						"font-weight": "600",
-						"margin-bottom": "2px",
-						"font-family": "Arial, sans-serif",
-					}}
-				>
-					{props.notification.title}
-				</div>
-				<div
-					style={{
-						color: COLORS.text,
-						"font-size": "12px",
-						opacity: "0.7",
-						"font-family": "Arial, sans-serif",
-					}}
-				>
-					{props.notification.message}
-				</div>
+
+			<div
+				style={{
+					position: "absolute",
+					left: "46px",
+					top: "16px",
+					right: "10px",
+					color: COLORS.text,
+					fontSize: "14px",
+					fontWeight: "600",
+					fontFamily: "Arial, sans-serif",
+					textAlign: "left",
+					whiteSpace: "nowrap",
+					overflow: "hidden",
+					textOverflow: "ellipsis",
+				}}
+			>
+				{props.notification.title}
 			</div>
+
+			<div
+				style={{
+					position: "absolute",
+					left: "47px",
+					top: "44px",
+					color: "rgb(0, 0, 0)",
+					fontSize: "14px",
+					fontFamily: "Arial, sans-serif",
+					opacity: "0.5",
+					textAlign: "left",
+					whiteSpace: "nowrap",
+					overflow: "hidden",
+					textOverflow: "ellipsis",
+				}}
+			>
+				{props.notification.message}
+			</div>
+
+			<div
+				style={{
+					position: "absolute",
+					left: "46px",
+					top: "43px",
+					right: "10px",
+					color: COLORS.textDark,
+					fontSize: "14px",
+					fontFamily: "Arial, sans-serif",
+					textAlign: "left",
+					whiteSpace: "nowrap",
+					overflow: "hidden",
+					textOverflow: "ellipsis",
+				}}
+			>
+				{props.notification.message}
+			</div>
+
+			<div
+				style={{
+					position: "absolute",
+					bottom: "4px",
+					left: "3px",
+					right: "10px",
+					height: "2px",
+					backgroundColor: PROGRESS_COLORS[props.notification.type],
+					borderRadius: "1px",
+					transformOrigin: "left center",
+					animation: mounted()
+						? `ntProgress ${props.notification.duration}ms linear forwards`
+						: "none",
+				}}
+			/>
 		</div>
 	);
 }
 
 export function initNotifications() {
+	if (!document.querySelector("#nt-keyframes")) {
+		const keyframesStyle = document.createElement("style");
+		keyframesStyle.id = "nt-keyframes";
+		keyframesStyle.textContent = `
+			@keyframes ntSlideIn {
+				from { transform: translateX(100%); }
+				to { transform: translateX(0); }
+			}
+			@keyframes ntSlideOut {
+				from { transform: translateX(0); }
+				to { transform: translateX(100%); }
+			}
+			@keyframes ntProgress {
+				from { transform: scaleX(1); }
+				to { transform: scaleX(0); }
+			}
+		`;
+		document.head.appendChild(keyframesStyle);
+	}
+
 	const container = document.createElement("div");
 	container.id = "notifications-container";
 	shadowWrapper.wrapper.appendChild(container);
-
-	// Add animation styles
-	const style = document.createElement("style");
-	style.textContent = `
-		@keyframes slideIn {
-			from {
-				transform: translateX(400px);
-				opacity: 0;
-			}
-			to {
-				transform: translateX(0);
-				opacity: 1;
-			}
-		}
-	`;
-	document.head.appendChild(style);
 
 	render(() => <NotificationContainer />, container);
 }

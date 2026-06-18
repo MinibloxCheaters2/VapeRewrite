@@ -1,100 +1,31 @@
 import { Shift, type SingleReplacement } from "../replacementTypes";
 
-export const SHOW_USERNAMES_WITH_HIDDEN_CHARS: SingleReplacement = [
-	/function\s+stripCrazyGamesSuffix\s*\(\w+\)\s*\{[\s\S]*?return[\s\S]*?\}/g,
-	{
-		replacement: `function stripCrazyGamesSuffix(m) { return m; }`,
-		shift: Shift.REPLACE,
-	},
-];
-
-const optionsReplacement = /*js*/ `var nn;
-nn = class {
-  static reset() {
-    this.resetVideo();
-    this.resetControls();
-    this.sound.reset();
-  }
-  static resetVideo() {
-    this.fov.reset();
-    this.resolution.reset();
-    this.renderDistance.reset();
-    this.particles.reset();
-    this.stars.reset();
-    this.dynamicFOV.reset();
-    this.textureMaterial.reset();
-    this.fastRender.reset();
-    this.autoFullscreen.reset();
-    this.clouds.reset();
-    this.cullChunks.reset();
-    this.aura.reset();
-    this.trail.reset();
-    this.auraAll.reset();
-    this.trailAll.reset();
-  }
-  static resetControls() {
-    this.mouseSensitivity.reset();
-    this.scrollSensitivity.reset();
-    this.touchSensitivity.reset();
-    this.invertScroll.reset();
-  }
-};
-I(nn, "debug", new Option("Debug", false));
-I(nn, "fov", new SliderOption("FOV", 50, 150, 85));
-I(nn, "mouseSensitivity", new SliderOption("Mouse Sensitivity", 1, 300, 100));
-I(nn, "scrollSensitivity", new SliderOption("Scroll Sensitivity", 1, 300, 200));
-I(nn, "touchSensitivity", new SliderOption("Touch Sensitivity", 1, 300, 100));
-I(nn, "renderDistance", new SliderOption("Render Distance ", 2, 8, 3));
-I(nn, "particles", new SliderOption("Particles", 0, 100, 20));
-I(nn, "resolution", new SliderOption("Resolution Scale", 10, 200, 100));
-I(nn, "invertScroll", new Option("Invert Scroll", false));
-I(nn, "autoJump", new Option("Auto Jump", true));
-I(nn, "cullChunks", new Option("Cull Chunks", true));
-I(nn, "clouds", new Option("Clouds", false));
-I(nn, "fastRender", new Option("Fast Render", true));
-I(nn, "fastEntities", new Option("Fast Entities", false));
-I(nn, "dynamicFOV", new Option("Dynamic FOV", true));
-I(nn, "autoFullscreen", new Option("Auto Fullscreen ", false));
-I(nn, "stars", new Option("Stars", true));
-I(nn, "fog", new Option("Fog", true));
-I(nn, "godRays", new Option("God Rays", false));
-I(nn, "waterShaders", new Option("Water Shaders", false));
-I(nn, "waterLightRefraction", new Option("Water Light Refraction", false));
-I(nn, "bobbing", new Option("Bobbing", true));
-I(nn, "textureMaterial", new SelectOption$1("Material Texture", ["Basic", "Lambert", "Phong", "Standard", "Toon"], "Lambert"));
-I(nn, "sound", new SoundOptions());
-I(nn, "cinematicMode", false);
-I(nn, "streamerMode", new Option("Streamer Mode", false, false));
-I(nn, "enableZoom", new Option("Enable Zoom", false, false));
-I(nn, "zoomLevel", new SliderOption("Zoom Level", 1, 15, 3, 1, false));
-I(nn, "textureMaterial", new SelectOption$1("Material Texture", ["Basic", "Lambert", "Phong", "Standard", "Toon"], "Lambert"));
-I(nn, "aura", new SelectOption$1("Aura", ["None", "Rain", "Tornado", "Halo", "Planet", "Inferno"], "None"));
-I(nn, "trail", new SelectOption$1("Trail", ["None", "Flame", "Rain", "Heart"], "None"));
-I(nn, "auraAll", new Option("Aura To All Players", false));
-I(nn, "trailAll", new Option("Trail To All Players", false));
-I(nn, "f1Mode", new Option("F1 Mode", false, false));
-let Options$1 = nn;`;
+const optionsReplacement = /*js*/ `E(Options, "aura", new SelectOption("Aura", ["None", "Rain", "Tornado", "Halo", "Planet", "Inferno"], "None"));
+E(Options, "trail", new SelectOption("Trail", ["None", "Flame", "Rain", "Heart"], "None"));
+E(Options, "auraAll", new Option("Aura To All Players", false));
+E(Options, "trailAll", new Option("Trail To All Players", false));
+E(Options, "cullChunks", new Option("Cull Chunks", true));`;
 
 const auraReplacements = `}), jsxRuntimeExports.jsx(ToggleButton, {
-			option: Options$1.fog
+			option: Options.fog
 		}), jsxRuntimeExports.jsx(ToggleButton, {
-			option: Options$1.cullChunks
+			option: Options.cullChunks
 		}), jsxRuntimeExports.jsx(ToggleButton, {
-			option: Options$1.clouds
+			option: Options.clouds
     }), jsxRuntimeExports.jsx(SelectButton, {
-			option: Options$1.aura
+			option: Options.aura
     }), jsxRuntimeExports.jsx(SelectButton, {
-			option: Options$1.trail
+			option: Options.trail
     }), jsxRuntimeExports.jsx(ToggleButton, {
-			option: Options$1.auraAll
+			option: Options.auraAll
 		}), jsxRuntimeExports.jsx(ToggleButton, {
-			option: Options$1.trailAll`;
+			option: Options.trailAll`;
 
 export const EXTRA_OPTIONS: SingleReplacement = [
-	/var\s+\w+\s*;\s*let\s+Options\$?1\s*=\s*\(\w+\s*=\s*class\s*\{[\s\S]*?\}\s*,[\s\S]*?\)\s*;/g,
+	/let\s+Options\s*=\s*\w+;/,
 	{
 		replacement: optionsReplacement,
-		shift: Shift.REPLACE,
+		shift: Shift.AFTER,
 	},
 ];
 
@@ -110,16 +41,16 @@ export const ENABLE_CHUNK_CULLING_SETTING: SingleReplacement = [
 	/CHUNK_UNLOADS_PER_TICK\s*\)/g,
 	{
 		replacement:
-			/*js*/ "Options$1.cullChunks.value?CHUNK_UNLOADS_PER_TICK:0)",
+			/*js*/ "Options.cullChunks.value?CHUNK_UNLOADS_PER_TICK:0)",
 		shift: Shift.REPLACE,
 	},
 ];
 
 export const SHOW_CLOUDS_SETTING: SingleReplacement = [
-	/I\s*\(\s*this\s*,\s*["']generate["']\s*\)\s*;\s*I\s*\(\s*this\s*,\s*["']showClouds["']\s*\)\s*;/g,
+	/A\s*\(\s*this\s*,\s*["']generate["']\s*\)\s*;\s*I\s*\(\s*this\s*,\s*["']showClouds["']\s*\)\s*;/g,
 	{
-		replacement: /*js*/ `I(this, "generate",Options$1.clouds.value);
-		I(this, "showClouds",Options$1.clouds.value);`,
+		replacement: /*js*/ `b(this, "generate",Options.clouds.value);
+		E(this, "showClouds",Options.clouds.value);`,
 		shift: Shift.REPLACE,
 	},
 ];
@@ -127,7 +58,7 @@ export const SHOW_CLOUDS_SETTING: SingleReplacement = [
 export const SHOW_CLOUDS_UPDATE_SETTING: SingleReplacement = [
 	/this\.generate\s*==\s*this\.showClouds/g,
 	{
-		replacement: /*js*/ `this.showClouds = Options$1.clouds.value; this.generate == this.showClouds`,
+		replacement: /*js*/ `this.showClouds = Options.clouds.value; this.generate == this.showClouds`,
 		shift: Shift.REPLACE,
 	},
 ];
@@ -136,14 +67,14 @@ export const GENERATE_CLOUDS_REPLACEMENT: SingleReplacement = [
 	/generateClouds\s*\(\s*\w+\s*\)\s*\{\s*for[\s\S]*?;/g,
 	{
 		replacement: `generateClouds(u) {
-		for (const h of this.clouds) this.gameScene.scene.remove(h), h.visible = Options$1.clouds.value;`,
+		for (const h of this.clouds) this.gameScene.scene.remove(h), h.visible = Options.clouds.value;`,
 		shift: Shift.REPLACE,
 	},
 ];
 
 const trailAuraReplacement = /*js*/ `class EffectsManager {
 	constructor(u, h) {
-		I(this, "activeEffects");
+		E(this, "activeEffects");
 		this.world = u, this.player = h, this.activeEffects = []
 	}
 	addEffect(u) {
@@ -157,7 +88,7 @@ const trailAuraReplacement = /*js*/ `class EffectsManager {
 	}
 	update() {
 		var u, h;
-		(u = Options$1.aura.value != "None" && (Options$1.auraAll.value || this.world.game.player.socketId == this.player.profile.uuid)? AURAS[Options$1.aura.value.toLowerCase()]: AURAS[this.player.profile.effects.aura]) == null || u.effect.update(this.world, this.player), (h = Options$1.trail.value != "None" && (Options$1.trailAll.value || this.world.game.player.socketId == this.player.profile.uuid)? TRAILS[Options$1.trail.value.toLowerCase()]: TRAILS[this.player.profile.effects.trail]) == null || h.effect.update(this.world, this.player)
+		(u = Options.aura.value != "None" && (Options.auraAll.value || this.world.game.player.socketId == this.player.profile.uuid)? AURAS[Options.aura.value.toLowerCase()]: AURAS[this.player.profile.effects.aura]) == null || u.effect.update(this.world, this.player), (h = Options.trail.value != "None" && (Options.trailAll.value || this.world.game.player.socketId == this.player.profile.uuid)? TRAILS[Options.trail.value.toLowerCase()]: TRAILS[this.player.profile.effects.trail]) == null || h.effect.update(this.world, this.player)
 	}
 }`;
 
@@ -168,214 +99,6 @@ export const TRAIL_AURA_REPLACEMENT: SingleReplacement = [
 		shift: Shift.REPLACE,
 	},
 ];
-
-const browsePlanetsModalReplacement = /*js*/ `BrowsePlanetsModal = m => {
-  const {
-    servers: u,
-    profile: h,
-    refreshServers: p
-  } = reactExports.useContext(AccountContext);
-
-  const [g, y] = reactExports.useState("");
-  const [x, S] = reactExports.useState(["All"]);
-  const [sortBy, setSortBy] = reactExports.useState("Players");
-  const b = useDebounce(g, 500);
-
-  let v =
-    (u == null
-      ? []
-      : u
-          .filter(A => A.category === "planets")
-          .sort((A, R) => {
-            if (sortBy === "Time") {
-              return (R.timeAllocated ?? 0) - (A.timeAllocated ?? 0);
-            }
-            return R.playerCount - A.playerCount;
-          })) ?? [];
-
-  const w = v.length === 0;
-
-  (!h || !h.rank) && (v = v.filter(A => A.playerCount < A.maxPlayers));
-
-  const k = () => {
-    y("");
-    m.onClose();
-  };
-
-  const E = A => {
-    S(R =>
-      A === "All"
-        ? R.includes("All")
-          ? []
-          : ["All"]
-        : R.includes(A)
-        ? R.filter(L => L !== A)
-        : [...R.filter(L => L !== "All"), A]
-    );
-  };
-
-  const T = v.filter(A => {
-    var F, U;
-    const R =
-      ((F = A.worldName)?.toLowerCase().includes(b.toLowerCase())) ||
-      ((U = A.ownerUsername)?.toLowerCase().includes(b.toLowerCase()));
-
-    let L = A.gameMode ?? "unknown";
-    L = L.slice(0, 1).toUpperCase() + L.slice(1);
-
-    const D = x.includes("All") || x.includes(L);
-    return R && D;
-  });
-
-  const C = reactExports.useCallback(lodashExports.throttle(p, 3000), []);
-
-  return jsxRuntimeExports.jsxs(Modal, {
-    isOpen: m.isOpen,
-    onClose: k,
-    isCentered: !0,
-    size: "2xl",
-    children: [
-      jsxRuntimeExports.jsx(ModalOverlay, {}),
-      jsxRuntimeExports.jsxs(ModalContent, {
-        bg: "gray.700",
-        children: [
-          jsxRuntimeExports.jsxs(ModalHeader, {
-            fontSize: "2xl",
-            children: [
-              "Browse Planets - ",
-              T.length,
-              " servers available",
-              jsxRuntimeExports.jsx(Text, {
-                fontSize: "lg",
-                children: "Join a planet to play with others!"
-              })
-            ]
-          }),
-          jsxRuntimeExports.jsx(ModalCloseButton, {}),
-          jsxRuntimeExports.jsxs(ModalBody, {
-            h: "full",
-            children: [
-              jsxRuntimeExports.jsxs(HStack, {
-                children: [
-                  jsxRuntimeExports.jsx(Input, {
-                    placeholder: "Search...",
-                    onChange: A => y(A.target.value)
-                  }),
-                  jsxRuntimeExports.jsx(IconButton, {
-                    icon: jsxRuntimeExports.jsx(FiRefreshCw, { size: 28 }),
-                    onClick: C
-                  })
-                ]
-              }),
-
-              jsxRuntimeExports.jsxs(HStack, {
-                mt: 2,
-                children: [
-                  jsxRuntimeExports.jsx(Text, {
-                    fontSize: "md",
-                    children: "Sort by "
-                  }),
-                  jsxRuntimeExports.jsx(MultiSelect, {
-                    options: ["Players", "Time"],
-                    selectedOptions: [sortBy],
-                    onSelect: A => setSortBy(A)
-                  })
-                ]
-              }),
-              jsxRuntimeExports.jsxs(HStack, {
-                mt: 2,
-                children: [
-                  jsxRuntimeExports.jsx(Text, {
-                    fontSize: "md",
-                    children: "Gamemode "
-                  }),
-                  jsxRuntimeExports.jsx(MultiSelect, {
-                    options: ["All", "Survival", "Adventure", "Creative"],
-                    selectedOptions: x,
-                    onSelect: E
-                  })
-                ]
-              }),
-
-              jsxRuntimeExports.jsx(Divider, { mt: 2, mb: 2 }),
-
-              jsxRuntimeExports.jsx(VStack, {
-                overflowY: "auto",
-                maxH: "40vh",
-                pb: "1em",
-                children:
-                  w
-                    ? jsxRuntimeExports.jsx(Text, {
-                        fontSize: "lg",
-                        children:
-                          "There are currently no planets available to join :("
-                      })
-                    : T.length === 0
-                    ? jsxRuntimeExports.jsx(Text, {
-                        fontSize: "lg",
-                        children: "No planets found"
-                      })
-                    : T.map(A =>
-                        jsxRuntimeExports.jsx(
-                          PlanetItem,
-                          { minigameId: A.id, server: A },
-                          A.id
-                        ))
-              })]
-          })]
-      })]
-  })
-},`;
-
-const planetModelEachPanelReplacement = /*js*/ `const PlanetItem = m => {
-  const u = reactExports.useContext(GameContext),
-        h = m.server.gameMode ?? "unknown";
-
-  const openedAgo = m.server.timeAllocated
-    ? "Opened " + dayjs(m.server.timeAllocated).fromNow()
-    : null;
-
-  return jsxRuntimeExports.jsx(Box, {
-    w: "full",
-    p: "0.5em",
-    position: "relative",
-    fontSize: "md",
-    border: "2px solid grey",
-    _hover: { border: "2px solid white", cursor: "pointer" },
-    onClick: () => { u.connect(m.minigameId); },
-    children: jsxRuntimeExports.jsxs(HStack, {
-      justifyContent: "space-between",
-      w: "full",
-      children: [
-        jsxRuntimeExports.jsxs(VStack, {
-          align: "flex-start",
-          overflowX: "hidden",
-          children: [
-            jsxRuntimeExports.jsx(Text, { children: m.server.worldName }),
-            jsxRuntimeExports.jsxs(Text, {
-              color: "gray.400",
-              fontSize: "sm",
-              children: ["Host: ", m.server.ownerUsername ? m.server.ownerUsername : "Guest"]
-            }),
-            openedAgo && jsxRuntimeExports.jsx(Text, {
-              fontSize: "xs",
-              color: "gray.500",
-              children: openedAgo
-            })
-          ]
-        }),
-        jsxRuntimeExports.jsxs(VStack, {
-          align: "flex-end",
-          children: [
-            jsxRuntimeExports.jsxs(Text, { fontSize: "sm", children: [m.server.playerCount, "/", m.server.maxPlayers] }),
-            jsxRuntimeExports.jsx(Text, { fontSize: "sm", children: h.slice(0,1).toUpperCase() + h.slice(1) }),
-            jsxRuntimeExports.jsx(Text, { fontSize: "sm", children: m.server.worldType ?? "unknown" })
-          ]
-        })
-      ]
-    })
-  })
-},`;
 const leaderboardDEVreplacement = /*js*/ `Leaderboards = () => {
 		const {
 			profile: m
@@ -548,22 +271,6 @@ const leaderboardDEVreplacement = /*js*/ `Leaderboards = () => {
 			})
 		})
 	},`;
-
-export const ADVANCED_BROWSE_PLANETS_MODAL: SingleReplacement = [
-	/BrowsePlanetsModal\s*=\s*\w+\s*=>\s*\{[\s\S]*?\)\s*\)\s*\}\s*\)\s*\]\s*\}\s*\)\s*\]\s*\}\s*\)\s*\]\s*\}\s*\)\s*\}\s*,/g,
-	{
-		replacement: browsePlanetsModalReplacement,
-		shift: Shift.REPLACE,
-	},
-];
-
-export const PLANET_MODEL_EACH_PANEL: SingleReplacement = [
-	/const PlanetItem\s*=\s*\w+\s*=>\s*\{[\s\S]*?\}\)\]\s*\}\)\]\s*\}\s*\)\s*\}\s*\)\s*\}\s*,/g,
-	{
-		replacement: planetModelEachPanelReplacement,
-		shift: Shift.REPLACE,
-	},
-];
 
 export const DEVELOPER_LEADERBOARD: SingleReplacement = [
 	/Leaderboards\s*=\s*\(\s*\)\s*=>\s*\{[\s\S]*?\}\s*\)\s*\]\s*\}\s*\)\s*\]\s*\}\s*\)\s*\]\s*\}\s*\)\s*\]\s*\}\s*\)\s*\}\s*\)\s*\}\s*\)\s*\}\s*,/g,

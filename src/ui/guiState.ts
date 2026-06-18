@@ -32,6 +32,31 @@ export function isCategoryWindowVisible(category: string): boolean {
 	return categoryWindows()[category] || false;
 }
 
+// Category window positions - cascading offsets so they don't overlap
+const initialPositions: Record<string, { x: number; y: number }> = {
+	combat: { x: 240, y: 46 },
+	blatant: { x: 260, y: 76 },
+	render: { x: 280, y: 106 },
+	utility: { x: 300, y: 136 },
+	world: { x: 320, y: 166 },
+	inventory: { x: 340, y: 196 },
+	minigames: { x: 360, y: 226 },
+};
+
+export const [categoryWindowPositions, setCategoryWindowPositions] =
+	createSignal<Record<string, { x: number; y: number }>>(initialPositions);
+
+export function setCategoryWindowPosition(
+	category: string,
+	x: number,
+	y: number,
+) {
+	setCategoryWindowPositions((prev) => ({
+		...prev,
+		[category]: { x, y },
+	}));
+}
+
 // Toggle GUI visibility
 export function toggleGUI() {
 	const newState = !guiVisible();

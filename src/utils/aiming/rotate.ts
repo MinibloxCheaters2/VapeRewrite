@@ -5,9 +5,10 @@
 
 import type { C2SPacket } from "@wq2/miniblox-sdk";
 import Bus from "@/Bus";
-import { Priority, Subscribe } from "@/event/api/Bus";
-import type CancelableWrapper from "@/event/api/CancelableWrapper";
+import { Priority, Subscribe } from "@/event/Bus";
+import type CancelableWrapper from "@/event/CancelableWrapper";
 import Refs from "../helpers/refs";
+import MovementCorrection from "../movement/MovementCorrection";
 import packetQueueManager from "../network/packetQueueManager";
 import { c2s } from "../network/packetRefs";
 import Rotation from "./rotation";
@@ -15,6 +16,7 @@ import Rotation from "./rotation";
 export class RotationPlan {
 	constructor(
 		public target: Rotation,
+		public movementCorrection: MovementCorrection = MovementCorrection.Auto,
 		public resetIn = 1,
 	) {}
 }
@@ -22,6 +24,9 @@ export class RotationPlan {
 export default new (class RotationManager {
 	#currentPlan: RotationPlan | undefined = undefined;
 	#trackedRot = Rotation.ZERO;
+	get currentPlan() {
+		return this.#currentPlan;
+	}
 	get playerRot() {
 		return new Rotation(Refs.player.yaw, Refs.player.pitch);
 	}

@@ -1,15 +1,13 @@
 import HudManager from "./api/HudManager";
 import ArrayListHud from "./impl/ArrayListHud";
-import CPSHud from "./impl/CPSHud";
-import FPSHud from "./impl/FPSHud";
-import KeystrokesHud from "./impl/KeystrokesHud";
+import SpeedHud from "./impl/SpeedHud";
+import TargetHud from "./impl/TargetHud";
 
 // Register all HUD types
 export function initHudSystem() {
 	HudManager.registerHudType(ArrayListHud);
-	HudManager.registerHudType(FPSHud);
-	HudManager.registerHudType(CPSHud);
-	HudManager.registerHudType(KeystrokesHud);
+	HudManager.registerHudType(SpeedHud);
+	HudManager.registerHudType(TargetHud);
 }
 
 export { default as BaseHudElement } from "./api/BaseHudElement";

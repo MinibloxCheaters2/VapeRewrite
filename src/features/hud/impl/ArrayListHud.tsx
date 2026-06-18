@@ -56,7 +56,7 @@ function hsvToRgb(h: number, s: number, v: number, o = 1): string {
 }
 
 export default class ArrayListHud extends HudElement {
-	public name = "ArrayList";
+	public name = "Text GUI";
 
 	constructor() {
 		super();

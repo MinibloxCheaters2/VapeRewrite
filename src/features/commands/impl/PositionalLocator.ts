@@ -1,8 +1,8 @@
 import { argument, literal } from "@wq2/brigadier-ts";
 import type { EntityPlayer, S2CPacket } from "@wq2/miniblox-sdk";
 import Bus from "@/Bus";
-import { Subscribe } from "@/event/api/Bus";
-import type CancelableWrapper from "@/event/api/CancelableWrapper";
+import { Subscribe } from "@/event/Bus";
+import type CancelableWrapper from "@/event/CancelableWrapper";
 import Refs from "@/utils/helpers/refs";
 import { s2c } from "@/utils/network/packetRefs";
 import PlayerArgumentType from "../api/brigadier/PlayerArgumentType";

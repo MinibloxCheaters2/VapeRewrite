@@ -1,5 +1,5 @@
-import { Subscribe } from "@/event/api/Bus";
-import type Cancelable from "@/event/api/Cancelable";
+import { Subscribe } from "@/event/Bus";
+import type Cancelable from "@/event/Cancelable";
 import Refs from "@/utils/helpers/refs";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";

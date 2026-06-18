@@ -5,7 +5,7 @@
  * @module
  */
 
-import { Subscribe } from "@/event/api/Bus";
+import { Subscribe } from "@/event/Bus";
 import Refs from "@/utils/helpers/refs";
 import { c2s } from "@/utils/network/packetRefs";
 import Category from "../../api/Category";

@@ -1,7 +1,20 @@
 import { MAIN_LOGGER as logger } from "@/utils";
 import type Mod from "../modules/api/Module";
 import ModuleManager, { P } from "../modules/api/ModuleManager";
-import type { BaseSetting } from "./Settings";
+import type { AnySetting, BaseSetting } from "./Settings";
+
+function iterSubSettings(mod: Mod, fn: (s: AnySetting) => void) {
+	for (const s of mod.settings) {
+		fn(s);
+		if (s.type === "submodule") {
+			for (const sub of s.submodules) {
+				for (const ss of sub.settings) {
+					fn(ss);
+				}
+			}
+		}
+	}
+}
 
 export interface SerializedSetting<V> {
 	name: string;
@@ -23,9 +36,8 @@ export class ModuleConfig {
 		public settings: SerializedSetting<unknown>[],
 	) {}
 	static from(mod: Mod): ModuleConfig {
-		const settings = mod.settings.map((x) =>
-			serializeBaseSetting<unknown>(x),
-		);
+		const settings: SerializedSetting<unknown>[] = [];
+		iterSubSettings(mod, (s) => settings.push(serializeBaseSetting(s)));
 		return new ModuleConfig(mod.enabled, settings);
 	}
 }
@@ -102,14 +114,13 @@ export function loadConfig(name: string = loadedConfig.name) {
 		// catgpt optimization gg
 		const lookup = new Map(config.settings.map((s) => [s.name, s.value]));
 
-		for (const setting of mod.settings) {
+		iterSubSettings(mod, (setting) => {
 			if (lookup.has(setting.name)) {
-				// why is it doing ts idk cat
 				(setting.setValue as (value: unknown) => void)(
 					lookup.get(setting.name),
 				);
 			}
-		}
+		});
 	}
 }
 
@@ -150,7 +161,10 @@ export function updateLoadedConfig(moduleName?: string, settingName?: string) {
 	}
 
 	// Update specific setting
-	const setting = mod.settings.find((s) => s.name === settingName);
+	let setting: AnySetting | undefined;
+	iterSubSettings(mod, (s) => {
+		if (s.name === settingName) setting = s;
+	});
 	if (!setting) return;
 
 	const serialized = serializeBaseSetting<unknown>(setting);

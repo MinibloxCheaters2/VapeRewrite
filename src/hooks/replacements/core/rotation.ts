@@ -1,7 +1,12 @@
-import { type MultipleReplacements, Shift } from "@/hooks/replacementTypes";
-import { ROTATION_MANAGER } from "@/utils/helpers/patchHelper";
+import {
+	type MultipleReplacements,
+	Shift,
+	type SingleReplacement,
+} from "@/hooks/replacementTypes";
+import { EXPOSED, ROTATION_MANAGER } from "@/utils/helpers/patchHelper";
 
 const ACTIVE_YAW = `${ROTATION_MANAGER}.activeRotation.yaw`;
+const CURRENT_PLAN = `${ROTATION_MANAGER}.currentPlan`;
 
 export const ROTATION_REPLACEMENTS: MultipleReplacements = [
 	[
@@ -39,23 +44,34 @@ export const ROTATION_REPLACEMENTS: MultipleReplacements = [
 			shift: Shift.REPLACE,
 		},
 	],
-	// stops applyInput from changing our yaw and correcting our movement,
-	// but that makes the server setback us when we go too far
-	// from the predicted pos since we don't do movement correction
-	// TODO, would it be better to send an empty input packet with the sendYaw instead?
-	// I can't be asked to work on fixing this not working on the prediction ac
 	[
-		"this.yaw=h.yaw,this.pitch=h.pitch,",
+		",this.yaw=h.yaw,this.pitch=h.pitch,",
 		{
-			replacement: "",
+			replacement: `;
+if (!(${CURRENT_PLAN}) || ${EXPOSED}.doMovementCorrection(${CURRENT_PLAN}.movementCorrection)) {
+	this.yaw = h.yaw;
+	this.pitch = h.pitch;
+};`,
 			shift: Shift.REPLACE,
 		},
 	],
 	[
 		"this.setPositionAndRotation(this.pos.x,this.pos.y,this.pos.z,h.yaw,h.pitch)",
 		{
-			replacement: "undefined",
-			shift: Shift.REPLACE,
+			replacement: `!(${CURRENT_PLAN}) || ${EXPOSED}.doMovementCorrection(${CURRENT_PLAN}.movementCorrection) &&`,
+			shift: Shift.BEFORE,
 		},
 	],
+];
+
+// PlayerMovement#updatePlayerMoveState
+export const SILENT_MOVEMENT_CORRECTION: SingleReplacement = [
+	"this.moveStrafe = (h.right ? 1 : 0) + (h.left ? -1 : 0),",
+	{
+		replacement: `if (${CURRENT_PLAN} !== undefined
+&& ${EXPOSED}.getEffectiveMode(${CURRENT_PLAN}.movementCorrection) === ${EXPOSED}.MovementCorrection.Silent) {
+	${EXPOSED}.doSilentMovementCorrection(h, this.yaw);
+}`,
+		shift: Shift.BEFORE,
+	},
 ];

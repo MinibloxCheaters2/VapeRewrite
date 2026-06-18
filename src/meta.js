@@ -40,6 +40,10 @@
 // @resource    inventory https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/category/inventory.png
 // @resource    render https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/category/render.png
 // @resource    world https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/category/world.png
+// @resource    overlaysicon https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/overlays/icon.png
+// @resource    guiback https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/misc/back.png
+// @resource    search https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/search.png
+// @resource    legit https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/misc/legit.png
 // @run-at      document-start
 // ==/UserScript==
 

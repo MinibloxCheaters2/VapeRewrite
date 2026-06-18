@@ -13,15 +13,15 @@ const DUMP_REGEXES = {
 	entities:
 		/this\.([a-zA-Z]*)\.values\(\)\)\s*[a-zA-Z]* instanceof EntityLiving/m,
 	// PlayerControllerMP#updateMouseOver
-	isInvisible: /\.mode\.isSpectator\(\)\s*\|\|\s*w\.([a-zA-Z]*)\(\)/m,
-	// attackTargetEntityWithCurrentItem
-	attack: /hitVec.z\}\)\}\)\),player\.([a-zA-Z]*)/,
+	isInvisible: /\.mode\.isSpectator\(\)\s*\|\|\s*[a-zA-Z]*\.([a-zA-Z]*)\(\)/m,
+	// attackTargetEntityWithCurrentItem, in PlayerController#attackEntity
+	attack: /player\.inputSequenceNumber\}\)\),player\.([a-zA-Z]*)/,
 	lastReportedYaw: /this\.([a-zA-Z]*)=this\.yaw,this\.last/m,
 	windowClick: /([a-zA-Z]*)\(this\.inventorySlots\.windowId/m,
 	damageReduceAmount:
 		/ItemArmor\s*&&\s*\([a-zA-Z]+\s*\+=\s*[a-zA-Z]*\.item\.([a-zA-Z]*)/,
 	playerController: /const ([a-zA-Z]*)\s*=\s*new\s+PlayerController,/,
-	boxGeometry: /w\s*=\s*new\s+Mesh\s*\(new ([a-zA-Z]*)\(1/m,
+	boxGeometry: /\s*=\s*new\s+Mesh\s*\(new ([a-zA-Z]*)\(1/m,
 	// playerControllerMP
 	syncItem: /([a-zA-Z]*)\(\),\n*\s*ClientSocket\.sendPacket/m,
 	// GLTF manager
@@ -38,9 +38,10 @@ const DUMP_REGEXES = {
 	getFlag:
 		/([a-zA-Z]+)\(([a-zA-Z]+)\)\s*{\s*\n*return\s*\(this\.dataWatcher\.getWatchableObjectByte\(0\)&1<<([a-zA-Z]+)\)!=0}/,
 	setFlag:
-		/setSprinting\(u\)\s*\{\n*\s*this\.([a-zA-Z]+)\([0-9]+,\s*([a-zA-Z]+)\)/,
+		/setSprinting\(\w+\)\s*\{\n*\s*this\.([a-zA-Z]+)\([0-9]+,\s*([a-zA-Z]+)\)/,
+	//EntityManager#shouldRenderEntity
 	isInvisibleToPlayer:
-		/!u\.world\.isBlockLoaded\(BlockPos\.fromVector\(u.pos\)\)\s*\|\|\n*\s*u\.([a-zA-Z]*)\(player\)/m,
+		/![a-zA-Z]+\.world\.isBlockLoaded\(_blockPos\)\)\s*\|\|!\w+&&\n*\s*[a-zA-Z]+\.([a-zA-Z]*)\(player\)/m,
 } as const;
 
 export type DumpKey = keyof typeof DUMP_REGEXES;

@@ -5,6 +5,7 @@ import swc from "@wq2/rolldown-plugin-swc";
 import solid from "@wq2/rolldown-plugin-solid-oxc";
 import { withFilter } from "rolldown/filter";
 import minify from "./minifyPlugin";
+import inlineCSS from "./inlineCSS";
 
 const { packageJson } = (await readPackageUp())!;
 
@@ -40,6 +41,7 @@ export default defineConfig({
 		withFilter(solid(), {
 			transform: { moduleType: ["jsx", "tsx"] },
 		}),
+		inlineCSS(),
 		// this MUST be before UserScript, so the comments from it won't be removed.
 		process.env.NODE_ENV === "production" ? minify() : undefined,
 		userscript(
@@ -68,8 +70,9 @@ export default defineConfig({
 		format: "iife",
 		file: `dist/vape-rewrite.user.js`,
 		minify: false,
-		sourcemap: "inline",
+		sourcemap: false, // sadly this doesn't work since we broke it with something
 	},
+	emitAssets: false, // if available in your version
 	resolve: {
 		tsconfigFilename: "./tsconfig.json",
 	},

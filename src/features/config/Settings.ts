@@ -36,6 +36,18 @@ export function getName(m: ModeLike): string {
 	return m.tag;
 }
 
+export interface SubmoduleItem {
+	name: string;
+	settings: AnySetting[];
+}
+
+export interface SubmoduleSetting extends BaseSetting<string> {
+	type: "submodule";
+	value: Accessor<string>;
+	setValue: (value: string) => void;
+	submodules: SubmoduleItem[];
+}
+
 export interface DropdownSetting<V extends ModeLike = string>
 	extends BaseSetting<V> {
 	type: "dropdown";
@@ -69,4 +81,5 @@ export type AnySetting =
 	| SliderSetting
 	| DropdownSetting<ModeLike>
 	| TextBoxSetting
-	| ColorSliderSetting;
+	| ColorSliderSetting
+	| SubmoduleSetting;

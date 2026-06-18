@@ -15,7 +15,7 @@ export const NO_STORE_NAME_RANDOMIZATION = false;
 export const NO_FG_EXPOSED_RANDOMIZATION = false;
 //#endregion
 //#region Hooks
-const UPDATING_MODE = false;
+const UPDATING_MODE = true;
 /** Checks for unmatched replacements, and if found, logs the unmatched replacements into the console */
 export const CHECK_UNMATCHED_REPLACEMENTS = UPDATING_MODE;
 /** Checks for unmatched dumps, and if found, logs the unmatched dumps into the console. */

@@ -8,6 +8,8 @@ import type {
 	DropdownSetting,
 	ModeLike,
 	SliderSetting,
+	SubmoduleItem,
+	SubmoduleSetting,
 	TextBoxSetting,
 	ToggleSetting,
 } from "./Settings";
@@ -21,6 +23,7 @@ export default class Configurable {
 		name: string,
 		defaultValue = false,
 		visible?: () => boolean,
+		target: AnySetting[] = this.settings,
 	): ToggleSetting {
 		const [value, setValueSignal] = createSignal(defaultValue);
 		const setting: ToggleSetting = {
@@ -33,7 +36,7 @@ export default class Configurable {
 			},
 			visible,
 		};
-		this.settings.push(setting);
+		target.push(setting);
 		return setting;
 	}
 
@@ -44,6 +47,7 @@ export default class Configurable {
 		max: number,
 		step?: number,
 		visible?: () => boolean,
+		target: AnySetting[] = this.settings,
 	): SliderSetting {
 		const [value, setValueSignal] = createSignal(defaultValue);
 		const setting: SliderSetting = {
@@ -60,7 +64,7 @@ export default class Configurable {
 			step,
 			visible,
 		};
-		this.settings.push(setting);
+		target.push(setting);
 		return setting;
 	}
 
@@ -69,6 +73,7 @@ export default class Configurable {
 		options: V[],
 		defaultValue: V = options[0],
 		visible?: () => boolean,
+		target: AnySetting[] = this.settings,
 	): DropdownSetting<V> {
 		const [value, setValueSignal] = createSignal(
 			defaultValue ?? options[0],
@@ -85,7 +90,7 @@ export default class Configurable {
 			options,
 			visible,
 		};
-		this.settings.push(setting as unknown as DropdownSetting<ModeLike>);
+		target.push(setting as unknown as DropdownSetting<ModeLike>);
 		return setting;
 	}
 
@@ -94,6 +99,7 @@ export default class Configurable {
 		defaultValue = "",
 		placeholder?: string,
 		visible?: () => boolean,
+		target: AnySetting[] = this.settings,
 	): TextBoxSetting {
 		const [value, setValueSignal] = createSignal(defaultValue);
 		const setting: TextBoxSetting = {
@@ -106,6 +112,37 @@ export default class Configurable {
 					updateLoadedConfig((this as Mod).name, name);
 			},
 			placeholder,
+			visible,
+		};
+		target.push(setting);
+		return setting;
+	}
+
+	protected createSubmoduleGroup(
+		name: string,
+		submoduleNames: string[],
+		defaultSelected?: string,
+		visible?: () => boolean,
+	): SubmoduleSetting {
+		const [value, setValueSignal] = createSignal(
+			defaultSelected ?? submoduleNames[0],
+		);
+
+		const items: SubmoduleItem[] = submoduleNames.map((n) => ({
+			name: n,
+			settings: [],
+		}));
+
+		const setting: SubmoduleSetting = {
+			type: "submodule",
+			name,
+			value,
+			setValue: (v) => {
+				setValueSignal(v);
+				if (this instanceof Mod)
+					updateLoadedConfig((this as Mod).name, name);
+			},
+			submodules: items,
 			visible,
 		};
 		this.settings.push(setting);

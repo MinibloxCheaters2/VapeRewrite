@@ -7,13 +7,6 @@ const replacementWorldTypes = /*js*/ `availableWorldTypes = {
 	},`;
 
 const STAFF_RANK = "1000";
-export const FORCE_ENABLE_RANK_GIFTING: SingleReplacement = [
-	/*js*/ `jsxRuntimeExports.jsx("option",{value:"legend",children:"Legend"})`,
-	{
-		replacement: /*js*/ `,jsxRuntimeExports.jsx("option", { value: "immortal", children: "Immortal" })`,
-		shift: Shift.AFTER,
-	},
-];
 
 export const ENABLE_ALL_WORLD_TYPES: SingleReplacement = [
 	/availableWorldTypes\s*=\s*\{[\s\S]*?\}\s*,/g,
@@ -50,9 +43,9 @@ export const STAFF_DETECTION: SingleReplacement = [
 	/*js*/ `ClientSocket.on("CPacketUpdateStatus",h=>{`,
 	{
 		replacement: /*js*/ `
-		if (h.rank && h.rank != "" && RANK.LEVEL[h.rank].permLevel > 1) {
+		if (l.rank && l.rank != "" && RANK.LEVEL[l.rank].permLevel > 1) {
 			game.chat.addChat({
-				text: "STAFF DETECTED : " + h.rank + "\\n".repeat(10),
+				text: "STAFF DETECTED : " + l.rank + "\\n".repeat(10),
 				color: "red"
 			});
 		}

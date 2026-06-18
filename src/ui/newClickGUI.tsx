@@ -6,18 +6,14 @@ import {
 	onMount,
 	Show,
 } from "solid-js";
-import { render } from "solid-js/web";
-import Category, {
-	type CategoryData,
-	type CategoryInfo,
-	categoryInfoSet,
-} from "@/features/modules/api/Category";
+import Category, { type CategoryInfo } from "@/features/modules/api/Category";
 import type Mod from "@/features/modules/api/Module";
 import ModuleManager, { P } from "@/features/modules/api/ModuleManager";
 import {
 	ColorSliderComponent,
 	DropdownComponent,
 	SliderComponent,
+	SubmoduleComponent,
 	TextBoxComponent,
 	ToggleComponent,
 } from "./components";
@@ -39,25 +35,25 @@ const COLORS = {
 
 import getResourceURL from "@/utils/helpers/cachedResourceURL";
 import { dragHandleAttrName } from "@/utils/mapping/names";
-import shadowWrapper from "./shadowWrapper";
 
 interface CategoryWindowProps {
 	category: string;
 	info: CategoryInfo;
-	position: { x: number; y: number };
+	position?: { x: number; y: number };
 }
 
-function CategoryWindow(props: CategoryWindowProps) {
+export function CategoryWindow(props: CategoryWindowProps) {
 	const [expanded, setExpanded] = createSignal(false);
-	const [position, setPosition] = createSignal(props.position);
+	const [position, setPosition] = createSignal(
+		props.position ?? { x: 6, y: 60 },
+	);
 	const [dragging, setDragging] = createSignal(false);
 	const [dragOffset, setDragOffset] = createSignal({ x: 0, y: 0 });
 	const [windowHeight, setWindowHeight] = createSignal(41);
 	const [updateTrigger, setUpdateTrigger] = createSignal(0);
 
 	const modules = ModuleManager.findModules(
-		//@ts-expect-error: When compiled, TypeScript enums with number values have string aliases. `Enum[Enum["K"] = 0] = "K";`
-		P.byCategory(Category[props.category]),
+		P.byCategory(Category[props.category.toUpperCase()]),
 	);
 
 	let windowRef: HTMLDivElement | undefined;
@@ -159,7 +155,7 @@ function CategoryWindow(props: CategoryWindowProps) {
 					"border-radius": "5px",
 					"box-shadow":
 						"0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)",
-					"z-index": "10000",
+					"z-index": "10002",
 					overflow: "hidden",
 					"user-select": "none",
 					transition: "height 0.16s linear",
@@ -540,6 +536,20 @@ function ModuleSettings(props: { mod: Mod; onExpandChange: () => void }) {
 													onChange={setting.setValue}
 												/>
 											);
+										case "submodule":
+											return (
+												<SubmoduleComponent
+													name={setting.name}
+													value={setting.value()}
+													submodules={
+														setting.submodules
+													}
+													onChange={setting.setValue}
+													onExpandChange={
+														props.onExpandChange
+													}
+												/>
+											);
 										case "colorslider":
 											return (
 												<ColorSliderComponent
@@ -565,44 +575,5 @@ function ModuleSettings(props: { mod: Mod; onExpandChange: () => void }) {
 }
 
 export function initNewClickGUI() {
-	const container = document.createElement("div");
-	container.id = "new-clickgui-container";
-	shadowWrapper.wrapper.appendChild(container);
-
-	const priority = {
-		Combat: 2,
-		Blatant: 3,
-		Render: 4,
-		Utility: 5,
-		World: 6,
-		Inventory: 7,
-		Minigames: 8,
-	} as Record<CategoryData["name"], number>;
-
-	let catIdx = 0;
-	for (const [cat, info] of Object.entries(categoryInfoSet).sort(
-		([an], [bn]) => {
-			return (priority[an] ?? 99) - (priority[bn] ?? 99);
-		},
-	)) {
-		// Position windows horizontally, starting at x=236 (after main GUI at x=6, width=220)
-		const left = 236 + catIdx * 226; // 226 = 220 (width) + 6 (gap)
-		const top = 60;
-
-		const categoryContainer = document.createElement("div");
-		container.appendChild(categoryContainer);
-
-		render(
-			() => (
-				<CategoryWindow
-					category={cat}
-					info={info}
-					position={{ x: left, y: top }}
-				/>
-			),
-			categoryContainer,
-		);
-
-		catIdx++;
-	}
+	// Category windows are now rendered within MainGUI.tsx
 }

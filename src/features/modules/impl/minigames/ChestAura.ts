@@ -1,5 +1,5 @@
 import type { BlockPos } from "@wq2/miniblox-sdk";
-import { Subscribe } from "@/event/api/Bus";
+import { Subscribe } from "@/event/Bus";
 import { blockHandlers, oneInRange } from "@/utils";
 import Refs from "@/utils/helpers/refs";
 import Category from "../../api/Category";

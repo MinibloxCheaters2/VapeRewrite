@@ -3,13 +3,19 @@
  * @module
  */
 
-import Cancelable from "@/event/api/Cancelable";
+import Cancelable from "@/event/Cancelable";
 import dispatcher from "@/features/commands/api/CommandDispatcher";
 import ModuleManager from "@/features/modules/api/ModuleManager";
 import RotationManager from "@/utils/aiming/rotate";
+import DesyncManager from "@/utils/movement/DesyncManager";
+import MovementCorrection, {
+	doMovementCorrection,
+	doSilentMovementCorrection,
+	getEffectiveMode,
+} from "@/utils/movement/MovementCorrection";
 import Bus from "../Bus";
-import CancelableWrapper from "../event/api/CancelableWrapper";
-import type ClientEvents from "../event/api/Events";
+import CancelableWrapper from "../event/CancelableWrapper";
+import type ClientEvents from "../event/Events";
 import ChatHook from "./ChatHook";
 import { MATCHED_DUMPS } from "./replacement";
 
@@ -47,22 +53,17 @@ export default {
 	) {
 		Bus.emit(event, ...payload);
 	},
-	get moduleManager() {
-		return ModuleManager;
-	},
-	get RotationManager() {
-		return RotationManager;
-	},
-
+	getEffectiveMode,
+	MovementCorrection,
+	doMovementCorrection,
+	doSilentMovementCorrection,
+	moduleManager: ModuleManager,
+	RotationManager,
+	DesyncManager,
+	// this HAS to be a getter, since it is undefined at start, but it then later gets set.
 	get dump() {
 		return MATCHED_DUMPS;
 	},
-
-	get ChatHook() {
-		return ChatHook;
-	},
-
-	get commandManager() {
-		return dispatcher;
-	},
+	ChatHook,
+	commandManager: dispatcher,
 };

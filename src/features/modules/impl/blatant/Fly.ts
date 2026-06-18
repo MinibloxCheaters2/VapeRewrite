@@ -1,7 +1,8 @@
 import Bus from "@/Bus";
-import { Subscribe } from "@/event/api/Bus";
+import { Subscribe } from "@/event/Bus";
 import Refs from "@/utils/helpers/refs";
 import isKeyDown from "@/utils/input/key";
+import DesyncManager from "@/utils/movement/DesyncManager";
 import getMoveDirection from "@/utils/movement/movement";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
@@ -18,22 +19,41 @@ export default class Fly extends Mod {
 	public name = "Fly";
 	public category = Category.BLATANT;
 
-	// Mode selection
-	private modeSetting = this.createDropdownSetting(
-		"Mode",
+	// Mode selection as submodules with nested settings
+	private modesGroup = this.createSubmoduleGroup(
+		"Modes",
 		["Normal", "Infinite (Old AC)"],
 		"Normal",
 	);
 
-	// Speed settings (all modes)
+	// Settings inside "Normal" submodule
+	private normalSub = this.modesGroup.submodules[0];
+	private desyncSetting = this.createToggleSetting(
+		"Desync",
+		true,
+		undefined,
+		this.normalSub.settings,
+	);
 	private speedSetting = this.createSliderSetting(
 		"Speed",
 		0.18,
 		0.05,
 		2.0,
 		0.01,
-		() => this.modeSetting.value() === "Normal",
+		undefined,
+		this.normalSub.settings,
 	);
+
+	// Settings inside "Infinite (Old AC)" submodule
+	private infiniteSub = this.modesGroup.submodules[1];
+	private lessVerticalMovement = this.createToggleSetting(
+		"Less Vertical Movement",
+		true,
+		undefined,
+		this.infiniteSub.settings,
+	);
+
+	// Module-level setting (shared across modes)
 	private verticalSetting = this.createSliderSetting(
 		"Vertical",
 		0.12,
@@ -42,12 +62,19 @@ export default class Fly extends Mod {
 		0.01,
 	);
 
-	// Infinite mode settings
-	private lessVerticalMovement = this.createToggleSetting(
-		"Less Vertical Movement",
-		true,
-		() => this.modeSetting.value() === "Infinite (Old AC)",
-	);
+	private desynced = false;
+
+	private get mode(): string {
+		return this.modesGroup.value();
+	}
+
+	private get desync(): boolean {
+		return this.desyncSetting.value();
+	}
+
+	private get lessVertical(): boolean {
+		return this.lessVerticalMovement.value();
+	}
 
 	// State
 	private ticks = 0;
@@ -56,10 +83,8 @@ export default class Fly extends Mod {
 	protected onEnable(): void {
 		this.ticks = 0;
 
-		const mode = this.modeSetting.value();
-
 		// Show mode-specific warnings
-		if (mode === "Infinite (Old AC)" && !this.warned) {
+		if (this.mode === "Infinite (Old AC)" && !this.warned) {
 			Refs.chat.addChat({
 				text: "Infinite Fly only works on servers using the old AC",
 				color: "yellow",
@@ -73,18 +98,21 @@ export default class Fly extends Mod {
 	}
 
 	protected onDisable(): void {
+		if (this.desynced) {
+			DesyncManager.desync = false;
+			this.desynced = false;
+		}
 		const { player } = Refs;
-		const mode = this.modeSetting.value();
 
 		// Smooth stop for certain modes
-		if (mode === "Normal") {
+		if (this.mode === "Normal") {
 			// Clamp motion to prevent sudden drops
 			player.motion.x = Math.max(Math.min(player.motion.x, 0.3), -0.3);
 			player.motion.z = Math.max(Math.min(player.motion.z, 0.3), -0.3);
 		}
 
 		// Infinite mode smooth stop
-		if (mode === "Infinite (Old AC)" && this.lessVerticalMovement.value()) {
+		if (this.mode === "Infinite (Old AC)" && this.lessVertical) {
 			let stopTicks = 4;
 			Bus.onceB("gameTick", () => {
 				const { player } = Refs;
@@ -103,9 +131,7 @@ export default class Fly extends Mod {
 
 	@Subscribe("gameTick")
 	public onTick() {
-		const mode = this.modeSetting.value();
-
-		switch (mode) {
+		switch (this.mode) {
 			case "Normal":
 				this.normalFly();
 				break;
@@ -116,6 +142,10 @@ export default class Fly extends Mod {
 	}
 
 	private normalFly(): void {
+		if (this.desync && !DesyncManager.desync) {
+			DesyncManager.desync = true;
+			this.desynced = true;
+		}
 		const { player } = Refs;
 		const dir = getMoveDirection(this.speedSetting.value());
 
@@ -159,13 +189,13 @@ export default class Fly extends Mod {
 				? this.verticalSetting.value()
 				: -this.verticalSetting.value();
 		} // Go up only every 2 ticks, barely helps.
-		else if (!this.lessVerticalMovement.value() || this.ticks % 2 === 0) {
+		else if (!this.lessVertical || this.ticks % 2 === 0) {
 			player.motion.y = 0.18;
 		}
 	}
 
 	public getTag(): string {
-		const mode = this.modeSetting.value();
+		const mode = this.mode;
 		const speed = this.speedSetting.value().toFixed(2);
 
 		switch (mode) {

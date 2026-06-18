@@ -1,5 +1,5 @@
 import type { C2SPacket, Entity } from "@wq2/miniblox-sdk";
-import { Subscribe } from "@/event/api/Bus";
+import { Subscribe } from "@/event/Bus";
 import Refs from "@/utils/helpers/refs";
 import { SimpleVec3 } from "@/utils/math/vec";
 import { findTargets } from "@/utils/movement/target";

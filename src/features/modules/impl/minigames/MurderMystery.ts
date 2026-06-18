@@ -1,6 +1,6 @@
 import type { ItemStack, S2CPacket } from "@wq2/miniblox-sdk";
-import { Subscribe } from "@/event/api/Bus";
-import type CancelableWrapper from "@/event/api/CancelableWrapper";
+import { Subscribe } from "@/event/Bus";
+import type CancelableWrapper from "@/event/CancelableWrapper";
 import { showNotification } from "@/ui/notifications";
 import { s2c } from "@/utils";
 import Refs from "@/utils/helpers/refs";

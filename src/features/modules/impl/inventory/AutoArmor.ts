@@ -1,6 +1,6 @@
 import type { ItemStack, Slot } from "@wq2/miniblox-sdk";
 import { SlotActionType } from "@wq2/miniblox-sdk";
-import { Subscribe } from "@/event/api/Bus";
+import { Subscribe } from "@/event/Bus";
 import Refs from "@/utils/helpers/refs";
 import remapObj from "@/utils/helpers/remapProxy";
 import { dropItem } from "@/utils/inventory";

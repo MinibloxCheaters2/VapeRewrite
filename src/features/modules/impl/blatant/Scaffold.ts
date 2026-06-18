@@ -1,9 +1,8 @@
 import type { BlockPos, EnumFacing } from "@wq2/miniblox-sdk";
 import type { Vector3 } from "three";
-import { Subscribe } from "@/event/api/Bus";
-import Interop from "@/exposedO";
-import { MATCHED_DUMPS } from "@/hooks/replacement";
+import { Subscribe } from "@/event/Bus";
 import Refs from "@/utils/helpers/refs";
+import isKeyDown from "@/utils/input/key";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 
@@ -29,6 +28,17 @@ export default class Scaffold extends Mod {
 		1,
 	);
 	private sameYSetting = this.createToggleSetting("Same Y", false);
+	private clutchModeSetting = this.createDropdownSetting("Clutch mode", [
+		"Air Place",
+		"Clutch",
+	]);
+
+	private autoJumpSetting = this.createToggleSetting("Auto Jump", false);
+	private autoJumpOnlySprintSetting = this.createToggleSetting(
+		"Jump only when sprinting",
+		false,
+		() => this.autoJump,
+	);
 
 	// State
 	private oldHeldSlot?: number;
@@ -53,6 +63,17 @@ export default class Scaffold extends Mod {
 
 	get sameY() {
 		return this.sameYSetting.value();
+	}
+
+	get clutchMode() {
+		return this.clutchModeSetting.value();
+	}
+
+	get autoJump() {
+		return this.autoJumpSetting.value();
+	}
+	get autoJumpOnlySprint() {
+		return this.autoJumpOnlySprintSetting.value();
 	}
 
 	protected onEnable(): void {
@@ -101,8 +122,13 @@ export default class Scaffold extends Mod {
 	}
 
 	private getPossibleSides(pos: BlockPos): EnumFacing | null {
-		const { EnumFacing, game, player, Materials } = Refs;
-		if (!EnumFacing || !game || !Materials) return null;
+		const { player, EnumFacing, game, Materials } = Refs;
+		if (
+			this.clutchMode === "Air Place" &&
+			pos.y <= Math.floor(player.pos.y)
+		) {
+			return player.getHorizontalFacing();
+		}
 
 		for (const side of EnumFacing.VALUES) {
 			const offset = side.toVector();
@@ -117,7 +143,7 @@ export default class Scaffold extends Mod {
 				return side.getOpposite();
 			}
 		}
-		return player.getHorizontalFacing();
+		return null;
 	}
 
 	private getRandomHitVec(placePos: BlockPos, face: EnumFacing): Vector3 {
@@ -148,23 +174,14 @@ export default class Scaffold extends Mod {
 
 	@Subscribe("gameTick")
 	onTick(): void {
-		const {
-			player,
-			game,
-			BlockPos,
-			ItemBlock,
-			playerControllerMP,
-			playerController,
-		} = Refs;
+		const { player, game, BlockPos, ItemBlock, playerController } = Refs;
 
 		if (
-			!player ||
-			!game ||
-			!BlockPos ||
-			!playerControllerMP ||
-			!playerController
+			this.autoJump &&
+			player.onGround &&
+			(!this.autoJumpOnlySprint || player.isSprinting())
 		) {
-			return;
+			player.jump();
 		}
 
 		this.tickCount++;
@@ -184,12 +201,6 @@ export default class Scaffold extends Mod {
 
 		const item = player.inventory.getCurrentItem();
 		if (!item || !(item.getItem() instanceof ItemBlock)) return;
-
-		// Get key pressed function
-		const keyPressedDump = MATCHED_DUMPS.keyPressedPlayer;
-		const keyPressed: ((key: string) => boolean) | null = keyPressedDump
-			? Interop.run((e) => e(keyPressedDump))
-			: null;
 
 		// Check if player is moving
 		const isMoving = player.moveForward !== 0 || player.moveStrafe !== 0;
@@ -272,7 +283,7 @@ export default class Scaffold extends Mod {
 							if (side) {
 								placeSide = side;
 								found = true;
-								// break;
+								break;
 							}
 						}
 					}
@@ -295,7 +306,7 @@ export default class Scaffold extends Mod {
 			const hitVec = this.getRandomHitVec(placePos, placeSide);
 
 			// Tower mode
-			if (this.tower && keyPressed?.("space") && player.onGround) {
+			if (this.tower && isKeyDown("space") && player.onGround) {
 				const centerDist = Math.sqrt(
 					(player.pos.x - (playerX + 0.5)) ** 2 +
 						(player.pos.z - (playerZ + 0.5)) ** 2,

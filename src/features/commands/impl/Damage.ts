@@ -9,7 +9,7 @@ dispatcher.register(
 			for (let i = 1; i < amount; i++) {
 				Refs.game.controller.objectMouseOver.hitVec =
 					Refs.player.pos.clone();
-				Refs.game.controller.attackEntity(Refs.player);
+				Refs.playerController.attackEntity(Refs.player);
 			}
 			Refs.chat.addChat({
 				text: `Dealt ${amount} damage!`,

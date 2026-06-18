@@ -6,36 +6,36 @@ const SCAFFOLD = `${MOD_MANAGER}.scaffold`;
 
 export const PHASE_REPLACEMENTS: MultipleReplacements = [
 	[
-		`calculateXOffset(A,this.getEntityBoundingBox(),g.x)`,
+		`calculateXOffset(R,w,g.x)`,
 		{
-			replacement: `${PHASE}.enabled ? g.x : calculateXOffset(A,this.getEntityBoundingBox(),g.x)`,
+			replacement: `${PHASE}.enabled ? g.x : calculateXOffset(R,w,g.x)`,
 			shift: Shift.REPLACE,
 		},
 	],
 
 	[
-		`calculateYOffset(A,this.getEntityBoundingBox(),g.y)`,
+		`calculateYOffset(R,v,g.y)`,
 		{
 			replacement: `${PHASE}.enabled
 				&& !${SCAFFOLD}.enabled
 				&& keyPressedPlayer("Shift")
 					? g.y
-					: calculateYOffset(A,this.getEntityBoundingBox(),g.y)
+					: calculateYOffset(R,v,g.y)
 				`,
 			shift: Shift.REPLACE,
 		},
 	],
 
 	[
-		`calculateZOffset(A,this.getEntityBoundingBox(),g.z)`,
+		`calculateZOffset(R,w,g.z)`,
 		{
-			replacement: `${PHASE}.enabled ? g.z : calculateZOffset(A,this.getEntityBoundingBox(),g.z)`,
+			replacement: `${PHASE}.enabled ? g.z : calculateZOffset(R,b,g.z)`,
 			shift: Shift.REPLACE,
 		},
 	],
 
 	[
-		`pushOutOfBlocks(u,h,p){`,
+		/pushOutOfBlocks\([\w,]\)\{/,
 		{
 			replacement: `if (${PHASE}.enabled) return;`,
 			shift: Shift.AFTER,

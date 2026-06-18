@@ -4,10 +4,10 @@ export enum Category {
 	COMBAT,
 	BLATANT,
 	RENDER,
-	WORLD,
-	MINIGAMES,
-	INVENTORY,
 	UTILITY,
+	WORLD,
+	INVENTORY,
+	MINIGAMES,
 }
 export default Category;
 

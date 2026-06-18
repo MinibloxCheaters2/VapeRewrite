@@ -1,5 +1,5 @@
 // idk if this works lmao
-import { Subscribe } from "@/event/api/Bus";
+import { Subscribe } from "@/event/Bus";
 import { defaultFilter, oneInRange } from "@/utils";
 import Refs from "@/utils/helpers/refs";
 import Category from "../../api/Category";

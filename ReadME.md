@@ -1,5 +1,8 @@
 # VapeRewrite
 
+> [!IMPORTANT]
+> For some reason, you NEED to have Synchronous `page` mode enabled. See here: chrome-extension://jinjaccalgkegednnccohejagnlnfdag/options/index.html#settings
+
 A new Userscript for Vape! This time, I'm not slacking.
 While this is in progress, Vape and Impact will receive no updates beyond critical fixes.
 

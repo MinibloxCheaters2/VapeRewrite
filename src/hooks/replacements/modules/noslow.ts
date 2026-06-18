@@ -13,9 +13,9 @@ export const NOSLOW_REPLACEMENTS: MultipleReplacements = [
 	],
 
 	[
-		"v&&!this.isUsingItem()",
+		"b&&!this.isUsingItem()",
 		{
-			replacement: /*js*/ `v&&!(this.isUsingItem() && !${NOSLOW}.enabled)`,
+			replacement: /*js*/ `b&&!(this.isUsingItem() && !${NOSLOW}.enabled)`,
 			shift: Shift.REPLACE,
 		},
 	],

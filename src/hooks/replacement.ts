@@ -40,6 +40,11 @@ function fixedEntries<K extends string | number | symbol, V>(
 	return Object.entries(x) as [K, V][]; // holy who wrote these typings LOL, there should be an extra type parameter for the key :sob:
 }
 
+/**
+ * Only use this on the main script.
+ * @param code original code
+ * @returns modified code
+ */
 export default function modifyCode(code: string): string {
 	MATCHED_DUMPS ??= {} as DumpKey2Name;
 	let modified = code;
