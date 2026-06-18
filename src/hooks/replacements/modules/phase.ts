@@ -29,7 +29,7 @@ export const PHASE_REPLACEMENTS: MultipleReplacements = [
 	[
 		`calculateZOffset(R,w,g.z)`,
 		{
-			replacement: `${PHASE}.enabled ? g.z : calculateZOffset(R,b,g.z)`,
+			replacement: `${PHASE}.enabled ? g.z : calculateZOffset(R,w,g.z)`,
 			shift: Shift.REPLACE,
 		},
 	],
