@@ -32,7 +32,7 @@
 	},
 	"devDependencies": {
 		"@wq2/miniblox-sdk": "^0.0.1",
-		"@biomejs/biome": "^2.5.1",
+		"@biomejs/biome": "^2.5.0",
 		"@types/three": "^0.158.3",
 		"@violentmonkey/types": "^0.3.3",
 		"@wq2/rolldown-plugin-solid-oxc": "^0.1.2",
@@ -44,7 +44,7 @@
 		"@wq2/rolldown-plugin-swc": "^0.0.2",
 		"rolldown-plugin-userscript": "^1.1.1",
 		"socket.io-client": "^4.8.3",
-		"typescript": "^7.0.0"
+		"typescript": "^6.0.3"
 	},
 	"lint-staged": {
 		"*.{ts,tsx,js,css}": [
