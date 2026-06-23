@@ -33,7 +33,7 @@
 	"devDependencies": {
 		"@wq2/miniblox-sdk": "^0.0.1",
 		"@biomejs/biome": "^2.5.0",
-		"@types/three": "^0.184.1",
+		"@types/three": "^0.184.0",
 		"@violentmonkey/types": "^0.3.3",
 		"@wq2/rolldown-plugin-solid-oxc": "^0.1.2",
 		"cross-env": "^10.1.0",
