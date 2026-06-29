@@ -6,11 +6,11 @@
 A new Userscript for Vape! This time, I'm not slacking.
 While this is in progress, Vape and Impact will receive no updates beyond critical fixes.
 
-## Roadmap
+## Roadmap Checklist
 
 - [x] A Useable ClickGUI (yes, this is really important, because it's one of the main reasons I want to use Impact over Vape)
 - [x] Basic modules such as (Velocity, KillAura, KeepSprint, Sprint, etc)
-- [x] Desync implementation
+- [ ] Desync fly (missing implementation)
 - [ ] Any remaining issues
 
 ## So why does VapeRewrite need a new base?
@@ -31,7 +31,7 @@ Simply put:
   - While the RegExp based replacing in Vape is horrible and annoying for both users (no "paste code into developer console to inject"), and even developers
     (if kept to the bare minimum), it is effectively a necessary evil:
     - How are you going to do packet modifications if you only have access to the builtin globals?
-    - *many* classes, methods, variables, etc. are not exposed from the one game object that we have access to. This means you would have to find viable replacements
+    - *many* classes, methods, variables, etc. are not exposed from the one game object that we have access to. This means you would have to find viable replacements for each of these globals.
 
 ## A note on developer console injection
 
