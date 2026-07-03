@@ -28,6 +28,19 @@ export default class Scaffold extends Mod {
 		1,
 	);
 	private sameYSetting = this.createToggleSetting("Same Y", false);
+	private keepYSetting = this.createToggleSetting("Keep Y", false);
+	private techniqueSetting = this.createDropdownSetting("Technique", [
+		"Normal",
+		"Telly",
+	]);
+	private rotationModeSetting = this.createDropdownSetting("Rotation mode", [
+		"Off",
+		"Normal",
+	]);
+	private blockTargetModeSetting = this.createDropdownSetting(
+		"Block target mode",
+		["Air Place", "Clutch"],
+	);
 	private clutchModeSetting = this.createDropdownSetting("Clutch mode", [
 		"Air Place",
 		"Clutch",
@@ -44,6 +57,8 @@ export default class Scaffold extends Mod {
 	private oldHeldSlot?: number;
 	private tickCount = 0;
 	private lastScaffoldY: number | null = null;
+	private lastMotionX = 0;
+	private lastMotionZ = 0;
 
 	get tower() {
 		return this.towerSetting.value();
@@ -65,6 +80,22 @@ export default class Scaffold extends Mod {
 		return this.sameYSetting.value();
 	}
 
+	get keepY() {
+		return this.keepYSetting.value();
+	}
+
+	get technique() {
+		return this.techniqueSetting.value();
+	}
+
+	get rotationMode() {
+		return this.rotationModeSetting.value();
+	}
+
+	get blockTargetMode() {
+		return this.blockTargetModeSetting.value();
+	}
+
 	get clutchMode() {
 		return this.clutchModeSetting.value();
 	}
@@ -83,6 +114,8 @@ export default class Scaffold extends Mod {
 		}
 		this.tickCount = 0;
 		this.lastScaffoldY = null;
+		this.lastMotionX = 0;
+		this.lastMotionZ = 0;
 	}
 
 	protected onDisable(): void {
@@ -91,6 +124,8 @@ export default class Scaffold extends Mod {
 			this.switchSlot(this.oldHeldSlot);
 		}
 		this.lastScaffoldY = null;
+		this.lastMotionX = 0;
+		this.lastMotionZ = 0;
 	}
 
 	private switchSlot(slot: number): void {
@@ -124,6 +159,7 @@ export default class Scaffold extends Mod {
 	private getPossibleSides(pos: BlockPos): EnumFacing | null {
 		const { player, EnumFacing, game, Materials } = Refs;
 		if (
+			this.blockTargetMode === "Air Place" &&
 			this.clutchMode === "Air Place" &&
 			pos.y <= Math.floor(player.pos.y)
 		) {
@@ -172,11 +208,30 @@ export default class Scaffold extends Mod {
 		return new Vec3(hitX, hitY, hitZ);
 	}
 
+	private applyRotation(placePos: BlockPos): void {
+		const { player } = Refs;
+		if (this.rotationMode === "Off") return;
+
+		const dx = placePos.x + 0.5 - player.pos.x;
+		const dy = placePos.y + 0.5 - (player.pos.y + player.getEyeHeight());
+		const dz = placePos.z + 0.5 - player.pos.z;
+		const dist = Math.sqrt(dx * dx + dz * dz);
+
+		player.rotationYaw = Math.atan2(dz, dx) * (180 / Math.PI) - 90;
+		player.rotationPitch = -(Math.atan2(dy, dist) * (180 / Math.PI));
+	}
+
 	@Subscribe("gameTick")
 	onTick(): void {
 		const { player, game, BlockPos, ItemBlock, playerController } = Refs;
 
 		if (
+			this.technique === "Telly" &&
+			player.onGround &&
+			player.isSprinting()
+		) {
+			player.jump();
+		} else if (
 			this.autoJump &&
 			player.onGround &&
 			(!this.autoJumpOnlySprint || player.isSprinting())
@@ -210,9 +265,27 @@ export default class Scaffold extends Mod {
 		const playerY = Math.floor(player.pos.y);
 		const playerZ = Math.floor(player.pos.z);
 
-		// Determine target Y coordinate based on sameY mode
+		// Determine target Y coordinate
 		let targetY: number;
-		if (this.sameY) {
+		if (this.keepY) {
+			if (this.lastScaffoldY === null) {
+				this.lastScaffoldY = playerY - 1;
+			}
+
+			const unchangedMovement =
+				player.motion.x === this.lastMotionX &&
+				player.motion.z === this.lastMotionZ;
+
+			if (
+				unchangedMovement &&
+				!player.onGround &&
+				player.motion.y > 0
+			) {
+				targetY = this.lastScaffoldY + 1;
+			} else {
+				targetY = this.lastScaffoldY;
+			}
+		} else if (this.sameY) {
 			if (isMoving) {
 				if (this.lastScaffoldY === null) {
 					this.lastScaffoldY = playerY - 1;
@@ -223,13 +296,12 @@ export default class Scaffold extends Mod {
 				this.lastScaffoldY = targetY;
 			}
 		} else {
-			if (this.lastScaffoldY === playerY - 1) {
-				targetY = playerY + 2;
-			} else {
-				targetY = playerY - 1;
-			}
+			targetY = playerY - 1;
 			this.lastScaffoldY = targetY;
 		}
+
+		this.lastMotionX = player.motion.x;
+		this.lastMotionZ = player.motion.z;
 
 		// Predict future position
 		const predictionMultiplier = this.expand * 2;
@@ -267,8 +339,8 @@ export default class Scaffold extends Mod {
 			// Find a side to place on
 			let placeSide = this.getPossibleSides(pos);
 
-			// If no direct side, search nearby
-			if (!placeSide) {
+			// If no direct side, search nearby unless clutch-only target mode
+			if (!placeSide && this.blockTargetMode !== "Clutch") {
 				let found = false;
 				for (let dist = 1; dist <= 2 && !found; dist++) {
 					for (let x = -dist; x <= dist && !found; x++) {
@@ -291,6 +363,9 @@ export default class Scaffold extends Mod {
 			}
 
 			if (!placeSide) {
+				if (this.technique === "Normal") {
+					this.applyRotation(pos);
+				}
 				continue;
 			}
 
@@ -301,6 +376,13 @@ export default class Scaffold extends Mod {
 				pos.y + dir.y,
 				pos.z + dir.z,
 			);
+
+			if (
+				this.technique === "Normal" ||
+				(this.technique === "Telly" && !player.onGround)
+			) {
+				this.applyRotation(placePos);
+			}
 
 			// Calculate hit vector
 			const hitVec = this.getRandomHitVec(placePos, placeSide);
@@ -340,7 +422,7 @@ export default class Scaffold extends Mod {
 				}
 			}
 
-			if (places++ > this.placesPerTick) break; // Only place one block per tick
+			if (places++ > this.placesPerTick) break;
 		}
 	}
 }
