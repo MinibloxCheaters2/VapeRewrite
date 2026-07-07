@@ -10,4 +10,4 @@ bun.lock
 package-lock.json
 .DS_Store
 rolldown.config.*.js
-.aider*
+# screw your trash AI.
