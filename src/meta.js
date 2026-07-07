@@ -4,8 +4,14 @@
 // @description Vape UserScript: The Rewrite
 // @license     AGPL-3.0-or-later
 // @homepageURL https://codeberg.org/Miniblox/VapeRewrite
-// @match       https://miniblox.io/*
-// @match       https://bloxbattles.io/*
+// @match       https://*.miniblox.io/*
+// @match       https://*.bloxbattles.io/*
+// @match       https://*.miniblox.org/*
+//#region mirrors (updated automatically by scripts/mirrors.ts, do NOT REDEEM)
+// @match       https://*.classcraft.pro/*
+// @match       https://*.mathnest.space/*
+// @match       https://*.storyhall.site/*
+//#endregion
 // @icon        https://miniblox.io/favicon.png
 // @grant       GM_addStyle
 // @grant       GM_getValue
@@ -44,7 +50,7 @@
 // @resource    guiback https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/misc/back.png
 // @resource    search https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/search.png
 // @resource    legit https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/misc/legit.png
-// @run-at      document-start
+// @run-at      document-idle
 // ==/UserScript==
 
 /**
