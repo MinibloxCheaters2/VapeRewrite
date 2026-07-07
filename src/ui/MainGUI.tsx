@@ -90,7 +90,7 @@ function MainGUI() {
 	const [overlaysOpen, setOverlaysOpen] = createSignal(false);
 	const [overlayHovered, setOverlayHovered] = createSignal(false);
 
-	const [searchVisible, setSearchVisible] = createSignal(false);
+	const [_searchVisible, _setSearchVisible] = createSignal(false);
 	const [searchText, setSearchText] = createSignal("");
 
 	// Settings state

@@ -372,8 +372,6 @@ export function DropdownComponent(props: {
 	);
 }
 
-
-
 // TextBox component
 export function TextBoxComponent(props: {
 	name: string;

@@ -1,10 +1,5 @@
 import { createSignal, For, Show } from "solid-js";
-import {
-	type AnySetting,
-	getName,
-	type ModeLike,
-	type SubmoduleItem,
-} from "@/features/config/Settings";
+import type { AnySetting, SubmoduleItem } from "@/features/config/Settings";
 import getResourceURL from "@/utils/helpers/cachedResourceURL";
 import {
 	ColorSliderComponent,

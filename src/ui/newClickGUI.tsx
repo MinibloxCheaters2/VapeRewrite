@@ -16,8 +16,8 @@ import {
 	TextBoxComponent,
 	ToggleComponent,
 } from "./components";
-import { SubmoduleComponent } from "./SubmoduleComponent";
 import { guiVisible, isCategoryWindowVisible } from "./guiState";
+import { SubmoduleComponent } from "./SubmoduleComponent";
 
 // Color palette matching Lua design
 const COLORS = {

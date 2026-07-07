@@ -1,8 +1,4 @@
-import type {
-	AnySetting,
-	SliderSetting,
-	ToggleSetting,
-} from "@/features/config/Settings";
+import type { SliderSetting, ToggleSetting } from "@/features/config/Settings";
 import SubModule from "@/features/config/SubModule";
 import Refs from "@/utils/helpers/refs";
 import isKeyDown from "@/utils/input/key";
@@ -11,20 +7,17 @@ import getMoveDirection from "@/utils/movement/movement";
 import type Fly from "./index";
 
 export default class NormalSub extends SubModule {
-	readonly desyncSetting: ToggleSetting = this.createToggleSetting("Desync", true);
-	readonly speedSetting: SliderSetting;
-
-	constructor(fly: Fly, target: AnySetting[]) {
-		super(fly, target);
-		this.desyncSetting = this.createToggleSetting("Desync", true);
-		this.speedSetting = this.createSliderSetting(
-			"Speed",
-			0.18,
-			0.05,
-			2.0,
-			0.01,
-		);
-	}
+	readonly desyncSetting: ToggleSetting = this.createToggleSetting(
+		"Desync",
+		true,
+	);
+	readonly speedSetting: SliderSetting = this.createSliderSetting(
+		"Speed",
+		0.18,
+		0.05,
+		2.0,
+		0.01,
+	);
 
 	onTick(fly: Fly): void {
 		if (this.desyncSetting.value() && !DesyncManager.desync) {

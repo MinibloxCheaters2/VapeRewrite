@@ -276,11 +276,7 @@ export default class Scaffold extends Mod {
 				player.motion.x === this.lastMotionX &&
 				player.motion.z === this.lastMotionZ;
 
-			if (
-				unchangedMovement &&
-				!player.onGround &&
-				player.motion.y > 0
-			) {
+			if (unchangedMovement && !player.onGround && player.motion.y > 0) {
 				targetY = this.lastScaffoldY + 1;
 			} else {
 				targetY = this.lastScaffoldY;
