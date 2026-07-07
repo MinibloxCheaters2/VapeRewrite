@@ -1,19 +1,10 @@
 # VapeRewrite
 
-> [!IMPORTANT]
-> For some reason, you NEED to have Synchronous `page` mode enabled. See here: chrome-extension://jinjaccalgkegednnccohejagnlnfdag/options/index.html#settings
-
 A new Userscript for Vape! This time, I'm not slacking.
 While this is in progress, Vape and Impact will receive no updates beyond critical fixes.
+We're mostly around the same feature set as Vape, but with more features.
 
-## Roadmap Checklist
-
-- [x] A Useable ClickGUI (yes, this is really important, because it's one of the main reasons I want to use Impact over Vape)
-- [x] Basic modules such as (Velocity, KillAura, KeepSprint, Sprint, etc)
-- [ ] Desync fly (missing implementation)
-- [ ] Any remaining issues
-
-## So why does VapeRewrite need a new base?
+## So, why does VapeRewrite need a new base?
 
 Simply put:
 - Vape code is very cluttered.
@@ -28,17 +19,12 @@ Simply put:
 - [Spherical](https://codeberg.org/Miniblox/Spherical) is supposed to be the new base for Vape
   whenever it finishes (never), but motivation makes it hard to overcome really big road blockers:
   - I also got sidetracked(ish) with trying to make Spherical in Kotlin/JS.
-  - While the RegExp based replacing in Vape is horrible and annoying for both users (no "paste code into developer console to inject"), and even developers
-    (if kept to the bare minimum), it is effectively a necessary evil:
-    - How are you going to do packet modifications if you only have access to the builtin globals?
-    - *many* classes, methods, variables, etc. are not exposed from the one game object that we have access to. This means you would have to find viable replacements for each of these globals.
 
 ## A note on developer console injection
 
-Once I get to a point where I am ready to experiment with new code,
-I will most likely try to use wang's hooking method to make a new "hooking backend" that will partially support developer console injection.
+This will be supported soon, as code replacement-based injection doesn't work anymore unless you switch to extensions and replace the bundle response.
 
-## Development Requires [Bun](https://bun.sh)
+## Development (using [Bun](https://bun.sh))
 
 ``` shell
 # Compile and watch (executes)
