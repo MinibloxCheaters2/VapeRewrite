@@ -5,7 +5,6 @@ import swc from "@wq2/rolldown-plugin-swc";
 import solid from "@wq2/rolldown-plugin-solid-oxc";
 import { withFilter } from "rolldown/filter";
 import minify from "./minifyPlugin";
-import inlineCSS from "./inlineCSS";
 
 const { packageJson } = (await readPackageUp())!;
 
@@ -19,6 +18,10 @@ export const REAL_CLIENT_NAME =
 
 export default defineConfig({
 	input: "src/index.ts",
+	platform: "browser",
+	moduleTypes: {
+		".css": "text",
+	},
 	plugins: [
 		// Babel, ESBuild, and SWC supports 2023-11 decorators
 		// ESBuild is written in Go (garbage collector) and Babel is written in JS (not native),
@@ -41,24 +44,18 @@ export default defineConfig({
 		withFilter(solid(), {
 			transform: { moduleType: ["jsx", "tsx"] },
 		}),
-		inlineCSS(),
 		// this MUST be before UserScript, so the comments from it won't be removed.
 		process.env.NODE_ENV === "production" ? minify() : undefined,
-		userscript(
-			(meta: string) => {
-				const newMeta = meta
-					.replace(
-						"process.env.AUTHOR",
-						packageJson.author?.name ?? "Unspecified",
-					)
-					.replace("process.env.VERSION", packageJson.version)
-					.replace("process.env.NAME", REAL_CLIENT_NAME);
-				return newMeta;
-			},
-			{
-				threadNumber: 8,
-			},
-		),
+		userscript((meta: string) => {
+			const newMeta = meta
+				.replace(
+					"process.env.AUTHOR",
+					packageJson.author?.name ?? "Unspecified",
+				)
+				.replace("process.env.VERSION", packageJson.version)
+				.replace("process.env.NAME", REAL_CLIENT_NAME);
+			return newMeta;
+		}),
 	],
 	transform: {
 		assumptions: {
@@ -70,9 +67,8 @@ export default defineConfig({
 		format: "iife",
 		file: `dist/vape-rewrite.user.js`,
 		minify: false,
-		sourcemap: false, // sadly this doesn't work since we broke it with something
+		sourcemap: "inline",
 	},
-	emitAssets: false, // if available in your version
 	resolve: {
 		tsconfigFilename: "./tsconfig.json",
 	},

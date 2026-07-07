@@ -17,6 +17,13 @@ import type {
 export default class Configurable {
 	/** Settings */
 	public settings: AnySetting[] = [];
+	/** Module name for config persistence (used when not directly a Mod) */
+	protected modNameForConfig?: string;
+
+	private get modName(): string | undefined {
+		if (this instanceof Mod) return this.name;
+		return this.modNameForConfig;
+	}
 
 	// Helper methods to create settings
 	protected createToggleSetting(
@@ -32,7 +39,7 @@ export default class Configurable {
 			value,
 			setValue: (value) => {
 				setValueSignal(value);
-				if (this instanceof Mod) updateLoadedConfig(this.name, name);
+				if (this.modName) updateLoadedConfig(this.modName, name);
 			},
 			visible,
 		};
@@ -56,8 +63,7 @@ export default class Configurable {
 			value,
 			setValue: (value) => {
 				setValueSignal(value);
-				if (this instanceof Mod)
-					updateLoadedConfig((this as Mod).name, name);
+				if (this.modName) updateLoadedConfig(this.modName, name);
 			},
 			min,
 			max,
@@ -84,8 +90,7 @@ export default class Configurable {
 			value,
 			setValue: (value) => {
 				setValueSignal(() => value);
-				if (this instanceof Mod)
-					updateLoadedConfig((this as Mod).name, name);
+				if (this.modName) updateLoadedConfig(this.modName, name);
 			},
 			options,
 			visible,
@@ -108,8 +113,7 @@ export default class Configurable {
 			value,
 			setValue: (value) => {
 				setValueSignal(value);
-				if (this instanceof Mod)
-					updateLoadedConfig((this as Mod).name, name);
+				if (this.modName) updateLoadedConfig(this.modName, name);
 			},
 			placeholder,
 			visible,
@@ -139,8 +143,7 @@ export default class Configurable {
 			value,
 			setValue: (v) => {
 				setValueSignal(v);
-				if (this instanceof Mod)
-					updateLoadedConfig((this as Mod).name, name);
+				if (this.modName) updateLoadedConfig(this.modName, name);
 			},
 			submodules: items,
 			visible,
@@ -167,16 +170,14 @@ export default class Configurable {
 			value: color,
 			setValue: (value) => {
 				setColorSignal(value);
-				if (this instanceof Mod)
-					updateLoadedConfig((this as Mod).name, name);
+				if (this.modName) updateLoadedConfig(this.modName, name);
 			},
 			hue: () => color().h,
 			sat: () => color().s,
 			opacity: () => color().o,
 			setColor: (h: number, s: number, v: number, o: number) => {
 				setColorSignal({ h, s, v, o });
-				if (this instanceof Mod)
-					updateLoadedConfig((this as Mod).name, name);
+				if (this.modName) updateLoadedConfig(this.modName, name);
 			},
 			visible,
 		};

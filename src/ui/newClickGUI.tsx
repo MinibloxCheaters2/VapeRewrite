@@ -13,10 +13,10 @@ import {
 	ColorSliderComponent,
 	DropdownComponent,
 	SliderComponent,
-	SubmoduleComponent,
 	TextBoxComponent,
 	ToggleComponent,
 } from "./components";
+import { SubmoduleComponent } from "./SubmoduleComponent";
 import { guiVisible, isCategoryWindowVisible } from "./guiState";
 
 // Color palette matching Lua design
