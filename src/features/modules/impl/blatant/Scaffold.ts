@@ -1,8 +1,11 @@
 import type { BlockPos, EnumFacing } from "@wq2/miniblox-sdk";
 import type { Vector3 } from "three";
 import { Subscribe } from "@/event/Bus";
+import RotationManager, { RotationPlan } from "@/utils/aiming/rotate";
+import Rotation from "@/utils/aiming/rotation";
 import Refs from "@/utils/helpers/refs";
 import isKeyDown from "@/utils/input/key";
+import { SETTING } from "@/utils/movement/MovementCorrection";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 
@@ -33,6 +36,12 @@ export default class Scaffold extends Mod {
 		"Normal",
 		"Telly",
 	]);
+	private movementCorrectionSetting = this.createDropdownSetting(
+		"Movement Correction",
+		SETTING,
+		undefined,
+		() => this.rotationMode !== "Off",
+	);
 	private rotationModeSetting = this.createDropdownSetting("Rotation mode", [
 		"Off",
 		"Normal",
@@ -94,6 +103,9 @@ export default class Scaffold extends Mod {
 
 	get blockTargetMode() {
 		return this.blockTargetModeSetting.value();
+	}
+	get movementCorrection() {
+		return this.movementCorrectionSetting.value();
 	}
 
 	get clutchMode() {
@@ -217,8 +229,17 @@ export default class Scaffold extends Mod {
 		const dz = placePos.z + 0.5 - player.pos.z;
 		const dist = Math.sqrt(dx * dx + dz * dz);
 
-		player.rotationYaw = Math.atan2(dz, dx) * (180 / Math.PI) - 90;
-		player.rotationPitch = -(Math.atan2(dy, dist) * (180 / Math.PI));
+		const IDK = 180 / Math.PI;
+
+		RotationManager.scheduleRotation(
+			new RotationPlan(
+				new Rotation(
+					Math.atan2(dz, dx) * IDK - 90,
+					-(Math.atan2(dy, dist) * IDK),
+				),
+				this.movementCorrection.value,
+			),
+		);
 	}
 
 	@Subscribe("gameTick")
