@@ -22,8 +22,7 @@ import type {
 	PlayerControllerMP,
 } from "@wq2/miniblox-sdk";
 import type { BoxGeometry, Mesh, Vector3 } from "three";
-import Interop from "@/exposedO";
-import { MATCHED_DUMPS } from "@/hooks/replacement";
+import { MATCHED_DUMPS } from "@/hooks/gameScript";
 import mappings from "../mapping/mappings";
 import remapObj from "./remapProxy";
 
@@ -47,7 +46,7 @@ class Refs {
 	static #BoxGeometry: typeof BoxGeometry;
 	static #Mesh: typeof Mesh;
 	static #Materials: typeof Materials;
-	static #Items: typeof Items;
+	// static #Items: typeof Items;
 	static #ItemBlock: typeof ItemBlock;
 	static #ItemSword: typeof ItemSword;
 	static #ItemStack: typeof ItemStack;
@@ -55,6 +54,7 @@ class Refs {
 	static #hud3D: Hud3D;
 	static #Blocks: AllBlocks;
 	static #ItemArmor: typeof ItemArmor;
+	static #Items: typeof Items;
 	static #Enchantments: typeof Enchantments;
 
 	static #initOrR<T>(field: T, initializer: () => T) {
@@ -62,14 +62,25 @@ class Refs {
 		return field;
 	}
 
+	static get Items(): typeof Items {
+		return Refs.#initOrR(
+			Refs.Items,
+			() =>
+				(globalThis as typeof globalThis & { Items: typeof Items })
+					.Items,
+		);
+	}
+
 	static get ItemSword(): typeof ItemSword {
-		return Refs.#initOrR(Refs.#ItemSword, () =>
-			Interop.run((e) => e<typeof ItemSword>("ItemSword")),
+		return Refs.#initOrR(
+			Refs.#ItemSword,
+			() => Refs.Items.iron_sword.constructor as typeof ItemSword,
 		);
 	}
 	static get ItemArmor(): typeof ItemArmor {
-		return Refs.#initOrR(Refs.#ItemArmor, () =>
-			Interop.run((e) => e<typeof ItemArmor>("ItemArmor")),
+		return Refs.#initOrR(
+			Refs.#ItemArmor,
+			() => Refs.Items.iron_boots.constructor,
 		);
 	}
 
@@ -105,21 +116,13 @@ class Refs {
 			Interop.run((e) => e<typeof Materials>("Materials")),
 		);
 	}
-
-	static get Items() {
-		return Refs.#initOrR(Refs.#Items, () =>
-			Interop.run((e) => e<typeof Items>("Items")),
-		);
-	}
 	static get ItemBlock() {
 		return Refs.#initOrR(Refs.#ItemBlock, () =>
 			Interop.run((e) => e<typeof ItemBlock>("ItemBlock")),
 		);
 	}
 	static get hud3D() {
-		return Refs.#initOrR(Refs.#hud3D, () =>
-			Interop.run((e) => e<Hud3D>("hud3D")),
-		);
+		return Refs.#initOrR(Refs.#hud3D, () => Refs.game);
 	}
 
 	/**
@@ -191,13 +194,17 @@ class Refs {
 	 * which you would have to do manually by indexing dumps and casting to `as "originalName"` so you get the typings.
 	 * | `game.` version      | `Refs` version        | Auto remapping |
 	 * |----------------------|-----------------------|----------------:|
-	 * | Refs.game.player     | Refs.player           | ✅             |
-	 * | Refs.game.world      | Refs.world            | ✅             |
-	 * | Refs.game.controller | Refs.playerController | ✅             |
-	 * | Refs.game.chat       | Refs.chat             | Not needed     |
+	 * | Refs.game.player     | Refs.player           | ✅              |
+	 * | Refs.game.world      | Refs.world            | ✅              |
+	 * | Refs.game.controller | Refs.playerController | ✅              |
+	 * | Refs.game.chat       | Refs.chat             | Not needed      |
 	 */
 	static get game() {
-		return Refs.#initOrR(Refs.#game, () => Interop.run((e) => e("game")));
+		return Refs.#initOrR(Refs.#game, () => {
+			const elem = document.querySelector("#react")!;
+			return Object.values(elem)[0].updateQueue.baseState.element.props
+				.game as Game;
+		});
 	}
 
 	static get ClientSocket() {

@@ -1,6 +1,4 @@
 import "./meta.js?userscript-metadata";
-import "./exposedO";
-import "./interop";
 import "./hooks/index";
 import "./ui/app";
 import "./features/commands/api/CommandManager";
