@@ -11,8 +11,6 @@ import { initProfilesPanel } from "./ProfilesPanel";
 import { initSettingsPanel } from "./SettingsPanel";
 import shadowWrapper from "./shadowWrapper";
 
-console.info("eaksopdpkasdopakops");
-
 // Initialize HUD system
 initHudSystem();
 
