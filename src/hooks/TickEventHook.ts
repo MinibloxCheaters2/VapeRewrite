@@ -1,9 +1,10 @@
 import Bus from "@/Bus";
 import Cancelable from "@/event/Cancelable";
 import Refs from "@/utils/helpers/refs";
+import type { Game, PlayerMovement } from "@wq2/miniblox-sdk";
 
-let origGameTick: () => void;
-let origPlayerTick: () => void;
+let origGameTick: Game["fixedUpdate"];
+let origPlayerTick: PlayerMovement["fixedUpdate"];
 
 export function hookGameTick() {
 	origGameTick = Refs.game.fixedUpdate;
