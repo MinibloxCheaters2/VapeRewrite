@@ -1,5 +1,4 @@
-import { MATCHED_DUMPS } from "@/hooks/replacement";
-import GExposed from "../../exposedO";
+import { MATCHED_DUMPS } from "@/hooks/gameScript";
 
 let fn: (k: string) => boolean;
 let isKeyDown = (k: string): boolean => {

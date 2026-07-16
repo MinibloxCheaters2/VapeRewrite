@@ -1,3 +1,4 @@
+// TODO: a lot of these got broken by global name remapping, and he is remapping more methods now.
 const DUMP_REGEXES = {
 	moveForward: /this\.([a-zA-Z]+)=\([a-zA-Z]+\.(up|down)/m,
 	moveStrafe: /this\.([a-zA-Z]+)=\([a-zA-Z]+\.right/m,
@@ -32,7 +33,6 @@ const DUMP_REGEXES = {
 	addShaderToMaterialWorld: /ShaderManager\.([a-zA-Z]*)\(this\.materialWorld/,
 	materialTransparentWorld:
 		/this\.([a-zA-Z]*)\s*=\s*this\.materialTransparent\.clone\(/,
-	// Shader Manager
 	potionAmplifiers:
 		/PotionHelper\.([a-zA-Z]+)\.set\(Potions\.([a-zA-Z]+)\.getId\(\),\s*"5"\)/,
 	getFlag:

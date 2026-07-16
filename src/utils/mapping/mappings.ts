@@ -3,7 +3,7 @@
  * @module
  */
 import type { DumpKey } from "@/hooks/dump";
-import { MATCHED_DUMPS } from "@/hooks/replacement";
+import { MATCHED_DUMPS } from "@/hooks/gameScript";
 import initOrR from "../helpers/initOrR";
 import type { Mapping } from "../helpers/remapProxy";
 

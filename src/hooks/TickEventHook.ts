@@ -1,6 +1,5 @@
 import Bus from "@/Bus";
 import Cancelable from "@/event/Cancelable";
-import waitForLoad from "@/ui/wait";
 import Refs from "@/utils/helpers/refs";
 
 let origGameTick: () => void;
@@ -27,7 +26,5 @@ export function hookPlayerTick() {
 	});
 }
 
-waitForLoad().then(() => {
-	hookGameTick();
-	hookPlayerTick();
-});
+hookGameTick();
+hookPlayerTick();

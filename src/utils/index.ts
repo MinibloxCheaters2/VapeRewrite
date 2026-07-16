@@ -7,7 +7,6 @@ export * from "./aiming/rotation";
 export * from "./helpers/blockHandlers";
 export * from "./helpers/cachedResourceURL";
 export * from "./helpers/initOrR";
-export * from "./helpers/patchHelper";
 // Utilities / helpers
 export * from "./helpers/refs";
 export * from "./helpers/remapProxy";
