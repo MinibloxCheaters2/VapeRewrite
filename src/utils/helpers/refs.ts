@@ -25,6 +25,10 @@ import type { BoxGeometry, Mesh, Vector3 } from "three";
 import { MATCHED_DUMPS } from "@/hooks/gameScript";
 import mappings from "../mapping/mappings";
 import remapObj from "./remapProxy";
+import { getInheritanceTree, HasProto } from "./tree";
+
+// search for exposed globals: `globalThis\.\w+ = `
+// note: you could also search for window, but there's a bunch of false positives for stuff like onbeforeunload
 
 // biome-ignore lint/complexity/noStaticOnlyClass: job
 class Refs {
@@ -64,7 +68,7 @@ class Refs {
 
 	static get Items(): typeof Items {
 		return Refs.#initOrR(
-			Refs.Items,
+			Refs.#Items,
 			() =>
 				(globalThis as typeof globalThis & { Items: typeof Items })
 					.Items,
@@ -80,26 +84,36 @@ class Refs {
 	static get ItemArmor(): typeof ItemArmor {
 		return Refs.#initOrR(
 			Refs.#ItemArmor,
-			() => Refs.Items.iron_boots.constructor,
+			() => Refs.Items.iron_boots.constructor as typeof ItemArmor,
 		);
 	}
 
 	static get ItemStack(): typeof ItemStack {
-		return Refs.#initOrR(Refs.#ItemStack, () =>
-			Interop.run((e) => e<typeof ItemStack>("ItemStack")),
+		return Refs.#initOrR(
+			Refs.#ItemStack,
+			() =>
+				(
+					globalThis as typeof globalThis & {
+						ItemStack: typeof ItemStack;
+					}
+				).ItemStack,
 		);
 	}
 
 	static get ItemBow(): typeof ItemBow {
-		return Refs.#initOrR(Refs.#ItemBow, () =>
-			Interop.run((e) => e<typeof ItemBow>("ItemBow")),
+		return Refs.#initOrR(
+			Refs.#ItemBow,
+			() => Refs.Items.bow.constructor as typeof ItemBow,
 		);
 	}
 
 	static get Enchantments(): typeof Enchantments {
-		return Refs.#initOrR(Refs.#Enchantments, () =>
-			Interop.run((e) => e<typeof Enchantments>("Enchantments")),
+		throw new Error(
+			"TODO: get Enchantements object, note that Enchantment is exposed and has a list for those",
 		);
+		/*return Refs.#initOrR(Refs.#Enchantments, () =>
+			Interop.run((e) => e<typeof Enchantments>("Enchantments")),
+		);*/
 	}
 
 	static get Blocks(): AllBlocks {
@@ -112,17 +126,21 @@ class Refs {
 	}
 
 	static get Materials() {
-		return Refs.#initOrR(Refs.#Materials, () =>
+		return undefined;
+		/*return Refs.#initOrR(Refs.#Materials, () =>
 			Interop.run((e) => e<typeof Materials>("Materials")),
-		);
+		);*/
 	}
 	static get ItemBlock() {
-		return Refs.#initOrR(Refs.#ItemBlock, () =>
-			Interop.run((e) => e<typeof ItemBlock>("ItemBlock")),
+		return Refs.#initOrR(
+			Refs.#ItemBlock,
+			() => Refs.Blocks.stone.constructor,
 		);
 	}
 	static get hud3D() {
-		return Refs.#initOrR(Refs.#hud3D, () => Refs.game);
+		// TODO: get hud3D object?
+		throw new Error("TODO: get hud3D object");
+		//return Refs.#initOrR(Refs.#hud3D, () => Refs.game);
 	}
 
 	/**
@@ -178,7 +196,15 @@ class Refs {
 
 	static get EntityLivingBase() {
 		return Refs.#initOrR(Refs.#EntityLivingBase, () =>
-			Interop.run((e) => e<typeof EntityLivingBase>("EntityLivingBase")),
+			Array.from(
+				getInheritanceTree(Refs.player as unknown as HasProto),
+			).find((x) => {
+				return (
+					"sprintingSpeedBoostModifier" in x &&
+					"nextEntityID" in x &&
+					typeof x === "number"
+				);
+			}),
 		);
 	}
 
@@ -208,9 +234,11 @@ class Refs {
 	}
 
 	static get ClientSocket() {
-		return Refs.#initOrR(Refs.#clientSocket, () =>
+		// TODO: get client socket object
+		return undefined;
+		/*return Refs.#initOrR(Refs.#clientSocket, () =>
 			Interop.run((e) => e("ClientSocket")),
-		);
+		);*/
 	}
 
 	/** Refs.game.world with a remap proxy applied */

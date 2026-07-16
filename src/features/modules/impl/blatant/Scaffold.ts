@@ -344,7 +344,8 @@ export default class Scaffold extends Mod {
 			);
 		}
 
-		const { Materials, hud3D } = Refs;
+		// TODO: we need hud3D
+		const { Materials /*, hud3D*/ } = Refs;
 		let places = 0;
 
 		for (const pos of positionsToCheck) {
@@ -431,7 +432,7 @@ export default class Scaffold extends Mod {
 					hitVec,
 				)
 			) {
-				hud3D.swingArm();
+				//hud3D.swingArm();
 
 				// Handle item stack
 				if (item.stackSize === 0) {
