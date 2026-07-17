@@ -1,5 +1,6 @@
 import "./meta.js?userscript-metadata";
 import "./hooks/index";
+import "./utils/helpers/three";
 import "./ui/app";
 import "./features/commands/api/CommandManager";
 import "./features/commands/Listener";
