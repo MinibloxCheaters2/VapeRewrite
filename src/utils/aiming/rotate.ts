@@ -1,5 +1,5 @@
 /**
- * Managers rotation
+ * Manages rotation
  * @module
  */
 

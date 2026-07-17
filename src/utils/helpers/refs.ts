@@ -38,7 +38,6 @@ class Refs {
 	static #player: ClientEntityPlayer;
 	static #chat: Chat;
 	static #Vec3: typeof Vector3;
-	static #clientSocket: typeof ClientSocket;
 	static #PBVector3: typeof PBVector3;
 	static #BlockPos: typeof BlockPos;
 	static #EnumFacing: typeof EnumFacing;
@@ -61,7 +60,7 @@ class Refs {
 	static #Items: typeof Items;
 	static #Enchantments: typeof Enchantments;
 
-	static #initOrR<T>(field: T, initializer: () => T) {
+	static #initOrR<T>(field: T, initializer: () => Awaited<T>) {
 		field ??= initializer();
 		return field;
 	}
@@ -158,27 +157,6 @@ class Refs {
 				Interop.run((e) => e<PlayerControllerMP>("playerControllerMP")),
 				mappings.playerControllerMP,
 			),
-		);
-	}
-
-	static get BoxGeometry() {
-		return Refs.#initOrR(Refs.#BoxGeometry, () =>
-			Interop.run((e) =>
-				// biome-ignore lint/style/noNonNullAssertion: this exists, unless the dump doesn't match.
-				e<typeof BoxGeometry>(MATCHED_DUMPS.boxGeometry!),
-			),
-		);
-	}
-
-	static get Mesh() {
-		return Refs.#initOrR(Refs.#Mesh, () =>
-			Interop.run((e) => e<typeof Mesh>("Mesh")),
-		);
-	}
-
-	static get Vec3() {
-		return Refs.#initOrR(Refs.#Vec3, () =>
-			Interop.run((e) => e<typeof Vector3>("Vector3$1")),
 		);
 	}
 

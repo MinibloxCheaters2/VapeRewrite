@@ -10,6 +10,7 @@ export * from "./helpers/initOrR";
 // Utilities / helpers
 export * from "./helpers/refs";
 export * from "./helpers/remapProxy";
+export * from "./helpers/three";
 // Input / keys
 export * from "./input/key";
 // Logger
