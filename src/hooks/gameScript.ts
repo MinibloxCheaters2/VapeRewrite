@@ -29,4 +29,4 @@ async function init() {
 		gameScript = await res.text();
 	}
 }
-init();
+export const gameScriptReady = init();

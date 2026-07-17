@@ -1,43 +1,51 @@
-import { gameScript } from "@/hooks/gameScript";
+import { gameScript, gameScriptReady } from "@/hooks/gameScript";
+import logger from "../logging/loggers";
 
-const THREE_IMPORT_REGEX = / from "(\.\/three-\w+\.js)";/g;
+// note to self: do NOT add the `g` (global) flag, otherwise it not workong
+// even though it works in regexr (you can see /g in the flags enabled) but idk
+// https://regexr.com/8nl99, feel free to paste ts as long as the code you put it in is under AGPL
+// (which most importantly, requires your code to be open source if the project is public!!! no proprietary/closed source garbage here).
+const THREE_IMPORT_REGEX = /from\s*"(\.\/three-\w+\.js)"/;
 
 export function getThreeImport(): string | undefined {
 	const m = gameScript.match(THREE_IMPORT_REGEX);
 	const v = m?.[1];
-	if (!v) return;
+	if (!v) {
+		logger.error("Failed to find ThreeJS import", gameScript, v);
+		return;
+	}
 	return v.replace("./", "./assets/");
 }
 
 export async function importThreeJS() {
+	await gameScriptReady;
 	const url = getThreeImport();
-	if (url === undefined) return;
+	if (url === undefined) {
+		logger.error("ThreeJS import thing not found!");
+		return;
+	}
 	return await import(url);
 }
 
-let THREE: object;
+let three: object;
 
-importThreeJS().then((three) => {
-	THREE = three;
+importThreeJS().then((t) => {
+	three = t;
 });
 
 function findObject(filter: (clazz: NewableFunction) => boolean) {
-	return Object.values(THREE).find(filter);
-}
-
-function filterObjects(filter: (clazz: NewableFunction) => boolean) {
-	return Object.values(THREE).filter(filter);
+	return Object.values(three).find(filter);
 }
 
 function findObjectByCode(codeFilter: (code: string) => boolean) {
-	return Object.values(THREE).filter((x) => codeFilter(x.toString()));
+	return Object.values(three).find((x) => codeFilter(x.toString()));
 }
 
 function findObjectByType(type: string) {
 	return findObjectByCode((x) => x.includes(`this.type=\`${type}\``));
 }
 
-const ThreeRefs = {
+const THREE = {
 	get BoxGeometry() {
 		return findObjectByType("BoxGeometry");
 	},
@@ -47,8 +55,16 @@ const ThreeRefs = {
 	},
 
 	get Vec3() {
-		return findObject((x) => x.prototype.isVector3);
+		return findObject((x) => {
+			return (
+				typeof x === "function" &&
+				"prototype" in x &&
+				typeof x.prototype === "object" &&
+				"isVector3" in x.prototype &&
+				x.prototype.isVector3
+			);
+		});
 	},
 };
 
-export default ThreeRefs;
+export default THREE;

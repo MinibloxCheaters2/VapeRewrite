@@ -22,7 +22,6 @@ import type {
 	PlayerControllerMP,
 } from "@wq2/miniblox-sdk";
 import type { BoxGeometry, Mesh, Vector3 } from "three";
-import { MATCHED_DUMPS } from "@/hooks/gameScript";
 import mappings from "../mapping/mappings";
 import remapObj from "./remapProxy";
 import { getInheritanceTree, HasProto } from "./tree";
@@ -37,7 +36,6 @@ class Refs {
 	static #world?: ClientWorld;
 	static #player: ClientEntityPlayer;
 	static #chat: Chat;
-	static #Vec3: typeof Vector3;
 	static #PBVector3: typeof PBVector3;
 	static #BlockPos: typeof BlockPos;
 	static #EnumFacing: typeof EnumFacing;
@@ -46,8 +44,6 @@ class Refs {
 	// for PlayerController, use `game.controller`
 	static #playerController: PlayerController;
 	static #playerControllerMP: PlayerControllerMP;
-	static #BoxGeometry: typeof BoxGeometry;
-	static #Mesh: typeof Mesh;
 	static #Materials: typeof Materials;
 	// static #Items: typeof Items;
 	static #ItemBlock: typeof ItemBlock;

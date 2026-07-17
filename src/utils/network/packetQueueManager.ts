@@ -10,6 +10,7 @@ import Refs from "../helpers/refs";
 import PacketUtil from "./PacketUtil";
 import { c2s } from "./packetRefs";
 import getPosFromPacket from "./posPacket";
+import THREE from "../helpers/three";
 
 export class PacketRecord<T> {
 	constructor(
@@ -52,8 +53,7 @@ export default new (class PacketQueueManager {
 	get serverRot(): Rotation | undefined {
 		return Rotation.fromPacket(
 			this.packetQueue.find(Rotation.hasRotation)?.packet as
-				| IRotation
-				| undefined,
+				IRotation | undefined,
 		);
 	}
 
@@ -148,8 +148,8 @@ export default new (class PacketQueueManager {
 	}
 
 	#initPosBox() {
-		const mesh = new Refs.Mesh(
-			new Refs.BoxGeometry(1, Refs.player.height, 1),
+		const mesh = new THREE.Mesh(
+			new THREE.BoxGeometry(1, Refs.player.height, 1),
 		);
 		this.#posBox = mesh;
 		const mtr = mesh.material as Material;
