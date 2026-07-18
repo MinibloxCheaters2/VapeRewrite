@@ -202,9 +202,11 @@ class Refs {
 	 */
 	static get game() {
 		return Refs.#initOrR(Refs.#game, () => {
-			const elem = document.querySelector("#react")!;
-			return Object.values(elem)[0].updateQueue.baseState.element.props
-				.game as Game;
+			const elem = document.querySelector("#react");
+			const fiber = elem && Object.values(elem)[0];
+			if (!fiber?.updateQueue?.baseState?.element?.props?.game)
+				throw new Error("React not mounted!");
+			return fiber.updateQueue.baseState.element.props.game as Game;
 		});
 	}
 

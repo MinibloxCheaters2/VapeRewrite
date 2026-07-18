@@ -1,5 +1,6 @@
 import Bus from "@/Bus";
 import Refs from "@/utils/helpers/refs";
+import { waitForReact } from "@/utils/helpers/waitForReact";
 import { Game } from "@wq2/miniblox-sdk";
 
 let orig: Game["connect"];
@@ -14,4 +15,4 @@ export function hookConnect() {
 	});
 }
 
-hookConnect();
+waitForReact().then(hookConnect);

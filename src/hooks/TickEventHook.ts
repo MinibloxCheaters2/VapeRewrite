@@ -1,6 +1,7 @@
 import Bus from "@/Bus";
 import Cancelable from "@/event/Cancelable";
 import Refs from "@/utils/helpers/refs";
+import { waitForReact } from "@/utils/helpers/waitForReact";
 import type { Game, PlayerMovement } from "@wq2/miniblox-sdk";
 
 let origGameTick: Game["fixedUpdate"];
@@ -27,5 +28,7 @@ export function hookPlayerTick() {
 	});
 }
 
-hookGameTick();
-hookPlayerTick();
+waitForReact().then(() => {
+	hookGameTick();
+	hookPlayerTick();
+});
