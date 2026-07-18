@@ -15,8 +15,8 @@ function replaceAndCopyFunction<OP, OR>(
 			newFunc(result);
 			return result;
 		},
-		get(orig) {
-			return orig;
+		get(orig, prop, receiver) {
+			return Reflect.get(orig, prop, receiver);
 		},
 	});
 }
