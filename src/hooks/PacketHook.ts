@@ -2,6 +2,7 @@ import Bus from "@/Bus";
 import CancelableWrapper from "@/event/CancelableWrapper";
 import { expose } from "@/exposed";
 import Refs from "@/utils/helpers/refs";
+import { waitForReact } from "@/utils/helpers/waitForReact";
 
 let Message;
 let proto2;
@@ -36,5 +37,5 @@ const packetHook = {
 		});
 	},
 };
-packetHook.init();
+waitForReact().then(() => packetHook.init());
 export default packetHook;
