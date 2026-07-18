@@ -1,5 +1,6 @@
 import Bus from "@/Bus";
 import CancelableWrapper from "@/event/CancelableWrapper";
+import { expose } from "@/exposed";
 import Refs from "@/utils/helpers/refs";
 
 let Message;
@@ -11,6 +12,7 @@ const packetHook = {
 		const SPacketUpdateInventory =
 			Refs.player.inventory.sendInventoryToServer();
 		Message = SPacketUpdateInventory.constructor.__proto__;
+		expose("Message", () => Message);
 		proto2 = SPacketUpdateInventory.constructor.runtime;
 		origToBinary = Message.prototype.toBinary;
 		origFromBinary = Message.prototype.fromBinary;

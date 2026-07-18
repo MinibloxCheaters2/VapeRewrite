@@ -1,4 +1,6 @@
+import { expose } from "@/exposed";
 import { DumpKey } from "./dump";
+import { MAIN_LOGGER as logger } from "@/utils";
 
 function isIndexPath(pathname: string): boolean {
 	return pathname.startsWith("/assets/index-") && pathname.endsWith(".js");
@@ -19,14 +21,21 @@ function isIndexScript(script: HTMLScriptElement): boolean {
 
 export const MATCHED_DUMPS = {} as Record<DumpKey, string>;
 export let gameScript: string;
+export let scriptEl: HTMLScriptElement;
 
 async function init() {
-	const scriptEl = Object.values(document.scripts).find((script) =>
+	const sc = Object.values(document.scripts).find((script) =>
 		isIndexScript(script),
 	);
+	if (!sc) {
+		logger.error("Failed to find game script");
+		return;
+	}
+	scriptEl = sc;
 	if (scriptEl?.src) {
 		const res = await fetch(scriptEl.src);
 		gameScript = await res.text();
 	}
+	expose("dumps", () => MATCHED_DUMPS);
 }
 export const gameScriptReady = init();

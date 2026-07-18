@@ -3,6 +3,7 @@
  * @module
  */
 import type { CPACKET_MAP, SPACKET_MAP } from "@wq2/miniblox-sdk";
+import Miniblox from "../game/miniblox";
 // TODO: update this
 
 export type CPacketMap = typeof CPACKET_MAP;
@@ -37,11 +38,15 @@ function getC2SUncached<
 	if (typeof ref === "symbol") {
 		throw "can't get a c2s packet with a name that is a symbol instead of a string.";
 	}
-	return Interop.run((evl) => {
+	const result = Miniblox.packets?.find(
+		(x) => "typeName" in x && x.typeName === ref,
+	);
+	if (!result) throw `failed to find packet named ${ref}`;
+	/*return Interop.run((evl) => {
 		const pkt = evl<V>(ref);
 		PacketRefs.s[ref] = pkt;
 		return pkt;
-	});
+	});*/
 }
 
 function getS2CUncached<
