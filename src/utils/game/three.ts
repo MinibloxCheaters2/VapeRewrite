@@ -1,5 +1,6 @@
 import { gameScript, gameScriptReady } from "@/hooks/gameScript";
 import logger from "../logging/loggers";
+import { expose } from "@/exposed";
 
 // note to self: do NOT add the `g` (global) flag, otherwise it not workong
 // even though it works in regexr (you can see /g in the flags enabled) but idk
@@ -31,6 +32,7 @@ let three: object;
 
 importThreeJS().then((t) => {
 	three = t;
+	expose("THREE_RAW", () => t);
 });
 
 function findObject(filter: (clazz: NewableFunction) => boolean) {
@@ -66,5 +68,6 @@ const THREE = {
 		});
 	},
 };
+expose("THREE", () => THREE);
 
 export default THREE;

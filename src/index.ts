@@ -1,6 +1,7 @@
 import "./meta.js?userscript-metadata";
+import "./exposed";
 import "./hooks/index";
-import "./utils/helpers/three";
+import "./utils/game";
 import "./ui/app";
 import "./features/commands/api/CommandManager";
 import "./features/commands/Listener";

@@ -25,6 +25,7 @@ import type { BoxGeometry, Mesh, Vector3 } from "three";
 import mappings from "../mapping/mappings";
 import remapObj from "./remapProxy";
 import { getInheritanceTree, HasProto } from "./tree";
+import { expose } from "@/exposed";
 
 // search for exposed globals: `globalThis\.\w+ = `
 // note: you could also search for window, but there's a bunch of false positives for stuff like onbeforeunload
@@ -234,5 +235,6 @@ class Refs {
 		);
 	}
 }
+expose("Refs", () => Refs);
 
 export default Refs;
