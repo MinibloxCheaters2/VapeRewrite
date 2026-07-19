@@ -10,7 +10,7 @@ import Refs from "../helpers/refs";
 import PacketUtil from "./PacketUtil";
 import { c2s } from "./packetRefs";
 import getPosFromPacket from "./posPacket";
-import THREE from "../game/three";
+import THREE from "../refs/three";
 
 export class PacketRecord<T> {
 	constructor(
