@@ -7,7 +7,7 @@ import type { S2CPacket } from "@wq2/miniblox-sdk";
 import { Subscribe } from "@/event/Bus";
 import type CancelableWrapper from "@/event/CancelableWrapper";
 import { s2c } from "@/utils";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 
@@ -16,12 +16,12 @@ export default class Paranoia extends Mod {
 	category = Category.UTILITY;
 
 	#alert(debug: string) {
-		Refs.chat.addChat({
+		Miniblox.chat.addChat({
 			text: `[\\green\\Vape Rewrite\\reset\\: \\blue\\STAFF DETECTOR\\red\\] ${debug}`,
 		});
 	}
 	#alertIfNotFound(id: number, pkt: string) {
-		const { world } = Refs;
+		const { world } = Miniblox;
 		if (!world) return;
 		const e = world.entities.get(id);
 		if (e) return;

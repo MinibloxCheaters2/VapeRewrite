@@ -3,7 +3,7 @@ import { Subscribe } from "@/event/Bus";
 import type CancelableWrapper from "@/event/CancelableWrapper";
 import { showNotification } from "@/ui/notifications";
 import { s2c } from "@/utils";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 
@@ -13,7 +13,7 @@ export default class MurderMystery extends Mod {
 	@Subscribe("receivePacket")
 	private onReceivePacket({ data }: CancelableWrapper<S2CPacket>) {
 		if (!(data instanceof s2c("CPacketEntityEquipment"))) return;
-		const { player, world, ItemStack, ItemSword, ItemBow } = Refs;
+		const { player, world, ItemStack, ItemSword, ItemBow } = Miniblox;
 		if (!world) return;
 		if (data.id === player.id) return;
 		const plr = world.entities.get(data.id);

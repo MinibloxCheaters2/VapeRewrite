@@ -8,7 +8,7 @@ import Bus from "@/Bus";
 import { COMMAND_PREFIX } from "@/Client";
 import { Subscribe } from "@/event/Bus";
 import type CancelableWrapper from "@/event/CancelableWrapper";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import logger from "@/utils/logging/loggers";
 import { c2s, s2c } from "@/utils/network/packetRefs";
 import dispatcher from "./api/CommandDispatcher";
@@ -36,7 +36,7 @@ export default new (class CommandListener {
 			const removedPrefix = packet.text.slice(COMMAND_PREFIX.length);
 			const r = await dispatcher.parse(removedPrefix, null);
 			if (r.getErrors().size > 0) {
-				Refs.chat.addChat({
+				Miniblox.chat.addChat({
 					text: `ERROR WHEN PARSING "${removedPrefix}": ${Array.from(r.getErrors().values()).join()}`,
 					color: "red",
 				});
@@ -45,7 +45,7 @@ export default new (class CommandListener {
 			try {
 				await dispatcher.execute(r, null);
 			} catch (e) {
-				Refs.chat.addChat({
+				Miniblox.chat.addChat({
 					text: `ERROR WHEN EXECUTING "${removedPrefix}": ${e} (this may exclude some useful information, check developer console for more info)`,
 					color: "red",
 				});
@@ -72,7 +72,7 @@ export default new (class CommandListener {
 					? `${COMMAND_PREFIX}${suggestionText}`
 					: suggestionText;
 			});
-			Refs.chat.autoCompleteReceived(
+			Miniblox.chat.autoCompleteReceived(
 				new (s2c("CPacketTabComplete"))({
 					matches: applied,
 				}),

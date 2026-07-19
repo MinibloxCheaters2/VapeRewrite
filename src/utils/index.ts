@@ -8,7 +8,7 @@ export * from "./helpers/blockHandlers";
 export * from "./helpers/cachedResourceURL";
 export * from "./helpers/initOrR";
 // Utilities / helpers
-export * from "./helpers/refs";
+export * from "./refs/miniblox";
 export * from "./helpers/remapProxy";
 export * from "./refs/three";
 // Input / keys

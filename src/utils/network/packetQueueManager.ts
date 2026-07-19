@@ -6,7 +6,7 @@ import Bus from "../../Bus";
 import { Priority, Subscribe } from "../../event/Bus";
 import type CancelableWrapper from "../../event/CancelableWrapper";
 import Rotation, { type IRotation } from "../aiming/rotation";
-import Refs from "../helpers/refs";
+import Miniblox from "../refs/miniblox";
 import PacketUtil from "./PacketUtil";
 import { c2s } from "./packetRefs";
 import getPosFromPacket from "./posPacket";
@@ -149,7 +149,7 @@ export default new (class PacketQueueManager {
 
 	#initPosBox() {
 		const mesh = new THREE.Mesh(
-			new THREE.BoxGeometry(1, Refs.player.height, 1),
+			new THREE.BoxGeometry(1, Miniblox.player.height, 1),
 		);
 		this.#posBox = mesh;
 		const mtr = mesh.material as Material;
@@ -158,7 +158,7 @@ export default new (class PacketQueueManager {
 		mtr.opacity = 0.5;
 		mesh.renderOrder = 6;
 		mesh.visible = true;
-		Refs.game.gameScene.ambientMeshes.add(mesh);
+		Miniblox.game.gameScene.ambientMeshes.add(mesh);
 		return mesh;
 	}
 

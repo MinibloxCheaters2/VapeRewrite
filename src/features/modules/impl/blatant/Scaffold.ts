@@ -3,7 +3,7 @@ import type { Vector3 } from "three";
 import { Subscribe } from "@/event/Bus";
 import RotationManager, { RotationPlan } from "@/utils/aiming/rotate";
 import Rotation from "@/utils/aiming/rotation";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import isKeyDown from "@/utils/input/key";
 import { SETTING } from "@/utils/movement/MovementCorrection";
 import Category from "../../api/Category";
@@ -120,7 +120,7 @@ export default class Scaffold extends Mod {
 	}
 
 	protected onEnable(): void {
-		const { player, game } = Refs;
+		const { player, game } = Miniblox;
 		if (player && game) {
 			this.oldHeldSlot = game.info.selectedSlot;
 		}
@@ -131,7 +131,7 @@ export default class Scaffold extends Mod {
 	}
 
 	protected onDisable(): void {
-		const { player, game } = Refs;
+		const { player, game } = Miniblox;
 		if (player && game && this.oldHeldSlot !== undefined) {
 			this.switchSlot(this.oldHeldSlot);
 		}
@@ -141,14 +141,14 @@ export default class Scaffold extends Mod {
 	}
 
 	private switchSlot(slot: number): void {
-		const { player, game } = Refs;
+		const { player, game } = Miniblox;
 		if (!player || !game) return;
 		player.inventory.currentItem = slot;
 		game.info.selectedSlot = slot;
 	}
 
 	private findBlockSlots(): number[] {
-		const { player, ItemBlock } = Refs;
+		const { player, ItemBlock } = Miniblox;
 		if (!player) return [];
 
 		const slotsWithBlocks: number[] = [];
@@ -169,7 +169,7 @@ export default class Scaffold extends Mod {
 	}
 
 	private getPossibleSides(pos: BlockPos): EnumFacing | null {
-		const { player, EnumFacing, game, Materials } = Refs;
+		const { player, EnumFacing, game, Materials } = Miniblox;
 		if (
 			this.blockTargetMode === "Air Place" &&
 			this.clutchMode === "Air Place" &&
@@ -180,7 +180,7 @@ export default class Scaffold extends Mod {
 
 		for (const side of EnumFacing.VALUES) {
 			const offset = side.toVector();
-			const { BlockPos } = Refs;
+			const { BlockPos } = Miniblox;
 			const checkPos = new BlockPos(
 				pos.x + offset.x,
 				pos.y + offset.y,
@@ -195,7 +195,7 @@ export default class Scaffold extends Mod {
 	}
 
 	private getRandomHitVec(placePos: BlockPos, face: EnumFacing): Vector3 {
-		const { Vec3, EnumFacing } = Refs;
+		const { Vec3, EnumFacing } = Miniblox;
 		const rand = () => 0.2 + Math.random() * 0.6;
 		let hitX = placePos.x + 0.5;
 		let hitY = placePos.y + 0.5;
@@ -221,7 +221,7 @@ export default class Scaffold extends Mod {
 	}
 
 	private applyRotation(placePos: BlockPos): void {
-		const { player } = Refs;
+		const { player } = Miniblox;
 		if (this.rotationMode === "Off") return;
 
 		const dx = placePos.x + 0.5 - player.pos.x;
@@ -244,7 +244,7 @@ export default class Scaffold extends Mod {
 
 	@Subscribe("gameTick")
 	onTick(): void {
-		const { player, game, BlockPos, ItemBlock, playerController } = Refs;
+		const { player, game, BlockPos, ItemBlock, playerController } = Miniblox;
 
 		if (
 			this.technique === "Telly" &&
@@ -345,7 +345,7 @@ export default class Scaffold extends Mod {
 		}
 
 		// TODO: we need hud3D
-		const { Materials /*, hud3D*/ } = Refs;
+		const { Materials /*, hud3D*/ } = Miniblox;
 		let places = 0;
 
 		for (const pos of positionsToCheck) {

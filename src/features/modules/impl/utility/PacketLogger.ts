@@ -2,7 +2,7 @@ import { Subscribe } from "@wq2/event-bus";
 import type { AnyPacket, C2SPacket, S2CPacket } from "@wq2/miniblox-sdk";
 import type CancelableWrapper from "@/event/CancelableWrapper";
 import { c2s, s2c } from "@/utils";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 
@@ -32,7 +32,7 @@ export default class PacketLogger extends Mod {
 
 	@Subscribe("sendPacket")
 	private onSendPacket(e: CancelableWrapper<C2SPacket>) {
-		if (!Refs.game.inGame) return; // useless
+		if (!Miniblox.game.inGame) return; // useless
 		if (isPacketBlacklisted(e.data)) return;
 		console.info("C -> S:", e.data);
 		this.#c2s.push(new Log(e.data, Date.now()));
@@ -40,7 +40,7 @@ export default class PacketLogger extends Mod {
 
 	@Subscribe("receivePacket")
 	private onReceivePacket(e: CancelableWrapper<S2CPacket>) {
-		if (!Refs.game.inGame) return; // useless
+		if (!Miniblox.game.inGame) return; // useless
 		if (isPacketBlacklisted(e.data)) return;
 		console.info("S -> C:", e.data);
 		this.#s2c.push(new Log(e.data, Date.now()));
@@ -50,7 +50,7 @@ export default class PacketLogger extends Mod {
 		const data = JSON.stringify({ c2s: this.#c2s, s2c: this.#s2c });
 		console.log(data);
 		navigator.clipboard.writeText(data);
-		Refs.game.chat.addChat({
+		Miniblox.game.chat.addChat({
 			text: "Copied log to clipboard",
 			color: "green",
 		});

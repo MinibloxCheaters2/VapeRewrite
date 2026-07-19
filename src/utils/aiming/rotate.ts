@@ -7,7 +7,7 @@ import type { C2SPacket } from "@wq2/miniblox-sdk";
 import Bus from "@/Bus";
 import { Priority, Subscribe } from "@/event/Bus";
 import type CancelableWrapper from "@/event/CancelableWrapper";
-import Refs from "../helpers/refs";
+import Miniblox from "../refs/miniblox";
 import MovementCorrection from "../movement/MovementCorrection";
 import packetQueueManager from "../network/packetQueueManager";
 import { c2s } from "../network/packetRefs";
@@ -28,7 +28,7 @@ export default new (class RotationManager {
 		return this.#currentPlan;
 	}
 	get playerRot() {
-		return new Rotation(Refs.player.yaw, Refs.player.pitch);
+		return new Rotation(Miniblox.player.yaw, Miniblox.player.pitch);
 	}
 	get serverRotation() {
 		return packetQueueManager.serverRot ?? this.#trackedRot;

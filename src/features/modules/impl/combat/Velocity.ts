@@ -1,7 +1,7 @@
 import type { S2CPacket } from "@wq2/miniblox-sdk";
 import { Subscribe } from "@/event/Bus";
 import type CancelableWrapper from "@/event/CancelableWrapper";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import { s2c } from "@/utils/network/packetRefs";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
@@ -11,7 +11,7 @@ function motionOrReduce<T extends "x" | "y" | "z">(
 	n: number,
 	reduce: number,
 ) {
-	return reduce === 0 ? Refs.player.motion[axis] : n * reduce;
+	return reduce === 0 ? Miniblox.player.motion[axis] : n * reduce;
 }
 
 export default class Velocity extends Mod {
@@ -35,7 +35,7 @@ export default class Velocity extends Mod {
 		const { data: packet } = e;
 		if (
 			packet instanceof s2c("CPacketEntityVelocity") &&
-			packet.id === Refs.player.id
+			packet.id === Miniblox.player.id
 		) {
 			if (this.horizontal === 0 && this.vertical === 0) e.cancel();
 

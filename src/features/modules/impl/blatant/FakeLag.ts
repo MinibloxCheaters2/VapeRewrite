@@ -1,6 +1,6 @@
 import type { C2SPacket, Entity } from "@wq2/miniblox-sdk";
 import { Subscribe } from "@/event/Bus";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import { SimpleVec3 } from "@/utils/math/vec";
 import { findTargets } from "@/utils/movement/target";
 import packetQueueManager, {
@@ -53,7 +53,7 @@ export default class FakeLag extends Mod {
 		if (this.#flushOnAction) {
 			return (
 				(packet instanceof c2s("SPacketEntityAction") &&
-					packet.id === Refs.player.id) ||
+					packet.id === Miniblox.player.id) ||
 				packet instanceof c2s("SPacketUseEntity") ||
 				packet instanceof c2s("SPacketUseItem") ||
 				packet instanceof c2s("SPacketPlayerAction") ||
@@ -88,16 +88,16 @@ export default class FakeLag extends Mod {
 		if (targets.length === 0) return;
 
 		const anyIntersects = targets.find((t) =>
-			t.boundingBox.intersectsBox(Refs.player.boundingBox),
+			t.boundingBox.intersectsBox(Miniblox.player.boundingBox),
 		);
 
 		if (anyIntersects) return;
 
 		const svPos = packetQueueManager.serverPos; // CAN BE UNDEFINED
-		const playerPos = Refs.player.pos;
+		const playerPos = Miniblox.player.pos;
 		const srvPos = svPos
 			? SimpleVec3.fromFloatVec3(svPos)
-			: SimpleVec3.fromThreeVec3(Refs.player.pos);
+			: SimpleVec3.fromThreeVec3(Miniblox.player.pos);
 		const serverPos = playerPos
 			.clone()
 			.setX(srvPos.x)
@@ -109,7 +109,7 @@ export default class FakeLag extends Mod {
 		);
 
 		const clientDistance = Math.min(
-			...targets.map((e) => e.pos.distanceTo(Refs.player.pos)),
+			...targets.map((e) => e.pos.distanceTo(Miniblox.player.pos)),
 		);
 
 		if (serverDistance < clientDistance) {

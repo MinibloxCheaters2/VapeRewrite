@@ -1,5 +1,5 @@
 import { Subscribe } from "@/event/Bus";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 
@@ -43,10 +43,10 @@ export default class LiquidWalk extends Mod {
 	}
 
 	private isInLiquid(testY: number): boolean {
-		const { player, game, Materials } = Refs;
+		const { player, game, Materials } = Miniblox;
 		if (!player || !game || !Materials) return false;
 
-		const { BlockPos } = Refs;
+		const { BlockPos } = Miniblox;
 		const pos = new BlockPos(
 			Math.floor(player.pos.x),
 			Math.floor(testY),
@@ -61,14 +61,14 @@ export default class LiquidWalk extends Mod {
 	}
 
 	private isLiquidBelow(): boolean {
-		const { player } = Refs;
+		const { player } = Miniblox;
 		if (!player) return false;
 
 		return this.isInLiquid(player.pos.y - 0.1);
 	}
 
 	private isLiquidAtFeet(): boolean {
-		const { player } = Refs;
+		const { player } = Miniblox;
 		if (!player) return false;
 
 		return this.isInLiquid(player.pos.y);
@@ -76,7 +76,7 @@ export default class LiquidWalk extends Mod {
 
 	@Subscribe("gameTick")
 	public onTick() {
-		const { player } = Refs;
+		const { player } = Miniblox;
 		if (!player) return;
 
 		const atLiquid = this.isLiquidAtFeet();

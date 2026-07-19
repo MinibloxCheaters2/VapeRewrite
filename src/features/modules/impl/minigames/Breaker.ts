@@ -6,7 +6,7 @@ import {
 	handleInRange,
 	withBlock,
 } from "@/utils";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 
@@ -30,10 +30,10 @@ export default class Breaker extends Mod {
 	}
 
 	#shouldBreakBlock(block: Block): boolean {
-		return block === Refs.Blocks.dragon_egg;
+		return block === Miniblox.Blocks.dragon_egg;
 	}
 	#shouldBreakBlockPos(pos: BlockPos): boolean {
-		const block = Refs.world?.getBlock?.(pos);
+		const block = Miniblox.world?.getBlock?.(pos);
 		if (block === undefined) return false;
 		return this.#shouldBreakBlock(block);
 	}
@@ -41,7 +41,7 @@ export default class Breaker extends Mod {
 	#handlerForBlock(block: Block): BlockHandler {
 		// TODO(Breaker): no one would want to really use breaker outside of EggWars,
 		//  but we should add a sort of packet mine for this.
-		return block === Refs.Blocks.dragon_egg
+		return block === Miniblox.Blocks.dragon_egg
 			? blockHandlers.rightClick
 			: blockHandlers.breakBlock;
 	}
@@ -50,7 +50,7 @@ export default class Breaker extends Mod {
 	private onTick() {
 		if (!this.#couldBreakAnything()) {
 			this.toggleSilently();
-			Refs.chat.addChat({
+			Miniblox.chat.addChat({
 				text: "this goobener has breaker on but made it break NOTHING. Screw your module, I'm disabling it.",
 			});
 			return;

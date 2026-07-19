@@ -1,5 +1,5 @@
 import { createSignal } from "solid-js";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import HudElement from "../api/JSXHudElement";
 
 interface TargetInfo {
@@ -36,8 +36,8 @@ export default class TargetHud extends HudElement {
 	public onAdd(): void {
 		const update = () => {
 			try {
-				const player = Refs.player;
-				const { EntityLivingBase, world } = Refs;
+				const player = Miniblox.player;
+				const { EntityLivingBase, world } = Miniblox;
 				if (!world || !player) return;
 
 				let closest: TargetInfo | null = null;

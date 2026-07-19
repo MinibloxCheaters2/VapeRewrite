@@ -1,6 +1,6 @@
 import { Subscribe } from "@/event/Bus";
 import type { Tagged } from "@/features/config/Settings";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import Dupe from "../Dupe";
 
 export default class ChestSpamDupe implements Tagged {
@@ -8,7 +8,7 @@ export default class ChestSpamDupe implements Tagged {
 
 	@Subscribe("gameTick")
 	private onTick() {
-		const { player, chat } = Refs;
+		const { player, chat } = Miniblox;
 		// TODO: would it work, even with your inventory?
 		if (
 			!player.openContainer ||

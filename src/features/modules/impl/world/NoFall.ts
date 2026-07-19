@@ -1,7 +1,7 @@
 import type { C2SPacket } from "@wq2/miniblox-sdk";
 import { Subscribe } from "@/event/Bus";
 import type CancelableWrapper from "@/event/CancelableWrapper";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import PacketFallDistance from "@/utils/movement/ServerFallDistance";
 import { c2s } from "@/utils/network/packetRefs";
 import Category from "../../api/Category";
@@ -26,10 +26,10 @@ export default class NoFall extends Mod {
 			packet instanceof c2s("SPacketPlayerPosLook") &&
 			!packet.onGround &&
 			PacketFallDistance.currentFallDistance >=
-				Refs.player.getMaxFallHeight() - FALL_HEIGHT_BUFFER
+				Miniblox.player.getMaxFallHeight() - FALL_HEIGHT_BUFFER
 		) {
 			packet.onGround = true;
-			Refs.player.fallDistance = 0.0;
+			Miniblox.player.fallDistance = 0.0;
 		}
 	}
 }

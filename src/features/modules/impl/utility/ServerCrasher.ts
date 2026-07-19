@@ -1,5 +1,5 @@
 import { Subscribe } from "@/event/Bus";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 
@@ -22,7 +22,7 @@ export default class ServerCrasher extends Mod {
 	onTick() {
 		for (let _ = 0; _ < this.#packetsPerTick; _++) {
 			//new C08PacketPlayerBlockPlacement(BlockPos.ORIGIN, 0, null, 0.0F, 0.0F, 0.0F)
-			Refs.ClientSocket.socket.send;
+			Miniblox.ClientSocket.socket.send;
 		}
 	}
 }

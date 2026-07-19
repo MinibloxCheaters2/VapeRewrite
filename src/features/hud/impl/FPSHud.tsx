@@ -1,5 +1,5 @@
 import { createSignal } from "solid-js";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import HudElement from "../api/JSXHudElement";
 
 export default class FPSHud extends HudElement {
@@ -37,7 +37,7 @@ export default class FPSHud extends HudElement {
 			const elapsed = now - this.lastFrameTime;
 
 			if (elapsed >= this.fpsUpdateInterval) {
-				const fps = Refs.game.resourceMonitor.filteredFPS;
+				const fps = Miniblox.game.resourceMonitor.filteredFPS;
 				this.fpsSignal[1](fps);
 				this.frameCount = 0;
 				this.lastFrameTime = now;

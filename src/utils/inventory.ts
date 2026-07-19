@@ -1,8 +1,8 @@
 import { SlotActionType } from "@wq2/miniblox-sdk";
-import Refs from "./helpers/refs";
+import Miniblox from "./refs/miniblox";
 
 export function dropItem(index: number) {
-	const { player, playerController } = Refs;
+	const { player, playerController } = Miniblox;
 	const windowId = player.openContainer.windowId;
 	playerController.windowClick(
 		windowId,

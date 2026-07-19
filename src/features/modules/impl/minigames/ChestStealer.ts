@@ -1,7 +1,7 @@
 import { type S2CPacket, SlotActionType } from "@wq2/miniblox-sdk";
 import { Subscribe } from "@/event/Bus";
 import type CancelableWrapper from "@/event/CancelableWrapper";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import { s2c } from "@/utils/network/packetRefs";
 import { getRandomArbitrary } from "@/utils/time/random";
 import Category from "../../api/Category";
@@ -107,14 +107,14 @@ export default class ChestStealer extends Mod {
 	}
 
 	private closeContainer(): void {
-		const { player } = Refs;
+		const { player } = Miniblox;
 		if (!player) return;
 
 		player.closeScreen?.();
 	}
 
 	private clickSlot(slotId: number): void {
-		const { playerController } = Refs;
+		const { playerController } = Miniblox;
 		if (!playerController || this.currentWindowId === null) return;
 
 		playerController.windowClick(
@@ -122,7 +122,7 @@ export default class ChestStealer extends Mod {
 			slotId,
 			0,
 			SlotActionType.PICKUP_RIGHT,
-			Refs.player,
+			Miniblox.player,
 		);
 	}
 
@@ -134,7 +134,7 @@ export default class ChestStealer extends Mod {
 			this.stolenItems = 0;
 
 			if (this.notify) {
-				Refs.chat.addChat({
+				Miniblox.chat.addChat({
 					text: "[ChestStealer] Opened chest",
 					color: "green",
 				});
@@ -144,7 +144,7 @@ export default class ChestStealer extends Mod {
 		if (packet instanceof s2c("CPacketCloseWindow")) {
 			if (this.currentWindowId === packet.windowId) {
 				if (this.notify && this.stolenItems > 0) {
-					Refs.chat.addChat({
+					Miniblox.chat.addChat({
 						text: `[ChestStealer] Stole ${this.stolenItems} items`,
 						color: "yellow",
 					});
@@ -156,7 +156,7 @@ export default class ChestStealer extends Mod {
 
 	@Subscribe("gameTick")
 	public onTick() {
-		const { playerController, player } = Refs;
+		const { playerController, player } = Miniblox;
 		if (!playerController || this.currentWindowId === null) {
 			return;
 		}

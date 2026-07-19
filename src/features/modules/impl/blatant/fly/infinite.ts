@@ -1,7 +1,7 @@
 import Bus from "@/Bus";
 import type { AnySetting, ToggleSetting } from "@/features/config/Settings";
 import SubModule from "@/features/config/SubModule";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import isKeyDown from "@/utils/input/key";
 import getMoveDirection from "@/utils/movement/movement";
 import type Fly from "./index";
@@ -18,7 +18,7 @@ export default class InfiniteSub extends SubModule {
 	}
 
 	onTick(fly: Fly, speed: number): void {
-		const { player } = Refs;
+		const { player } = Miniblox;
 		fly.ticks++;
 
 		const dir = getMoveDirection(speed);
@@ -46,7 +46,7 @@ export default class InfiniteSub extends SubModule {
 		if (this.lessVerticalSetting.value()) {
 			let stopTicks = 4;
 			Bus.onceB("gameTick", () => {
-				const { player } = Refs;
+				const { player } = Miniblox;
 				if (stopTicks > 0) {
 					player.motion.y = 0.18;
 					stopTicks--;

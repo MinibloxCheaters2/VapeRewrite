@@ -2,7 +2,7 @@ import type { EntityLivingBase } from "@wq2/miniblox-sdk";
 import { Subscribe } from "@/event/Bus";
 import RotationManager, { RotationPlan } from "@/utils/aiming/rotate";
 import Rotation from "@/utils/aiming/rotation";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import deg2rad from "@/utils/math/radians";
 import { SETTING } from "@/utils/movement/MovementCorrection";
 import { findTargets } from "@/utils/movement/target";
@@ -66,7 +66,7 @@ export default class KillAura extends Mod {
 	block() {
 		if (this.autoBlock) {
 			if (!this.blocking) {
-				const { ClientSocket, playerControllerMP } = Refs;
+				const { ClientSocket, playerControllerMP } = Miniblox;
 				// auto-remapping proxy!
 				playerControllerMP.syncItem();
 				ClientSocket.sendPacket(new PacketRefs.s.SPacketUseItem());
@@ -78,7 +78,7 @@ export default class KillAura extends Mod {
 	unblock() {
 		if (this.blocking) {
 			const { ClientSocket, BlockPos, EnumFacing, playerControllerMP } =
-				Refs;
+				Miniblox;
 			// auto-remapping proxy again lol
 			playerControllerMP.syncItem();
 			ClientSocket.sendPacket(
@@ -93,7 +93,7 @@ export default class KillAura extends Mod {
 	}
 
 	sendAttack(e: EntityLivingBase, first: boolean) {
-		const { ClientSocket, player } = Refs;
+		const { ClientSocket, player } = Miniblox;
 		const box = e.getEntityBoundingBox();
 		const hitVec = player.getEyePos().clone().clamp(box.min, box.max);
 
