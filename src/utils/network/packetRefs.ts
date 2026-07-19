@@ -3,7 +3,7 @@
  * @module
  */
 import type { CPACKET_MAP, SPACKET_MAP } from "@wq2/miniblox-sdk";
-import Miniblox from "../game/miniblox";
+import Miniblox from "../refs/miniblox";
 // TODO: update this
 
 export type CPacketMap = typeof CPACKET_MAP;
