@@ -1,7 +1,7 @@
 import { scriptEl } from "@/hooks/gameScript";
 import { expose } from "@/exposed";
 import initOrR from "../helpers/initOrR";
-import { AnyPacket } from "@wq2/miniblox-sdk";
+import { AnyPacket, ClientSocket, PlayerControllerMP } from "@wq2/miniblox-sdk";
 
 export async function importMiniblox() {
 	return await import(scriptEl.src);
@@ -31,6 +31,9 @@ function filterObjectByCode(codeFilter: (code: string) => boolean) {
 }
 
 const packets: AnyPacket[] | undefined = undefined;
+let CSocket: typeof ClientSocket | undefined = undefined;
+let playerControllerMP: PlayerControllerMP | undefined = undefined;
+
 const Miniblox = {
 	/** note: not all packets are here, only the ones vector exports. */
 	get packets() {
@@ -40,6 +43,33 @@ const Miniblox = {
 				filterObject(
 					(x) => typeof x === "function" && "typeName" in x,
 				) as AnyPacket[] | undefined,
+		);
+	},
+	get ClientSocket() {
+		return initOrR(CSocket, () =>
+			findObject(
+				(x) =>
+					// classes are "functions"
+					typeof x === "function" &&
+					"sendPacket" in x &&
+					"socket" in x &&
+					"disconnectMessage" in x &&
+					"netSim" in x &&
+					"serverBaseUrl" in x &&
+					"setUrl" in x,
+			),
+		);
+	},
+	get playerControllerMP() {
+		return initOrR(playerControllerMP, () =>
+			findObject(
+				(x) =>
+					typeof x === "object" &&
+					"lastSentSlot" in x &&
+					"isHittingBlock" in x &&
+					"sendEnchantPacket" in x &&
+					"sendRenamePacket" in x,
+			),
 		);
 	},
 };
