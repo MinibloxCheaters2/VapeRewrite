@@ -1,4 +1,4 @@
-import type {
+import {
 	AllBlocks,
 	BlockPos,
 	Chat,
@@ -16,12 +16,10 @@ import type {
 	ItemStack,
 	ItemSword,
 	Items,
-	Materials,
 	PlayerController,
 	PlayerControllerMP,
 	AnyPacket,
 	Message,
-	SPacketPlayerInput,
 } from "@wq2/miniblox-sdk";
 import { scriptEl } from "@/hooks/gameScript";
 import { expose } from "@/exposed";
@@ -29,7 +27,7 @@ import initOrR from "../helpers/initOrR";
 import mappings from "../mapping/mappings";
 import remapObj from "../helpers/remapProxy";
 import { getInheritanceTree, HasProto } from "../helpers/tree";
-import PacketRefs from "../network/packetRefs";
+import { PerspectiveCamera } from "three";
 
 export async function importMiniblox() {
 	return await import(scriptEl.src);
@@ -64,6 +62,8 @@ let _player: ClientEntityPlayer | undefined;
 let _chat: Chat | undefined;
 let _BlockPos: typeof BlockPos | undefined;
 let _EnumFacing: typeof EnumFacing | undefined;
+let _Enchantments: typeof Enchantments | undefined;
+let _hud3D: Hud3D | undefined;
 let _EntityLivingBase: typeof EntityLivingBase | undefined;
 let _playerController: PlayerController | undefined;
 let _Blocks: AllBlocks | undefined;
@@ -78,7 +78,7 @@ let _packets: AnyPacket[] | undefined = undefined;
 let CSocket: typeof ClientSocket | undefined = undefined;
 let _playerControllerMP: PlayerControllerMP | undefined = undefined;
 
-// search for exposed globals: `globalThis\.\w+ = `
+// search for exposed globals: `unsafeWindow\.\w+ = `
 // note: you could also search for window, but there's a bunch of false positives for stuff like onbeforeunload
 
 const Miniblox = {
@@ -124,7 +124,7 @@ const Miniblox = {
 		return initOrR(
 			_Items,
 			() =>
-				(globalThis as typeof globalThis & { Items: typeof Items })
+				(unsafeWindow as typeof unsafeWindow & { Items: typeof Items })
 					.Items,
 		);
 	},
@@ -147,7 +147,7 @@ const Miniblox = {
 			_ItemStack,
 			() =>
 				(
-					globalThis as typeof globalThis & {
+					unsafeWindow as typeof unsafeWindow & {
 						ItemStack: typeof ItemStack;
 					}
 				).ItemStack,
@@ -162,8 +162,15 @@ const Miniblox = {
 	},
 
 	get Enchantments(): typeof Enchantments {
-		throw new Error(
-			"TODO: get Enchantements object, note that Enchantment is exposed and has a list for those",
+		return initOrR(_Enchantments, () =>
+			findObject(
+				(x) =>
+					typeof x === "function" &&
+					"protection" in x &&
+					"fireProtection" in x &&
+					"featherFalling" in x &&
+					"init" in x,
+			),
 		);
 	},
 
@@ -171,7 +178,7 @@ const Miniblox = {
 		return initOrR(
 			_Blocks,
 			() =>
-				(globalThis as typeof globalThis & { Blocks: AllBlocks })
+				(unsafeWindow as typeof unsafeWindow & { Blocks: AllBlocks })
 					.Blocks,
 		);
 	},
@@ -183,8 +190,56 @@ const Miniblox = {
 		return initOrR(_ItemBlock, () => Miniblox.Blocks.stone.constructor);
 	},
 	get hud3D() {
-		// TODO: get hud3D object?
-		throw new Error("TODO: get hud3D object");
+		/*
+		var hud3D = new class extends er {
+    item = new er;
+    fireGroup = new er;
+    suffocationGroup = new ur;
+    lastSuffocationBlock;
+    mesh = new ur;
+    tesr;
+    rightArm;
+    armSkin;
+    armSkinReady = !1;
+    leftArm;
+    lastPunch = 0;
+    rightArmPunch = new aI([aMe, oMe, sMe, cMe],this);
+    itemPunch = new aI([zje, Bje, Vje],this);
+    eat = new aI([lMe, uMe],this);
+    sword = [new aI([Hje, Uje, Wje],this), new aI([Gje, Kje, qje],this)];
+    swordVariation = 0;
+    shovel = new aI([Jje, Yje, Xje],this);
+    axe = new aI([Zje, Qje, $je, eMe],this);
+    cancelAnimation = !1;
+    currentActiveItem;
+    prevCast = !1;
+    prevCharge = null;
+    prevCompassFrame = -1;
+    prevClockFrame = -1;
+    swingLength = bT(0);
+    constructor() {
+        super(),
+        gameScene.camera.add(this), // <<< this, we can detect the fields that only exist in this class and then put it here as a reference
+        gameScene.camera.add(this.fireGroup),
+        gameScene.camera.add(this.suffocationGroup),
+        this.add(this.item)
+    }
+*/
+		return initOrR(_hud3D, () => {
+			const { gameScene } = this.game;
+			const camera = gameScene.camera as PerspectiveCamera; // could use destructuring, but I need this cast
+			const hud3D = camera.children.find((c) => {
+				return (
+					"item" in c &&
+					"fireGroup" in c &&
+					"eat" in c &&
+					"swingArm" in c &&
+					"leftPunch" in c
+				);
+			}) as unknown as Hud3D;
+			console.log(hud3D);
+			return hud3D;
+		});
 	},
 
 	/**
