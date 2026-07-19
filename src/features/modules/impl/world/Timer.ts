@@ -1,5 +1,5 @@
 import type { ClientEntityPlayer } from "@wq2/miniblox-sdk";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 
@@ -40,7 +40,7 @@ export default class Timer extends Mod {
 	private hookFixedUpdate(): void {
 		if (this.isHooked) return;
 
-		const { player } = Refs;
+		const { player } = Miniblox;
 		if (!player) return;
 
 		// Get the player's fixedUpdate method
@@ -81,7 +81,7 @@ export default class Timer extends Mod {
 	private unhookFixedUpdate(): void {
 		if (!this.isHooked || !this.originalFixedUpdate) return;
 
-		const { player } = Refs;
+		const { player } = Miniblox;
 		if (!player) return;
 
 		const playerProto = Object.getPrototypeOf(player) as ClientEntityPlayer;

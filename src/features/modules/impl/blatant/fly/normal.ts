@@ -1,6 +1,6 @@
 import type { SliderSetting, ToggleSetting } from "@/features/config/Settings";
 import SubModule from "@/features/config/SubModule";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import isKeyDown from "@/utils/input/key";
 import DesyncManager from "@/utils/movement/DesyncManager";
 import getMoveDirection from "@/utils/movement/movement";
@@ -24,7 +24,7 @@ export default class NormalSub extends SubModule {
 			DesyncManager.desync = true;
 			fly.desynced = true;
 		}
-		const { player } = Refs;
+		const { player } = Miniblox;
 		const dir = getMoveDirection(this.speedSetting.value());
 
 		player.motion.x = dir.x;
@@ -41,7 +41,7 @@ export default class NormalSub extends SubModule {
 	}
 
 	onDisable(_fly: Fly): void {
-		const { player } = Refs;
+		const { player } = Miniblox;
 		player.motion.x = Math.max(Math.min(player.motion.x, 0.3), -0.3);
 		player.motion.z = Math.max(Math.min(player.motion.z, 0.3), -0.3);
 	}

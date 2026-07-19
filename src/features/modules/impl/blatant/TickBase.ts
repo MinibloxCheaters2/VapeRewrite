@@ -1,6 +1,6 @@
 import { Subscribe } from "@/event/Bus";
 import type Cancelable from "@/event/Cancelable";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 
@@ -44,7 +44,7 @@ export default class TickBase extends Mod {
 			this.tick = false;
 			wrap.cancel();
 			for (let i = 0; i < Math.floor(this.#boosts); i++) {
-				Refs.player.fixedUpdate();
+				Miniblox.player.fixedUpdate();
 			}
 		}
 	}

@@ -1,7 +1,7 @@
 import type { C2SPacket, ItemStack } from "@wq2/miniblox-sdk";
 import { SubscribeAsync } from "@/event/Bus";
 import type CancelableWrapper from "@/event/CancelableWrapper";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import { c2s } from "@/utils/network/packetRefs";
 import waitTicks from "@/utils/time/wait";
 import Category from "../../api/Category";
@@ -73,7 +73,7 @@ export default class AutoSword extends Mod {
 	}
 
 	private findBestSword(): number | null {
-		const { player } = Refs;
+		const { player } = Miniblox;
 		if (!player) return null;
 
 		const inventory = player.inventory.main || [];
@@ -104,7 +104,7 @@ export default class AutoSword extends Mod {
 	}
 
 	private switchToSword(): void {
-		const { player, game } = Refs;
+		const { player, game } = Miniblox;
 		if (!player || !game) return;
 
 		const now = Date.now();
@@ -121,18 +121,18 @@ export default class AutoSword extends Mod {
 
 		player.inventory.currentItem = swordSlot;
 		// this should work if my remap proxy works
-		Refs.playerControllerMP.syncItem();
+		Miniblox.playerControllerMP.syncItem();
 		game.info.selectedSlot = swordSlot;
 		this.lastSlotSwitch = now;
 	}
 
 	private swapBackToPrevious(): void {
-		const { player, game } = Refs;
+		const { player, game } = Miniblox;
 		if (!player || !game || this.previousSlot === null) return;
 
 		player.inventory.currentItem = this.previousSlot;
 		game.info.selectedSlot = this.previousSlot;
-		Refs.playerControllerMP.syncItem();
+		Miniblox.playerControllerMP.syncItem();
 		this.previousSlot = null;
 	}
 

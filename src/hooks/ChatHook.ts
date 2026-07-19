@@ -4,7 +4,7 @@
  */
 
 import type { Chat, ChatData, ChatLog } from "@wq2/miniblox-sdk";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 
 const idSymbol = Symbol();
 
@@ -13,7 +13,7 @@ export type UUIDv4 = `${string}-${string}-4${string}-${string}-${string}`;
 export default new (class ChatHook {
 	origAddChat: Chat["addChat"];
 	init() {
-		const { chat } = Refs;
+		const { chat } = Miniblox;
 		this.origAddChat = chat.addChat;
 		chat.addChat = new Proxy(chat.addChat, {
 			apply(orig, ts, args: [ChatData]) {
@@ -30,7 +30,7 @@ export default new (class ChatHook {
 		id: UUIDv4,
 		modifier: ChatLog | ((old: ChatLog) => ChatLog),
 	): boolean {
-		const { log } = Refs.chat;
+		const { log } = Miniblox.chat;
 		const origIdx = log.findIndex((log) => log[idSymbol] === id);
 		if (origIdx === -1) return false;
 		const orig = log[origIdx];
@@ -43,7 +43,7 @@ export default new (class ChatHook {
 		id: UUIDv4,
 		modifier: ChatLog | ((old: ChatLog) => ChatLog),
 	): boolean {
-		const { log } = Refs.chat;
+		const { log } = Miniblox.chat;
 		const origIdx = log.findIndex((log) => log[idSymbol] === id);
 		if (origIdx === -1) return false;
 		const orig = log[origIdx];

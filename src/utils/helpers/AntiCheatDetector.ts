@@ -7,7 +7,7 @@ import Bus from "@/Bus";
 import { Subscribe } from "@/event/Bus";
 import { Logger } from "../logging/Logger";
 import { c2s, s2c } from "../network/packetRefs";
-import Refs from "./refs";
+import Miniblox from "../refs/miniblox";
 
 export enum DetectedAC {
 	/** Not detected yet. */
@@ -44,10 +44,10 @@ export default new (class AntiCheatDetector {
 				data instanceof c2s("SPacketPlayerInput") &&
 				!(
 					(
-						Refs.player.abilities.isFlying ||
-						Refs.player.mode.isSpectator()
+						Miniblox.player.abilities.isFlying ||
+						Miniblox.player.mode.isSpectator()
 					) /* ||
-					Refs.player.mode.isCreative()*/
+					Miniblox.player.mode.isCreative()*/
 				)
 			) {
 				LOGGER.info("Captured 1st input");

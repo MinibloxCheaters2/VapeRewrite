@@ -1,7 +1,7 @@
 // idk if this works lmao
 import { Subscribe } from "@/event/Bus";
 import { defaultFilter, oneInRange } from "@/utils";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 
@@ -38,11 +38,11 @@ export default class Spider extends Mod {
 	}
 
 	private isNearWall(): boolean {
-		const { player, game } = Refs;
+		const { player, game } = Miniblox;
 		if (!player || !game) return false;
 
 		const range = this.wallDetectRange;
-		const { BlockPos } = Refs;
+		const { BlockPos } = Miniblox;
 
 		// Check all 4 cardinal directions
 		const directions = [
@@ -64,7 +64,7 @@ export default class Spider extends Mod {
 			);
 
 			const block = game.world.getBlockState(checkPos).getBlock();
-			const { Materials } = Refs;
+			const { Materials } = Miniblox;
 
 			if (Materials && block.material !== Materials.air) {
 				return true;
@@ -85,7 +85,7 @@ export default class Spider extends Mod {
 
 	@Subscribe("gameTick")
 	public onTick() {
-		const { player } = Refs;
+		const { player } = Miniblox;
 		if (!player) return;
 
 		const nearWall = this.isNearWall() || this.isCollidingHorizontally();

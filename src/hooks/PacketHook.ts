@@ -1,7 +1,7 @@
 import Bus from "@/Bus";
 import CancelableWrapper from "@/event/CancelableWrapper";
 import { expose } from "@/exposed";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import { waitForReact } from "@/utils/helpers/waitForReact";
 
 let Message;
@@ -11,7 +11,7 @@ let origToBinary, origFromBinary;
 const packetHook = {
 	init() {
 		const SPacketUpdateInventory =
-			Refs.player.inventory.sendInventoryToServer();
+			Miniblox.player.inventory.sendInventoryToServer();
 		Message = SPacketUpdateInventory.constructor.__proto__;
 		expose("Message", () => Message);
 		proto2 = SPacketUpdateInventory.constructor.runtime;

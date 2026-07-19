@@ -1,8 +1,8 @@
 import type { Entity, EntityLivingBase } from "@wq2/miniblox-sdk";
-import Refs from "../helpers/refs";
+import Miniblox from "../refs/miniblox";
 
 export function getTeam(entity: Entity) {
-	const entry = Refs.game.playerList.playerDataMap.get(entity.id);
+	const entry = Miniblox.game.playerList.playerDataMap.get(entity.id);
 	if (!entry) return;
 	return entry.color !== "white" ? entry.color : undefined;
 }
@@ -12,7 +12,7 @@ export function findTargets(
 	_angle = 360,
 	checkWalls = false,
 ): EntityLivingBase[] {
-	const { player, EntityLivingBase, world } = Refs;
+	const { player, EntityLivingBase, world } = Miniblox;
 	if (world === undefined)
 		throw new Error("findTargets called while world is null");
 	const localTeam = getTeam(player);

@@ -1,5 +1,5 @@
 import { Subscribe } from "@/event/Bus";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import DesyncManager from "@/utils/movement/DesyncManager";
 import Category from "../../../api/Category";
 import Mod from "../../../api/Module";
@@ -45,11 +45,11 @@ export default class Fly extends Mod {
 		this.ticks = 0;
 
 		if (this.mode === "Infinite (Old AC)" && !this.warned) {
-			Refs.chat.addChat({
+			Miniblox.chat.addChat({
 				text: "Infinite Fly only works on servers using the old AC",
 				color: "yellow",
 			});
-			Refs.chat.addChat({
+			Miniblox.chat.addChat({
 				text: "(KitPvP, Skywars, Eggwars, Bridge Duels use new AC)",
 				color: "gray",
 			});

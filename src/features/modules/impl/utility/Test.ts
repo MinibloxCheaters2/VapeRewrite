@@ -6,7 +6,7 @@
  */
 
 import { Subscribe } from "@/event/Bus";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import { c2s } from "@/utils/network/packetRefs";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
@@ -36,7 +36,7 @@ export default class Test extends Mod {
 			return;
 		}
 		for (let i = 0; i < this.#times; i++) {
-			Refs.ClientSocket.sendPacket(new (c2s("SPacketUseItem"))());
+			Miniblox.ClientSocket.sendPacket(new (c2s("SPacketUseItem"))());
 		}
 		this.#waitCount = this.#delay;
 	}

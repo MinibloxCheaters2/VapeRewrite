@@ -1,5 +1,5 @@
 import { Subscribe } from "@/event/Bus";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import { findTargets } from "@/utils/movement/target";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
@@ -79,7 +79,7 @@ export default class TargetStrafe extends Mod {
 
 	@Subscribe("gameTick")
 	public onTick() {
-		const { player } = Refs;
+		const { player } = Miniblox;
 		if (this.onlyOnGround && !player.onGround) return;
 
 		if (this.onlyWhenMoving) {

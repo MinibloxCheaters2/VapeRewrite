@@ -1,7 +1,7 @@
 import type { ItemStack, Slot } from "@wq2/miniblox-sdk";
 import { SlotActionType } from "@wq2/miniblox-sdk";
 import { Subscribe } from "@/event/Bus";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import remapObj from "@/utils/helpers/remapProxy";
 import { dropItem } from "@/utils/inventory";
 import mappings from "@/utils/mapping/mappings";
@@ -12,7 +12,7 @@ function getItemStrength(stack: ItemStack) {
 	if (stack === null) return 0;
 	const itemBase = stack.getItem();
 	let base = 1;
-	const { ItemSword, ItemArmor, Enchantments } = Refs;
+	const { ItemSword, ItemArmor, Enchantments } = Miniblox;
 
 	if (itemBase instanceof ItemSword) base += itemBase.attackDamage;
 	else if (itemBase instanceof ItemArmor) {
@@ -39,7 +39,7 @@ function getItemStrength(stack: ItemStack) {
 function getArmorSlot(armorSlot: number, slots: (Slot | null)[]) {
 	let returned = armorSlot;
 	let dist = 0;
-	const { ItemArmor } = Refs; // *slight* optimization, doesn't matter that much since it just stops you from constantly hitting cache
+	const { ItemArmor } = Miniblox; // *slight* optimization, doesn't matter that much since it just stops you from constantly hitting cache
 	for (let i = 0; i < 40; i++) {
 		const stack = slots[i]?.getStack();
 		if (!stack) continue;
@@ -62,7 +62,7 @@ export default class AutoArmor extends Mod {
 
 	@Subscribe("gameTick")
 	private onTick() {
-		const { player, playerController } = Refs;
+		const { player, playerController } = Miniblox;
 		// if (player.openContainer === player.inventoryContainer) {
 		for (let i = 0; i < 4; i++) {
 			const slots = player.inventoryContainer.inventorySlots;

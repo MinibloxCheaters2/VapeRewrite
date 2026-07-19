@@ -1,20 +1,20 @@
 import type { Block, BlockPos, BlockState } from "@wq2/miniblox-sdk";
 import PacketRefs from "../network/packetRefs";
-import Refs from "./refs";
+import Miniblox from "../refs/miniblox";
 
 export type BlockHandler = (b: BlockPos) => void;
 export type BlockFilter = (b: BlockPos) => boolean;
 
 export const blockHandlers = {
 	rightClick(pos: BlockPos) {
-		Refs.ClientSocket.sendPacket(
+		Miniblox.ClientSocket.sendPacket(
 			new PacketRefs.s.SPacketClick({
 				location: pos.toProto(),
 			}),
 		);
 	},
 	breakBlock(pos: BlockPos) {
-		Refs.ClientSocket.sendPacket(
+		Miniblox.ClientSocket.sendPacket(
 			new PacketRefs.s.SPacketBreakBlock({
 				location: pos.toProto(),
 				start: false,
@@ -32,7 +32,7 @@ export function isSolid(b: Block) {
 }
 
 export function withBlock<T>(fn: (block: Block) => T): (pos: BlockPos) => T {
-	const { world } = Refs;
+	const { world } = Miniblox;
 	if (world === undefined)
 		throw new Error("Can't call withBlock(fn) while not in world");
 	return (pos) => fn(world.getBlock(pos));
@@ -41,7 +41,7 @@ export function withBlock<T>(fn: (block: Block) => T): (pos: BlockPos) => T {
 export function withBlockState<T>(
 	fn: (block: BlockState) => T,
 ): (pos: BlockPos) => T {
-	const { world } = Refs;
+	const { world } = Miniblox;
 	if (world === undefined)
 		throw new Error("Can't call withBlockState(fn) while not in world");
 	return (pos) => fn(world.getBlockState(pos));
@@ -49,13 +49,13 @@ export function withBlockState<T>(
 
 export const defaultFilter: BlockFilter = (b) =>
 	// biome-ignore lint/style/noNonNullAssertion: you shouldn't call this while the world is null anyways
-	isSolid(Refs.world!.getBlock(b));
+	isSolid(Miniblox.world!.getBlock(b));
 
 export function allBlocksInRange(
 	hRange: number,
 	vRange: number = hRange,
 ): BlockPos[] {
-	const { player, BlockPos } = Refs;
+	const { player, BlockPos } = Miniblox;
 	const min = new BlockPos(
 		player.pos.x - hRange,
 		player.pos.y - vRange,

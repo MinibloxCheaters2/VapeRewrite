@@ -7,7 +7,7 @@ import {
 	type SuggestionsBuilder,
 } from "@wq2/brigadier-ts";
 import type { EntityPlayer } from "@wq2/miniblox-sdk";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 
 export const PLAYER_NOT_FOUND = new CommandErrorType(
 	(found) => `Player "${found}" not found`,
@@ -18,7 +18,7 @@ export default class ModuleArgumentType extends ArgumentType<EntityPlayer> {
 		_context: CommandContext<unknown>,
 		builder: SuggestionsBuilder,
 	): Promise<Suggestions> {
-		const suggestions = Refs.world.players
+		const suggestions = Miniblox.world.players
 			.values()
 			.filter((m) =>
 				m.name
@@ -36,7 +36,7 @@ export default class ModuleArgumentType extends ArgumentType<EntityPlayer> {
 	parse(reader: StringReader): EntityPlayer {
 		const start = reader.getCursor();
 		const name = reader.readString();
-		const plr = Refs.world.players
+		const plr = Miniblox.world.players
 			.values()
 			.find((p) => p.name.toLowerCase() === name.toLowerCase());
 

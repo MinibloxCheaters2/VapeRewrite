@@ -3,7 +3,7 @@ import type { EntityPlayer, S2CPacket } from "@wq2/miniblox-sdk";
 import Bus from "@/Bus";
 import { Subscribe } from "@/event/Bus";
 import type CancelableWrapper from "@/event/CancelableWrapper";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import { s2c } from "@/utils/network/packetRefs";
 import PlayerArgumentType from "../api/brigadier/PlayerArgumentType";
 import dispatcher from "../api/CommandDispatcher";
@@ -12,7 +12,7 @@ dispatcher.register(
 	literal("locate").then(
 		argument("player", new PlayerArgumentType()).executes(async (e) => {
 			const player = e.get<EntityPlayer>("player");
-			Refs.chat.addChat({
+			Miniblox.chat.addChat({
 				text: `${player.name} is at ${Math.round(player.pos.x)}, ${Math.round(
 					player.pos.y,
 				)}, ${Math.round(player.pos.z)}`,

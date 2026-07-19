@@ -1,9 +1,9 @@
-import Refs from "../helpers/refs";
+import Miniblox from "../refs/miniblox";
 
 export default function getMoveDirection(moveSpeed: number) {
-	const { player, Vec3 } = Refs;
-	let moveStrafe = Refs.player.moveStrafe;
-	let moveForward = Refs.player.moveForward;
+	const { player, Vec3 } = Miniblox;
+	let moveStrafe = Miniblox.player.moveStrafe;
+	let moveForward = Miniblox.player.moveForward;
 	let speed = moveStrafe * moveStrafe + moveForward * moveForward;
 	if (speed >= 0.0001) {
 		speed = Math.sqrt(speed);

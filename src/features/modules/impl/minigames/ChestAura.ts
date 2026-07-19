@@ -1,7 +1,7 @@
 import type { BlockPos } from "@wq2/miniblox-sdk";
 import { Subscribe } from "@/event/Bus";
 import { blockHandlers, oneInRange } from "@/utils";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 
@@ -20,7 +20,7 @@ export default class ChestAura extends Mod {
 
 	@Subscribe("playerTick")
 	private onPlayerTick() {
-		const { Blocks, world } = Refs;
+		const { Blocks, world } = Miniblox;
 		if (world === undefined) return;
 		const chest = oneInRange(this.#range, (pos) => {
 			return (

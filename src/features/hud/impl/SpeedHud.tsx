@@ -1,5 +1,5 @@
 import { createSignal } from "solid-js";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import HudElement from "../api/JSXHudElement";
 
 export default class SpeedHud extends HudElement {
@@ -31,7 +31,7 @@ export default class SpeedHud extends HudElement {
 	public onAdd(): void {
 		const update = () => {
 			try {
-				const player = Refs.player;
+				const player = Miniblox.player;
 				if (player) {
 					const now = performance.now();
 					const dt = (now - this.#lastTime) / 1000;
