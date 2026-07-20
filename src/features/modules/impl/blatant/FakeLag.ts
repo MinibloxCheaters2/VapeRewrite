@@ -1,6 +1,5 @@
 import type { C2SPacket, Entity } from "@wq2/miniblox-sdk";
 import { Subscribe } from "@/event/Bus";
-import Miniblox from "@/utils/refs/miniblox";
 import { SimpleVec3 } from "@/utils/math/vec";
 import { findTargets } from "@/utils/movement/target";
 import packetQueueManager, {
@@ -8,6 +7,7 @@ import packetQueueManager, {
 	type PacketOutcome,
 } from "@/utils/network/packetQueueManager";
 import { c2s } from "@/utils/network/packetRefs";
+import Miniblox from "@/utils/refs/miniblox";
 import { getRandomArbitrary } from "@/utils/time/random";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";

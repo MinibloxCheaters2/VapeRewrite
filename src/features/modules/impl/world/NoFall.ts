@@ -1,9 +1,9 @@
 import type { C2SPacket } from "@wq2/miniblox-sdk";
 import { Subscribe } from "@/event/Bus";
 import type CancelableWrapper from "@/event/CancelableWrapper";
-import Miniblox from "@/utils/refs/miniblox";
 import PacketFallDistance from "@/utils/movement/ServerFallDistance";
 import { c2s } from "@/utils/network/packetRefs";
+import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 

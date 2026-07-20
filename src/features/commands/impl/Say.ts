@@ -1,6 +1,6 @@
 import { argument, literal, StringArgumentType } from "@wq2/brigadier-ts";
-import Miniblox from "@/utils/refs/miniblox";
 import PacketRefs from "@/utils/network/packetRefs";
+import Miniblox from "@/utils/refs/miniblox";
 import dispatcher from "../api/CommandDispatcher";
 
 dispatcher.register(

@@ -1,5 +1,6 @@
-import {
+import type {
 	AllBlocks,
+	AnyPacket,
 	BlockPos,
 	Chat,
 	ClientEntityPlayer,
@@ -16,19 +17,18 @@ import {
 	ItemStack,
 	ItemSword,
 	Items,
+	Materials,
+	Message,
 	PlayerController,
 	PlayerControllerMP,
-	AnyPacket,
-	Message,
-	Materials,
 } from "@wq2/miniblox-sdk";
-import { scriptEl } from "@/hooks/gameScript";
+import type { PerspectiveCamera } from "three";
 import { expose } from "@/exposed";
+import { scriptEl } from "@/hooks/gameScript";
 import initOrR from "../helpers/initOrR";
-import mappings from "../mapping/mappings";
 import remapObj from "../helpers/remapProxy";
-import { getInheritanceTree, HasProto } from "../helpers/tree";
-import { PerspectiveCamera } from "three";
+import { getInheritanceTree, type HasProto } from "../helpers/tree";
+import mappings from "../mapping/mappings";
 
 export async function importMiniblox() {
 	return await import(scriptEl.src);
@@ -45,7 +45,7 @@ function findObject(filter: (clazz: NewableFunction) => boolean) {
 	return Object.values(miniblox).find(filter);
 }
 
-function findObjectByCode(codeFilter: (code: string) => boolean) {
+function _findObjectByCode(codeFilter: (code: string) => boolean) {
 	return Object.values(miniblox).find((x) => codeFilter(x.toString()));
 }
 
@@ -53,7 +53,7 @@ function filterObject(filter: (clazz: NewableFunction) => boolean) {
 	return Object.values(miniblox).filter(filter);
 }
 
-function filterObjectByCode(codeFilter: (code: string) => boolean) {
+function _filterObjectByCode(codeFilter: (code: string) => boolean) {
 	return Object.values(miniblox).filter((x) => codeFilter(x.toString()));
 }
 
@@ -76,9 +76,9 @@ let _ItemStack: typeof ItemStack | undefined;
 let _ItemBow: typeof ItemBow | undefined;
 let _ItemBlock: typeof ItemBlock | undefined;
 
-let _packets: AnyPacket[] | undefined = undefined;
-let CSocket: typeof ClientSocket | undefined = undefined;
-let _playerControllerMP: PlayerControllerMP | undefined = undefined;
+let _packets: AnyPacket[] | undefined;
+let CSocket: typeof ClientSocket | undefined;
+let _playerControllerMP: PlayerControllerMP | undefined;
 
 // search for exposed globals: `globalThis\.\w+ = `
 // note: you could also search for window, but there's a bunch of false positives for stuff like onbeforeunload
@@ -91,7 +91,7 @@ const Miniblox = {
 			() =>
 				filterObject(
 					(x) => typeof x === "function" && "typeName" in x,
-				) as Message<{}>[] | undefined,
+				) as Message<object>[] | undefined,
 		);
 	},
 	get ClientSocket() {

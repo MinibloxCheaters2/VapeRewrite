@@ -3,9 +3,9 @@ import type { Vector3 } from "three";
 import { Subscribe } from "@/event/Bus";
 import RotationManager, { RotationPlan } from "@/utils/aiming/rotate";
 import Rotation from "@/utils/aiming/rotation";
-import Miniblox from "@/utils/refs/miniblox";
 import isKeyDown from "@/utils/input/key";
 import { SETTING } from "@/utils/movement/MovementCorrection";
+import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 
@@ -244,7 +244,8 @@ export default class Scaffold extends Mod {
 
 	@Subscribe("gameTick")
 	onTick(): void {
-		const { player, game, BlockPos, ItemBlock, playerController } = Miniblox;
+		const { player, game, BlockPos, ItemBlock, playerController } =
+			Miniblox;
 
 		if (
 			this.technique === "Telly" &&

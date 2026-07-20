@@ -7,10 +7,7 @@ export * from "./aiming/rotation";
 export * from "./helpers/blockHandlers";
 export * from "./helpers/cachedResourceURL";
 export * from "./helpers/initOrR";
-// Utilities / helpers
-export * from "./refs/miniblox";
 export * from "./helpers/remapProxy";
-export * from "./refs/three";
 // Input / keys
 export * from "./input/key";
 // Logger
@@ -31,6 +28,9 @@ export * from "./network/PacketUtil";
 export * from "./network/packetQueueManager";
 export * from "./network/packetRefs";
 export * from "./network/posPacket";
+// Utilities / helpers
+export * from "./refs/miniblox";
+export * from "./refs/three";
 // Random / timing
 export * from "./time/random";
 export * from "./time/wait";

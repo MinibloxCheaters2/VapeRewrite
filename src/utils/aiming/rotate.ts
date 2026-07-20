@@ -7,10 +7,10 @@ import type { C2SPacket } from "@wq2/miniblox-sdk";
 import Bus from "@/Bus";
 import { Priority, Subscribe } from "@/event/Bus";
 import type CancelableWrapper from "@/event/CancelableWrapper";
-import Miniblox from "../refs/miniblox";
 import MovementCorrection from "../movement/MovementCorrection";
 import packetQueueManager from "../network/packetQueueManager";
 import { c2s } from "../network/packetRefs";
+import Miniblox from "../refs/miniblox";
 import Rotation from "./rotation";
 
 export class RotationPlan {

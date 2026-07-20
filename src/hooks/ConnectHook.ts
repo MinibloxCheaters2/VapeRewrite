@@ -1,7 +1,7 @@
+import type { Game } from "@wq2/miniblox-sdk";
 import Bus from "@/Bus";
-import Miniblox from "@/utils/refs/miniblox";
 import { waitForReact } from "@/utils/helpers/waitForReact";
-import { Game } from "@wq2/miniblox-sdk";
+import Miniblox from "@/utils/refs/miniblox";
 
 let orig: Game["connect"];
 

@@ -1,6 +1,6 @@
 import { Subscribe } from "@/event/Bus";
-import Miniblox from "@/utils/refs/miniblox";
 import { findTargets } from "@/utils/movement/target";
+import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 

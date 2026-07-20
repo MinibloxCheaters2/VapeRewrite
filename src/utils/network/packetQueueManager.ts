@@ -7,10 +7,10 @@ import { Priority, Subscribe } from "../../event/Bus";
 import type CancelableWrapper from "../../event/CancelableWrapper";
 import Rotation, { type IRotation } from "../aiming/rotation";
 import Miniblox from "../refs/miniblox";
+import THREE from "../refs/three";
 import PacketUtil from "./PacketUtil";
 import { c2s } from "./packetRefs";
 import getPosFromPacket from "./posPacket";
-import THREE from "../refs/three";
 
 export class PacketRecord<T> {
 	constructor(
@@ -53,7 +53,8 @@ export default new (class PacketQueueManager {
 	get serverRot(): Rotation | undefined {
 		return Rotation.fromPacket(
 			this.packetQueue.find(Rotation.hasRotation)?.packet as
-				IRotation | undefined,
+				| IRotation
+				| undefined,
 		);
 	}
 

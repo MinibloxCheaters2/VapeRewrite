@@ -1,14 +1,17 @@
-export type Constructor = Function | (HasProto & { name: string });
+export type Constructor = (
+	...args: never
+) => unknown | (HasProto & { name: string });
 
 export interface HasProto {
 	__proto__: Constructor;
 }
 
 export function getParent(obj: HasProto): Constructor | undefined {
-	if (obj.__proto__ instanceof Function) {
+	const proto = Object.getPrototypeOf(obj);
+	if (proto instanceof Function) {
 		return undefined; // this itself extends off of nothing.
 	}
-	return obj.__proto__;
+	return proto;
 }
 
 /**

@@ -1,6 +1,6 @@
 import { Subscribe } from "@/event/Bus";
-import Miniblox from "@/utils/refs/miniblox";
 import DesyncManager from "@/utils/movement/DesyncManager";
+import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../../api/Category";
 import Mod from "../../../api/Module";
 import InfiniteSub from "./infinite";
