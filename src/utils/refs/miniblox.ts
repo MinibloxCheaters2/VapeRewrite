@@ -95,30 +95,34 @@ const Miniblox = {
 		);
 	},
 	get ClientSocket() {
-		return initOrR(CSocket, () =>
-			findObject(
-				(x) =>
-					// classes are "functions"
-					typeof x === "function" &&
-					"sendPacket" in x &&
-					"socket" in x &&
-					"disconnectMessage" in x &&
-					"netSim" in x &&
-					"serverBaseUrl" in x &&
-					"setUrl" in x,
-			),
+		return initOrR(
+			CSocket,
+			() =>
+				findObject(
+					(x) =>
+						// classes are "functions"
+						typeof x === "function" &&
+						"sendPacket" in x &&
+						"socket" in x &&
+						"disconnectMessage" in x &&
+						"netSim" in x &&
+						"serverBaseUrl" in x &&
+						"setUrl" in x,
+				) as typeof ClientSocket,
 		);
 	},
 	get playerControllerMP() {
-		return initOrR(_playerControllerMP, () =>
-			findObject(
-				(x) =>
-					typeof x === "object" &&
-					"lastSentSlot" in x &&
-					"isHittingBlock" in x &&
-					"sendEnchantPacket" in x &&
-					"sendRenamePacket" in x,
-			),
+		return initOrR(
+			_playerControllerMP,
+			() =>
+				findObject(
+					(x) =>
+						typeof x === "object" &&
+						"lastSentSlot" in x &&
+						"isHittingBlock" in x &&
+						"sendEnchantPacket" in x &&
+						"sendRenamePacket" in x,
+				) as PlayerControllerMP,
 		);
 	},
 

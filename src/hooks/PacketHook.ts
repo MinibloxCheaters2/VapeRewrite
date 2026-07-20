@@ -1,4 +1,4 @@
-import { ClientSocket, type Message } from "@wq2/miniblox-sdk";
+import type { ClientSocket as ClientSocketT, Message } from "@wq2/miniblox-sdk";
 import Bus from "@/Bus";
 import CancelableWrapper from "@/event/CancelableWrapper";
 import { expose } from "@/exposed";
@@ -13,12 +13,12 @@ let _Message: Message<object> & {
 };
 let _proto2: object;
 let /*origToBinary, */ origFromBinary: (binary: Uint8Array) => Message<object>;
-let origSend: (typeof ClientSocket)["sendPacket"];
+let origSend: (typeof ClientSocketT)["sendPacket"];
 
 const packetHook = {
 	init() {
-		origSend = ClientSocket.sendPacket;
-		ClientSocket.sendPacket = new Proxy(origSend, {
+		origSend = Miniblox.ClientSocket.sendPacket;
+		Miniblox.ClientSocket.sendPacket = new Proxy(origSend, {
 			apply(target, thisArg, argArray) {
 				const cw = new CancelableWrapper(argArray);
 				Bus.emit("sendPacket", cw);
