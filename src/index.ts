@@ -2,6 +2,7 @@ import "./meta.js?userscript-metadata";
 import "./exposed";
 import "./hooks/index";
 import "./utils/refs";
+import "./utils/network/WasmTest";
 import "./ui/app";
 import "./features/commands/api/CommandManager";
 import "./features/commands/Listener";
