@@ -50,6 +50,7 @@
 // @resource    guiback https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/misc/back.png
 // @resource    search https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/search.png
 // @resource    legit https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/misc/legit.png
+// @require     https://codeberg.org/Miniblox/VapeRewrite/raw/branch/fix/unpatch/packetGenWrapper.js?0
 // @run-at      document-idle
 // ==/UserScript==
 
