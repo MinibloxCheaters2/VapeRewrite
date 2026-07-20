@@ -47,7 +47,7 @@ const packetHook = {
 				const cw = new CancelableWrapper(thisArg);
 				Bus.emit("receivePacket", cw);
 				if (cw.canceled) return;
-				return Reflect.apply(target, thisArg, argArray);
+				return Reflect.apply(target, thisArg, cw.data);
 			},
 		});
 	},
