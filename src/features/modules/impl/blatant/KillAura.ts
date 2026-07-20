@@ -2,11 +2,11 @@ import type { EntityLivingBase } from "@wq2/miniblox-sdk";
 import { Subscribe } from "@/event/Bus";
 import RotationManager, { RotationPlan } from "@/utils/aiming/rotate";
 import Rotation from "@/utils/aiming/rotation";
-import Miniblox from "@/utils/refs/miniblox";
 import deg2rad from "@/utils/math/radians";
 import { SETTING } from "@/utils/movement/MovementCorrection";
 import { findTargets } from "@/utils/movement/target";
 import PacketRefs from "@/utils/network/packetRefs";
+import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 

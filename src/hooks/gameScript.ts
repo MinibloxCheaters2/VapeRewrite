@@ -1,6 +1,6 @@
 import { expose } from "@/exposed";
-import { DumpKey } from "./dump";
 import { MAIN_LOGGER as logger } from "@/utils";
+import type { DumpKey } from "./dump";
 
 function isIndexPath(pathname: string): boolean {
 	return pathname.startsWith("/assets/index-") && pathname.endsWith(".js");

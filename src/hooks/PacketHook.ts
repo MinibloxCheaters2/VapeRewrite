@@ -1,9 +1,9 @@
+import { ClientSocket, type Message } from "@wq2/miniblox-sdk";
 import Bus from "@/Bus";
 import CancelableWrapper from "@/event/CancelableWrapper";
 import { expose } from "@/exposed";
-import Miniblox from "@/utils/refs/miniblox";
 import { waitForReact } from "@/utils/helpers/waitForReact";
-import { ClientSocket, Message } from "@wq2/miniblox-sdk";
+import Miniblox from "@/utils/refs/miniblox";
 
 let _Message: Message<object> & {
 	prototype: {
@@ -11,9 +11,9 @@ let _Message: Message<object> & {
 		fromBinary: (binary: Uint8Array) => Message<object>;
 	};
 };
-let proto2;
-let /*origToBinary, */ origFromBinary;
-let origSend;
+let _proto2: object;
+let /*origToBinary, */ origFromBinary: (binary: Uint8Array) => Message<object>;
+let origSend: (typeof ClientSocket)["sendPacket"];
 
 const packetHook = {
 	init() {
@@ -28,9 +28,9 @@ const packetHook = {
 		});
 		const SPacketUpdateInventory =
 			Miniblox.player.inventory.sendInventoryToServer();
-		_Message = SPacketUpdateInventory.constructor.__proto__;
+		_Message = Object.getPrototypeOf(SPacketUpdateInventory.constructor);
 		expose("Message", () => _Message);
-		proto2 = SPacketUpdateInventory.constructor.runtime;
+		_proto2 = SPacketUpdateInventory.constructor.runtime;
 		origFromBinary = _Message.prototype.fromBinary;
 
 		/*Message.prototype.toBinary = new Proxy(origToBinary, {

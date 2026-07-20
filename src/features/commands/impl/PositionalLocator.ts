@@ -3,8 +3,8 @@ import type { EntityPlayer, S2CPacket } from "@wq2/miniblox-sdk";
 import Bus from "@/Bus";
 import { Subscribe } from "@/event/Bus";
 import type CancelableWrapper from "@/event/CancelableWrapper";
-import Miniblox from "@/utils/refs/miniblox";
 import { s2c } from "@/utils/network/packetRefs";
+import Miniblox from "@/utils/refs/miniblox";
 import PlayerArgumentType from "../api/brigadier/PlayerArgumentType";
 import dispatcher from "../api/CommandDispatcher";
 

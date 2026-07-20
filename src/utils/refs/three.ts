@@ -1,6 +1,6 @@
+import { expose } from "@/exposed";
 import { gameScript, gameScriptReady } from "@/hooks/gameScript";
 import logger from "../logging/loggers";
-import { expose } from "@/exposed";
 
 // note to self: do NOT add the `g` (global) flag, otherwise it not workong
 // even though it works in regexr (you can see /g in the flags enabled) but idk

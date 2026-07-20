@@ -1,9 +1,9 @@
 import type { SliderSetting, ToggleSetting } from "@/features/config/Settings";
 import SubModule from "@/features/config/SubModule";
-import Miniblox from "@/utils/refs/miniblox";
 import isKeyDown from "@/utils/input/key";
 import DesyncManager from "@/utils/movement/DesyncManager";
 import getMoveDirection from "@/utils/movement/movement";
+import Miniblox from "@/utils/refs/miniblox";
 import type Fly from "./index";
 
 export default class NormalSub extends SubModule {

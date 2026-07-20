@@ -1,8 +1,8 @@
+import type { Game, PlayerMovement } from "@wq2/miniblox-sdk";
 import Bus from "@/Bus";
 import Cancelable from "@/event/Cancelable";
-import Miniblox from "@/utils/refs/miniblox";
 import { waitForReact } from "@/utils/helpers/waitForReact";
-import type { Game, PlayerMovement } from "@wq2/miniblox-sdk";
+import Miniblox from "@/utils/refs/miniblox";
 
 let origGameTick: Game["fixedUpdate"];
 let origPlayerTick: PlayerMovement["fixedUpdate"];

@@ -8,9 +8,9 @@ import Bus from "@/Bus";
 import { COMMAND_PREFIX } from "@/Client";
 import { Subscribe } from "@/event/Bus";
 import type CancelableWrapper from "@/event/CancelableWrapper";
-import Miniblox from "@/utils/refs/miniblox";
 import logger from "@/utils/logging/loggers";
 import { c2s, s2c } from "@/utils/network/packetRefs";
+import Miniblox from "@/utils/refs/miniblox";
 import dispatcher from "./api/CommandDispatcher";
 
 export default new (class CommandListener {
