@@ -20,6 +20,7 @@ import {
 	PlayerControllerMP,
 	AnyPacket,
 	Message,
+	Materials,
 } from "@wq2/miniblox-sdk";
 import { scriptEl } from "@/hooks/gameScript";
 import { expose } from "@/exposed";
@@ -67,6 +68,7 @@ let _hud3D: Hud3D | undefined;
 let _EntityLivingBase: typeof EntityLivingBase | undefined;
 let _playerController: PlayerController | undefined;
 let _Blocks: AllBlocks | undefined;
+let _Materials: typeof Materials | undefined;
 let _Items: typeof Items | undefined;
 let _ItemSword: typeof ItemSword | undefined;
 let _ItemArmor: typeof ItemArmor | undefined;
@@ -78,7 +80,7 @@ let _packets: AnyPacket[] | undefined = undefined;
 let CSocket: typeof ClientSocket | undefined = undefined;
 let _playerControllerMP: PlayerControllerMP | undefined = undefined;
 
-// search for exposed globals: `unsafeWindow\.\w+ = `
+// search for exposed globals: `globalThis\.\w+ = `
 // note: you could also search for window, but there's a bunch of false positives for stuff like onbeforeunload
 
 const Miniblox = {
@@ -184,7 +186,16 @@ const Miniblox = {
 	},
 
 	get Materials() {
-		return undefined;
+		return initOrR(_Materials, () =>
+			findObject(
+				(x) =>
+					//e
+					typeof x === "function" &&
+					"redstoneLight" in x &&
+					"air" in x &&
+					"leaves" in x,
+			),
+		);
 	},
 	get ItemBlock() {
 		return initOrR(_ItemBlock, () => Miniblox.Blocks.stone.constructor);
