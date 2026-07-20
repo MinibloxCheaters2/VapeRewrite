@@ -19,10 +19,9 @@ async function load() {
 }
 
 async function init() {
-	await gameScriptReady;
 	const wasmExports = await load();
+	await gameScriptReady;
 	const result = wasmExports.parse(gameScript);
-	logger.info("Parsed game script", result);
 	return result;
 }
 
