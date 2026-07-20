@@ -9,9 +9,10 @@
 		"jsxImportSource": "solid-js",
 		"skipLibCheck": true,
 		"lib": ["DOM", "ES6", "DOM.Iterable", "ESNext"],
+		"types": ["src/types/css.d.ts", "src/types/vm.d.ts"],
 		"paths": {
-			"@/*": ["./src/*"]
-		}
+			"@/*": ["./src/*"],
+		},
 	},
-	"include": ["src/**/*"]
+	"include": ["src/**/*"],
 }

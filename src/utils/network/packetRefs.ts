@@ -54,7 +54,7 @@ function getS2CUncached<
 	V extends CPacketMap[K] = CPacketMap[K],
 >(ref: K): V {
 	if (typeof ref === "symbol") {
-		throw "can't get a c2s packet with a name that is a symbol instead of a string.";
+		throw "can't get a s2c packet with a name that is a symbol instead of a string.";
 	}
 	return Interop.run((evl) => {
 		const pkt = evl<V>(ref);
