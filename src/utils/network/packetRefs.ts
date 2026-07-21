@@ -4,6 +4,7 @@
  */
 import type { CPACKET_MAP, SPACKET_MAP } from "@wq2/miniblox-sdk";
 import Miniblox from "../refs/miniblox";
+import { ready as packetsReady } from "./WasmTest";
 // TODO: update this
 
 export type CPacketMap = typeof CPACKET_MAP;

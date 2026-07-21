@@ -79,9 +79,34 @@ let _ItemBlock: typeof ItemBlock | undefined;
 let _packets: AnyPacket[] | undefined;
 let CSocket: typeof ClientSocket | undefined;
 let _playerControllerMP: PlayerControllerMP | undefined;
+let _Message: typeof Message | undefined;
+export interface Runtime {
+	util: {
+		setEnumType(): void;
+		initPartial(a: object | undefined, b: object): void;
+		equals(a: object, b: object): boolean;
+	};
+	syntax: string;
+}
+let _proto2: object | undefined;
+let _proto3: object | undefined;
 
 // search for exposed globals: `globalThis\.\w+ = `
 // note: you could also search for window, but there's a bunch of false positives for stuff like onbeforeunload
+
+/** gets a message class from either miniblox.packets or a function that returns SPacketUpdateInventory */
+function getReferenceMsg() {
+	function method1() {
+		return Miniblox.packets?.filter?.((x) => x != null)?.[0];
+	}
+	function method2() {
+		return Miniblox.player.inventory.sendInventoryToServer();
+	}
+	return method1() ?? method2();
+}
+function getMsgRuntime(msg: Message<object>) {
+	return (msg.constructor as Function & { runtime: object }).runtime;
+}
 
 const Miniblox = {
 	/** note: not all packets are here, only the ones vector exports. */
@@ -93,6 +118,27 @@ const Miniblox = {
 					(x) => typeof x === "function" && "typeName" in x,
 				) as Message<object>[] | undefined,
 		);
+	},
+	get proto2() {
+		return initOrR(_proto2, () =>
+			getMsgRuntime(Miniblox.player.inventory.sendInventoryToServer()),
+		);
+	},
+	get proto3() {
+		return initOrR(_proto3, () => {
+			const packets = Miniblox.packets;
+			if (!packets) return;
+			return packets
+				.filter((x) => x !== undefined && x != null)
+				.map((x) => getMsgRuntime({ constructor: x }))
+				.find((x) => x?.syntax === "proto3")!;
+		});
+	},
+	get Message() {
+		return initOrR(_Message, () => {
+			const msg = getReferenceMsg();
+			return msg ? Object.getPrototypeOf(msg) : undefined;
+		});
 	},
 	get ClientSocket() {
 		return initOrR(
