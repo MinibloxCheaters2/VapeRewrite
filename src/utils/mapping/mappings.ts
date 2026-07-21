@@ -28,7 +28,7 @@ export default new (class Mappings {
 		return initOrR(this.#playerControllerMP, () => ofDumps("syncItem"));
 	}
 	get world() {
-		return initOrR(this.#world, () => ofDumps("entities"));
+		return initOrR(this.#world, () => ofDumps());
 	}
 	get ItemArmor() {
 		return initOrR(this.#ItemArmor, () => ofDumps("damageReduceAmount"));
