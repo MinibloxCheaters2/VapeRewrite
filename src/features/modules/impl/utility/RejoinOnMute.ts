@@ -1,11 +1,10 @@
 import type { C2SPacket } from "@wq2/miniblox-sdk";
 import { Subscribe } from "@/event/Bus";
 import type CancelableWrapper from "@/event/CancelableWrapper";
-import { s2c } from "@/utils/network/packetRefs";
+import { isS2C } from "@/utils";
 import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
-import { isS2C } from "@/utils";
 
 // when you send a 50 character message, the server seems to trigger the mute detection.
 const LIMIT = 50;

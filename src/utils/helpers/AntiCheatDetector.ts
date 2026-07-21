@@ -6,9 +6,8 @@
 import Bus from "@/Bus";
 import { Subscribe } from "@/event/Bus";
 import { Logger } from "../logging/Logger";
-import { c2s, s2c } from "../network/packetRefs";
-import Miniblox from "../refs/miniblox";
 import { isC2S, isS2C } from "../network/PacketUtil";
+import Miniblox from "../refs/miniblox";
 
 export enum DetectedAC {
 	/** Not detected yet. */
@@ -30,10 +29,6 @@ const LOGGER = new Logger("AntiCheat Detector");
 export default new (class AntiCheatDetector {
 	verdict = DetectedAC.UNKNOWN;
 	#firstInput = -1;
-	constructor() {
-		// TODO(unpatch): un-comment this after adding stuff
-		//Bus.registerSubscriber(this);
-	}
 	@Subscribe("connect")
 	private resetState() {
 		LOGGER.info("Setting initial unknown state");

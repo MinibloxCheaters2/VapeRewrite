@@ -7,7 +7,6 @@ import type { C2SPacket } from "@wq2/miniblox-sdk";
 import Bus from "@/Bus";
 import { Priority, Subscribe } from "@/event/Bus";
 import type CancelableWrapper from "@/event/CancelableWrapper";
-import { c2s } from "../network/packetRefs";
 import { isC2S } from "../network/PacketUtil";
 
 export default new (class PacketFallDistance {

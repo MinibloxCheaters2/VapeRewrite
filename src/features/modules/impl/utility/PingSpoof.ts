@@ -1,6 +1,6 @@
 import type { C2SPacket } from "@wq2/miniblox-sdk";
 import { Subscribe } from "@/event/Bus";
-import { Action, c2s, isC2S, type PacketOutcome } from "@/utils";
+import { Action, isC2S, type PacketOutcome } from "@/utils";
 import packetQueueManager from "@/utils/network/packetQueueManager";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";

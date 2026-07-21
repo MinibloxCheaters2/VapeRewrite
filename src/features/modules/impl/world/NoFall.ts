@@ -1,12 +1,11 @@
 import type { C2SPacket } from "@wq2/miniblox-sdk";
 import { Subscribe } from "@/event/Bus";
 import type CancelableWrapper from "@/event/CancelableWrapper";
+import { isC2S } from "@/utils";
 import PacketFallDistance from "@/utils/movement/ServerFallDistance";
-import { c2s } from "@/utils/network/packetRefs";
 import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
-import { isC2S } from "@/utils";
 
 /**
  * max fall high (defaults to 3) - buffer, idk what a good value is, since

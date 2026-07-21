@@ -1,11 +1,11 @@
 import type { C2SPacket } from "@wq2/miniblox-sdk";
 import { Subscribe } from "@/event/Bus";
 import type CancelableWrapper from "@/event/CancelableWrapper";
+import { isC2S } from "@/utils";
 import { c2s } from "@/utils/network/packetRefs";
 import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
-import { isC2S } from "@/utils";
 
 /** Y offset values, that when used before attacking a player, gives a critical hit. **/
 const CRIT_OFFSETS = [0.08, -0.07840000152];

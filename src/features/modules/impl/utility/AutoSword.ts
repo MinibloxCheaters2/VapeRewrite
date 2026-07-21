@@ -1,12 +1,11 @@
 import type { C2SPacket, ItemStack } from "@wq2/miniblox-sdk";
 import { SubscribeAsync } from "@/event/Bus";
 import type CancelableWrapper from "@/event/CancelableWrapper";
-import { c2s } from "@/utils/network/packetRefs";
+import { isC2S } from "@/utils";
 import Miniblox from "@/utils/refs/miniblox";
 import waitTicks from "@/utils/time/wait";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
-import { isC2S } from "@/utils";
 
 export default class AutoSword extends Mod {
 	public name = "AutoSword";

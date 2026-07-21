@@ -105,7 +105,9 @@ function getReferenceMsg() {
 	return method1() ?? method2();
 }
 function getMsgRuntime(msg: Message<object>) {
-	return (msg.constructor as Function & { runtime: object }).runtime;
+	return (
+		msg.constructor as (typeof msg)["constructor"] & { runtime: object }
+	).runtime;
 }
 
 const Miniblox = {
@@ -131,7 +133,11 @@ const Miniblox = {
 			return packets
 				.filter((x) => x !== undefined && x != null)
 				.map((x) => getMsgRuntime({ constructor: x }))
-				.find((x) => x?.syntax === "proto3")!;
+				.find(
+					(x) =>
+						(x as typeof x & { syntax: string })?.syntax ===
+						"proto3",
+				);
 		});
 	},
 	get Message() {

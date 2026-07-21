@@ -1,7 +1,7 @@
 import { Subscribe } from "@wq2/event-bus";
 import type { AnyPacket, C2SPacket, S2CPacket } from "@wq2/miniblox-sdk";
 import type CancelableWrapper from "@/event/CancelableWrapper";
-import { c2s, isC2S, isS2C, s2c } from "@/utils";
+import { isC2S, isS2C } from "@/utils";
 import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";

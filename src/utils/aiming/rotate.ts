@@ -4,15 +4,13 @@
  */
 
 import type { C2SPacket } from "@wq2/miniblox-sdk";
-import Bus from "@/Bus";
 import { Priority, Subscribe } from "@/event/Bus";
 import type CancelableWrapper from "@/event/CancelableWrapper";
 import MovementCorrection from "../movement/MovementCorrection";
+import { isC2S } from "../network/PacketUtil";
 import packetQueueManager from "../network/packetQueueManager";
-import { c2s } from "../network/packetRefs";
 import Miniblox from "../refs/miniblox";
 import Rotation from "./rotation";
-import { isC2S } from "../network/PacketUtil";
 
 export class RotationPlan {
 	constructor(
@@ -36,10 +34,6 @@ export default new (class RotationManager {
 	}
 	get activeRotation() {
 		return this.#currentPlan?.target ?? this.playerRot;
-	}
-	constructor() {
-		// TODO(unpatch): un-comment this after adding stuff
-		//Bus.registerSubscriber(this);
 	}
 	scheduleRotation(plan: RotationPlan) {
 		this.#currentPlan = plan;

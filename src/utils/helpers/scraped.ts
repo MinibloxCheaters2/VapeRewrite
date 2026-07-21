@@ -3,6 +3,7 @@
  * @module
  */
 
+import type { Message } from "@wq2/miniblox-sdk";
 import type {
 	MappedEnumGroup,
 	MappedMessage,
@@ -10,7 +11,6 @@ import type {
 } from "@wq2/packet-gen-wasm";
 import { ready as packetsPromise } from "../network/WasmTest";
 import Miniblox from "../refs/miniblox";
-import { Message } from "@wq2/miniblox-sdk";
 
 const scrapedMessages: MappedMessage[] = [];
 const scrapedEnums: MappedEnumGroup[] = [];
