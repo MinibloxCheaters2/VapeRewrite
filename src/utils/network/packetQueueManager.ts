@@ -8,7 +8,7 @@ import type CancelableWrapper from "../../event/CancelableWrapper";
 import Rotation, { type IRotation } from "../aiming/rotation";
 import Miniblox from "../refs/miniblox";
 import THREE from "../refs/three";
-import { sendSilently, isC2S } from "./PacketUtil";
+import { isC2S, sendSilently } from "./PacketUtil";
 import getPosFromPacket from "./posPacket";
 
 export class PacketRecord<T> {
@@ -52,7 +52,8 @@ export default new (class PacketQueueManager {
 	get serverRot(): Rotation | undefined {
 		return Rotation.fromPacket(
 			this.packetQueue.find(Rotation.hasRotation)?.packet as
-				IRotation | undefined,
+				| IRotation
+				| undefined,
 		);
 	}
 

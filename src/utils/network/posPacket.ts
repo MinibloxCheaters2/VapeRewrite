@@ -4,7 +4,6 @@ import type {
 	SPacketPlayerPosLook,
 } from "@wq2/miniblox-sdk";
 import { SimpleVec3 } from "../math/vec";
-import { c2s } from "./packetRefs";
 import { isC2S } from "./PacketUtil";
 
 export default function getPosFromPacket(

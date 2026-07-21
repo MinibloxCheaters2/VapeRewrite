@@ -1,11 +1,10 @@
 import type { C2SPacket } from "@wq2/miniblox-sdk";
 import { Subscribe } from "@/event/Bus";
 import type CancelableWrapper from "@/event/CancelableWrapper";
-import { c2s } from "@/utils/network/packetRefs";
+import { isC2S } from "@/utils";
 import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
-import { isC2S } from "@/utils";
 
 export default class WTap extends Mod {
 	public name = "WTap";

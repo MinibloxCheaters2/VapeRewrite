@@ -1,6 +1,6 @@
-import { gameScript, gameScriptReady } from "@/hooks/gameScript";
 //import { parse } from "@wq2/packet-gen-wasm";
 import type * as VMModule from "@wq2/packet-gen-wasm";
+import { gameScript, gameScriptReady } from "@/hooks/gameScript";
 
 async function load() {
 	const wasmExports = (await import(

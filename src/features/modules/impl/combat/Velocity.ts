@@ -1,11 +1,10 @@
 import type { S2CPacket } from "@wq2/miniblox-sdk";
 import { Subscribe } from "@/event/Bus";
 import type CancelableWrapper from "@/event/CancelableWrapper";
-import { s2c } from "@/utils/network/packetRefs";
+import { isS2C } from "@/utils";
 import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
-import { isS2C } from "@/utils";
 
 function motionOrReduce<T extends "x" | "y" | "z">(
 	axis: T,

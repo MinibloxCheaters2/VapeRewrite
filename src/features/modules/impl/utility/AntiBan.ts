@@ -1,7 +1,7 @@
+import randomUsername from "@/utils/helpers/username";
 import logger from "@/utils/logging/loggers";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
-import randomUsername from "@/utils/helpers/username";
 
 export interface AccountData {
 	name: string;
