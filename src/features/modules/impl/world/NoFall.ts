@@ -6,6 +6,7 @@ import { c2s } from "@/utils/network/packetRefs";
 import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
+import { isC2S } from "@/utils";
 
 /**
  * max fall high (defaults to 3) - buffer, idk what a good value is, since
@@ -23,7 +24,7 @@ export default class NoFall extends Mod {
 	@Subscribe("sendPacket")
 	onPacket({ data: packet }: CancelableWrapper<C2SPacket>) {
 		if (
-			packet instanceof c2s("SPacketPlayerPosLook") &&
+			isC2S("SPacketPlayerPosLook", packet) &&
 			!packet.onGround &&
 			PacketFallDistance.currentFallDistance >=
 				Miniblox.player.getMaxFallHeight() - FALL_HEIGHT_BUFFER

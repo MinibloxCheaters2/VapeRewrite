@@ -4,7 +4,6 @@
  */
 import type { CPACKET_MAP, SPACKET_MAP } from "@wq2/miniblox-sdk";
 import Miniblox from "../refs/miniblox";
-import { ready as packetsReady } from "./WasmTest";
 // TODO: update this
 
 export type CPacketMap = typeof CPACKET_MAP;
@@ -67,7 +66,7 @@ function getS2CUncached<
 /**
  * note: use `PacketRefs.c` instead when trying to do `new {packet}`, it's way cleaner since instead of:
  * ```ts
- * const pkt = new (c2s("SPacketSomething"));
+ * const pkt = new (s2c("CPacketSomething"));
  * ```
  * you can do
  * ```ts
@@ -84,7 +83,7 @@ export function c2s<
 /**
  * note: use `PacketRefs.s` instead when trying to do `new {packet}`, it's way cleaner since instead of:
  * ```ts
- * const pkt = new (s2c("CPacketSomething"));
+ * const pkt = new (c2s("SPacketSomething"));
  * ```
  * you can do
  * ```ts

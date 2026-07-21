@@ -8,8 +8,7 @@ import type CancelableWrapper from "../../event/CancelableWrapper";
 import Rotation, { type IRotation } from "../aiming/rotation";
 import Miniblox from "../refs/miniblox";
 import THREE from "../refs/three";
-import PacketUtil from "./PacketUtil";
-import { c2s } from "./packetRefs";
+import { sendSilently, isC2S, isS2C } from "./PacketUtil";
 import getPosFromPacket from "./posPacket";
 
 export class PacketRecord<T> {
@@ -53,8 +52,7 @@ export default new (class PacketQueueManager {
 	get serverRot(): Rotation | undefined {
 		return Rotation.fromPacket(
 			this.packetQueue.find(Rotation.hasRotation)?.packet as
-				| IRotation
-				| undefined,
+				IRotation | undefined,
 		);
 	}
 
@@ -82,7 +80,7 @@ export default new (class PacketQueueManager {
 	/** this doesn't remove the packet from the packet queue since I'm lazy, you do that yourself. this just sends the packet. */
 	private flushPacket<T extends C2SPacket>(record: PacketRecord<T>) {
 		// TODO: only handling C2S packets
-		PacketUtil.sendSilently(record.packet);
+		sendSilently(record.packet);
 	}
 
 	flush(when?: (p: PacketRecord<AnyPacket>) => boolean) {
@@ -96,8 +94,8 @@ export default new (class PacketQueueManager {
 	}
 
 	#preProcessing(pkt: C2SPacket): PreAction {
-		if (pkt instanceof c2s("SPacketMessage")) return PreAction.PASS;
-		if (pkt instanceof c2s("SPacketRespawn")) return PreAction.FLUSH;
+		if (isC2S("SPacketMessage", pkt)) return PreAction.PASS;
+		if (isC2S("SPacketRespawn", pkt)) return PreAction.FLUSH;
 		return PreAction.GO;
 	}
 

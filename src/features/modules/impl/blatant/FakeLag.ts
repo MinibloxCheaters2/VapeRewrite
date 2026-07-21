@@ -11,6 +11,7 @@ import Miniblox from "@/utils/refs/miniblox";
 import { getRandomArbitrary } from "@/utils/time/random";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
+import { isC2S } from "@/utils";
 
 export default class FakeLag extends Mod {
 	public name = "FakeLag";
@@ -52,12 +53,12 @@ export default class FakeLag extends Mod {
 	#flushPreconditions(packet: C2SPacket): boolean {
 		if (this.#flushOnAction) {
 			return (
-				(packet instanceof c2s("SPacketEntityAction") &&
+				(isC2S("SPacketEntityAction", packet) &&
 					packet.id === Miniblox.player.id) ||
-				packet instanceof c2s("SPacketUseEntity") ||
-				packet instanceof c2s("SPacketUseItem") ||
-				packet instanceof c2s("SPacketPlayerAction") ||
-				packet instanceof c2s("SPacketUpdateSign")
+				isC2S("SPacketUseEntity", packet) ||
+				isC2S("SPacketUseItem", packet) ||
+				isC2S("SPacketPlayerAction", packet) ||
+				isC2S("SPacketUpdateSign", packet)
 			);
 		}
 

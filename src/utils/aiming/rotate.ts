@@ -12,6 +12,7 @@ import packetQueueManager from "../network/packetQueueManager";
 import { c2s } from "../network/packetRefs";
 import Miniblox from "../refs/miniblox";
 import Rotation from "./rotation";
+import { isC2S } from "../network/PacketUtil";
 
 export class RotationPlan {
 	constructor(
@@ -37,14 +38,15 @@ export default new (class RotationManager {
 		return this.#currentPlan?.target ?? this.playerRot;
 	}
 	constructor() {
-		Bus.registerSubscriber(this);
+		// TODO(unpatch): un-comment this after adding stuff
+		//Bus.registerSubscriber(this);
 	}
 	scheduleRotation(plan: RotationPlan) {
 		this.#currentPlan = plan;
 	}
 	@Subscribe("sendPacket", Priority.LOWEST)
 	private onPacket({ data: packet }: CancelableWrapper<C2SPacket>) {
-		if (packet instanceof c2s("SPacketPlayerPosLook")) {
+		if (isC2S("SPacketPlayerPosLook", packet)) {
 			if (Rotation.hasRotation(packet))
 				// biome-ignore lint/style/noNonNullAssertion: we know it's not undefined
 				this.#trackedRot = Rotation.fromPacket(packet)!;

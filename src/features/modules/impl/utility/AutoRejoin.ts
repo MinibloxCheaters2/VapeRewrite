@@ -11,7 +11,7 @@ export default class AutoRejoin extends Mod {
 	category = Category.UTILITY;
 	@Subscribe("receivePacket")
 	private lol({ data: pkt }: CancelableWrapper<S2CPacket>) {
-		if (pkt instanceof s2c("CPacketDisconnect")) {
+		if (isS2C("CPacketDisconnect", pkt)) {
 			Miniblox.game.connect(Miniblox.game.serverInfo.serverId);
 		}
 	}

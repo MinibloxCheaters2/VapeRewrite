@@ -8,6 +8,7 @@ import Bus from "@/Bus";
 import { Priority, Subscribe } from "@/event/Bus";
 import type CancelableWrapper from "@/event/CancelableWrapper";
 import { c2s } from "../network/packetRefs";
+import { isC2S } from "../network/PacketUtil";
 
 export default new (class PacketFallDistance {
 	currentFallDistance = 0;
@@ -34,7 +35,7 @@ export default new (class PacketFallDistance {
 
 	@Subscribe("sendPacket", Priority.LOWEST)
 	private sendPacket({ data: pkt }: CancelableWrapper<C2SPacket>) {
-		if (pkt instanceof c2s("SPacketPlayerPosLook")) {
+		if (isC2S("SPacketPlayerPosLook", pkt)) {
 			this.handle(pkt.onGround, pkt.pos?.y);
 		}
 	}

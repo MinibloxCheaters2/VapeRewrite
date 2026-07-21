@@ -9,9 +9,10 @@ import { COMMAND_PREFIX } from "@/Client";
 import { Subscribe } from "@/event/Bus";
 import type CancelableWrapper from "@/event/CancelableWrapper";
 import logger from "@/utils/logging/loggers";
-import { c2s, s2c } from "@/utils/network/packetRefs";
+import PacketRefs, { c2s, s2c } from "@/utils/network/packetRefs";
 import Miniblox from "@/utils/refs/miniblox";
 import dispatcher from "./api/CommandDispatcher";
+import { isC2S } from "@/utils";
 
 export default new (class CommandListener {
 	constructor() {
@@ -29,7 +30,7 @@ export default new (class CommandListener {
 	async intercept(wrap: CancelableWrapper<C2SPacket>) {
 		const { data: packet } = wrap;
 		if (
-			packet instanceof c2s("SPacketMessage") &&
+			isC2S("SPacketMessage", packet) &&
 			CommandListener.isCommand(packet.text)
 		) {
 			wrap.cancel();
@@ -56,7 +57,7 @@ export default new (class CommandListener {
 			}
 		}
 		if (
-			packet instanceof c2s("SPacketTabComplete") &&
+			isC2S("SPacketTabComplete", packet) &&
 			CommandListener.isCommand(packet.message)
 		) {
 			wrap.cancel();
@@ -73,7 +74,7 @@ export default new (class CommandListener {
 					: suggestionText;
 			});
 			Miniblox.chat.autoCompleteReceived(
-				new (s2c("CPacketTabComplete"))({
+				new PacketRefs.c.CPacketTabComplete({
 					matches: applied,
 				}),
 			);
