@@ -20,10 +20,10 @@ const packetHook = {
 		origSend = Miniblox.ClientSocket.sendPacket;
 		Miniblox.ClientSocket.sendPacket = new Proxy(origSend, {
 			apply(target, thisArg, argArray) {
-				const cw = new CancelableWrapper(argArray);
+				const cw = new CancelableWrapper(argArray[0]);
 				Bus.emit("sendPacket", cw);
 				if (cw.canceled) return;
-				return Reflect.apply(target, thisArg, cw.data);
+				return Reflect.apply(target, thisArg, [cw.data]);
 			},
 		});
 		const SPacketUpdateInventory =

@@ -1,6 +1,7 @@
 import logger from "@/utils/logging/loggers";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
+import randomUsername from "@/utils/helpers/username";
 
 export interface AccountData {
 	name: string;
@@ -8,6 +9,11 @@ export interface AccountData {
 }
 
 const GUEST_TOKEN = "";
+
+interface NonAccountData {
+	session: string;
+	requestedUuid?: string;
+}
 
 export default class AntiBan extends Mod {
 	name = "AntiBan";
@@ -19,12 +25,43 @@ export default class AntiBan extends Mod {
 		"http://localhost:3785/",
 	);
 
+	private nonAccountModeSetting = this.createDropdownSetting(
+		"NonAccountMode",
+		["Legacy", "New"],
+		"Legacy",
+		() => !this.genEnabled,
+	);
+	private usernameModeSetting = this.createDropdownSetting(
+		"UsernameMode",
+		["Random", "Static"],
+		"Random",
+		() => this.nonAccountMode === "New",
+	);
+	private usernameSetting = this.createTextBoxSetting(
+		"Username",
+		"",
+		"Enter a username...",
+		() => this.nonAccountMode === "New",
+	);
+
 	get genEnabled(): boolean {
 		return this.integration.value();
 	}
 
 	get apiServerLocation(): URL {
 		return new URL(this.endpoint.value());
+	}
+
+	get username() {
+		return !this.genEnabled &&
+			this.nonAccountMode === "New" &&
+			this.usernameModeSetting.value() === "Static"
+			? this.usernameSetting.value()
+			: randomUsername();
+	}
+
+	get nonAccountMode() {
+		return this.nonAccountModeSetting.value();
 	}
 
 	get generateMinibloxAccountEndpoint(): URL {
@@ -60,12 +97,28 @@ export default class AntiBan extends Mod {
 		return await r.json();
 	}
 
-	public async getToken(): Promise<string> {
-		if (
+	public async canUseAccountGen(): Promise<boolean> {
+		return (
 			this.genEnabled &&
 			this.apiServerLocation &&
 			(await this.isAPIServerOnline())
-		) {
+		);
+	}
+
+	public handleNonAccount(): NonAccountData {
+		switch (this.nonAccountMode) {
+			case "Legacy":
+				return { session: GUEST_TOKEN };
+			case "New":
+				return {
+					session: GUEST_TOKEN,
+					requestedUuid: this.username,
+				};
+		}
+	}
+
+	public async getToken(): Promise<string> {
+		if (await this.canUseAccountGen()) {
 			const acc = this.#generateAccount()
 				.then((r) => r.session)
 				.catch((e) => {
