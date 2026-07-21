@@ -6,6 +6,7 @@ import Miniblox from "@/utils/refs/miniblox";
 import waitTicks from "@/utils/time/wait";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
+import { isC2S } from "@/utils";
 
 export default class AutoSword extends Mod {
 	public name = "AutoSword";
@@ -140,7 +141,7 @@ export default class AutoSword extends Mod {
 	@SubscribeAsync("sendPacket")
 	private async onPacket({ data: packet }: CancelableWrapper<C2SPacket>) {
 		if (
-			packet instanceof c2s("SPacketUseEntity") &&
+			isC2S("SPacketUseEntity", packet) &&
 			packet.action === 1 /*ATTACK*/
 		) {
 			this.switchToSword();

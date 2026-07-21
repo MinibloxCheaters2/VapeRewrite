@@ -6,7 +6,7 @@
 import type { S2CPacket } from "@wq2/miniblox-sdk";
 import { Subscribe } from "@/event/Bus";
 import type CancelableWrapper from "@/event/CancelableWrapper";
-import { s2c } from "@/utils";
+import { isS2C, s2c } from "@/utils";
 import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
@@ -47,23 +47,23 @@ export default class Paranoia extends Mod {
 	@Subscribe("receivePacket")
 	private onReceivePacket({ data: pkt }: CancelableWrapper<S2CPacket>) {
 		if (
-			pkt instanceof s2c("CPacketEntityVelocity") ||
-			pkt instanceof s2c("CPacketEntityEquipment") ||
-			pkt instanceof s2c("CPacketAnimation") ||
-			pkt instanceof s2c("CPacketEntityAction") ||
-			pkt instanceof s2c("CPacketEntityMetadata") ||
-			pkt instanceof s2c("CPacketEntityPositionAndRotation") ||
-			pkt instanceof s2c("CPacketEntityRelativePositionAndRotation") ||
-			pkt instanceof s2c("CPacketUpdateHealth") ||
-			pkt instanceof s2c("CPacketEntityEffect") ||
-			pkt instanceof s2c("CPacketEntityProperties") ||
-			pkt instanceof s2c("CPacketRemoveEntityEffect") ||
-			pkt instanceof s2c("CPacketUseBed")
+			isS2C("CPacketEntityVelocity", pkt) ||
+			isS2C("CPacketEntityEquipment", pkt) ||
+			isS2C("CPacketAnimation", pkt) ||
+			isS2C("CPacketEntityAction", pkt) ||
+			isS2C("CPacketEntityMetadata", pkt) ||
+			isS2C("CPacketEntityPositionAndRotation", pkt) ||
+			isS2C("CPacketEntityRelativePositionAndRotation", pkt) ||
+			isS2C("CPacketUpdateHealth", pkt) ||
+			isS2C("CPacketEntityEffect", pkt) ||
+			isS2C("CPacketEntityProperties", pkt) ||
+			isS2C("CPacketRemoveEntityEffect", pkt) ||
+			isS2C("CPacketUseBed", pkt)
 		)
 			this.#alertFromField(pkt, "id");
-		else if (pkt instanceof s2c("CPacketEntityStatus"))
+		else if (isS2C("CPacketEntityStatus", pkt))
 			this.#alertFromField(pkt, "entityId");
-		/*else if (pkt instanceof s2c("CPacketPlayerList"))
+		/*else if (isS2C("CPacketPlayerList", pkt))
 			for (const pl of pkt.players) {
 				this.#alertFromField(
 					pl,

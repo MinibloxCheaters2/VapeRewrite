@@ -5,6 +5,7 @@ import { s2c } from "@/utils/network/packetRefs";
 import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
+import { isS2C } from "@/utils";
 
 function motionOrReduce<T extends "x" | "y" | "z">(
 	axis: T,
@@ -34,7 +35,7 @@ export default class Velocity extends Mod {
 	onPacket(e: CancelableWrapper<S2CPacket>) {
 		const { data: packet } = e;
 		if (
-			packet instanceof s2c("CPacketEntityVelocity") &&
+			isS2C("CPacketEntityVelocity", packet) &&
 			packet.id === Miniblox.player.id
 		) {
 			if (this.horizontal === 0 && this.vertical === 0) e.cancel();
@@ -45,7 +46,7 @@ export default class Velocity extends Mod {
 			packet.motion.y *= motionOrReduce("y", packet.motion.y, pV);
 			packet.motion.z *= motionOrReduce("z", packet.motion.z, pH);
 		}
-		if (packet instanceof s2c("CPacketExplosion") && packet.playerPos) {
+		if (isS2C("CPacketExplosion", packet) && packet.playerPos) {
 			if (this.horizontal === 0 && this.vertical === 0) {
 				packet.playerPos = undefined;
 				return;

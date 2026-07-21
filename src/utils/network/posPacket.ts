@@ -5,6 +5,7 @@ import type {
 } from "@wq2/miniblox-sdk";
 import { SimpleVec3 } from "../math/vec";
 import { c2s } from "./packetRefs";
+import { isC2S } from "./PacketUtil";
 
 export default function getPosFromPacket(
 	packet: SPacketPlayerPosLook,
@@ -24,10 +25,10 @@ export default function getPosFromPacket(
 export default function getPosFromPacket(
 	packet: C2SPacket | undefined,
 ): SimpleVec3 | undefined {
-	if (packet instanceof c2s("SPacketPlayerPosLook") && packet.pos) {
+	if (isC2S("SPacketPlayerPosLook", packet) && packet.pos) {
 		return SimpleVec3.fromFloatVec3(packet.pos);
 	}
-	if (packet instanceof c2s("SPacketPlayerInput")) {
+	if (isC2S("SPacketPlayerInput", packet)) {
 		return SimpleVec3.fromFloatVec3(packet.pos);
 	}
 }

@@ -5,6 +5,7 @@ import { c2s } from "@/utils/network/packetRefs";
 import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
+import { isC2S } from "@/utils";
 
 export default class WTap extends Mod {
 	public name = "WTap";
@@ -13,7 +14,7 @@ export default class WTap extends Mod {
 	@Subscribe("sendPacket")
 	private onPacket({ data: packet }: CancelableWrapper<C2SPacket>) {
 		if (
-			packet instanceof c2s("SPacketUseEntity") &&
+			isC2S("SPacketUseEntity", packet) &&
 			packet.action === 1 /*ATTACK*/ &&
 			Miniblox.player.isSprinting()
 		) {

@@ -1,7 +1,7 @@
 import { Subscribe } from "@wq2/event-bus";
 import type { AnyPacket, C2SPacket, S2CPacket } from "@wq2/miniblox-sdk";
 import type CancelableWrapper from "@/event/CancelableWrapper";
-import { c2s, s2c } from "@/utils";
+import { c2s, isC2S, isS2C, s2c } from "@/utils";
 import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
@@ -15,9 +15,9 @@ class Log<T extends AnyPacket> {
 
 function isPacketBlacklisted(packet: AnyPacket): boolean {
 	return (
-		packet instanceof s2c("CPacketChunkData") ||
-		packet instanceof c2s("SPacketPing") ||
-		packet instanceof s2c("CPacketPong")
+		isS2C("CPacketChunkData", packet) ||
+		isC2S("SPacketPing", packet) ||
+		isS2C("CPacketPong", packet)
 	);
 }
 

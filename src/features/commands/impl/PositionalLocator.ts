@@ -7,6 +7,7 @@ import { s2c } from "@/utils/network/packetRefs";
 import Miniblox from "@/utils/refs/miniblox";
 import PlayerArgumentType from "../api/brigadier/PlayerArgumentType";
 import dispatcher from "../api/CommandDispatcher";
+import { isS2C } from "@/utils";
 
 dispatcher.register(
 	literal("locate").then(
@@ -31,7 +32,7 @@ class PlayerInfoLocator {
 	// biome-ignore lint/correctness/noUnusedPrivateClassMembers: the annotation uses it
 	#onRecvPacket(e: CancelableWrapper<S2CPacket>) {
 		const { data: packet } = e;
-		if (packet instanceof s2c("CPacketMessage")) {
+		if (isS2C("CPacketMessage", packet)) {
 		}
 	}
 }

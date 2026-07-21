@@ -5,6 +5,7 @@ import { c2s } from "@/utils/network/packetRefs";
 import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
+import { isC2S } from "@/utils";
 
 /** Y offset values, that when used before attacking a player, gives a critical hit. **/
 const CRIT_OFFSETS = [0.08, -0.07840000152];
@@ -33,10 +34,7 @@ export default class Criticals extends Mod {
 
 	@Subscribe("sendPacket")
 	private onPacket({ data: pkt }: CancelableWrapper<C2SPacket>) {
-		if (
-			pkt instanceof c2s("SPacketUseEntity") &&
-			pkt.action === 1 /*ATTACK*/
-		)
+		if (isC2S("SPacketUseEntity", pkt) && pkt.action === 1 /*ATTACK*/)
 			Criticals.sendCritPackets();
 	}
 }

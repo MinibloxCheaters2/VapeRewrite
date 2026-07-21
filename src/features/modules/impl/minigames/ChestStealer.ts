@@ -6,6 +6,7 @@ import Miniblox from "@/utils/refs/miniblox";
 import { getRandomArbitrary } from "@/utils/time/random";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
+import { isS2C } from "@/utils";
 
 export default class ChestStealer extends Mod {
 	public name = "ChestStealer";
@@ -128,7 +129,7 @@ export default class ChestStealer extends Mod {
 
 	@Subscribe("receivePacket")
 	private onPacket({ data: packet }: CancelableWrapper<S2CPacket>) {
-		if (packet instanceof s2c("CPacketOpenWindow")) {
+		if (isS2C("CPacketOpenWindow", packet)) {
 			this.currentWindowId = packet.windowId;
 			this.lastClickTime = Date.now();
 			this.stolenItems = 0;
@@ -141,7 +142,7 @@ export default class ChestStealer extends Mod {
 			}
 		}
 
-		if (packet instanceof s2c("CPacketCloseWindow")) {
+		if (isS2C("CPacketCloseWindow", packet)) {
 			if (this.currentWindowId === packet.windowId) {
 				if (this.notify && this.stolenItems > 0) {
 					Miniblox.chat.addChat({

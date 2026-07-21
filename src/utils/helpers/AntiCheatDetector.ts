@@ -8,6 +8,7 @@ import { Subscribe } from "@/event/Bus";
 import { Logger } from "../logging/Logger";
 import { c2s, s2c } from "../network/packetRefs";
 import Miniblox from "../refs/miniblox";
+import { isC2S, isS2C } from "../network/PacketUtil";
 
 export enum DetectedAC {
 	/** Not detected yet. */
@@ -30,7 +31,8 @@ export default new (class AntiCheatDetector {
 	verdict = DetectedAC.UNKNOWN;
 	#firstInput = -1;
 	constructor() {
-		Bus.registerSubscriber(this);
+		// TODO(unpatch): un-comment this after adding stuff
+		//Bus.registerSubscriber(this);
 	}
 	@Subscribe("connect")
 	private resetState() {
@@ -41,13 +43,11 @@ export default new (class AntiCheatDetector {
 		Bus.onceB("sendPacket", ({ data }) => {
 			if (
 				this.#firstInput === -1 &&
-				data instanceof c2s("SPacketPlayerInput") &&
+				isC2S("SPacketPlayerInput", data) &&
 				!(
-					(
-						Miniblox.player.abilities.isFlying ||
-						Miniblox.player.mode.isSpectator()
-					) /* ||
-					Miniblox.player.mode.isCreative()*/
+					Miniblox.player.abilities.isFlying ||
+					Miniblox.player.mode.isSpectator() ||
+					Miniblox.player.mode.isCreative()
 				)
 			) {
 				LOGGER.info("Captured 1st input");
@@ -58,7 +58,7 @@ export default new (class AntiCheatDetector {
 		});
 		Bus.onceB("receivePacket", ({ data }) => {
 			if (this.verdict === DetectedAC.UNKNOWN) {
-				if (data instanceof s2c("CPacketPlayerReconciliation")) {
+				if (isS2C("CPacketPlayerReconciliation", data)) {
 					LOGGER.info(
 						"New AC-only packet detected, verdict is new AC",
 					);
