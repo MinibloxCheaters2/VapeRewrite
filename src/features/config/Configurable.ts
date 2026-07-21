@@ -80,7 +80,7 @@ export default class Configurable {
 		return setting;
 	}
 
-	protected createDropdownSetting<V extends ModeLike = string>(
+	protected createDropdownSetting<const V extends ModeLike = string>(
 		name: string,
 		options: V[],
 		defaultValue: V = options[0],

@@ -8,7 +8,7 @@ import type CancelableWrapper from "../../event/CancelableWrapper";
 import Rotation, { type IRotation } from "../aiming/rotation";
 import Miniblox from "../refs/miniblox";
 import THREE from "../refs/three";
-import { sendSilently, isC2S, isS2C } from "./PacketUtil";
+import { sendSilently, isC2S } from "./PacketUtil";
 import getPosFromPacket from "./posPacket";
 
 export class PacketRecord<T> {
