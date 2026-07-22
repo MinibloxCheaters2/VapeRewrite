@@ -9,6 +9,7 @@ import PacketRefs from "@/utils/network/packetRefs";
 import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
+import { MAIN_LOGGER as logger } from "@/utils";
 
 function wrapAngleTo180_radians(angle: number): number {
 	let ang = angle;
@@ -141,15 +142,16 @@ export default class KillAura extends Mod {
 		player.attack(e);
 	}
 
-	@Subscribe("gameTick")
+	@Subscribe("playerTick")
 	onTick() {
 		// ghetto ahh method
 		let first = true;
-		for (const target of findTargets(
+		const targets = findTargets(
 			this.range,
 			this.angle,
 			this.wallCheck,
-		)) {
+		);
+		for (const target of targets) {
 			this.block();
 			this.sendAttack(target, first);
 			first = false;
