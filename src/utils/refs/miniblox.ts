@@ -353,13 +353,13 @@ const Miniblox = {
 			Array.from(
 				getInheritanceTree(Miniblox.player as unknown as HasProto),
 			).find((x) => {
-				const ctor = x.constructor as typeof EntityLivingBase;
+				const ctor = (x as unknown as EntityLivingBase & { constructor: typeof EntityLivingBase }).constructor;
 				return (
 					"sprintingSpeedBoostModifier" in ctor &&
 					"nextEntityID" in ctor &&
 					typeof ctor.nextEntityID === "number"
 				);
-			}),
+			}) as typeof EntityLivingBase | undefined,
 		);
 	},
 
