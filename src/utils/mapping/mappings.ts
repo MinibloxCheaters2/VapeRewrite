@@ -35,7 +35,13 @@ export default new (class Mappings {
 	}
 	get ClientEntityPlayer() {
 		return initOrR(this.#ClientEntityPlayer, () =>
-			ofDumps("moveForward", "moveStrafe", "lastReportedYaw", "attack"),
+			ofDumps(
+				"moveForward",
+				"moveStrafe",
+				"lastReportedYaw",
+				"getMoveDirection",
+				"attack",
+			),
 		);
 	}
 })();

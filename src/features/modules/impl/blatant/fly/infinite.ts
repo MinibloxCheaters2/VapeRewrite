@@ -21,7 +21,7 @@ export default class InfiniteSub extends SubModule {
 		const { player } = Miniblox;
 		fly.ticks++;
 
-		const dir = getMoveDirection(speed);
+		const dir = player.getMoveDirection(speed);
 		player.motion.x = dir.x;
 		player.motion.z = dir.z;
 

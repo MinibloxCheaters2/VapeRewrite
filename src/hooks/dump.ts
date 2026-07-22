@@ -9,7 +9,8 @@ const DUMP_REGEXES = {
 	normalizeAngle: /([a-zA-Z]+)\(this\.boatYaw\s*-\s*this.yaw\)/,
 	// PlayerMovement#updatePlayerMoveState
 	applyInput: /this\.(\w+)\(this\.currentInput\)/,
-	// reconcileServerPosition: /d/,
+	getMoveDirection:
+		/([a-zA-Z]+)\(\w\)[\s\S]*?>=\s*1e-4[\s\S]*?Math\.cos\(this\.yaw\)/,
 	updatePlayerMoveState:
 		/this\.([a-zA-Z]*)\(\),\n*\s*this\.isUsingItem\(\)\s*&&/,
 	// PlayerMovement#checkHeadInBlock

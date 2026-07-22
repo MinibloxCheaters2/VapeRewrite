@@ -29,13 +29,14 @@ since that then signifies that we are in a class that doesn't extend anything.
 export function getInheritanceTree(obj: HasProto): Set<Constructor> {
 	const tree = new Set<Constructor>();
 	let cur: HasProto = obj;
-	while (true) {
+	while (cur != null) {
 		const parent = getParent(cur);
-		if (parent === undefined) {
+		if (parent == null) {
 			break;
 		}
 		tree.add(parent);
 		cur = parent as HasProto;
+		if (cur == null) break;
 	}
 	return tree;
 }
