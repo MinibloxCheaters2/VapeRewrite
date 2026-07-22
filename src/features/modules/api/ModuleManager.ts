@@ -2,6 +2,7 @@ import Blink from "../impl/blatant/Blink.js";
 import FakeLag from "../impl/blatant/FakeLag.js";
 import Fly from "../impl/blatant/fly/index.js";
 import KillAura from "../impl/blatant/KillAura.js";
+import MaceKill from "../impl/blatant/MaceKill.js";
 import NoSlow from "../impl/blatant/NoSlow.js";
 import Phase from "../impl/blatant/Phase.js";
 import Scaffold from "../impl/blatant/Scaffold.js";
@@ -100,6 +101,7 @@ export default class ModuleManager {
 		new AutoRejoin(),
 		new MurderMystery(),
 		new Paranoia(),
+		new MaceKill(),
 	] as const;
 
 	/** Each module's name */
