@@ -1,12 +1,14 @@
-import { MATCHED_DUMPS } from "@/hooks/gameScript";
+import Miniblox from "../refs/miniblox";
 
-let fn: (k: string) => boolean;
-let isKeyDown = (k: string): boolean => {
-	if (fn !== undefined) isKeyDown = fn;
-	fn = GExposed.store.run((e) =>
-		e<(k: string) => boolean>(MATCHED_DUMPS.keyPressedPlayer),
-	);
-	return fn(k);
-};
+const pressedKeys: Record<string, boolean> = {};
 
-export default isKeyDown;
+document.addEventListener("keydown", (x) => (pressedKeys[x.code] = true));
+document.addEventListener("keyup", (x) => (pressedKeys[x.code] = true));
+
+export default function isKeyDown(key: string): boolean {
+	const { Game } = Miniblox;
+	if (Game.isActive(false)) {
+		return pressedKeys[key] ?? false;
+	}
+	return false;
+}
