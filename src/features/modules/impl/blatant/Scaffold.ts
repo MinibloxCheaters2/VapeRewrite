@@ -407,7 +407,7 @@ export default class Scaffold extends Mod {
 			const hitVec = this.getRandomHitVec(placePos, placeSide);
 
 			// Tower mode
-			if (this.tower && isKeyDown("space") && player.onGround) {
+			if (this.tower && isKeyDown("Space") && player.onGround) {
 				const centerDist = Math.sqrt(
 					(player.pos.x - (playerX + 0.5)) ** 2 +
 						(player.pos.z - (playerZ + 0.5)) ** 2,
