@@ -312,7 +312,6 @@ const Miniblox = {
 					"leftPunch" in c
 				);
 			}) as unknown as Hud3D;
-			console.log(hud3D);
 			return hud3D;
 		});
 	},
@@ -355,7 +354,6 @@ const Miniblox = {
 				getInheritanceTree(Miniblox.player as unknown as HasProto),
 			).find((x) => {
 				const ctor = x.constructor as typeof EntityLivingBase;
-				console.log(ctor);
 				return (
 					"sprintingSpeedBoostModifier" in ctor &&
 					"nextEntityID" in ctor &&
