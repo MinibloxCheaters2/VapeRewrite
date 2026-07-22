@@ -10,7 +10,7 @@ import type {
 	Syntax,
 } from "@wq2/packet-gen-wasm";
 import { ready as packetsPromise } from "../network/WasmTest";
-import Miniblox from "../refs/miniblox";
+import Miniblox, { Runtime } from "../refs/miniblox";
 
 const scrapedMessages: MappedMessage[] = [];
 const scrapedEnums: MappedEnumGroup[] = [];
@@ -38,9 +38,10 @@ export async function init() {
 	scrapedMessages.push(...filtered);
 	scrapedEnums.push(...p.enums);
 }
+
 export function asMessage<T extends object>(msg: MappedMessage): Message<T> {
 	const msgClass = Miniblox.Message;
-	const runtime =
+	const runtime: Runtime | undefined =
 		msg.syntax === _Syntax.Proto3 ? Miniblox.proto3 : Miniblox.proto2;
 
 	if (runtime === undefined)
@@ -57,16 +58,16 @@ export function asMessage<T extends object>(msg: MappedMessage): Message<T> {
 			).util.initPartial(args, this);
 		}
 
-		static fromBinary(a, b) {
+		static fromBinary(a: unknown, b: unknown) {
 			return new packetClass().fromBinary(a, b);
 		}
-		static fromJson(a, b) {
+		static fromJson(a: unknown, b: unknown) {
 			return new packetClass().fromJson(a, b);
 		}
-		static fromJsonString(a, b) {
+		static fromJsonString(a: unknown, b: unknown) {
 			return new packetClass().fromJsonString(a, b);
 		}
-		static equals(a, b) {
+		static equals(a: unknown, b: unknown) {
 			return runtime.util.equals(packetClass, a, b);
 		}
 	};

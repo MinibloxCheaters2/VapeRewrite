@@ -1,6 +1,8 @@
-//import { parse } from "@wq2/packet-gen-wasm";
 import type * as VMModule from "@wq2/packet-gen-wasm";
 import { gameScript, gameScriptReady } from "@/hooks/gameScript";
+import { AnyPacket } from "@wq2/miniblox-sdk";
+
+export let packets = new Map<string, AnyPacket>();
 
 async function load() {
 	const wasmExports = (await import(
@@ -25,3 +27,13 @@ async function init() {
 }
 
 export const ready = init();
+
+// async function fillDummyPackets() {
+// 	await scrapeReady;
+// 	const { result } = await ready;
+// 	result.messages.forEach(x => {
+// 		packets.getOrInsertComputed(x.typeName, () => asMessage(x));
+// 	});
+// }
+
+// ready.then(fillDummyPackets);

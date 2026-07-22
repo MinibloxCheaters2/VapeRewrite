@@ -5,6 +5,7 @@
 import type { CPACKET_MAP, SPACKET_MAP } from "@wq2/miniblox-sdk";
 import { discoveredPackets } from "@/hooks/PacketHook";
 import Miniblox from "../refs/miniblox";
+import { packets as dummyPackets } from "./WasmTest";
 
 export type CPacketMap = typeof CPACKET_MAP;
 export type SPacketMap = typeof SPACKET_MAP;
@@ -35,7 +36,7 @@ function findPacketByName(ref: string) {
 	return (
 		Miniblox.packets?.find(
 			(x) => "typeName" in x && x.typeName === ref,
-		) ?? discoveredPackets.get(ref)
+		) ?? discoveredPackets.get(ref) ?? dummyPackets.get(ref)
 	);
 }
 
