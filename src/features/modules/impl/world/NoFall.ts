@@ -8,11 +8,13 @@ import Category from "../../api/Category";
 import Mod from "../../api/Module";
 
 /**
- * max fall high (defaults to 3) - buffer, idk what a good value is, since
+ * max fall height (defaults to 3) - buffer, idk what a good value is, since
  * if you start falling ~6 blocks per tick then
  * you get half a heart of fall damage
  */
-export const FALL_HEIGHT_BUFFER = 0.5;
+const FALL_HEIGHT_BUFFER = 0.5;
+/** Too lazy to make a dump for getMaxFallHeight, and it always returns 3 anyway */
+const MAX_FALL_HEIGHT = 3;
 
 export default class NoFall extends Mod {
 	public name = "NoFall";
@@ -26,7 +28,7 @@ export default class NoFall extends Mod {
 			isC2S("SPacketPlayerPosLook", packet) &&
 			!packet.onGround &&
 			PacketFallDistance.currentFallDistance >=
-				Miniblox.player.getMaxFallHeight() - FALL_HEIGHT_BUFFER
+				/*Miniblox.player.getMaxFallHeight()*/MAX_FALL_HEIGHT - FALL_HEIGHT_BUFFER
 		) {
 			packet.onGround = true;
 			Miniblox.player.fallDistance = 0.0;
