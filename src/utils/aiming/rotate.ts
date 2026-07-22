@@ -4,6 +4,7 @@
  */
 
 import type { C2SPacket } from "@wq2/miniblox-sdk";
+import Bus from "@/Bus";
 import { Priority, Subscribe } from "@/event/Bus";
 import type CancelableWrapper from "@/event/CancelableWrapper";
 import MovementCorrection from "../movement/MovementCorrection";
@@ -23,6 +24,9 @@ export class RotationPlan {
 export default new (class RotationManager {
 	#currentPlan: RotationPlan | undefined = undefined;
 	#trackedRot = Rotation.ZERO;
+	constructor() {
+		Bus.registerSubscriber(this);
+	}
 	get currentPlan() {
 		return this.#currentPlan;
 	}

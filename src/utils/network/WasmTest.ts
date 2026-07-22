@@ -27,13 +27,3 @@ async function init() {
 }
 
 export const ready = init();
-
-// async function fillDummyPackets() {
-// 	await scrapeReady;
-// 	const { result } = await ready;
-// 	result.messages.forEach(x => {
-// 		packets.getOrInsertComputed(x.typeName, () => asMessage(x));
-// 	});
-// }
-
-// ready.then(fillDummyPackets);

@@ -4,6 +4,7 @@
  */
 
 import type { Chat, ChatData, ChatLog } from "@wq2/miniblox-sdk";
+import Bus from "@/Bus";
 import Miniblox from "@/utils/refs/miniblox";
 
 const idSymbol = Symbol();
@@ -12,6 +13,9 @@ export type UUIDv4 = `${string}-${string}-4${string}-${string}-${string}`;
 
 export default new (class ChatHook {
 	origAddChat: Chat["addChat"];
+	constructor() {
+		Bus.registerSubscriber(this);
+	}
 	init() {
 		const { chat } = Miniblox;
 		this.origAddChat = chat.addChat;

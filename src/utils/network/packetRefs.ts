@@ -2,7 +2,7 @@
  * contains a cache to packet references.
  * @module
  */
-import type { CPACKET_MAP, SPACKET_MAP } from "@wq2/miniblox-sdk";
+import type { CPACKET_MAP, Message, SPACKET_MAP } from "@wq2/miniblox-sdk";
 import { discoveredPackets } from "@/hooks/PacketHook";
 import Miniblox from "../refs/miniblox";
 import { packets as dummyPackets } from "./WasmTest";
@@ -32,12 +32,60 @@ function makeProxyRef<T extends CPacketMap | SPacketMap, V = T[keyof T]>(
 	});
 }
 
+function extractS2CPacketsFromCombined(pktClass: unknown) {
+	try {
+		const fields = (
+			pktClass as {
+				fields?: Iterable<{
+					name?: string;
+					T?: {
+						fields?: Iterable<{
+							name?: string;
+							oneof?: string;
+							T?: unknown;
+						}>;
+					};
+					oneof?: string;
+				}>;
+			}
+		).fields;
+		if (!fields) return;
+		for (const field of fields) {
+			if (field.name === "packets" && field.T?.fields) {
+				for (const sub of field.T.fields) {
+					if (sub.oneof === "packet" && sub.T && sub.name) {
+						discoveredPackets.set(
+							sub.name,
+							sub.T as Message<object>,
+						);
+					}
+				}
+				break;
+			}
+		}
+	} catch {
+		/* noop */
+	}
+}
+
 function findPacketByName(ref: string) {
-	return (
-		Miniblox.packets?.find(
-			(x) => "typeName" in x && x.typeName === ref,
-		) ?? discoveredPackets.get(ref) ?? dummyPackets.get(ref)
+	const fromSdk = Miniblox.packets?.find(
+		(x) => "typeName" in x && x.typeName === ref,
 	);
+	const fromDiscovered = discoveredPackets.get(ref);
+	const fromDummy = dummyPackets.get(ref);
+
+	const result = fromSdk ?? fromDiscovered ?? fromDummy;
+
+	if (result && (fromSdk || fromDiscovered)) {
+		dummyPackets.delete(ref);
+	}
+
+	if (result && ref === "ClientBoundCombined") {
+		extractS2CPacketsFromCombined(result);
+	}
+
+	return result;
 }
 
 function getC2SUncached<
