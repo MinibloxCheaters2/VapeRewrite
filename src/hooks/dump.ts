@@ -13,6 +13,7 @@ const DUMP_REGEXES = {
 		/([a-zA-Z]+)\(\w\)[\s\S]*?>=\s*1e-4[\s\S]*?Math\.cos\(this\.yaw\)/,
 	updatePlayerMoveState:
 		/this\.([a-zA-Z]*)\(\),\n*\s*this\.isUsingItem\(\)\s*&&/,
+	getEyePos: /(\w+)\(\)\s*{\n*\s*let\s+\w\s*=\s*this\.pos\.clone\(\);\n*\s*return\s+\w.y\s*\+=\s*this\.getEyeHeight/,
 	// PlayerMovement#checkHeadInBlock
 	// position:
 	// 	/null;\s*\n*\s*let\s*\w\s*=\s*\w+\.fromVector\(\w+\.([a-zA-Z]+)\)/g,
