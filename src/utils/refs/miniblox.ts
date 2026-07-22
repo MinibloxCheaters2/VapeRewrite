@@ -114,9 +114,9 @@ function getReferenceMsg() {
 	}
 	return method1() ?? method2();
 }
-function getMsgRuntime(msg: Message<object>) {
+function getMsgRuntime(msg: Message<object>): Runtime {
 	return (
-		msg.constructor as (typeof msg)["constructor"] & { runtime: object }
+		msg.constructor as (typeof msg)["constructor"] & { runtime: Runtime }
 	).runtime;
 }
 
@@ -134,7 +134,7 @@ const Miniblox = {
 	get proto2() {
 		return initOrR(_proto2, () =>
 			getMsgRuntime(Miniblox.player.inventory.sendInventoryToServer()),
-		);
+		) as Runtime | undefined;
 	},
 	get proto3() {
 		return initOrR(_proto3, () => {
@@ -147,7 +147,7 @@ const Miniblox = {
 					(x) =>
 						(x as typeof x & { syntax: string })?.syntax ===
 						"proto3",
-				);
+				) as Runtime | undefined;
 		});
 	},
 	get Message() {
