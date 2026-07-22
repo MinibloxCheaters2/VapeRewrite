@@ -174,7 +174,7 @@ const Miniblox = {
 		return initOrR(
 			_playerControllerMP,
 			() =>
-				findObject(
+				remapObj(findObject(
 					(x) =>
 						x != null &&
 						typeof x === "object" &&
@@ -182,7 +182,7 @@ const Miniblox = {
 						"isHittingBlock" in x &&
 						"sendEnchantPacket" in x &&
 						"sendRenamePacket" in x,
-				) as PlayerControllerMP,
+				) as PlayerControllerMP, mappings.playerControllerMP),
 		);
 	},
 
@@ -354,11 +354,7 @@ const Miniblox = {
 				getInheritanceTree(Miniblox.player as unknown as HasProto),
 			).find((x) => {
 				const ctor = (x as unknown as EntityLivingBase & { constructor: typeof EntityLivingBase }).constructor;
-				return (
-					"sprintingSpeedBoostModifier" in ctor &&
-					"nextEntityID" in ctor &&
-					typeof ctor.nextEntityID === "number"
-				);
+				return Object.getOwnPropertyNames(ctor).includes("sprintingSpeedBoostModifier");
 			}))?.constructor as typeof EntityLivingBase | undefined,
 		);
 	},
