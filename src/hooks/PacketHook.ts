@@ -55,11 +55,11 @@ const packetHook = {
 			});*/
 
 		_Message.prototype.fromBinary = new Proxy(origFromBinary, {
-			apply(target, thisArg, _argArray) {
+			apply(target, thisArg, argArray) {
 				const cw = new CancelableWrapper(thisArg);
 				Bus.emit("receivePacket", cw);
 				if (cw.canceled) return;
-				return Reflect.apply(target, thisArg, cw.data);
+				return Reflect.apply(target, cw.data, argArray);
 			},
 		});
 	},
