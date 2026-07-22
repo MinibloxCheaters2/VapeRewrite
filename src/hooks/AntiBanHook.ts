@@ -6,7 +6,6 @@ function hook() {
 	Bus.on("connect", () => {
 		Bus.onceB("sendPacket", ({ data: pkt }) => {
 			if (isC2S("SPacketLoginStart", pkt)) {
-				console.info("hello world");
 				pkt.hydration = "0";
 				pkt.prefetch = undefined;
 				pkt.metricsId = crypto.randomUUID();
