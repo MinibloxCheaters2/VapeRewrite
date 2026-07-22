@@ -34,30 +34,37 @@ export async function importMiniblox() {
 	return await import(scriptEl.src);
 }
 
-let miniblox: object;
+// let miniblox: object;
+let values: unknown[];
 
 importMiniblox().then((t) => {
-	miniblox = t;
+	// miniblox = t;
+	values = Object.values(t);
 	expose("MinibloxRaw", () => t);
 });
 
-function findObject(filter: (clazz: NewableFunction) => boolean) {
-	return Object.values(miniblox).find(filter);
+function findObject<T>(filter: <X>(clazz: unknown) => clazz is X) {
+	return values.find(filter) as T | undefined;
 }
 
-function _findObjectByCode(codeFilter: (code: string) => boolean) {
-	return Object.values(miniblox).find((x) => codeFilter(x.toString()));
+function _findObjectByCode<T>(codeFilter: (code: string) => boolean) {
+	return values.find(
+		(x) => typeof x === "function" && codeFilter(x.toString()),
+	) as T | undefined;
 }
 
-function filterObject(filter: (clazz: NewableFunction) => boolean) {
-	return Object.values(miniblox).filter(filter);
+function filterObject(filter: <X>(clazz: unknown) => clazz is X) {
+	return values.filter(filter);
 }
 
-function _filterObjectByCode(codeFilter: (code: string) => boolean) {
-	return Object.values(miniblox).filter((x) => codeFilter(x.toString()));
+function _filterObjectByCode<T>(codeFilter: (code: string) => boolean) {
+	return values.filter(
+		(x) => typeof x === "function" && codeFilter(x.toString()),
+	) as T[];
 }
 
 let _game: Game | undefined;
+let _Game: typeof Game | undefined;
 let _world: ClientWorld | undefined;
 let _player: ClientEntityPlayer | undefined;
 let _chat: Chat | undefined;
@@ -152,7 +159,7 @@ const Miniblox = {
 			() =>
 				findObject(
 					(x) =>
-						// classes are "functions"
+						// raw classes are "functions" (because their constructors are)
 						typeof x === "function" &&
 						"sendPacket" in x &&
 						"socket" in x &&
@@ -169,6 +176,7 @@ const Miniblox = {
 			() =>
 				findObject(
 					(x) =>
+						x != null &&
 						typeof x === "object" &&
 						"lastSentSlot" in x &&
 						"isHittingBlock" in x &&
@@ -223,6 +231,7 @@ const Miniblox = {
 		return initOrR(_Enchantments, () =>
 			findObject(
 				(x) =>
+					x != null &&
 					typeof x === "function" &&
 					"protection" in x &&
 					"fireProtection" in x &&
@@ -245,7 +254,6 @@ const Miniblox = {
 		return initOrR(_Materials, () =>
 			findObject(
 				(x) =>
-					//e
 					typeof x === "function" &&
 					"redstoneLight" in x &&
 					"air" in x &&
@@ -346,10 +354,12 @@ const Miniblox = {
 			Array.from(
 				getInheritanceTree(Miniblox.player as unknown as HasProto),
 			).find((x) => {
+				const ctor = x.constructor as typeof EntityLivingBase;
+				console.log(ctor);
 				return (
-					"sprintingSpeedBoostModifier" in x &&
-					"nextEntityID" in x &&
-					typeof x === "number"
+					"sprintingSpeedBoostModifier" in ctor &&
+					"nextEntityID" in ctor &&
+					typeof ctor.nextEntityID === "number"
 				);
 			}),
 		);
@@ -368,11 +378,30 @@ const Miniblox = {
 	 */
 	get game() {
 		return initOrR(_game, () => {
-			const elem = document.querySelector("#react");
-			const fiber = elem && Object.values(elem)[0];
-			if (!fiber?.updateQueue?.baseState?.element?.props?.game)
-				throw new Error("React not mounted!");
-			return fiber.updateQueue.baseState.element.props.game as Game;
+			function method1() {
+				return findObject(
+					(x) =>
+						typeof x === "object" &&
+						"gameScene" in x &&
+						"GameSceneClass" in x &&
+						"player" in x &&
+						"world" in x,
+				) as Game;
+			}
+			function method2() {
+				const elem = document.querySelector("#react");
+				const fiber = elem && Object.values(elem)[0];
+				if (!fiber?.updateQueue?.baseState?.element?.props?.game)
+					throw new Error("React not mounted!");
+				return fiber.updateQueue.baseState.element.props.game as Game;
+			}
+			return method1() ?? method2();
+		});
+	},
+
+	get Game() {
+		return initOrR(_Game, () => {
+			return Miniblox.game.constructor as typeof Game;
 		});
 	},
 
