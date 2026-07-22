@@ -34,31 +34,34 @@ export async function importMiniblox() {
 	return await import(scriptEl.src);
 }
 
-// let miniblox: object;
-let values: unknown[];
+let miniblox: object;
 
 importMiniblox().then((t) => {
-	// miniblox = t;
-	values = Object.values(t);
+	miniblox = t;
 	expose("MinibloxRaw", () => t);
 });
 
+let vals: unknown[] | undefined;
+function values() {
+	return initOrR(vals, () => Object.values(miniblox));
+}
+
 function findObject<T>(filter: <X>(clazz: unknown) => clazz is X) {
-	return values.find(filter) as T | undefined;
+	return values().find(filter) as T | undefined;
 }
 
 function _findObjectByCode<T>(codeFilter: (code: string) => boolean) {
-	return values.find(
+	return values().find(
 		(x) => typeof x === "function" && codeFilter(x.toString()),
 	) as T | undefined;
 }
 
 function filterObject(filter: <X>(clazz: unknown) => clazz is X) {
-	return values.filter(filter);
+	return values().filter(filter);
 }
 
 function _filterObjectByCode<T>(codeFilter: (code: string) => boolean) {
-	return values.filter(
+	return values().filter(
 		(x) => typeof x === "function" && codeFilter(x.toString()),
 	) as T[];
 }
