@@ -1,6 +1,7 @@
 import { createSignal } from "solid-js";
 import { addBind } from "@/features/binds/handler";
 import logger from "@/utils/logging/loggers";
+import { waitForReact } from "@/utils/helpers/waitForReact";
 
 // Global GUI visibility state - default hidden (open with \ key)
 export const [guiVisible, setGuiVisible] = createSignal(false);
@@ -63,28 +64,20 @@ export function toggleGUI() {
 	setGuiVisible(newState);
 }
 
-// Setup keybind using existing bind system
-if (typeof window !== "undefined") {
-	// Wait for DOM to be ready
-	setTimeout(() => {
-		try {
-			// Register \ key (Backslash)
-			addBind("\\", "gui-toggle", (e) => {
-				e.preventDefault();
-				e.stopPropagation();
-				toggleGUI();
-			});
+try {
+	// Register \ key (Backslash)
+	addBind("BackSlash", "gui-toggle", (e) => {
+		e.preventDefault();
+		e.stopPropagation();
+		toggleGUI();
+	});
 
-			// Also register RightShift as alternative
-			addBind("Shift", "gui-toggle-shift", (e) => {
-				if (e.location === 2) {
-					e.preventDefault();
-					e.stopPropagation();
-					toggleGUI();
-				}
-			});
-		} catch (error) {
-			logger.error("Failed to register GUI keybinds:", error);
-		}
-	}, 100);
+	// Also register RightShift as alternative
+	addBind("ShiftRight", "gui-toggle-shift", (e) => {
+		e.preventDefault();
+		e.stopPropagation();
+		toggleGUI();
+	});
+} catch (error) {
+	logger.error("Failed to register GUI keybinds:", error);
 }
