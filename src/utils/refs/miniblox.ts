@@ -86,7 +86,7 @@ let _ItemStack: typeof ItemStack | undefined;
 let _ItemBow: typeof ItemBow | undefined;
 let _ItemBlock: typeof ItemBlock | undefined;
 
-let _packets: AnyPacket[] | undefined;
+let _packets: Message<object>[];
 let CSocket: typeof ClientSocket | undefined;
 let _playerControllerMP: PlayerControllerMP | undefined;
 let _Message: typeof Message | undefined;
@@ -122,13 +122,13 @@ function getMsgRuntime(msg: Message<object>): Runtime {
 
 const Miniblox = {
 	/** note: not all packets are here, only the ones vector exports. */
-	get packets() {
+	get packets(): Message<object>[] | undefined {
 		return initOrR(
 			_packets,
 			() =>
-				filterObject(
+				(filterObject(
 					(x) => typeof x === "function" && "typeName" in x,
-				) as Message<object>[] | undefined,
+				) ?? []) as Message<object>[],
 		);
 	},
 	get proto2() {

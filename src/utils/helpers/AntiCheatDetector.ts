@@ -29,6 +29,9 @@ const LOGGER = new Logger("AntiCheat Detector");
 export default new (class AntiCheatDetector {
 	verdict = DetectedAC.UNKNOWN;
 	#firstInput = -1;
+	constructor() {
+		Bus.registerSubscriber(this);
+	}
 	@Subscribe("connect")
 	private resetState() {
 		LOGGER.info("Setting initial unknown state");
@@ -54,20 +57,15 @@ export default new (class AntiCheatDetector {
 		Bus.onceB("receivePacket", ({ data }) => {
 			if (this.verdict === DetectedAC.UNKNOWN) {
 				if (isS2C("CPacketPlayerReconciliation", data)) {
-					LOGGER.info(
-						"New AC-only packet detected, verdict is new AC",
-					);
 					// only the new ac sends this
 					this.verdict = DetectedAC.NEW;
 					return true;
 				} else if (
-					this.#firstInput !== -1 &&
-					Date.now() - this.#firstInput >= 0.5e3
+					Miniblox.player.serverUsesInputMovement() ||
+					(this.#firstInput !== -1 &&
+						Date.now() - this.#firstInput >= 0.5e3)
 				) {
-					LOGGER.info(
-						"No reconciliation packet for 0.5 seconds, assuming old AC.",
-					);
-					this.verdict = DetectedAC.OLD; // assume old AC if we don't get a reconciliation packet after 0.5 seconds
+					this.verdict = DetectedAC.OLD;
 					return true;
 				}
 			} else {
