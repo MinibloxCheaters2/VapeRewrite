@@ -350,7 +350,7 @@ const Miniblox = {
 
 	get EntityLivingBase() {
 		return initOrR(_EntityLivingBase, () =>
-			Array.from(
+			(Array.from(
 				getInheritanceTree(Miniblox.player as unknown as HasProto),
 			).find((x) => {
 				const ctor = (x as unknown as EntityLivingBase & { constructor: typeof EntityLivingBase }).constructor;
@@ -359,7 +359,7 @@ const Miniblox = {
 					"nextEntityID" in ctor &&
 					typeof ctor.nextEntityID === "number"
 				);
-			}) as typeof EntityLivingBase | undefined,
+			}))?.constructor as typeof EntityLivingBase | undefined,
 		);
 	},
 

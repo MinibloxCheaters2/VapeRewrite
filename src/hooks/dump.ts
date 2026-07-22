@@ -21,7 +21,7 @@ const DUMP_REGEXES = {
 	// EntityItem#update
 	pushOutOfBlocks: /this\.noPhysics\s*=\s*this\.(\w+)\(this/,
 	// attackTargetEntityWithCurrentItem, in PlayerController#attackEntity
-	attack: /\w+\.(\w+)\(e\),\n*\s*ft.hit()/,
+	attack: /\w+\.(\w+)\(e\),\n*\s*\w+\.hit\(\)/,
 	lastReportedYaw: /this\.([a-zA-Z]*)=this\.yaw,this\.last/m,
 	windowClick: /([a-zA-Z]*)\(this\.inventorySlots\.windowId/m,
 	damageReduceAmount: /\w\.item\.(\w+)\s*\|\|\s*0/,
