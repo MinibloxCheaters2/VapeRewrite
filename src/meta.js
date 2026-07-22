@@ -5,6 +5,7 @@
 // @license     AGPL-3.0-or-later
 // @homepageURL https://codeberg.org/Miniblox/VapeRewrite
 // @match       https://*.miniblox.io/*
+// @match       https://*.miniblox.online/*
 // @match       https://*.bloxbattles.io/*
 // @match       https://*.miniblox.org/*
 //#region mirrors (updated automatically by scripts/mirrors.ts, do NOT REDEEM)
