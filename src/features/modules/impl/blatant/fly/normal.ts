@@ -1,29 +1,20 @@
 import type { SliderSetting, ToggleSetting } from "@/features/config/Settings";
 import SubModule from "@/features/config/SubModule";
 import isKeyDown from "@/utils/input/key";
-import DesyncManager from "@/utils/movement/DesyncManager";
 import getMoveDirection from "@/utils/movement/movement";
 import Miniblox from "@/utils/refs/miniblox";
 import type Fly from "./index";
 
 export default class NormalSub extends SubModule {
-	readonly desyncSetting: ToggleSetting = this.createToggleSetting(
-		"Desync",
-		true,
-	);
 	readonly speedSetting: SliderSetting = this.createSliderSetting(
 		"Speed",
-		0.18,
-		0.05,
-		2.0,
+		1,
+		0.11,
+		6.0,
 		0.01,
 	);
 
 	onTick(fly: Fly): void {
-		if (this.desyncSetting.value() && !DesyncManager.desync) {
-			DesyncManager.desync = true;
-			fly.desynced = true;
-		}
 		const { player } = Miniblox;
 		const dir = getMoveDirection(this.speedSetting.value());
 

@@ -1,6 +1,7 @@
 import { expose } from "@/exposed";
 import { gameScript, gameScriptReady } from "@/hooks/gameScript";
 import logger from "../logging/loggers";
+import { Vector3 } from "three";
 
 // note to self: do NOT add the `g` (global) flag, otherwise it not workong
 // even though it works in regexr (you can see /g in the flags enabled) but idk
@@ -56,7 +57,7 @@ const THREE = {
 		return findObjectByType("Mesh");
 	},
 
-	get Vec3() {
+	get Vec3(): typeof Vector3 {
 		return findObject((x) => {
 			return (
 				typeof x === "function" &&
