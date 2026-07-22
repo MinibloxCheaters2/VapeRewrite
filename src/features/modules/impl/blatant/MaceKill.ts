@@ -29,7 +29,17 @@ export default class MaceKill extends Mod {
 					y: player.pos.y + this.clipAmount,
 					z: player.pos.z,
 				},
-				onGround: true,
+				onGround: false,
+			}),
+		);
+		ClientSocket.sendPacket(
+			new PacketRefs.s.SPacketPlayerPosLook({
+				pos: {
+					x: player.pos.x,
+					y: player.pos.y + 0.03,
+					z: player.pos.z,
+				},
+				onGround: false,
 			}),
 		);
 	}
