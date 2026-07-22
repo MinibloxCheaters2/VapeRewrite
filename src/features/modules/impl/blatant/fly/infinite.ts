@@ -25,8 +25,8 @@ export default class InfiniteSub extends SubModule {
 		player.motion.x = dir.x;
 		player.motion.z = dir.z;
 
-		const goUp = isKeyDown("space");
-		const goDown = isKeyDown("alt");
+		const goUp = isKeyDown("Space");
+		const goDown = isKeyDown("Alt");
 
 		if (fly.ticks <= 6 && !goUp && !goDown) {
 			player.motion.y = 0;

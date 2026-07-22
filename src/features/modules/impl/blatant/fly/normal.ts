@@ -30,8 +30,8 @@ export default class NormalSub extends SubModule {
 		player.motion.x = dir.x;
 		player.motion.z = dir.z;
 
-		const goUp = isKeyDown("space");
-		const goDown = isKeyDown("shift");
+		const goUp = isKeyDown("Space");
+		const goDown = isKeyDown("Shift");
 
 		player.motion.y = goUp
 			? fly.verticalSetting.value()

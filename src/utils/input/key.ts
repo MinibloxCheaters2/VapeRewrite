@@ -7,8 +7,6 @@ document.addEventListener("keyup", (x) => (pressedKeys[x.code] = true));
 
 export default function isKeyDown(key: string): boolean {
 	const { Game } = Miniblox;
-	if (Game.isActive(false)) {
-		return pressedKeys[key] ?? false;
-	}
-	return false;
+	if (!Game.isActive(false)) return false;
+	return pressedKeys[key] ?? false;
 }
