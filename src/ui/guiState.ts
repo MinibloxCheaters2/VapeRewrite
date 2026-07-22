@@ -66,7 +66,7 @@ export function toggleGUI() {
 
 try {
 	// Register \ key (Backslash)
-	addBind("BackSlash", "gui-toggle", (e) => {
+	addBind("Backslash", "gui-toggle", (e) => {
 		e.preventDefault();
 		e.stopPropagation();
 		toggleGUI();
