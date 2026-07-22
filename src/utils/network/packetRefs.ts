@@ -3,8 +3,8 @@
  * @module
  */
 import type { CPACKET_MAP, SPACKET_MAP } from "@wq2/miniblox-sdk";
+import { discoveredPackets } from "@/hooks/PacketHook";
 import Miniblox from "../refs/miniblox";
-// TODO: update this
 
 export type CPacketMap = typeof CPACKET_MAP;
 export type SPacketMap = typeof SPACKET_MAP;
@@ -31,6 +31,14 @@ function makeProxyRef<T extends CPacketMap | SPacketMap, V = T[keyof T]>(
 	});
 }
 
+function findPacketByName(ref: string) {
+	return (
+		Miniblox.packets?.find(
+			(x) => "typeName" in x && x.typeName === ref,
+		) ?? discoveredPackets.get(ref)
+	);
+}
+
 function getC2SUncached<
 	K extends SPacketName,
 	V extends SPacketMap[K] = SPacketMap[K],
@@ -38,15 +46,9 @@ function getC2SUncached<
 	if (typeof ref === "symbol") {
 		throw "can't get a c2s packet with a name that is a symbol instead of a string.";
 	}
-	const result = Miniblox.packets?.find(
-		(x) => "typeName" in x && x.typeName === ref,
-	);
+	const result = findPacketByName(ref as string);
 	if (!result) throw `failed to find packet named ${ref}`;
-	/*return Interop.run((evl) => {
-		const pkt = evl<V>(ref);
-		PacketRefs.s[ref] = pkt;
-		return pkt;
-	});*/
+	return result as V;
 }
 
 function getS2CUncached<
@@ -56,11 +58,9 @@ function getS2CUncached<
 	if (typeof ref === "symbol") {
 		throw "can't get a s2c packet with a name that is a symbol instead of a string.";
 	}
-	return Interop.run((evl) => {
-		const pkt = evl<V>(ref);
-		PacketRefs.c[ref] = pkt;
-		return pkt;
-	});
+	const result = findPacketByName(ref as string);
+	if (!result) throw `failed to find packet named ${ref}`;
+	return result as V;
 }
 
 /**

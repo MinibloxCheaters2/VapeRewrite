@@ -15,6 +15,8 @@ let _proto2: object;
 let /*origToBinary, */ origFromBinary: (binary: Uint8Array) => Message<object>;
 let origSend: (typeof ClientSocketT)["sendPacket"];
 
+export const discoveredPackets = new Map<string, Message<object>>();
+
 const packetHook = {
 	init() {
 		origSend = Miniblox.ClientSocket.sendPacket;
@@ -23,6 +25,16 @@ const packetHook = {
 				const cw = new CancelableWrapper(argArray[0]);
 				Bus.emit("sendPacket", cw);
 				if (cw.canceled) return;
+				const packet = cw.data;
+				if (packet && typeof packet === "object") {
+					const ctor = (packet as { constructor: Message<object> & { typeName?: string } }).constructor;
+					if (ctor && typeof ctor === "function" && "typeName" in ctor) {
+						const name = ctor.typeName;
+						if (name && !Miniblox.packets?.some((x) => "typeName" in x && (x as { typeName?: string }).typeName === name)) {
+							discoveredPackets.set(name, ctor);
+						}
+					}
+				}
 				return Reflect.apply(target, thisArg, [cw.data]);
 			},
 		});
