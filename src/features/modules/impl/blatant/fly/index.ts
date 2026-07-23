@@ -20,9 +20,9 @@ export default class Fly extends Mod {
 
 	public verticalSetting = this.createSliderSetting(
 		"Vertical",
-		0.12,
+		1,
 		0.05,
-		1.0,
+		100,
 		0.01,
 	);
 
