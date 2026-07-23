@@ -109,31 +109,27 @@ export default class KeystrokesHud extends HudElement {
 		return this.keysPressed[0]().has(key);
 	}
 
-	private renderKey(key: string, label: string, width = 40, height = 40) {
+	private renderKey(
+		key: string,
+		label: string,
+		width = 40,
+		height = 40,
+	) {
 		const pressed = this.isPressed(key);
 		const textColor = this.textColorSetting.value();
 		const bgColor = this.bgColorSetting.value();
 		const pressedColor = this.pressedColorSetting.value();
-
 		const bg = pressed ? pressedColor : bgColor;
 
 		return (
 			<div
+				class="vape-key"
 				style={{
-					width: `${width}px`,
-					height: `${height}px`,
-					display: "flex",
-					"align-items": "center",
-					"justify-content": "center",
-					"background-color": `rgba(${Math.round(bg.h * 255)}, ${Math.round(bg.s * 255)}, ${Math.round(bg.v * 255)}, ${bg.o})`,
-					border: "1px solid rgba(255, 255, 255, 0.2)",
-					"border-radius": "4px",
-					"font-family": "Arial, sans-serif",
-					"font-size": `${this.fontSizeSetting.value()}px`,
-					color: `rgba(${Math.round(textColor.h * 255)}, ${Math.round(textColor.s * 255)}, ${Math.round(textColor.v * 255)}, ${textColor.o})`,
-					"font-weight": "600",
-					"text-shadow": "1px 1px 2px rgba(0, 0, 0, 0.8)",
-					transition: "background-color 0.05s ease",
+					"--key-width": `${width}px`,
+					"--key-height": `${height}px`,
+					"--hud-font-size": `${this.fontSizeSetting.value()}px`,
+					"--hud-color": `rgba(${Math.round(textColor.h * 255)}, ${Math.round(textColor.s * 255)}, ${Math.round(textColor.v * 255)}, ${textColor.o})`,
+					"--hud-bg": `rgba(${Math.round(bg.h * 255)}, ${Math.round(bg.s * 255)}, ${Math.round(bg.v * 255)}, ${bg.o})`,
 				}}
 			>
 				{label}
@@ -143,54 +139,24 @@ export default class KeystrokesHud extends HudElement {
 
 	public render() {
 		return (
-			<div
-				style={{
-					display: "flex",
-					"flex-direction": "column",
-					gap: "4px",
-				}}
-			>
-				{/* WASD Keys */}
-				<div
-					style={{
-						display: "flex",
-						"justify-content": "center",
-					}}
-				>
+			<div class="vape-hud-stack">
+				<div class="vape-key-row-center">
 					{this.renderKey("w", "W")}
 				</div>
-				<div
-					style={{
-						display: "flex",
-						gap: "4px",
-					}}
-				>
+				<div class="vape-key-row">
 					{this.renderKey("a", "A")}
 					{this.renderKey("s", "S")}
 					{this.renderKey("d", "D")}
 				</div>
 
-				{/* Space */}
 				{this.showSpaceSetting.value() && (
-					<div
-						style={{
-							display: "flex",
-							"justify-content": "center",
-						}}
-					>
+					<div class="vape-key-row-center">
 						{this.renderKey(" ", "━━━", 128, 40)}
 					</div>
 				)}
 
-				{/* Mouse Buttons */}
 				{this.showMouseSetting.value() && (
-					<div
-						style={{
-							display: "flex",
-							gap: "4px",
-							"justify-content": "center",
-						}}
-					>
+					<div class="vape-key-row-center">
 						{this.renderKey("lmb", "LMB", 62)}
 						{this.renderKey("rmb", "RMB", 62)}
 					</div>

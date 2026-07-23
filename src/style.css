@@ -12,7 +12,8 @@
 	--vape-divider: rgba(255, 255, 255, 0.072);
 	--vape-divider-dark: rgba(48, 48, 48, 0.52);
 	--vape-radius: 5px;
-	--vape-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
+	--vape-shadow:
+		0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
 	--vape-transition: background-color 0.16s linear;
 	--vape-font: Arial, sans-serif;
 }
@@ -134,6 +135,7 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	padding: 0 12px;
 	cursor: pointer;
 	transition: var(--vape-transition);
+	background-color: var(--row-bg, var(--vape-main-dark));
 }
 
 /* ── Close button (24x24) ── */
@@ -248,6 +250,15 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	background-color: var(--vape-accent);
 }
 
+/* ── Slider thumb circle ── */
+.vape-slider-thumb {
+	border-radius: 50%;
+	background-color: var(--vape-text);
+	width: var(--thumb-size, 14px);
+	height: var(--thumb-size, 14px);
+	transition: width 0.16s linear, height 0.16s linear;
+}
+
 /* ── Mode selector chip ── */
 .vape-chip {
 	padding: 4px 8px;
@@ -259,16 +270,23 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 
 /* ── Toggle knob base ── */
 .vape-toggle-track {
+	width: 32px;
+	height: 18px;
 	border-radius: 9px;
 	position: relative;
 	transition: background-color 0.16s linear;
+	background-color: var(--toggle-bg, rgba(255, 255, 255, 0.08));
 }
 
 .vape-toggle-knob {
+	width: 14px;
+	height: 14px;
+	background-color: var(--vape-text);
 	border-radius: 50%;
 	position: absolute;
 	top: 2px;
 	transition: left 0.16s linear;
+	left: var(--toggle-knob-left, 2px);
 }
 
 /* ── Overlay container ── */
@@ -307,4 +325,222 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+}
+
+/* ── Setting label (14px, flex:1) ── */
+.vape-label {
+	color: var(--vape-text-dark);
+	font-size: 14px;
+	flex: 1;
+	font-family: var(--vape-font);
+}
+
+/* ── Setting value text (14px, muted) ── */
+.vape-value {
+	color: var(--vape-text-darker);
+	font-size: 14px;
+	margin-right: 8px;
+	font-family: var(--vape-font);
+}
+
+/* ── Small label (11px) ── */
+.vape-label-sm {
+	color: var(--vape-text-dark);
+	font-size: 11px;
+	font-family: var(--vape-font);
+}
+
+/* ── Section label (10px, block) ── */
+.vape-section-label {
+	color: var(--vape-text-dark);
+	font-size: 10px;
+	font-family: var(--vape-font);
+	display: block;
+	margin-bottom: 4px;
+}
+
+/* ── Dropdown option text ── */
+.vape-dropdown-text {
+	font-size: 13px;
+	font-family: var(--vape-font);
+	color: var(--item-color, var(--vape-text-dark));
+}
+
+/* ── Setting row (50px, padding, dark bg) ── */
+.vape-setting-row {
+	height: 50px;
+	padding: 0 12px;
+	background-color: var(--vape-main-dark);
+}
+
+/* ── Setting column (50px, padding, dark bg, flex col) ── */
+.vape-setting-col {
+	height: 50px;
+	padding: 0 12px;
+	background-color: var(--vape-main-dark);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+/* ── Slider top row (flex between, center, 30px) ── */
+.vape-slider-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	height: 30px;
+}
+
+/* ── Slider number input ── */
+.vape-slider-input {
+	color: var(--vape-text-dark);
+	background-color: transparent;
+	font-size: 11px;
+	font-family: var(--vape-font);
+	width: 45%;
+	text-align: right;
+	margin-top: 2px;
+	border: none;
+}
+
+/* ── Text input ── */
+.vape-text-input {
+	width: 100%;
+	height: 24px;
+	padding: 0 8px;
+	border: none;
+	border-radius: 4px;
+	background-color: var(--input-bg, rgba(255, 255, 255, 0.05));
+	color: var(--vape-text);
+	font-size: 13px;
+	font-family: var(--vape-font);
+	outline: none;
+	transition: background-color 0.16s linear;
+}
+
+/* ── Dropdown list wrapper ── */
+.vape-dropdown-list {
+	background-color: rgb(22, 21, 22);
+}
+
+/* ── Dropdown option item ── */
+.vape-dropdown-item {
+	height: 32px;
+	padding: 0 24px;
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	transition: background-color 0.16s linear;
+	background-color: var(--item-bg, transparent);
+}
+
+/* ── Color picker header row ── */
+.vape-color-header {
+	display: flex;
+	align-items: center;
+	height: 50px;
+	padding: 0 12px;
+	cursor: pointer;
+}
+
+/* ── Color picker swatch ── */
+.vape-color-swatch {
+	width: 24px;
+	height: 24px;
+	background-color: var(--swatch-color);
+	opacity: var(--swatch-opacity, 1);
+	border-radius: 4px;
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	cursor: pointer;
+}
+
+/* ── HUD common text (font, weight, shadow) ── */
+.vape-hud-text {
+	font-family: var(--hud-font, var(--vape-font));
+	font-weight: 600;
+	text-shadow: var(--hud-shadow, 2px 2px 4px rgba(0, 0, 0, 0.8));
+	font-size: var(--hud-font-size, 14px);
+	color: var(--hud-color, white);
+}
+
+/* ── HUD sub text (2px smaller) ── */
+.vape-hud-text-sm {
+	font-size: calc(var(--hud-font-size, 14px) - 2px);
+}
+
+/* ── HUD opacity modifier ── */
+.vape-hud-dim {
+	opacity: 0.8;
+}
+
+/* ── HUD vertical stack ── */
+.vape-hud-stack {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+/* ── HUD info row (health bar + text) ── */
+.vape-hud-info-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 4px;
+}
+
+/* ── HUD panel (bg, radius, padding) ── */
+.vape-hud-panel {
+	background-color: rgba(0, 0, 0, 0.5);
+	border-radius: 6px;
+	padding: 8px 12px;
+	min-width: 160px;
+}
+
+/* ── Keystroke key box ── */
+.vape-key {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: var(--key-width, 40px);
+	height: var(--key-height, 40px);
+	background-color: var(--hud-bg, transparent);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	border-radius: 4px;
+	font-family: var(--hud-font, var(--vape-font));
+	font-size: var(--hud-font-size, 14px);
+	color: var(--hud-color, white);
+	font-weight: 600;
+	text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+	transition: background-color 0.05s ease;
+}
+
+/* ── Key row with gap ── */
+.vape-key-row {
+	display: flex;
+	gap: 4px;
+}
+
+/* ── Centered key row ── */
+.vape-key-row-center {
+	display: flex;
+	gap: 4px;
+	justify-content: center;
+}
+
+/* ── Health bar track ── */
+.vape-health-bar-track {
+	flex: 1;
+	height: 6px;
+	background-color: rgba(255, 255, 255, 0.2);
+	border-radius: 3px;
+	overflow: hidden;
+}
+
+/* ── Health bar fill ── */
+.vape-health-bar-fill {
+	width: var(--health-pct, 0%);
+	background-color: var(--health-color, #4caf50);
+	height: 100%;
+	border-radius: 3px;
+	transition: width 0.2s ease;
 }

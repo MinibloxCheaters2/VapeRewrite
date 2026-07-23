@@ -28,7 +28,7 @@ export default class FPSHud extends HudElement {
 	private fpsSignal = createSignal(0);
 	private lastFrameTime = performance.now();
 	private frameCount = 0;
-	private fpsUpdateInterval = 500; // Update every 500ms
+	private fpsUpdateInterval = 500;
 
 	public onAdd(): void {
 		const updateFPS = () => {
@@ -61,12 +61,10 @@ export default class FPSHud extends HudElement {
 
 		return (
 			<div
+				class="vape-hud-text"
 				style={{
-					"font-family": "Arial, sans-serif",
-					"font-size": `${this.fontSizeSetting.value()}px`,
-					color: textColor,
-					"font-weight": "600",
-					"text-shadow": "2px 2px 4px rgba(0, 0, 0, 0.8)",
+					"--hud-font-size": `${this.fontSizeSetting.value()}px`,
+					"--hud-color": textColor,
 				}}
 			>
 				FPS: {this.fpsSignal[0]()}

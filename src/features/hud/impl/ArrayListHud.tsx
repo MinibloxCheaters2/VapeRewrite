@@ -99,19 +99,16 @@ export default class ArrayListHud extends HudElement {
 	#rainbowInterval?: number;
 
 	public onAdd(): void {
-		// Start rainbow animation
 		const interval = setInterval(() => {
 			this.rainbowOffsetSignal[1](
 				(this.rainbowOffsetSignal[0]() + 0.002) % 1,
 			);
-		}, 16); // :sob:
+		}, 16);
 
-		// Store interval for cleanup
 		this.#rainbowInterval = interval;
 	}
 
 	public onRemove(): void {
-		// Clean up interval
 		if (this.#rainbowInterval) {
 			clearInterval(this.#rainbowInterval);
 		}
@@ -160,17 +157,15 @@ export default class ArrayListHud extends HudElement {
 			const alignment = this.alignmentSetting.value();
 			if (alignment === "Left") return false;
 			if (alignment === "Right") return true;
-			// Auto: based on position
 			return this.position.x > window.innerWidth / 2;
 		};
 
 		return (
 			<div
 				style={{
-					"font-family": this.fontFamilySetting.value(),
+					"--hud-font": this.fontFamilySetting.value(),
 				}}
 			>
-				{/* Logo */}
 				{this.showLogoSetting.value() && (
 					<div
 						style={{
@@ -206,7 +201,6 @@ export default class ArrayListHud extends HudElement {
 					</div>
 				)}
 
-				{/* Module list */}
 				<div
 					style={{
 						display: "flex",
@@ -220,15 +214,13 @@ export default class ArrayListHud extends HudElement {
 					<For each={sortedModules()}>
 						{(module, index) => (
 							<div
+								class="vape-hud-text"
 								style={{
-									color: this.getRainbowColor(index()),
-									"font-size": `${this.fontSizeSetting.value()}px`,
-									"text-shadow": `2px 2px 2px ${this.getShadowColor()}`,
-									"font-weight": "600",
+									"--hud-font-size": `${this.fontSizeSetting.value()}px`,
+									"--hud-color": this.getRainbowColor(index()),
+									"--hud-shadow": `2px 2px 2px ${this.getShadowColor()}`,
 									"letter-spacing": "0.3px",
 									padding: "1px 4px",
-									"font-family":
-										this.fontFamilySetting.value(),
 								}}
 							>
 								{module.name}

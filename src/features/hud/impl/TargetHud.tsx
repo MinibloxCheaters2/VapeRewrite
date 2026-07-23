@@ -94,60 +94,28 @@ export default class TargetHud extends HudElement {
 
 		return (
 			<div
+				class="vape-hud-text vape-hud-panel"
 				style={{
-					"font-family": "Arial, sans-serif",
-					"font-size": `${this.fontSizeSetting.value()}px`,
-					color: textColor,
-					"font-weight": "600",
-					"text-shadow": "2px 2px 4px rgba(0, 0, 0, 0.8)",
-					"background-color": "rgba(0, 0, 0, 0.5)",
-					"border-radius": "6px",
-					padding: "8px 12px",
-					"min-width": "160px",
+					"--hud-font-size": `${this.fontSizeSetting.value()}px`,
+					"--hud-color": textColor,
 				}}
 			>
 				<div style={{ "margin-bottom": "4px" }}>{target.name}</div>
-				<div
-					style={{
-						display: "flex",
-						"align-items": "center",
-						gap: "8px",
-						"margin-bottom": "4px",
-					}}
-				>
-					<div
-						style={{
-							flex: "1",
-							height: "6px",
-							"background-color": "rgba(255, 255, 255, 0.2)",
-							"border-radius": "3px",
-							overflow: "hidden",
-						}}
-					>
+				<div class="vape-hud-info-row">
+					<div class="vape-health-bar-track">
 						<div
+							class="vape-health-bar-fill"
 							style={{
-								width: `${Math.max(0, Math.min(100, healthPct * 100))}%`,
-								height: "100%",
-								"background-color": healthBarColor,
-								"border-radius": "3px",
-								transition: "width 0.2s ease",
+								"--health-pct": `${Math.max(0, Math.min(100, healthPct * 100))}%`,
+								"--health-color": healthBarColor,
 							}}
 						/>
 					</div>
-					<span
-						style={{
-							"font-size": `${this.fontSizeSetting.value() - 2}px`,
-						}}
-					>
+					<span class="vape-hud-text-sm">
 						{target.health}/{target.maxHealth}
 					</span>
 				</div>
-				<div
-					style={{
-						"font-size": `${this.fontSizeSetting.value() - 2}px`,
-						opacity: "0.8",
-					}}
-				>
+				<div class="vape-hud-text-sm vape-hud-dim">
 					Distance: {target.distance}
 				</div>
 			</div>

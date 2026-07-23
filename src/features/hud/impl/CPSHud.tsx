@@ -38,10 +38,8 @@ export default class CPSHud extends HudElement {
 		const handleMouseDown = (e: MouseEvent) => {
 			const now = Date.now();
 			if (e.button === 0) {
-				// Left click
 				this.leftClicks.push(now);
 			} else if (e.button === 2) {
-				// Right click
 				this.rightClicks.push(now);
 			}
 		};
@@ -50,7 +48,6 @@ export default class CPSHud extends HudElement {
 			const now = Date.now();
 			const oneSecondAgo = now - 1000;
 
-			// Filter clicks from the last second
 			this.leftClicks = this.leftClicks.filter((t) => t > oneSecondAgo);
 			this.rightClicks = this.rightClicks.filter((t) => t > oneSecondAgo);
 
@@ -80,17 +77,14 @@ export default class CPSHud extends HudElement {
 	public render() {
 		const color = this.textColorSetting.value();
 		const textColor = `rgba(${Math.round(color.h * 255)}, ${Math.round(color.s * 255)}, ${Math.round(color.v * 255)}, ${color.o})`;
-
 		const showBoth = this.showBothSetting.value();
 
 		return (
 			<div
+				class="vape-hud-text"
 				style={{
-					"font-family": "Arial, sans-serif",
-					"font-size": `${this.fontSizeSetting.value()}px`,
-					color: textColor,
-					"font-weight": "600",
-					"text-shadow": "2px 2px 4px rgba(0, 0, 0, 0.8)",
+					"--hud-font-size": `${this.fontSizeSetting.value()}px`,
+					"--hud-color": textColor,
 				}}
 			>
 				{showBoth ? (

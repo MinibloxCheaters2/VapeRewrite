@@ -15,7 +15,7 @@ export function ToggleComponent(props: {
 		<div
 			class="vape-row"
 			style={{
-				"background-color": hovered()
+				"--row-bg": hovered()
 					? "var(--vape-main-light)"
 					: "var(--vape-main-dark)",
 			}}
@@ -23,22 +23,11 @@ export function ToggleComponent(props: {
 			on:pointerleave={() => setHovered(false)}
 			on:click={() => props.onChange(!props.enabled)}
 		>
-			<span
-				style={{
-					color: "var(--vape-text-dark)",
-					"font-size": "14px",
-					flex: "1",
-					"font-family": "Arial, sans-serif",
-				}}
-			>
-				{props.name}
-			</span>
+			<span class="vape-label">{props.name}</span>
 			<div
 				class="vape-toggle-track"
 				style={{
-					width: "32px",
-					height: "18px",
-					"background-color": props.enabled
+					"--toggle-bg": props.enabled
 						? "var(--vape-accent)"
 						: "rgba(255, 255, 255, 0.08)",
 				}}
@@ -46,10 +35,7 @@ export function ToggleComponent(props: {
 				<div
 					class="vape-toggle-knob"
 					style={{
-						width: "14px",
-						height: "14px",
-						"background-color": "var(--vape-text)",
-						left: props.enabled ? "16px" : "2px",
+						"--toggle-knob-left": props.enabled ? "16px" : "2px",
 					}}
 				/>
 			</div>
@@ -107,59 +93,22 @@ export function SliderComponent(props: {
 
 	return (
 		<div
-			style={{
-				height: "50px",
-				padding: "0 12px",
-				"background-color": "var(--vape-main-dark)",
-			}}
+			class="vape-setting-row"
 			on:pointerenter={() => setHovered(true)}
 			on:pointerleave={() => setHovered(false)}
 		>
-			<div
-				style={{
-					display: "flex",
-					"justify-content": "space-between",
-					"align-items": "center",
-					height: "30px",
-				}}
-			>
-				<span
-					style={{
-						color: "var(--vape-text-dark)",
-						"font-size": "11px",
-						"font-family": "Arial, sans-serif",
-					}}
-				>
-					{props.name}
-				</span>
-				{/*allows the value to go out of bounds if the user really needs a specific value. this is a cool feature I wish more clients had.*/}
+			<div class="vape-slider-row">
+				<span class="vape-label-sm">{props.name}</span>
 				<input
 					type="number"
-					style={{
-						color: "var(--vape-text-dark)",
-						"background-color": "transparent",
-						"font-size": "11px",
-						"font-family": "Arial, sans-serif",
-						width: "45%",
-						"text-align": "right",
-						"margin-top": "2px",
-						border: "none",
-					}}
+					class="vape-slider-input"
 					value={props.value}
 					alt={props.tooltip}
 					onChange={(e) => props.onChange(e.target.valueAsNumber)}
 				/>
 				<Show when={props.unit}>
 					{(unit) => (
-						<span
-							style={{
-								color: "var(--vape-text-dark)",
-								"font-size": "11px",
-								"font-family": "Arial, sans-serif",
-							}}
-						>
-							{unit()}
-						</span>
+						<span class="vape-label-sm">{unit()}</span>
 					)}
 				</Show>
 			</div>
@@ -170,9 +119,7 @@ export function SliderComponent(props: {
 			>
 				<div
 					class="vape-slider-fill"
-					style={{
-						width: `${Math.max(4, percentage())}%`,
-					}}
+					style={{ width: `${Math.max(4, percentage())}%` }}
 				>
 					<div
 						style={{
@@ -189,15 +136,10 @@ export function SliderComponent(props: {
 						}}
 					>
 						<div
+							class="vape-slider-thumb"
 							style={{
-								width:
+								"--thumb-size":
 									hovered() || dragging() ? "16px" : "14px",
-								height:
-									hovered() || dragging() ? "16px" : "14px",
-								"background-color": "var(--vape-text)",
-								"border-radius": "50%",
-								transition:
-									"width 0.16s linear, height 0.16s linear",
 							}}
 						/>
 					</div>
@@ -221,7 +163,6 @@ export function DropdownComponent(props: {
 
 	const toggleExpanded = () => {
 		setExpanded(!expanded());
-		// Notify parent to update height
 		if (props.onExpandChange) {
 			requestAnimationFrame(() => props.onExpandChange?.());
 		}
@@ -232,7 +173,7 @@ export function DropdownComponent(props: {
 			<div
 				class="vape-row"
 				style={{
-					"background-color": hovered()
+					"--row-bg": hovered()
 						? "var(--vape-main-light)"
 						: "var(--vape-main-dark)",
 				}}
@@ -240,26 +181,8 @@ export function DropdownComponent(props: {
 				on:pointerleave={() => setHovered(false)}
 				on:click={toggleExpanded}
 			>
-				<span
-					style={{
-						color: "var(--vape-text-dark)",
-						"font-size": "14px",
-						flex: "1",
-						"font-family": "Arial, sans-serif",
-					}}
-				>
-					{props.name}
-				</span>
-				<span
-					style={{
-						color: "var(--vape-text-darker)",
-						"font-size": "14px",
-						"margin-right": "8px",
-						"font-family": "Arial, sans-serif",
-					}}
-				>
-					{getName(props.value)}
-				</span>
+				<span class="vape-label">{props.name}</span>
+				<span class="vape-value">{getName(props.value)}</span>
 				<img
 					src={getResourceURL("contract")}
 					alt=""
@@ -275,26 +198,20 @@ export function DropdownComponent(props: {
 				/>
 			</div>
 			<Show when={expanded()}>
-				<div style={{ "background-color": "rgb(22, 21, 22)" }}>
+				<div class="vape-dropdown-list">
 					<For each={props.options}>
 						{(option) => (
 							<div
+								class="vape-dropdown-item"
 								style={{
-									height: "32px",
-									padding: "0 24px",
-									display: "flex",
-									"align-items": "center",
-									cursor: "pointer",
-									"background-color":
+									"--item-bg":
 										option === props.value
 											? "rgba(255, 255, 255, 0.05)"
 											: "transparent",
-									transition: "background-color 0.16s linear",
 								}}
 								on:click={() => {
 									props.onChange(option);
 									setExpanded(false);
-									// Notify parent to update height after closing
 									if (props.onExpandChange) {
 										requestAnimationFrame(() =>
 											props.onExpandChange?.(),
@@ -315,13 +232,12 @@ export function DropdownComponent(props: {
 								}}
 							>
 								<span
+									class="vape-dropdown-text"
 									style={{
-										color:
+										"--item-color":
 											option === props.value
 												? "var(--vape-text)"
 												: "var(--vape-text-dark)",
-										"font-size": "13px",
-										"font-family": "Arial, sans-serif",
 									}}
 								>
 									{getName(option)}
@@ -346,44 +262,22 @@ export function TextBoxComponent(props: {
 	const [focused, setFocused] = createSignal(false);
 
 	return (
-		<div
-			style={{
-				height: "50px",
-				padding: "0 12px",
-				"background-color": "var(--vape-main-dark)",
-				display: "flex",
-				"flex-direction": "column",
-				"justify-content": "center",
-			}}
-		>
+		<div class="vape-setting-col">
 			<span
-				style={{
-					color: "var(--vape-text-dark)",
-					"font-size": "11px",
-					"margin-bottom": "6px",
-					"font-family": "Arial, sans-serif",
-				}}
+				class="vape-label-sm"
+				style={{ "margin-bottom": "6px" }}
 			>
 				{props.name}
 			</span>
 			<input
 				type="text"
+				class="vape-text-input"
 				value={props.value}
 				placeholder={props.placeholder}
 				style={{
-					width: "100%",
-					height: "24px",
-					padding: "0 8px",
-					"background-color": focused()
+					"--input-bg": focused()
 						? "var(--vape-main-light)"
 						: "rgba(255, 255, 255, 0.05)",
-					border: "none",
-					"border-radius": "4px",
-					color: "var(--vape-text)",
-					"font-size": "13px",
-					"font-family": "Arial, sans-serif",
-					outline: "none",
-					transition: "background-color 0.16s linear",
 				}}
 				on:input={(e) => props.onChange(e.currentTarget.value)}
 				on:focus={() => setFocused(true)}
@@ -528,40 +422,21 @@ export function ColorSliderComponent(props: {
 	return (
 		<div style={{ "background-color": "var(--vape-main-dark)" }}>
 			<div
-				style={{
-					display: "flex",
-					"align-items": "center",
-					height: "50px",
-					padding: "0 12px",
-					cursor: "pointer",
-				}}
+				class="vape-color-header"
 				on:click={() => setExpanded(!expanded())}
 			>
-				<span
-					style={{
-						color: "var(--vape-text-dark)",
-						"font-size": "11px",
-						"font-family": "Arial, sans-serif",
-					}}
-				>
-					{props.name}
-				</span>
+				<span class="vape-label-sm">{props.name}</span>
 				<div style={{ flex: "1" }} />
 				<div
+					class="vape-color-swatch"
 					style={{
-						width: "24px",
-						height: "24px",
-						"background-color": color(),
-						opacity: props.opacity,
-						"border-radius": "4px",
-						border: "1px solid rgba(255, 255, 255, 0.2)",
-						cursor: "pointer",
+						"--swatch-color": color(),
+						"--swatch-opacity": props.opacity,
 					}}
 				/>
 			</div>
 			<Show when={expanded()}>
 				<div style={{ padding: "12px" }}>
-					{/* Saturation/Value Picker */}
 					<div
 						ref={svPickerRef}
 						style={{
@@ -578,7 +453,6 @@ export function ColorSliderComponent(props: {
 							updateSV(e);
 						}}
 					>
-						{/* Picker indicator */}
 						<div
 							style={{
 								position: "absolute",
@@ -595,19 +469,8 @@ export function ColorSliderComponent(props: {
 						/>
 					</div>
 
-					{/* Hue Slider */}
 					<div style={{ "margin-bottom": "8px" }}>
-						<span
-							style={{
-								color: "var(--vape-text-dark)",
-								"font-size": "10px",
-								"font-family": "Arial, sans-serif",
-								display: "block",
-								"margin-bottom": "4px",
-							}}
-						>
-							Hue
-						</span>
+						<span class="vape-section-label">Hue</span>
 						<div
 							ref={hueSliderRef}
 							style={{
@@ -641,19 +504,8 @@ export function ColorSliderComponent(props: {
 						</div>
 					</div>
 
-					{/* Opacity Slider */}
 					<div>
-						<span
-							style={{
-								color: "var(--vape-text-dark)",
-								"font-size": "10px",
-								"font-family": "Arial, sans-serif",
-								display: "block",
-								"margin-bottom": "4px",
-							}}
-						>
-							Opacity
-						</span>
+						<span class="vape-section-label">Opacity</span>
 						<div
 							ref={opacitySliderRef}
 							style={{
