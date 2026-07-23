@@ -4,8 +4,7 @@ import logger from "../logging/loggers";
 import { Vector3 } from "three";
 
 // note to self: do NOT add the `g` (global) flag, otherwise it not workong
-// even though it works in regexr (you can see /g in the flags enabled) but idk
-// https://regexr.com/8nl99, feel free to paste ts as long as the code you put it in is under AGPL
+// feel free to paste ts as long as the code you put it in is under AGPL
 // (which most importantly, requires your code to be open source if the project is public!!! no proprietary/closed source garbage here).
 const THREE_IMPORT_REGEX = /from\s*"(\.\/three-[^(\.js)"]+\.js)"/;
 
