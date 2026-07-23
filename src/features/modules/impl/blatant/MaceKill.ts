@@ -25,12 +25,7 @@ export default class MaceKill extends Mod {
 	name = "MaceKill";
 	category = Category.BLATANT;
 
-	#fallDistance = this.createSliderSetting(
-		"FallDistance",
-		60,
-		20,
-		400,
-	);
+	#fallDistance = this.createSliderSetting("FallDistance", 60, 20, 400);
 
 	private get fallDistance() {
 		return this.#fallDistance.value();
@@ -39,7 +34,11 @@ export default class MaceKill extends Mod {
 
 	@Subscribe("sendPacket")
 	onSendPacket({ data: pkt }: CancelableWrapper<C2SPacket>) {
-		if (this.hackyFallDamageFix && isC2S("SPacketPlayerPosLook", pkt) && pkt.onGround) {
+		if (
+			this.hackyFallDamageFix &&
+			isC2S("SPacketPlayerPosLook", pkt) &&
+			pkt.onGround
+		) {
 			pkt.onGround = false;
 			this.hackyFallDamageFix = false;
 		}

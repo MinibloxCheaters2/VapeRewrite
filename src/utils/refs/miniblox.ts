@@ -1,6 +1,5 @@
 import type {
 	AllBlocks,
-	AnyPacket,
 	BlockPos,
 	Chat,
 	ClientEntityPlayer,
@@ -174,10 +173,9 @@ const Miniblox = {
 		);
 	},
 	get playerControllerMP() {
-		return initOrR(
-			_playerControllerMP,
-			() =>
-				remapObj(findObject(
+		return initOrR(_playerControllerMP, () =>
+			remapObj(
+				findObject(
 					(x) =>
 						x != null &&
 						typeof x === "object" &&
@@ -185,7 +183,9 @@ const Miniblox = {
 						"isHittingBlock" in x &&
 						"sendEnchantPacket" in x &&
 						"sendRenamePacket" in x,
-				) as PlayerControllerMP, mappings.playerControllerMP),
+				) as PlayerControllerMP,
+				mappings.playerControllerMP,
+			),
 		);
 	},
 
@@ -352,13 +352,21 @@ const Miniblox = {
 	},
 
 	get EntityLivingBase() {
-		return initOrR(_EntityLivingBase, () =>
-			(Array.from(
-				getInheritanceTree(Miniblox.player as unknown as HasProto),
-			).find((x) => {
-				const ctor = (x as unknown as EntityLivingBase & { constructor: typeof EntityLivingBase }).constructor;
-				return Object.getOwnPropertyNames(ctor).includes("sprintingSpeedBoostModifier");
-			}))?.constructor as typeof EntityLivingBase | undefined,
+		return initOrR(
+			_EntityLivingBase,
+			() =>
+				Array.from(
+					getInheritanceTree(Miniblox.player as unknown as HasProto),
+				).find((x) => {
+					const ctor = (
+						x as unknown as EntityLivingBase & {
+							constructor: typeof EntityLivingBase;
+						}
+					).constructor;
+					return Object.getOwnPropertyNames(ctor).includes(
+						"sprintingSpeedBoostModifier",
+					);
+				})?.constructor as typeof EntityLivingBase | undefined,
 		);
 	},
 

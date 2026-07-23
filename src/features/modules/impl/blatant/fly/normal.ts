@@ -1,4 +1,4 @@
-import type { SliderSetting, ToggleSetting } from "@/features/config/Settings";
+import type { SliderSetting } from "@/features/config/Settings";
 import SubModule from "@/features/config/SubModule";
 import isKeyDown from "@/utils/input/key";
 import getMoveDirection from "@/utils/movement/movement";
