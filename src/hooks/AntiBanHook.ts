@@ -12,7 +12,8 @@ function hook() {
 				if (ModuleManager.antiBan.enabled) {
 					const na = ModuleManager.antiBan.handleNonAccount();
 					pkt.session = na.session;
-					if (na.requestedUuid) pkt.requestedUuid = na.requestedUuid;
+					// legacy non-accounts don't have requestedUUID as a name
+					pkt.requestedUuid = na.requestedUuid;
 				}
 			}
 			return false;
