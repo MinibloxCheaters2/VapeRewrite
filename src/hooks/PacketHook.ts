@@ -27,10 +27,28 @@ const packetHook = {
 				if (cw.canceled) return;
 				const packet = cw.data;
 				if (packet && typeof packet === "object") {
-					const ctor = (packet as { constructor: Message<object> & { typeName?: string } }).constructor;
-					if (ctor && typeof ctor === "function" && "typeName" in ctor) {
+					const ctor = (
+						packet as {
+							constructor: Message<object> & {
+								typeName?: string;
+							};
+						}
+					).constructor;
+					if (
+						ctor &&
+						typeof ctor === "function" &&
+						"typeName" in ctor
+					) {
 						const name = ctor.typeName;
-						if (name && !Miniblox.packets?.some((x) => "typeName" in x && (x as { typeName?: string }).typeName === name)) {
+						if (
+							name &&
+							!Miniblox.packets?.some(
+								(x) =>
+									"typeName" in x &&
+									(x as { typeName?: string }).typeName ===
+										name,
+							)
+						) {
 							discoveredPackets.set(name, ctor);
 						}
 					}

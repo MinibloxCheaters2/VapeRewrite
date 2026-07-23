@@ -2,7 +2,7 @@
 const DUMP_REGEXES = {
 	moveForward: /this\.([a-zA-Z]+)=\([a-zA-Z]+\.(up|down)/m,
 	moveStrafe:
-		/this\.([a-zA-Z]+)=\+!!\w\.right\s*\+\s*\(\w\.left\s*\?\s*-1\s*\:\s*0\)/m,
+		/this\.([a-zA-Z]+)=\+!!\w\.right\s*\+\s*\(\w\.left\s*\?\s*-1\s*:\s*0\)/m,
 	// PathNavigateGround#isPositionClear
 	iterator: /of\s*\w+\.([a-zA-Z]+)\(new/,
 	// EntityBoat#update
@@ -13,7 +13,8 @@ const DUMP_REGEXES = {
 		/([a-zA-Z]+)\(\w\)[\s\S]*?>=\s*1e-4[\s\S]*?Math\.cos\(this\.yaw\)/,
 	updatePlayerMoveState:
 		/this\.([a-zA-Z]*)\(\),\n*\s*this\.isUsingItem\(\)\s*&&/,
-	getEyePos: /(\w+)\(\)\s*{\n*\s*let\s+\w\s*=\s*this\.pos\.clone\(\);\n*\s*return\s+\w.y\s*\+=\s*this\.getEyeHeight/,
+	getEyePos:
+		/(\w+)\(\)\s*{\n*\s*let\s+\w\s*=\s*this\.pos\.clone\(\);\n*\s*return\s+\w.y\s*\+=\s*this\.getEyeHeight/,
 	// PlayerMovement#checkHeadInBlock
 	// position:
 	// 	/null;\s*\n*\s*let\s*\w\s*=\s*\w+\.fromVector\(\w+\.([a-zA-Z]+)\)/g,

@@ -41,7 +41,7 @@ export default new (class Mappings {
 				"lastReportedYaw",
 				"getMoveDirection",
 				"attack",
-				"getEyePos"
+				"getEyePos",
 			),
 		);
 	}

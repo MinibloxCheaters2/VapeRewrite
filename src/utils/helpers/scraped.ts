@@ -10,7 +10,7 @@ import type {
 	Syntax,
 } from "@wq2/packet-gen-wasm";
 import { ready as packetsPromise } from "../network/WasmTest";
-import Miniblox, { Runtime } from "../refs/miniblox";
+import Miniblox, { type Runtime } from "../refs/miniblox";
 
 const scrapedMessages: MappedMessage[] = [];
 const scrapedEnums: MappedEnumGroup[] = [];

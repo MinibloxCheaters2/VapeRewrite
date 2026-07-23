@@ -102,7 +102,7 @@ export default class ModuleManager {
 		new AutoRejoin(),
 		new MurderMystery(),
 		new Paranoia(),
-		this.maceKill
+		this.maceKill,
 	] as const;
 
 	/** Each module's name */
