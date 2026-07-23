@@ -143,11 +143,22 @@ export function listConfigs(): string[] {
 		.map((a) => a.slice(CONFIG_KEY_PREFIX.length));
 }
 
+let saveTimeout: ReturnType<typeof setTimeout> | undefined;
+
+function scheduleSave() {
+	if (saveTimeout !== undefined) clearTimeout(saveTimeout);
+	saveTimeout = setTimeout(() => {
+		saveTimeout = undefined;
+		saveConfig(loadedConfig.name);
+	}, 500);
+}
+
 /** Updates the loadedConfig to reflect the current state of modules and settings */
 export function updateLoadedConfig(moduleName?: string, settingName?: string) {
 	if (!moduleName) {
 		// Full update
 		loadedConfig.modules = serializeModules();
+		scheduleSave();
 		return;
 	}
 
@@ -157,6 +168,7 @@ export function updateLoadedConfig(moduleName?: string, settingName?: string) {
 	if (!settingName) {
 		// Update entire module
 		loadedConfig.modules[moduleName] = ModuleConfig.from(mod);
+		scheduleSave();
 		return;
 	}
 
@@ -177,4 +189,5 @@ export function updateLoadedConfig(moduleName?: string, settingName?: string) {
 			moduleConfig.settings[index] = serialized;
 		}
 	}
+	scheduleSave();
 }
