@@ -6,6 +6,7 @@ import PacketFallDistance from "@/utils/movement/ServerFallDistance";
 import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
+import ModuleManager from "../../api/ModuleManager";
 
 /**
  * max fall height (defaults to 3) - buffer, idk what a good value is, since
@@ -27,6 +28,7 @@ export default class NoFall extends Mod {
 		if (
 			isC2S("SPacketPlayerPosLook", packet) &&
 			!packet.onGround &&
+			!ModuleManager.maceKill.hackyFallDamageFix &&
 			PacketFallDistance.currentFallDistance >=
 				/*Miniblox.player.getMaxFallHeight()*/MAX_FALL_HEIGHT - FALL_HEIGHT_BUFFER
 		) {
