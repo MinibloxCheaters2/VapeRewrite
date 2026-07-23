@@ -3,12 +3,6 @@ import { render } from "solid-js/web";
 import getResourceURL from "@/utils/helpers/cachedResourceURL";
 import shadowWrapper from "./shadowWrapper";
 
-const COLORS = {
-	main: "rgb(26, 25, 26)",
-	text: "rgb(209, 209, 209)",
-	textDark: "rgb(170, 170, 170)",
-};
-
 type NotificationType = "info" | "warning" | "alert";
 
 const PROGRESS_COLORS: Record<NotificationType, string> = {
@@ -122,7 +116,7 @@ function NotificationItem(props: {
 					left: "46px",
 					top: "16px",
 					right: "10px",
-					color: COLORS.text,
+					color: "var(--vape-text)",
 					fontSize: "14px",
 					fontWeight: "600",
 					fontFamily: "Arial, sans-serif",
@@ -159,7 +153,7 @@ function NotificationItem(props: {
 					left: "46px",
 					top: "43px",
 					right: "10px",
-					color: COLORS.textDark,
+					color: "var(--vape-text-dark)",
 					fontSize: "14px",
 					fontFamily: "Arial, sans-serif",
 					textAlign: "left",
@@ -174,10 +168,10 @@ function NotificationItem(props: {
 			<div
 				style={{
 					position: "absolute",
-					bottom: "4px",
+					bottom: "3px",
 					left: "3px",
 					right: "10px",
-					height: "2px",
+					height: "3px",
 					backgroundColor: PROGRESS_COLORS[props.notification.type],
 					borderRadius: "1px",
 					transformOrigin: "left center",
@@ -191,26 +185,6 @@ function NotificationItem(props: {
 }
 
 export function initNotifications() {
-	if (!document.querySelector("#nt-keyframes")) {
-		const keyframesStyle = document.createElement("style");
-		keyframesStyle.id = "nt-keyframes";
-		keyframesStyle.textContent = `
-			@keyframes ntSlideIn {
-				from { transform: translateX(100%); }
-				to { transform: translateX(0); }
-			}
-			@keyframes ntSlideOut {
-				from { transform: translateX(0); }
-				to { transform: translateX(100%); }
-			}
-			@keyframes ntProgress {
-				from { transform: scaleX(1); }
-				to { transform: scaleX(0); }
-			}
-		`;
-		document.head.appendChild(keyframesStyle);
-	}
-
 	const container = document.createElement("div");
 	container.id = "notifications-container";
 	shadowWrapper.wrapper.appendChild(container);

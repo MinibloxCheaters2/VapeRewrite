@@ -6,17 +6,6 @@ import { dragHandleAttrName } from "@/utils/mapping/names";
 import { guiVisible } from "./guiState";
 import shadowWrapper from "./shadowWrapper";
 
-const COLORS = {
-	main: "rgb(26, 25, 26)",
-	mainLight: "rgb(30, 29, 30)",
-	mainDark: "rgb(24, 23, 24)",
-	text: "rgb(200, 200, 200)",
-	textDark: "rgb(150, 150, 150)",
-	textDarker: "rgb(100, 100, 100)",
-	accent: "rgb(5, 134, 105)",
-	divider: "rgba(255, 255, 255, 0.072)",
-};
-
 export const [profilesPanelVisible, setProfilesPanelVisible] =
 	createSignal(false);
 
@@ -83,45 +72,27 @@ function ProfilesPanel() {
 		<Show when={isVisible()}>
 			<div
 				ref={windowRef}
+				class="vape-panel"
 				style={{
 					position: "fixed",
 					left: `${position().x}px`,
 					top: `${position().y}px`,
 					width: "220px",
-					"background-color": COLORS.main,
-					"border-radius": "5px",
-					"box-shadow":
-						"0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)",
+					"background-color": "var(--vape-main)",
 					"z-index": "10001",
-					overflow: "hidden",
-					"user-select": "none",
-					"backdrop-filter": "blur(10px)",
 				}}
 				on:pointerdown={handlePointerDown}
 			>
 				{/* Blur background */}
-				<div
-					style={{
-						position: "absolute",
-						inset: "-48px -48px",
-						"backdrop-filter": "blur(24px)",
-						"background-size": "cover",
-						opacity: "0.3",
-						"pointer-events": "none",
-						"z-index": "-1",
-					}}
-				/>
+				<div class="vape-blur-bg" />
 
 				{/* Header */}
 				<div
 					{...{ [dragHandleAttrName]: "" }}
+					class="vape-header"
 					style={{
-						display: "flex",
-						"align-items": "center",
-						height: "40px",
-						padding: "0 12px",
 						cursor: dragging() ? "grabbing" : "grab",
-						"border-bottom": `1px solid ${COLORS.divider}`,
+						"border-bottom": `1px solid var(--vape-divider)`,
 					}}
 				>
 					<img
@@ -136,7 +107,7 @@ function ProfilesPanel() {
 					<span
 						style={{
 							"margin-left": "8px",
-							color: COLORS.text,
+							color: "var(--vape-text)",
 							"font-size": "13px",
 							flex: "1",
 							"font-family": "Arial, sans-serif",
@@ -145,18 +116,7 @@ function ProfilesPanel() {
 						Profiles
 					</span>
 					<button
-						style={{
-							width: "24px",
-							height: "24px",
-							background: "none",
-							border: "none",
-							cursor: "pointer",
-							display: "flex",
-							"align-items": "center",
-							"justify-content": "center",
-							opacity: "0.7",
-							transition: "opacity 0.16s linear",
-						}}
+						class="vape-close-btn"
 						type="button"
 						on:click={() => setProfilesPanelVisible(false)}
 						on:pointerenter={(e) => {
@@ -188,28 +148,24 @@ function ProfilesPanel() {
 					<For each={profiles()}>
 						{(profile) => (
 							<div
+								class="vape-btn-row"
 								style={{
-									display: "flex",
-									"align-items": "center",
-									height: "40px",
 									padding: "0 12px",
 									"background-color": profile.active
-										? COLORS.accent
-										: COLORS.main,
-									cursor: "pointer",
-									transition: "background-color 0.16s linear",
+										? "var(--vape-accent)"
+										: "var(--vape-main)",
 								}}
 								on:click={() => selectProfile(profile.name)}
 								on:pointerenter={(e) => {
 									if (!profile.active) {
 										e.currentTarget.style.backgroundColor =
-											COLORS.mainLight;
+											"var(--vape-main-light)";
 									}
 								}}
 								on:pointerleave={(e) => {
 									if (!profile.active) {
 										e.currentTarget.style.backgroundColor =
-											COLORS.main;
+											"var(--vape-main)";
 									}
 								}}
 							>
@@ -217,7 +173,7 @@ function ProfilesPanel() {
 									style={{
 										color: profile.active
 											? "rgb(255, 255, 255)"
-											: COLORS.text,
+											: "var(--vape-text)",
 										"font-size": "14px",
 										flex: "1",
 										"font-family": "Arial, sans-serif",
@@ -242,28 +198,25 @@ function ProfilesPanel() {
 				/>
 
 				<button
+					class="vape-btn-row"
 					style={{
-						display: "flex",
-						"align-items": "center",
-						height: "40px",
 						padding: "0 12px",
-						"background-color": COLORS.main,
-						cursor: "pointer",
-						transition: "background-color 0.16s linear",
+						"background-color": "var(--vape-main)",
 					}}
 					type="submit"
 					on:click={() => saveConfig(configName())}
 					on:pointerenter={(e) => {
 						e.currentTarget.style.backgroundColor =
-							COLORS.mainLight;
+							"var(--vape-main-light)";
 					}}
 					on:pointerleave={(e) => {
-						e.currentTarget.style.backgroundColor = COLORS.main;
+						e.currentTarget.style.backgroundColor =
+							"var(--vape-main)";
 					}}
 				>
 					<span
 						style={{
-							color: COLORS.text,
+							color: "var(--vape-text)",
 							"font-size": "14px",
 							flex: "1",
 							"font-family": "Arial, sans-serif",

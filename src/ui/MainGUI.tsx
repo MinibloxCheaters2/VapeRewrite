@@ -22,18 +22,6 @@ import { CategoryWindow } from "./newClickGUI";
 import { setProfilesPanelVisible } from "./ProfilesPanel";
 import shadowWrapper from "./shadowWrapper";
 
-const COLORS = {
-	main: "rgb(26, 25, 26)",
-	mainLight: "rgb(30, 29, 30)",
-	mainDark: "rgb(24, 23, 24)",
-	text: "rgb(200, 200, 200)",
-	textDark: "rgb(150, 150, 150)",
-	textDarker: "rgb(100, 100, 100)",
-	accent: "rgb(5, 134, 105)",
-	hover: "rgb(30, 29, 30)",
-	divider: "rgba(255, 255, 255, 0.072)",
-};
-
 function MainGUI() {
 	const [position, setPosition] = createSignal({ x: 6, y: 60 });
 	const [dragging, setDragging] = createSignal(false);
@@ -142,25 +130,17 @@ function MainGUI() {
 	return (
 		<Show when={guiVisible()}>
 			{/* Background blur overlay */}
-			<div
-				style={{
-					position: "fixed",
-					inset: "0",
-					"backdrop-filter": "blur(8px)",
-					"background-color": "rgba(0, 0, 0, 0.3)",
-					"z-index": "9999",
-					"pointer-events": "none",
-				}}
-			/>
+			<div class="vape-blur-bg" />
 
 			<div
 				ref={windowRef}
+				class="vape-panel"
 				style={{
 					position: "fixed",
 					left: `${position().x}px`,
 					top: `${position().y}px`,
 					width: "220px",
-					"background-color": COLORS.mainDark,
+					"background-color": "var(--vape-main-dark)",
 					"border-radius": "5px",
 					"box-shadow":
 						"0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)",
@@ -172,26 +152,13 @@ function MainGUI() {
 				on:pointerdown={handlePointerDown}
 			>
 				{/* Blur background */}
-				<div
-					style={{
-						position: "absolute",
-						inset: "-48px -48px",
-						"backdrop-filter": "blur(24px)",
-						"background-size": "cover",
-						opacity: "0.3",
-						"pointer-events": "none",
-						"z-index": "-1",
-					}}
-				/>
+				<div class="vape-blur-bg" />
 
 				{/* Header */}
 				<div
 					{...{ [dragHandleAttrName]: "" }}
+					class="vape-header"
 					style={{
-						display: "flex",
-						"align-items": "center",
-						height: "40px",
-						padding: "0 11px",
 						cursor: dragging() ? "grabbing" : "grab",
 					}}
 				>
@@ -203,14 +170,7 @@ function MainGUI() {
 								fallback={
 									<>
 										<button
-											style={{
-												background: "none",
-												border: "none",
-												cursor: "pointer",
-												padding: "0",
-												display: "flex",
-												"align-items": "center",
-											}}
+											class="vape-close-btn"
 											type="button"
 											on:click={closeSettingsCategory}
 										>
@@ -226,7 +186,7 @@ function MainGUI() {
 										</button>
 										<span
 											style={{
-												color: COLORS.text,
+												color: "var(--vape-text)",
 												"font-size": "14px",
 												"font-family":
 													"Arial, sans-serif",
@@ -237,14 +197,7 @@ function MainGUI() {
 											{activeSettingsCategory()}
 										</span>
 										<button
-											style={{
-												background: "none",
-												border: "none",
-												cursor: "pointer",
-												padding: "0",
-												display: "flex",
-												"align-items": "center",
-											}}
+											class="vape-close-btn"
 											type="button"
 											on:click={closeSettings}
 										>
@@ -261,14 +214,7 @@ function MainGUI() {
 								}
 							>
 								<button
-									style={{
-										background: "none",
-										border: "none",
-										cursor: "pointer",
-										padding: "0",
-										display: "flex",
-										"align-items": "center",
-									}}
+									class="vape-close-btn"
 									type="button"
 									on:click={closeSettings}
 								>
@@ -284,7 +230,7 @@ function MainGUI() {
 								</button>
 								<span
 									style={{
-										color: COLORS.text,
+										color: "var(--vape-text)",
 										"font-size": "14px",
 										"font-family": "Arial, sans-serif",
 										"margin-left": "10px",
@@ -294,14 +240,7 @@ function MainGUI() {
 									Settings
 								</span>
 								<button
-									style={{
-										background: "none",
-										border: "none",
-										cursor: "pointer",
-										padding: "0",
-										display: "flex",
-										"align-items": "center",
-									}}
+									class="vape-close-btn"
 									type="button"
 									on:click={closeSettings}
 								>
@@ -341,15 +280,12 @@ function MainGUI() {
 				{/* Settings button (only in main view) */}
 				<Show when={!showSettings()}>
 					<button
+						class="vape-icon-btn"
 						style={{
 							position: "absolute",
 							top: "0",
 							right: "0",
 							width: "40px",
-							height: "40px",
-							background: "none",
-							border: "none",
-							cursor: "pointer",
 						}}
 						type="button"
 						on:click={() => setShowSettings(true)}
@@ -371,12 +307,7 @@ function MainGUI() {
 
 				<Show when={!showSettings()}>
 					{/* Divider */}
-					<div
-						style={{
-							height: "1px",
-							"background-color": COLORS.divider,
-						}}
-					/>
+					<div class="vape-divider" />
 
 					{/* Categories */}
 					<div
@@ -404,7 +335,7 @@ function MainGUI() {
 					>
 						<span
 							style={{
-								color: COLORS.textDarker,
+								color: "var(--vape-text-darker)",
 								"font-size": "9px",
 								"font-family": "Arial, sans-serif",
 								"font-weight": "600",
@@ -415,13 +346,12 @@ function MainGUI() {
 							{"\u200A".repeat(10)}MISC
 						</span>
 						<div
+							class="vape-divider"
 							style={{
 								position: "absolute",
 								bottom: "0",
 								left: "0",
 								right: "0",
-								height: "1px",
-								"background-color": COLORS.divider,
 							}}
 						/>
 					</div>
@@ -442,24 +372,10 @@ function MainGUI() {
 					</div>
 
 					{/* Bottom bar */}
-					<div
-						style={{
-							position: "relative",
-							height: "36px",
-							"background-color": COLORS.main,
-						}}
-					>
-						<div
-							style={{
-								position: "absolute",
-								top: "0",
-								left: "0",
-								right: "0",
-								height: "1px",
-								"background-color": COLORS.divider,
-							}}
-						/>
+					<div class="vape-bottom-bar">
+						<div class="vape-divider" />
 						<button
+							class="vape-action-btn"
 							style={{
 								position: "absolute",
 								right: "5px",
@@ -469,13 +385,7 @@ function MainGUI() {
 								background: overlayHovered()
 									? "rgba(255,255,255,0.06)"
 									: "transparent",
-								border: "none",
 								"border-radius": "50%",
-								cursor: "pointer",
-								display: "flex",
-								"align-items": "center",
-								"justify-content": "center",
-								transition: "background-color 0.16s linear",
 							}}
 							type="button"
 							on:click={() => setOverlaysOpen(true)}
@@ -520,7 +430,7 @@ function MainGUI() {
 								bottom: "0",
 								left: "0",
 								right: "0",
-								"background-color": COLORS.main,
+								"background-color": "var(--vape-main)",
 								"border-radius": "5px",
 								transform: overlaysOpen()
 									? "translateY(0)"
@@ -548,7 +458,7 @@ function MainGUI() {
 								<span
 									style={{
 										"margin-left": "12px",
-										color: COLORS.text,
+										color: "var(--vape-text)",
 										"font-size": "15px",
 										"font-family": "Arial, sans-serif",
 										flex: "1",
@@ -557,18 +467,7 @@ function MainGUI() {
 									Overlays
 								</span>
 								<button
-									style={{
-										width: "24px",
-										height: "24px",
-										background: "none",
-										border: "none",
-										cursor: "pointer",
-										display: "flex",
-										"align-items": "center",
-										"justify-content": "center",
-										opacity: "0.7",
-										transition: "opacity 0.16s linear",
-									}}
+									class="vape-close-btn"
 									type="button"
 									on:click={() => setOverlaysOpen(false)}
 									on:pointerenter={(e) => {
@@ -588,12 +487,7 @@ function MainGUI() {
 									/>
 								</button>
 							</div>
-							<div
-								style={{
-									height: "1px",
-									"background-color": COLORS.divider,
-								}}
-							/>
+							<div class="vape-divider" />
 							<For each={hudTypes}>
 								{(hudClass) => {
 									const name = new hudClass().name;
@@ -630,7 +524,7 @@ function MainGUI() {
 										>
 											<span
 												style={{
-													color: COLORS.text,
+													color: "var(--vape-text)",
 													"font-size": "14px",
 													"font-family":
 														"Arial, sans-serif",
@@ -646,7 +540,7 @@ function MainGUI() {
 													width: "22px",
 													height: "12px",
 													"background-color": isOn()
-														? COLORS.accent
+														? "var(--vape-accent)"
 														: toggleHovered()
 															? "rgb(111, 110, 111)"
 															: "rgb(58, 57, 58)",
@@ -666,7 +560,7 @@ function MainGUI() {
 														width: "8px",
 														height: "8px",
 														"background-color":
-															COLORS.main,
+															"var(--vape-main)",
 														"border-radius": "50%",
 														transition:
 															"left 0.16s linear",
@@ -683,12 +577,7 @@ function MainGUI() {
 
 				{/* Settings view */}
 				<Show when={showSettings()}>
-					<div
-						style={{
-							height: "1px",
-							"background-color": COLORS.divider,
-						}}
-					/>
+					<div class="vape-divider" />
 					<div
 						style={{
 							"max-height": "480px",
@@ -775,12 +664,12 @@ function MainGUI() {
 												height: "40px",
 												padding: "0 12px",
 												"background-color":
-													COLORS.mainDark,
+													"var(--vape-main-dark)",
 											}}
 										>
 											<span
 												style={{
-													color: COLORS.textDarker,
+													color: "var(--vape-text-darker)",
 													"font-size": "14px",
 													"font-family":
 														"Arial, sans-serif",
@@ -791,7 +680,7 @@ function MainGUI() {
 											<div style={{ flex: "1" }} />
 											<span
 												style={{
-													color: COLORS.textDarker,
+													color: "var(--vape-text-darker)",
 													"font-size": "11px",
 													"font-family":
 														"Arial, sans-serif",
@@ -885,9 +774,8 @@ function MainGUI() {
 								}
 							/>
 							<div
+								class="vape-divider"
 								style={{
-									height: "1px",
-									"background-color": COLORS.divider,
 									margin: "8px 0",
 								}}
 							/>
@@ -901,7 +789,7 @@ function MainGUI() {
 							>
 								<span
 									style={{
-										color: COLORS.text,
+										color: "var(--vape-text)",
 										"font-size": "14px",
 										"font-family": "Arial, sans-serif",
 										flex: "1",
@@ -915,7 +803,8 @@ function MainGUI() {
 										height: "24px",
 										"border-radius": "4px",
 										border: "1px solid rgba(255,255,255,0.2)",
-										"background-color": COLORS.accent,
+										"background-color":
+											"var(--vape-accent)",
 										cursor: "pointer",
 									}}
 									type="button"
@@ -937,7 +826,7 @@ function MainGUI() {
 							>
 								<span
 									style={{
-										color: COLORS.textDark,
+										color: "var(--vape-text-dark)",
 										"font-size": "14px",
 										"font-family": "Arial, sans-serif",
 										flex: "1",
@@ -946,17 +835,13 @@ function MainGUI() {
 									Rebind GUI
 								</span>
 								<button
+									class="vape-icon-btn"
 									style={{
 										width: "20px",
 										height: "21px",
 										"background-color":
 											"rgba(255,255,255,0.08)",
-										border: "none",
 										"border-radius": "4px",
-										cursor: "pointer",
-										display: "flex",
-										"align-items": "center",
-										"justify-content": "center",
 									}}
 									type="button"
 									title="Change keybind"
@@ -991,6 +876,7 @@ function MainGUI() {
 
 			{/* Search panel */}
 			<div
+				class="vape-panel"
 				style={{
 					position: "fixed",
 					top: "13px",
@@ -998,7 +884,7 @@ function MainGUI() {
 					transform: "translateX(-50%)",
 					width: "220px",
 					"max-height": "437px",
-					"background-color": COLORS.mainDark,
+					"background-color": "var(--vape-main-dark)",
 					"border-radius": "5px",
 					"box-shadow":
 						"0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)",
@@ -1007,16 +893,7 @@ function MainGUI() {
 					"backdrop-filter": "blur(10px)",
 				}}
 			>
-				<div
-					style={{
-						position: "absolute",
-						inset: "-48px -48px",
-						"backdrop-filter": "blur(24px)",
-						opacity: "0.3",
-						"pointer-events": "none",
-						"z-index": "-1",
-					}}
-				/>
+				<div class="vape-blur-bg" />
 				<div
 					style={{
 						display: "flex",
@@ -1026,12 +903,10 @@ function MainGUI() {
 					}}
 				>
 					<button
+						class="vape-icon-btn"
 						style={{
 							width: "29px",
 							height: "16px",
-							background: "none",
-							border: "none",
-							cursor: "pointer",
 							padding: "0",
 						}}
 						type="button"
@@ -1068,7 +943,7 @@ function MainGUI() {
 							background: "none",
 							border: "none",
 							outline: "none",
-							color: COLORS.text,
+							color: "var(--vape-text)",
 							"font-size": "12px",
 							"font-family": "Arial, sans-serif",
 							padding: "0 8px",
@@ -1076,12 +951,7 @@ function MainGUI() {
 					/>
 				</div>
 				<Show when={searchText() !== ""}>
-					<div
-						style={{
-							height: "1px",
-							"background-color": "rgba(255,255,255,0.072)",
-						}}
-					/>
+					<div class="vape-divider" />
 					<div
 						style={{
 							"max-height": "398px",
@@ -1112,7 +982,9 @@ function SearchResultItem(props: { mod: Mod }) {
 			style={{
 				width: "100%",
 				height: "32px",
-				background: hovered() ? COLORS.mainLight : "transparent",
+				background: hovered()
+					? "var(--vape-main-light)"
+					: "transparent",
 				border: "none",
 				cursor: "pointer",
 				display: "flex",
@@ -1134,8 +1006,8 @@ function SearchResultItem(props: { mod: Mod }) {
 			<span
 				style={{
 					color: props.mod.stateAccessor()
-						? COLORS.text
-						: COLORS.textDark,
+						? "var(--vape-text)"
+						: "var(--vape-text-dark)",
 					"font-size": "13px",
 					"font-family": "Arial, sans-serif",
 					flex: "1",
@@ -1148,7 +1020,7 @@ function SearchResultItem(props: { mod: Mod }) {
 			<Show when={props.mod.tagAccessor()}>
 				<span
 					style={{
-						color: COLORS.textDarker,
+						color: "var(--vape-text-darker)",
 						"font-size": "11px",
 						"margin-right": "8px",
 					}}
@@ -1162,8 +1034,8 @@ function SearchResultItem(props: { mod: Mod }) {
 					height: "8px",
 					"border-radius": "50%",
 					"background-color": props.mod.stateAccessor()
-						? COLORS.accent
-						: COLORS.textDarker,
+						? "var(--vape-accent)"
+						: "var(--vape-text-darker)",
 					transition: "background-color 0.16s linear",
 					"flex-shrink": "0",
 				}}
@@ -1184,17 +1056,11 @@ function CategoryButton(props: { category: string; info: CategoryInfo }) {
 
 	return (
 		<button
+			class="vape-btn-row"
 			style={{
-				width: "100%",
-				height: "40px",
-				background: hovered() ? COLORS.mainLight : COLORS.main,
-				border: "none",
-				cursor: "pointer",
-				display: "flex",
-				"align-items": "center",
-				padding: "0 13px",
-				transition: "background-color 0.16s linear",
-				position: "relative",
+				background: hovered()
+					? "var(--vape-main-light)"
+					: "var(--vape-main)",
 			}}
 			on:pointerenter={() => setHovered(true)}
 			on:pointerleave={() => setHovered(false)}
@@ -1207,10 +1073,10 @@ function CategoryButton(props: { category: string; info: CategoryInfo }) {
 				style={{
 					"margin-left": "12px",
 					color: expanded()
-						? COLORS.accent
+						? "var(--vape-accent)"
 						: hovered()
-							? COLORS.text
-							: COLORS.textDark,
+							? "var(--vape-text)"
+							: "var(--vape-text-dark)",
 					"font-size": "14px",
 					"font-family": "Arial, sans-serif",
 					flex: "1",
@@ -1243,16 +1109,11 @@ function MiscItem(props: {
 
 	return (
 		<button
+			class="vape-btn-row"
 			style={{
-				width: "100%",
-				height: "40px",
-				background: hovered() ? COLORS.mainLight : COLORS.main,
-				border: "none",
-				cursor: "pointer",
-				display: "flex",
-				"align-items": "center",
-				padding: "0 13px",
-				transition: "background-color 0.16s linear",
+				background: hovered()
+					? "var(--vape-main-light)"
+					: "var(--vape-main)",
 			}}
 			type="button"
 			on:pointerenter={() => setHovered(true)}
@@ -1261,7 +1122,9 @@ function MiscItem(props: {
 		>
 			<span
 				style={{
-					color: hovered() ? COLORS.text : COLORS.textDark,
+					color: hovered()
+						? "var(--vape-text)"
+						: "var(--vape-text-dark)",
 					"font-size": "14px",
 					"font-family": "Arial, sans-serif",
 					"text-align": "left",
@@ -1274,7 +1137,7 @@ function MiscItem(props: {
 			<Show when={props.subText}>
 				<span
 					style={{
-						color: COLORS.textDarker,
+						color: "var(--vape-text-darker)",
 						"font-size": "11px",
 						"font-family": "Arial, sans-serif",
 					}}
@@ -1295,30 +1158,18 @@ function ActionButton(props: {
 
 	return (
 		<div
+			class="vape-action-wrap"
 			style={{
-				display: "flex",
-				"justify-content": "center",
-				padding: "4px 10px",
 				opacity: props.disabled ? "0.4" : "1",
 				"pointer-events": props.disabled ? "none" : "auto",
 			}}
 		>
 			<button
+				class="vape-action-btn"
 				style={{
-					width: "200px",
-					height: "31px",
 					background: hovered()
 						? "rgba(255,255,255,0.0875)"
 						: "rgba(255,255,255,0.05)",
-					border: "none",
-					"border-radius": "4px",
-					cursor: "pointer",
-					display: "flex",
-					"align-items": "center",
-					"justify-content": "center",
-					"box-sizing": "border-box",
-					padding: "2px 10px",
-					transition: "background-color 0.16s linear",
 				}}
 				type="button"
 				on:pointerenter={() => setHovered(true)}
@@ -1327,7 +1178,7 @@ function ActionButton(props: {
 			>
 				<span
 					style={{
-						color: COLORS.text,
+						color: "var(--vape-text)",
 						"font-size": "12px",
 						"font-family": "Arial, sans-serif",
 						"border-radius": "4px",
@@ -1352,16 +1203,11 @@ function SettingsCategoryButton(props: {
 
 	return (
 		<button
+			class="vape-btn-row"
 			style={{
-				width: "100%",
-				height: "40px",
-				background: hovered() ? COLORS.mainLight : "transparent",
-				border: "none",
-				cursor: "pointer",
-				display: "flex",
-				"align-items": "center",
-				padding: "0 12px",
-				transition: "background-color 0.16s linear",
+				background: hovered()
+					? "var(--vape-main-light)"
+					: "transparent",
 			}}
 			type="button"
 			on:pointerenter={() => setHovered(true)}
@@ -1370,7 +1216,7 @@ function SettingsCategoryButton(props: {
 		>
 			<span
 				style={{
-					color: COLORS.text,
+					color: "var(--vape-text)",
 					"font-size": "14px",
 					"font-family": "Arial, sans-serif",
 					flex: "1",
@@ -1382,7 +1228,7 @@ function SettingsCategoryButton(props: {
 			<Show when={props.subText}>
 				<span
 					style={{
-						color: COLORS.textDarker,
+						color: "var(--vape-text-darker)",
 						"font-size": "11px",
 						"font-family": "Arial, sans-serif",
 						"margin-right": "8px",

@@ -9,16 +9,6 @@ import {
 	ToggleComponent,
 } from "./components";
 
-const COLORS = {
-	main: "rgb(26, 25, 26)",
-	mainLight: "rgb(30, 29, 30)",
-	mainDark: "rgb(24, 23, 24)",
-	text: "rgb(200, 200, 200)",
-	textDark: "rgb(150, 150, 150)",
-	textDarker: "rgb(100, 100, 100)",
-	accent: "rgb(5, 134, 105)",
-};
-
 function renderSetting(setting: AnySetting, onExpandChange?: () => void) {
 	switch (setting.type) {
 		case "toggle":
@@ -98,24 +88,20 @@ export function SubmoduleComponent(props: {
 		props.submodules.find((s) => s.name === props.value);
 
 	return (
-		<div style={{ "background-color": COLORS.mainDark }}>
+		<div style={{ "background-color": "var(--vape-main-dark)" }}>
 			<div
+				class="vape-row"
 				style={{
-					display: "flex",
-					"align-items": "center",
-					height: "40px",
-					padding: "0 12px",
 					"background-color": hovered()
-						? COLORS.mainLight
-						: COLORS.mainDark,
-					transition: "background-color 0.16s linear",
+						? "var(--vape-main-light)"
+						: "var(--vape-main-dark)",
 				}}
 				on:pointerenter={() => setHovered(true)}
 				on:pointerleave={() => setHovered(false)}
 			>
 				<span
 					style={{
-						color: COLORS.textDark,
+						color: "var(--vape-text-dark)",
 						"font-size": "14px",
 						flex: "1",
 						"font-family": "Arial, sans-serif",
@@ -127,13 +113,7 @@ export function SubmoduleComponent(props: {
 				{/* Mode selector (no arrow — users infer it's clickable) */}
 				<div style={{ position: "relative", "margin-right": "4px" }}>
 					<div
-						style={{
-							padding: "4px 8px",
-							cursor: "pointer",
-							"background-color": "rgba(255, 255, 255, 0.08)",
-							"border-radius": "4px",
-							transition: "background-color 0.16s linear",
-						}}
+						class="vape-chip"
 						on:pointerenter={(e) => {
 							e.currentTarget.style.backgroundColor =
 								"rgba(255, 255, 255, 0.12)";
@@ -149,7 +129,7 @@ export function SubmoduleComponent(props: {
 					>
 						<span
 							style={{
-								color: COLORS.textDarker,
+								color: "var(--vape-text-darker)",
 								"font-size": "12px",
 								"font-family": "Arial, sans-serif",
 							}}
@@ -164,7 +144,7 @@ export function SubmoduleComponent(props: {
 								position: "absolute",
 								top: "100%",
 								right: "0",
-								"background-color": COLORS.main,
+								"background-color": "var(--vape-main)",
 								"border-radius": "4px",
 								"z-index": "100",
 								overflow: "hidden",
@@ -180,12 +160,12 @@ export function SubmoduleComponent(props: {
 											"white-space": "nowrap",
 											"background-color":
 												sub.name === props.value
-													? COLORS.accent
+													? "var(--vape-accent)"
 													: "transparent",
 											color:
 												sub.name === props.value
-													? COLORS.text
-													: COLORS.textDark,
+													? "var(--vape-text)"
+													: "var(--vape-text-dark)",
 											"font-size": "12px",
 											"font-family": "Arial, sans-serif",
 											transition:
@@ -199,7 +179,7 @@ export function SubmoduleComponent(props: {
 										on:pointerenter={(e) => {
 											if (sub.name !== props.value) {
 												e.currentTarget.style.backgroundColor =
-													COLORS.mainLight;
+													"var(--vape-main-light)";
 											}
 										}}
 										on:pointerleave={(e) => {

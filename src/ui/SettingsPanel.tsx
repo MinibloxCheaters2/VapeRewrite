@@ -5,17 +5,6 @@ import { dragHandleAttrName } from "@/utils/mapping/names";
 import { guiVisible } from "./guiState";
 import shadowWrapper from "./shadowWrapper";
 
-const COLORS = {
-	main: "rgb(26, 25, 26)",
-	mainLight: "rgb(30, 29, 30)",
-	mainDark: "rgb(24, 23, 24)",
-	text: "rgb(200, 200, 200)",
-	textDark: "rgb(150, 150, 150)",
-	textDarker: "rgb(100, 100, 100)",
-	accent: "rgb(5, 134, 105)",
-	divider: "rgba(255, 255, 255, 0.072)",
-};
-
 export const [settingsPanelVisible, setSettingsPanelVisible] =
 	createSignal(false);
 
@@ -63,12 +52,13 @@ function SettingsPanel() {
 		<Show when={isVisible()}>
 			<div
 				ref={windowRef}
+				class="vape-panel"
 				style={{
 					position: "fixed",
 					left: `${position().x}px`,
 					top: `${position().y}px`,
 					width: "300px",
-					"background-color": COLORS.main,
+					"background-color": "var(--vape-main)",
 					"border-radius": "5px",
 					"box-shadow":
 						"0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)",
@@ -80,33 +70,20 @@ function SettingsPanel() {
 				on:pointerdown={handlePointerDown}
 			>
 				{/* Blur background */}
-				<div
-					style={{
-						position: "absolute",
-						inset: "-48px -48px",
-						"backdrop-filter": "blur(24px)",
-						"background-size": "cover",
-						opacity: "0.3",
-						"pointer-events": "none",
-						"z-index": "-1",
-					}}
-				/>
+				<div class="vape-blur-bg" />
 
 				{/* Header */}
 				<div
 					{...{ [dragHandleAttrName]: "" }}
+					class="vape-header"
 					style={{
-						display: "flex",
-						"align-items": "center",
-						height: "40px",
-						padding: "0 12px",
 						cursor: dragging() ? "grabbing" : "grab",
-						"border-bottom": `1px solid ${COLORS.divider}`,
+						"border-bottom": "1px solid var(--vape-divider)",
 					}}
 				>
 					<span
 						style={{
-							color: COLORS.text,
+							color: "var(--vape-text)",
 							"font-size": "13px",
 							flex: "1",
 							"font-family": "Arial, sans-serif",
@@ -115,18 +92,7 @@ function SettingsPanel() {
 						Settings
 					</span>
 					<button
-						style={{
-							width: "24px",
-							height: "24px",
-							background: "none",
-							border: "none",
-							cursor: "pointer",
-							display: "flex",
-							"align-items": "center",
-							"justify-content": "center",
-							opacity: "0.7",
-							transition: "opacity 0.16s linear",
-						}}
+						class="vape-close-btn"
 						type="button"
 						on:click={() => setSettingsPanelVisible(false)}
 						on:pointerenter={(e) => {
