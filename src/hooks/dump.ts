@@ -6,7 +6,7 @@ const DUMP_REGEXES = {
 	// PathNavigateGround#isPositionClear
 	iterator: /of\s*\w+\.([a-zA-Z]+)\(new/,
 	// EntityBoat#update
-	normalizeAngle: /([a-zA-Z]+)\(this\.boatYaw\s*-\s*this.yaw\)/,
+	normalizeAngle: /(\w+)\(this\.boatYaw\s*-\s*this.yaw\)/,
 	// PlayerMovement#updatePlayerMoveState
 	applyInput: /this\.(\w+)\(this\.currentInput\)/,
 	getMoveDirection:
