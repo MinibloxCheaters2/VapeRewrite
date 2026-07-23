@@ -110,7 +110,6 @@ export function SubmoduleComponent(props: {
 					{props.name}
 				</span>
 
-				{/* Mode selector (no arrow — users infer it's clickable) */}
 				<div style={{ position: "relative", "margin-right": "4px" }}>
 					<div
 						class="vape-chip"

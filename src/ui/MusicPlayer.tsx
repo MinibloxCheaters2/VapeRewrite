@@ -396,7 +396,6 @@ function MusicPlayer() {
 							"border-radius": "16px",
 							"box-shadow":
 								"0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)",
-							"backdrop-filter": "blur(10px)",
 							overflow: "hidden",
 							transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
 						}}

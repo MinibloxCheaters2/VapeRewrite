@@ -65,14 +65,10 @@ function SettingsPanel() {
 					"z-index": "10001",
 					overflow: "hidden",
 					"user-select": "none",
-					"backdrop-filter": "blur(10px)",
 				}}
-				on:pointerdown={handlePointerDown}
-			>
-				{/* Blur background */}
-				<div class="vape-blur-bg" />
-
-				{/* Header */}
+			on:pointerdown={handlePointerDown}
+		>
+			{/* Header */}
 				<div
 					{...{ [dragHandleAttrName]: "" }}
 					class="vape-header"

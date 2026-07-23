@@ -107,9 +107,7 @@ export function SliderComponent(props: {
 					onChange={(e) => props.onChange(e.target.valueAsNumber)}
 				/>
 				<Show when={props.unit}>
-					{(unit) => (
-						<span class="vape-label-sm">{unit()}</span>
-					)}
+					{(unit) => <span class="vape-label-sm">{unit()}</span>}
 				</Show>
 			</div>
 			<div
@@ -263,10 +261,7 @@ export function TextBoxComponent(props: {
 
 	return (
 		<div class="vape-setting-col">
-			<span
-				class="vape-label-sm"
-				style={{ "margin-bottom": "6px" }}
-			>
+			<span class="vape-label-sm" style={{ "margin-bottom": "6px" }}>
 				{props.name}
 			</span>
 			<input

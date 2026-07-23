@@ -129,9 +129,7 @@ function MainGUI() {
 
 	return (
 		<Show when={guiVisible()}>
-			{/* Background blur overlay */}
-			<div class="vape-blur-bg" />
-
+			<div class="vape-bg-blur" />
 			<div
 				ref={windowRef}
 				class="vape-panel"
@@ -147,21 +145,17 @@ function MainGUI() {
 					"z-index": "10001",
 					overflow: "hidden",
 					"user-select": "none",
-					"backdrop-filter": "blur(10px)",
 				}}
-				on:pointerdown={handlePointerDown}
+			on:pointerdown={handlePointerDown}
+		>
+			{/* Header */}
+			<div
+				{...{ [dragHandleAttrName]: "" }}
+				class="vape-header"
+				style={{
+					cursor: dragging() ? "grabbing" : "grab",
+				}}
 			>
-				{/* Blur background */}
-				<div class="vape-blur-bg" />
-
-				{/* Header */}
-				<div
-					{...{ [dragHandleAttrName]: "" }}
-					class="vape-header"
-					style={{
-						cursor: dragging() ? "grabbing" : "grab",
-					}}
-				>
 					<Show
 						when={!showSettings()}
 						fallback={
@@ -889,12 +883,10 @@ function MainGUI() {
 					"box-shadow":
 						"0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)",
 					"z-index": "10002",
-					overflow: "hidden",
-					"backdrop-filter": "blur(10px)",
-				}}
-			>
-				<div class="vape-blur-bg" />
-				<div
+				overflow: "hidden",
+			}}
+		>
+			<div
 					style={{
 						display: "flex",
 						"align-items": "center",

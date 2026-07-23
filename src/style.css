@@ -1,5 +1,4 @@
-/* global css */
-/* Note: might conflict with existing styles if not in shadow DOM */
+/* this is put inside the shadow root */
 
 :root {
 	--vape-main: rgb(26, 25, 26);
@@ -18,7 +17,6 @@
 	--vape-font: Arial, sans-serif;
 }
 
-/* New ClickGUI Styles */
 #new-clickgui-container,
 #main-gui-container,
 #textgui-container,
@@ -72,7 +70,6 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	background: transparent;
 }
 
-/* ── Notification animations ── */
 @keyframes ntSlideIn {
 	from {
 		transform: translateX(100%);
@@ -100,26 +97,21 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	}
 }
 
-/* ── Reusable panel / window ── */
 .vape-panel {
 	border-radius: var(--vape-radius);
 	box-shadow: var(--vape-shadow);
 	overflow: hidden;
 	user-select: none;
-	backdrop-filter: blur(10px);
 }
 
-.vape-blur-bg {
-	position: absolute;
-	inset: -48px -48px;
+.vape-bg-blur {
+	position: fixed;
+	inset: 0;
 	backdrop-filter: blur(24px);
-	background-size: cover;
-	opacity: 0.3;
 	pointer-events: none;
-	z-index: -1;
+	z-index: 10000;
 }
 
-/* ── Header row (draggable) ── */
 .vape-header {
 	display: flex;
 	align-items: center;
@@ -127,7 +119,6 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	padding: 0 12px;
 }
 
-/* ── Clickable row (toggle, dropdown, submodule) ── */
 .vape-row {
 	display: flex;
 	align-items: center;
@@ -138,7 +129,6 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	background-color: var(--row-bg, var(--vape-main-dark));
 }
 
-/* ── Close button (24x24) ── */
 .vape-close-btn {
 	width: 24px;
 	height: 24px;
@@ -152,7 +142,6 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	transition: opacity 0.16s linear;
 }
 
-/* ── Icon-only button 25x40 (arrow, dots) ── */
 .vape-icon-btn {
 	width: 25px;
 	height: 40px;
@@ -166,13 +155,11 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	transition: opacity 0.16s linear;
 }
 
-/* ── Divider line ── */
 .vape-divider {
 	height: 1px;
 	background-color: var(--vape-divider);
 }
 
-/* ── Button with no background / no border ── */
 .vape-btn-none {
 	background: none;
 	border: none;
@@ -182,7 +169,6 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	align-items: center;
 }
 
-/* ── Full-width button row (category, misc item, settings category) ── */
 .vape-btn-row {
 	width: 100%;
 	height: 40px;
@@ -194,26 +180,22 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	position: relative;
 }
 
-/* ── Section padding ── */
 .vape-section-pad {
 	padding: 4px 0;
 }
 
-/* ── Bottom bar ── */
 .vape-bottom-bar {
 	position: relative;
 	height: 36px;
 	background-color: var(--vape-main);
 }
 
-/* ── Action button wrapper ── */
 .vape-action-wrap {
 	display: flex;
 	justify-content: center;
 	padding: 4px 10px;
 }
 
-/* ── Action button ── */
 .vape-action-btn {
 	width: 200px;
 	height: 31px;
@@ -233,7 +215,6 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	background-color: rgba(255, 255, 255, 0.0875);
 }
 
-/* ── Slider container ── */
 .vape-slider-wrap {
 	position: relative;
 	height: 2px;
@@ -241,7 +222,6 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	cursor: pointer;
 }
 
-/* ── Slider fill ── */
 .vape-slider-fill {
 	position: absolute;
 	left: 0;
@@ -250,16 +230,16 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	background-color: var(--vape-accent);
 }
 
-/* ── Slider thumb circle ── */
 .vape-slider-thumb {
 	border-radius: 50%;
 	background-color: var(--vape-text);
 	width: var(--thumb-size, 14px);
 	height: var(--thumb-size, 14px);
-	transition: width 0.16s linear, height 0.16s linear;
+	transition:
+		width 0.16s linear,
+		height 0.16s linear;
 }
 
-/* ── Mode selector chip ── */
 .vape-chip {
 	padding: 4px 8px;
 	cursor: pointer;
@@ -268,7 +248,6 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	transition: var(--vape-transition);
 }
 
-/* ── Toggle knob base ── */
 .vape-toggle-track {
 	width: 32px;
 	height: 18px;
@@ -289,7 +268,6 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	left: var(--toggle-knob-left, 2px);
 }
 
-/* ── Overlay container ── */
 .vape-overlay-bg {
 	position: fixed;
 	inset: 0;
@@ -298,7 +276,6 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	pointer-events: none;
 }
 
-/* ── HUD manager horizontal panel ── */
 .vape-hud-bar {
 	display: flex;
 	gap: 8px;
@@ -307,7 +284,6 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	overflow: visible;
 }
 
-/* ── Utility: flex helpers ── */
 .vape-flex-1 {
 	flex: 1;
 }
@@ -316,7 +292,6 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	flex-shrink: 0;
 }
 
-/* ── Utility: text ── */
 .vape-text {
 	font-family: var(--vape-font);
 }
@@ -327,7 +302,6 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	text-overflow: ellipsis;
 }
 
-/* ── Setting label (14px, flex:1) ── */
 .vape-label {
 	color: var(--vape-text-dark);
 	font-size: 14px;
@@ -335,7 +309,6 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	font-family: var(--vape-font);
 }
 
-/* ── Setting value text (14px, muted) ── */
 .vape-value {
 	color: var(--vape-text-darker);
 	font-size: 14px;
@@ -343,14 +316,12 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	font-family: var(--vape-font);
 }
 
-/* ── Small label (11px) ── */
 .vape-label-sm {
 	color: var(--vape-text-dark);
 	font-size: 11px;
 	font-family: var(--vape-font);
 }
 
-/* ── Section label (10px, block) ── */
 .vape-section-label {
 	color: var(--vape-text-dark);
 	font-size: 10px;
@@ -359,21 +330,18 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	margin-bottom: 4px;
 }
 
-/* ── Dropdown option text ── */
 .vape-dropdown-text {
 	font-size: 13px;
 	font-family: var(--vape-font);
 	color: var(--item-color, var(--vape-text-dark));
 }
 
-/* ── Setting row (50px, padding, dark bg) ── */
 .vape-setting-row {
 	height: 50px;
 	padding: 0 12px;
 	background-color: var(--vape-main-dark);
 }
 
-/* ── Setting column (50px, padding, dark bg, flex col) ── */
 .vape-setting-col {
 	height: 50px;
 	padding: 0 12px;
@@ -383,7 +351,6 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	justify-content: center;
 }
 
-/* ── Slider top row (flex between, center, 30px) ── */
 .vape-slider-row {
 	display: flex;
 	justify-content: space-between;
@@ -391,7 +358,6 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	height: 30px;
 }
 
-/* ── Slider number input ── */
 .vape-slider-input {
 	color: var(--vape-text-dark);
 	background-color: transparent;
@@ -403,7 +369,6 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	border: none;
 }
 
-/* ── Text input ── */
 .vape-text-input {
 	width: 100%;
 	height: 24px;
@@ -418,12 +383,10 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	transition: background-color 0.16s linear;
 }
 
-/* ── Dropdown list wrapper ── */
 .vape-dropdown-list {
 	background-color: rgb(22, 21, 22);
 }
 
-/* ── Dropdown option item ── */
 .vape-dropdown-item {
 	height: 32px;
 	padding: 0 24px;
@@ -434,7 +397,6 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	background-color: var(--item-bg, transparent);
 }
 
-/* ── Color picker header row ── */
 .vape-color-header {
 	display: flex;
 	align-items: center;
@@ -443,7 +405,6 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	cursor: pointer;
 }
 
-/* ── Color picker swatch ── */
 .vape-color-swatch {
 	width: 24px;
 	height: 24px;
@@ -454,7 +415,6 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	cursor: pointer;
 }
 
-/* ── HUD common text (font, weight, shadow) ── */
 .vape-hud-text {
 	font-family: var(--hud-font, var(--vape-font));
 	font-weight: 600;
@@ -463,24 +423,20 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	color: var(--hud-color, white);
 }
 
-/* ── HUD sub text (2px smaller) ── */
 .vape-hud-text-sm {
 	font-size: calc(var(--hud-font-size, 14px) - 2px);
 }
 
-/* ── HUD opacity modifier ── */
 .vape-hud-dim {
 	opacity: 0.8;
 }
 
-/* ── HUD vertical stack ── */
 .vape-hud-stack {
 	display: flex;
 	flex-direction: column;
 	gap: 4px;
 }
 
-/* ── HUD info row (health bar + text) ── */
 .vape-hud-info-row {
 	display: flex;
 	align-items: center;
@@ -488,7 +444,6 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	margin-bottom: 4px;
 }
 
-/* ── HUD panel (bg, radius, padding) ── */
 .vape-hud-panel {
 	background-color: rgba(0, 0, 0, 0.5);
 	border-radius: 6px;
@@ -496,7 +451,6 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	min-width: 160px;
 }
 
-/* ── Keystroke key box ── */
 .vape-key {
 	display: flex;
 	align-items: center;
@@ -514,20 +468,17 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	transition: background-color 0.05s ease;
 }
 
-/* ── Key row with gap ── */
 .vape-key-row {
 	display: flex;
 	gap: 4px;
 }
 
-/* ── Centered key row ── */
 .vape-key-row-center {
 	display: flex;
 	gap: 4px;
 	justify-content: center;
 }
 
-/* ── Health bar track ── */
 .vape-health-bar-track {
 	flex: 1;
 	height: 6px;
@@ -536,7 +487,6 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	overflow: hidden;
 }
 
-/* ── Health bar fill ── */
 .vape-health-bar-fill {
 	width: var(--health-pct, 0%);
 	background-color: var(--health-color, #4caf50);
