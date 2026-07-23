@@ -22,27 +22,33 @@ function teleport(y: number, onGround: boolean) {
 }
 
 export default class MaceKill extends Mod {
-	public name = "MaceKill";
-	public category = Category.BLATANT;
+	name = "MaceKill";
+	category = Category.BLATANT;
 
 	#fallDistance = this.createSliderSetting(
 		"FallDistance",
-		100,
-		15,
-		1_000_000,
+		60,
+		20,
+		400,
 	);
 
-	get fallDistance() {
+	private get fallDistance() {
 		return this.#fallDistance.value();
 	}
+	hackyFallDamageFix = false;
 
 	@Subscribe("sendPacket")
 	onSendPacket({ data: pkt }: CancelableWrapper<C2SPacket>) {
+		if (this.hackyFallDamageFix && isC2S("SPacketPlayerPosLook", pkt) && pkt.onGround) {
+			pkt.onGround = false;
+			this.hackyFallDamageFix = false;
+		}
 		if (!isC2S("SPacketUseEntity", pkt) || pkt.action !== 1) return;
 		const { player, Items } = Miniblox;
 		if (player.inventory.getCurrentItem()?.item !== Items.mace) return;
 		teleport(player.pos.y + this.fallDistance, false);
 		teleport(player.pos.y + (this.fallDistance - 0.08), false);
-		teleport(player.pos.y + 1, false);
+		teleport(player.pos.y, false);
+		this.hackyFallDamageFix = true;
 	}
 }

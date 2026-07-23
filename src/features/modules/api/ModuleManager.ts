@@ -61,6 +61,7 @@ export default class ModuleManager {
 	static readonly phase = new Phase();
 	static readonly scaffold = new Scaffold();
 	static readonly hudManager = new HudManagerModule();
+	static readonly maceKill = new MaceKill();
 
 	private constructor() {
 		throw new Error("everything in module manager is static lol");
@@ -101,7 +102,7 @@ export default class ModuleManager {
 		new AutoRejoin(),
 		new MurderMystery(),
 		new Paranoia(),
-		new MaceKill(),
+		this.maceKill
 	] as const;
 
 	/** Each module's name */
