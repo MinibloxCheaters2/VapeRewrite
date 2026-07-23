@@ -1,6 +1,22 @@
 /* global css */
 /* Note: might conflict with existing styles if not in shadow DOM */
 
+:root {
+	--vape-main: rgb(26, 25, 26);
+	--vape-main-light: rgb(30, 29, 30);
+	--vape-main-dark: rgb(24, 23, 24);
+	--vape-text: rgb(200, 200, 200);
+	--vape-text-dark: rgb(150, 150, 150);
+	--vape-text-darker: rgb(100, 100, 100);
+	--vape-accent: rgb(5, 134, 105);
+	--vape-divider: rgba(255, 255, 255, 0.072);
+	--vape-divider-dark: rgba(48, 48, 48, 0.52);
+	--vape-radius: 5px;
+	--vape-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
+	--vape-transition: background-color 0.16s linear;
+	--vape-font: Arial, sans-serif;
+}
+
 /* New ClickGUI Styles */
 #new-clickgui-container,
 #main-gui-container,
@@ -41,10 +57,10 @@
 
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
-	-webkit-appearance: none; /* removes default light style */
+	-webkit-appearance: none;
 	margin: 0;
-	background: transparent; /* dark background */
-	color: #ccc; /* lighter arrow color */
+	background: transparent;
+	color: #ccc;
 	width: 16px;
 	height: 16px;
 	border-left: 1px solid #555;
@@ -53,4 +69,242 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="number"]::-webkit-inner-spin-button:hover,
 input[type="number"]::-webkit-outer-spin-button:hover {
 	background: transparent;
+}
+
+/* ── Notification animations ── */
+@keyframes ntSlideIn {
+	from {
+		transform: translateX(100%);
+	}
+	to {
+		transform: translateX(0);
+	}
+}
+
+@keyframes ntSlideOut {
+	from {
+		transform: translateX(0);
+	}
+	to {
+		transform: translateX(100%);
+	}
+}
+
+@keyframes ntProgress {
+	from {
+		transform: scaleX(1);
+	}
+	to {
+		transform: scaleX(0);
+	}
+}
+
+/* ── Reusable panel / window ── */
+.vape-panel {
+	border-radius: var(--vape-radius);
+	box-shadow: var(--vape-shadow);
+	overflow: hidden;
+	user-select: none;
+	backdrop-filter: blur(10px);
+}
+
+.vape-blur-bg {
+	position: absolute;
+	inset: -48px -48px;
+	backdrop-filter: blur(24px);
+	background-size: cover;
+	opacity: 0.3;
+	pointer-events: none;
+	z-index: -1;
+}
+
+/* ── Header row (draggable) ── */
+.vape-header {
+	display: flex;
+	align-items: center;
+	height: 40px;
+	padding: 0 12px;
+}
+
+/* ── Clickable row (toggle, dropdown, submodule) ── */
+.vape-row {
+	display: flex;
+	align-items: center;
+	height: 40px;
+	padding: 0 12px;
+	cursor: pointer;
+	transition: var(--vape-transition);
+}
+
+/* ── Close button (24x24) ── */
+.vape-close-btn {
+	width: 24px;
+	height: 24px;
+	background: none;
+	border: none;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	opacity: 0.7;
+	transition: opacity 0.16s linear;
+}
+
+/* ── Icon-only button 25x40 (arrow, dots) ── */
+.vape-icon-btn {
+	width: 25px;
+	height: 40px;
+	background: none;
+	border: none;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	opacity: 0.7;
+	transition: opacity 0.16s linear;
+}
+
+/* ── Divider line ── */
+.vape-divider {
+	height: 1px;
+	background-color: var(--vape-divider);
+}
+
+/* ── Button with no background / no border ── */
+.vape-btn-none {
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 0;
+	display: flex;
+	align-items: center;
+}
+
+/* ── Full-width button row (category, misc item, settings category) ── */
+.vape-btn-row {
+	width: 100%;
+	height: 40px;
+	border: none;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	transition: var(--vape-transition);
+	position: relative;
+}
+
+/* ── Section padding ── */
+.vape-section-pad {
+	padding: 4px 0;
+}
+
+/* ── Bottom bar ── */
+.vape-bottom-bar {
+	position: relative;
+	height: 36px;
+	background-color: var(--vape-main);
+}
+
+/* ── Action button wrapper ── */
+.vape-action-wrap {
+	display: flex;
+	justify-content: center;
+	padding: 4px 10px;
+}
+
+/* ── Action button ── */
+.vape-action-btn {
+	width: 200px;
+	height: 31px;
+	background-color: rgba(255, 255, 255, 0.05);
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	padding: 2px 10px;
+	transition: var(--vape-transition);
+}
+
+.vape-action-btn:hover {
+	background-color: rgba(255, 255, 255, 0.0875);
+}
+
+/* ── Slider container ── */
+.vape-slider-wrap {
+	position: relative;
+	height: 2px;
+	background-color: rgba(255, 255, 255, 0.1);
+	cursor: pointer;
+}
+
+/* ── Slider fill ── */
+.vape-slider-fill {
+	position: absolute;
+	left: 0;
+	top: 0;
+	height: 100%;
+	background-color: var(--vape-accent);
+}
+
+/* ── Mode selector chip ── */
+.vape-chip {
+	padding: 4px 8px;
+	cursor: pointer;
+	background-color: rgba(255, 255, 255, 0.08);
+	border-radius: 4px;
+	transition: var(--vape-transition);
+}
+
+/* ── Toggle knob base ── */
+.vape-toggle-track {
+	border-radius: 9px;
+	position: relative;
+	transition: background-color 0.16s linear;
+}
+
+.vape-toggle-knob {
+	border-radius: 50%;
+	position: absolute;
+	top: 2px;
+	transition: left 0.16s linear;
+}
+
+/* ── Overlay container ── */
+.vape-overlay-bg {
+	position: fixed;
+	inset: 0;
+	backdrop-filter: blur(8px);
+	background-color: rgba(0, 0, 0, 0.3);
+	pointer-events: none;
+}
+
+/* ── HUD manager horizontal panel ── */
+.vape-hud-bar {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	padding: 8px;
+	overflow: visible;
+}
+
+/* ── Utility: flex helpers ── */
+.vape-flex-1 {
+	flex: 1;
+}
+
+.vape-flex-shrink-0 {
+	flex-shrink: 0;
+}
+
+/* ── Utility: text ── */
+.vape-text {
+	font-family: var(--vape-font);
+}
+
+.vape-text-ellipsis {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }

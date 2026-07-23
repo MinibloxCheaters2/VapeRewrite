@@ -2,19 +2,6 @@ import { createSignal, For, Show } from "solid-js";
 import { getName, type ModeLike } from "@/features/config/Settings";
 import getResourceURL from "@/utils/helpers/cachedResourceURL";
 
-const COLORS = {
-	main: "rgb(26, 25, 26)",
-	mainLight: "rgb(30, 29, 30)",
-	mainDark: "rgb(24, 23, 24)",
-	text: "rgb(200, 200, 200)",
-	textDark: "rgb(150, 150, 150)",
-	textDarker: "rgb(100, 100, 100)",
-	accent: "rgb(5, 134, 105)",
-	hover: "rgb(30, 29, 30)",
-	divider: "rgba(255, 255, 255, 0.072)",
-	dividerDark: "rgba(48, 48, 48, 0.52)",
-};
-
 // Toggle component
 export function ToggleComponent(props: {
 	name: string;
@@ -26,16 +13,11 @@ export function ToggleComponent(props: {
 
 	return (
 		<div
+			class="vape-row"
 			style={{
-				display: "flex",
-				"align-items": "center",
-				height: "40px",
-				padding: "0 12px",
 				"background-color": hovered()
-					? COLORS.mainLight
-					: COLORS.mainDark,
-				cursor: "pointer",
-				transition: "background-color 0.16s linear",
+					? "var(--vape-main-light)"
+					: "var(--vape-main-dark)",
 			}}
 			on:pointerenter={() => setHovered(true)}
 			on:pointerleave={() => setHovered(false)}
@@ -43,7 +25,7 @@ export function ToggleComponent(props: {
 		>
 			<span
 				style={{
-					color: COLORS.textDark,
+					color: "var(--vape-text-dark)",
 					"font-size": "14px",
 					flex: "1",
 					"font-family": "Arial, sans-serif",
@@ -52,27 +34,22 @@ export function ToggleComponent(props: {
 				{props.name}
 			</span>
 			<div
+				class="vape-toggle-track"
 				style={{
 					width: "32px",
 					height: "18px",
 					"background-color": props.enabled
-						? COLORS.accent
+						? "var(--vape-accent)"
 						: "rgba(255, 255, 255, 0.08)",
-					"border-radius": "9px",
-					position: "relative",
-					transition: "background-color 0.16s linear",
 				}}
 			>
 				<div
+					class="vape-toggle-knob"
 					style={{
 						width: "14px",
 						height: "14px",
-						"background-color": COLORS.text,
-						"border-radius": "50%",
-						position: "absolute",
-						top: "2px",
+						"background-color": "var(--vape-text)",
 						left: props.enabled ? "16px" : "2px",
-						transition: "left 0.16s linear",
 					}}
 				/>
 			</div>
@@ -133,7 +110,7 @@ export function SliderComponent(props: {
 			style={{
 				height: "50px",
 				padding: "0 12px",
-				"background-color": COLORS.mainDark,
+				"background-color": "var(--vape-main-dark)",
 			}}
 			on:pointerenter={() => setHovered(true)}
 			on:pointerleave={() => setHovered(false)}
@@ -148,7 +125,7 @@ export function SliderComponent(props: {
 			>
 				<span
 					style={{
-						color: COLORS.textDark,
+						color: "var(--vape-text-dark)",
 						"font-size": "11px",
 						"font-family": "Arial, sans-serif",
 					}}
@@ -159,7 +136,7 @@ export function SliderComponent(props: {
 				<input
 					type="number"
 					style={{
-						color: COLORS.textDark,
+						color: "var(--vape-text-dark)",
 						"background-color": "transparent",
 						"font-size": "11px",
 						"font-family": "Arial, sans-serif",
@@ -176,7 +153,7 @@ export function SliderComponent(props: {
 					{(unit) => (
 						<span
 							style={{
-								color: COLORS.textDark,
+								color: "var(--vape-text-dark)",
 								"font-size": "11px",
 								"font-family": "Arial, sans-serif",
 							}}
@@ -188,22 +165,13 @@ export function SliderComponent(props: {
 			</div>
 			<div
 				ref={sliderRef}
-				style={{
-					position: "relative",
-					height: "2px",
-					"background-color": "rgba(255, 255, 255, 0.1)",
-					cursor: "pointer",
-				}}
+				class="vape-slider-wrap"
 				on:pointerdown={handlePointerDown}
 			>
 				<div
+					class="vape-slider-fill"
 					style={{
-						position: "absolute",
-						left: "0",
-						top: "0",
 						width: `${Math.max(4, percentage())}%`,
-						height: "100%",
-						"background-color": COLORS.accent,
 					}}
 				>
 					<div
@@ -214,7 +182,7 @@ export function SliderComponent(props: {
 							transform: "translateY(-50%)",
 							width: "24px",
 							height: "4px",
-							"background-color": COLORS.mainDark,
+							"background-color": "var(--vape-main-dark)",
 							display: "flex",
 							"align-items": "center",
 							"justify-content": "center",
@@ -226,7 +194,7 @@ export function SliderComponent(props: {
 									hovered() || dragging() ? "16px" : "14px",
 								height:
 									hovered() || dragging() ? "16px" : "14px",
-								"background-color": COLORS.text,
+								"background-color": "var(--vape-text)",
 								"border-radius": "50%",
 								transition:
 									"width 0.16s linear, height 0.16s linear",
@@ -260,18 +228,13 @@ export function DropdownComponent(props: {
 	};
 
 	return (
-		<div style={{ "background-color": COLORS.mainDark }}>
+		<div style={{ "background-color": "var(--vape-main-dark)" }}>
 			<div
+				class="vape-row"
 				style={{
-					display: "flex",
-					"align-items": "center",
-					height: "40px",
-					padding: "0 12px",
 					"background-color": hovered()
-						? COLORS.mainLight
-						: COLORS.mainDark,
-					cursor: "pointer",
-					transition: "background-color 0.16s linear",
+						? "var(--vape-main-light)"
+						: "var(--vape-main-dark)",
 				}}
 				on:pointerenter={() => setHovered(true)}
 				on:pointerleave={() => setHovered(false)}
@@ -279,7 +242,7 @@ export function DropdownComponent(props: {
 			>
 				<span
 					style={{
-						color: COLORS.textDark,
+						color: "var(--vape-text-dark)",
 						"font-size": "14px",
 						flex: "1",
 						"font-family": "Arial, sans-serif",
@@ -289,7 +252,7 @@ export function DropdownComponent(props: {
 				</span>
 				<span
 					style={{
-						color: COLORS.textDarker,
+						color: "var(--vape-text-darker)",
 						"font-size": "14px",
 						"margin-right": "8px",
 						"font-family": "Arial, sans-serif",
@@ -355,8 +318,8 @@ export function DropdownComponent(props: {
 									style={{
 										color:
 											option === props.value
-												? COLORS.text
-												: COLORS.textDark,
+												? "var(--vape-text)"
+												: "var(--vape-text-dark)",
 										"font-size": "13px",
 										"font-family": "Arial, sans-serif",
 									}}
@@ -387,7 +350,7 @@ export function TextBoxComponent(props: {
 			style={{
 				height: "50px",
 				padding: "0 12px",
-				"background-color": COLORS.mainDark,
+				"background-color": "var(--vape-main-dark)",
 				display: "flex",
 				"flex-direction": "column",
 				"justify-content": "center",
@@ -395,7 +358,7 @@ export function TextBoxComponent(props: {
 		>
 			<span
 				style={{
-					color: COLORS.textDark,
+					color: "var(--vape-text-dark)",
 					"font-size": "11px",
 					"margin-bottom": "6px",
 					"font-family": "Arial, sans-serif",
@@ -412,11 +375,11 @@ export function TextBoxComponent(props: {
 					height: "24px",
 					padding: "0 8px",
 					"background-color": focused()
-						? COLORS.mainLight
+						? "var(--vape-main-light)"
 						: "rgba(255, 255, 255, 0.05)",
 					border: "none",
 					"border-radius": "4px",
-					color: COLORS.text,
+					color: "var(--vape-text)",
 					"font-size": "13px",
 					"font-family": "Arial, sans-serif",
 					outline: "none",
@@ -563,7 +526,7 @@ export function ColorSliderComponent(props: {
 	document.addEventListener("pointerup", handlePointerUp);
 
 	return (
-		<div style={{ "background-color": COLORS.mainDark }}>
+		<div style={{ "background-color": "var(--vape-main-dark)" }}>
 			<div
 				style={{
 					display: "flex",
@@ -576,7 +539,7 @@ export function ColorSliderComponent(props: {
 			>
 				<span
 					style={{
-						color: COLORS.textDark,
+						color: "var(--vape-text-dark)",
 						"font-size": "11px",
 						"font-family": "Arial, sans-serif",
 					}}
@@ -636,7 +599,7 @@ export function ColorSliderComponent(props: {
 					<div style={{ "margin-bottom": "8px" }}>
 						<span
 							style={{
-								color: COLORS.textDark,
+								color: "var(--vape-text-dark)",
 								"font-size": "10px",
 								"font-family": "Arial, sans-serif",
 								display: "block",
@@ -682,7 +645,7 @@ export function ColorSliderComponent(props: {
 					<div>
 						<span
 							style={{
-								color: COLORS.textDark,
+								color: "var(--vape-text-dark)",
 								"font-size": "10px",
 								"font-family": "Arial, sans-serif",
 								display: "block",

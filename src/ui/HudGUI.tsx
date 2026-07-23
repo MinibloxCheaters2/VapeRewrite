@@ -14,18 +14,6 @@ import {
 } from "./components";
 import shadowWrapper from "./shadowWrapper";
 
-const COLORS = {
-	main: "rgb(26, 25, 26)",
-	mainLight: "rgb(30, 29, 30)",
-	mainDark: "rgb(24, 23, 24)",
-	text: "rgb(200, 200, 200)",
-	textDark: "rgb(150, 150, 150)",
-	textDarker: "rgb(100, 100, 100)",
-	accent: "rgb(5, 134, 105)",
-	hover: "rgb(30, 29, 30)",
-	divider: "rgba(255, 255, 255, 0.072)",
-};
-
 // HUD Manager Panel (horizontal bar at bottom)
 function HudManagerPanel() {
 	const [position, setPosition] = createSignal({
@@ -99,35 +87,18 @@ function HudManagerPanel() {
 	return (
 		<Show when={ModuleManager.hudManager.stateAccessor()}>
 			{/* Background blur overlay */}
-			<div
-				style={{
-					position: "fixed",
-					inset: "0",
-					"backdrop-filter": "blur(8px)",
-					"background-color": "rgba(0, 0, 0, 0.3)",
-					"z-index": "9998",
-					"pointer-events": "none",
-				}}
-			/>
+			<div class="vape-overlay-bg" style={{ "z-index": "9998" }} />
 
 			<div
 				ref={panelRef}
+				class="vape-panel vape-hud-bar"
 				style={{
 					position: "fixed",
 					left: `${position().x}px`,
 					top: `${position().y}px`,
-					"background-color": COLORS.main,
+					"background-color": "var(--vape-main)",
 					"border-radius": "8px",
-					"box-shadow":
-						"0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)",
 					"z-index": "10002",
-					overflow: "visible",
-					"user-select": "none",
-					"backdrop-filter": "blur(10px)",
-					padding: "8px",
-					display: "flex",
-					gap: "8px",
-					"align-items": "center",
 				}}
 				on:pointerdown={handlePointerDown}
 			>
@@ -148,7 +119,7 @@ function HudManagerPanel() {
 						style={{
 							width: "3px",
 							height: "16px",
-							"background-color": COLORS.textDark,
+							"background-color": "var(--vape-text-dark)",
 							"border-radius": "2px",
 						}}
 					/>
@@ -159,7 +130,7 @@ function HudManagerPanel() {
 					style={{
 						width: "32px",
 						height: "32px",
-						"background-color": COLORS.accent,
+						"background-color": "var(--vape-accent)",
 						border: "none",
 						"border-radius": "6px",
 						cursor: "pointer",
@@ -188,7 +159,7 @@ function HudManagerPanel() {
 					style={{
 						width: "32px",
 						height: "32px",
-						"background-color": COLORS.mainLight,
+						"background-color": "var(--vape-main-light)",
 						border: "none",
 						"border-radius": "6px",
 						cursor: selectedHud() ? "pointer" : "not-allowed",
@@ -206,19 +177,19 @@ function HudManagerPanel() {
 					on:pointerenter={(e) => {
 						if (selectedHud()) {
 							e.currentTarget.style.backgroundColor =
-								COLORS.hover;
+								"var(--vape-main-light)";
 						}
 					}}
 					on:pointerleave={(e) => {
 						if (selectedHud()) {
 							e.currentTarget.style.backgroundColor =
-								COLORS.mainLight;
+								"var(--vape-main-light)";
 						}
 					}}
 				>
 					<span
 						style={{
-							color: COLORS.text,
+							color: "var(--vape-text)",
 							"font-size": "16px",
 						}}
 					>
@@ -262,32 +233,29 @@ function HudManagerPanel() {
 
 				{/* Close button */}
 				<button
+					class="vape-close-btn"
 					style={{
 						width: "32px",
 						height: "32px",
-						"background-color": COLORS.mainLight,
-						border: "none",
+						"background-color": "var(--vape-main-light)",
 						"border-radius": "6px",
-						cursor: "pointer",
-						display: "flex",
-						"align-items": "center",
-						"justify-content": "center",
 						transition: "background-color 0.16s linear",
 						"margin-left": "8px",
 					}}
 					type="button"
 					on:click={handleClose}
 					on:pointerenter={(e) => {
-						e.currentTarget.style.backgroundColor = COLORS.hover;
+						e.currentTarget.style.backgroundColor =
+							"var(--vape-main-light)";
 					}}
 					on:pointerleave={(e) => {
 						e.currentTarget.style.backgroundColor =
-							COLORS.mainLight;
+							"var(--vape-main-light)";
 					}}
 				>
 					<span
 						style={{
-							color: COLORS.text,
+							color: "var(--vape-text)",
 							"font-size": "18px",
 							"font-weight": "bold",
 						}}
@@ -303,7 +271,7 @@ function HudManagerPanel() {
 							position: "absolute",
 							bottom: "48px",
 							left: "40px",
-							"background-color": COLORS.mainDark,
+							"background-color": "var(--vape-main-dark)",
 							"border-radius": "6px",
 							"box-shadow":
 								"0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)",
@@ -325,7 +293,7 @@ function HudManagerPanel() {
 											display: "flex",
 											"align-items": "center",
 											padding: "0 12px",
-											color: COLORS.text,
+											color: "var(--vape-text)",
 											"font-size": "13px",
 											"font-family": "Arial, sans-serif",
 											"border-radius": "4px",
@@ -336,7 +304,7 @@ function HudManagerPanel() {
 										on:click={() => handleAddHud(hudClass)}
 										on:pointerenter={(e) => {
 											e.currentTarget.style.backgroundColor =
-												COLORS.mainLight;
+												"var(--vape-main-light)";
 										}}
 										on:pointerleave={(e) => {
 											e.currentTarget.style.backgroundColor =
@@ -358,7 +326,7 @@ function HudManagerPanel() {
 							position: "absolute",
 							bottom: "48px",
 							left: "80px",
-							"background-color": COLORS.mainDark,
+							"background-color": "var(--vape-main-dark)",
 							"border-radius": "6px",
 							"box-shadow":
 								"0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)",
@@ -369,13 +337,14 @@ function HudManagerPanel() {
 						<div
 							style={{
 								padding: "0 12px 8px 12px",
-								"border-bottom": `1px solid ${COLORS.divider}`,
+								"border-bottom":
+									"1px solid var(--vape-divider)",
 								"margin-bottom": "4px",
 							}}
 						>
 							<span
 								style={{
-									color: COLORS.text,
+									color: "var(--vape-text)",
 									"font-size": "13px",
 									"font-family": "Arial, sans-serif",
 									"font-weight": "600",
@@ -402,7 +371,7 @@ function HudSettings(props: { hud: BaseHudElement }) {
 					<div style={{ padding: "12px", "text-align": "center" }}>
 						<span
 							style={{
-								color: COLORS.textDarker,
+								color: "var(--vape-text-darker)",
 								"font-size": "11px",
 								"font-family": "Arial, sans-serif",
 							}}
@@ -559,7 +528,7 @@ function HudElementRenderer(props: { hud: JSXHudElement }) {
 						: "default",
 					outline:
 						isSelected() && hudManagerActive()
-							? `2px solid ${COLORS.accent}`
+							? "2px solid var(--vape-accent)"
 							: "none",
 					"outline-offset": "2px",
 				}}

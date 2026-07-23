@@ -9,6 +9,8 @@ import {
 import Category, { type CategoryInfo } from "@/features/modules/api/Category";
 import type Mod from "@/features/modules/api/Module";
 import ModuleManager, { P } from "@/features/modules/api/ModuleManager";
+import getResourceURL from "@/utils/helpers/cachedResourceURL";
+import { dragHandleAttrName } from "@/utils/mapping/names";
 import {
 	ColorSliderComponent,
 	DropdownComponent,
@@ -16,38 +18,25 @@ import {
 	TextBoxComponent,
 	ToggleComponent,
 } from "./components";
-import { guiVisible, isCategoryWindowVisible } from "./guiState";
+import {
+	categoryWindowPositions,
+	guiVisible,
+	isCategoryWindowVisible,
+	setCategoryWindowPosition,
+} from "./guiState";
 import { SubmoduleComponent } from "./SubmoduleComponent";
-
-// Color palette matching Lua design
-const COLORS = {
-	main: "rgb(26, 25, 26)",
-	mainLight: "rgb(30, 29, 30)",
-	mainDark: "rgb(24, 23, 24)",
-	text: "rgb(200, 200, 200)",
-	textDark: "rgb(150, 150, 150)",
-	textDarker: "rgb(100, 100, 100)",
-	accent: "rgb(5, 134, 105)",
-	hover: "rgb(30, 29, 30)",
-	divider: "rgba(255, 255, 255, 0.072)",
-	dividerDark: "rgba(48, 48, 48, 0.52)",
-};
-
-import getResourceURL from "@/utils/helpers/cachedResourceURL";
-import { dragHandleAttrName } from "@/utils/mapping/names";
 
 interface CategoryWindowProps {
 	category: string;
 	info: CategoryInfo;
-	position?: { x: number; y: number };
 }
 
 export function CategoryWindow(props: CategoryWindowProps) {
 	const [expanded, setExpanded] = createSignal(false);
-	const [position, setPosition] = createSignal(
-		props.position ?? { x: 6, y: 60 },
-	);
 	const [dragging, setDragging] = createSignal(false);
+
+	const position = () =>
+		categoryWindowPositions()[props.category] ?? { x: 6, y: 60 };
 	const [dragOffset, setDragOffset] = createSignal({ x: 0, y: 0 });
 	const [windowHeight, setWindowHeight] = createSignal(41);
 	const [updateTrigger, setUpdateTrigger] = createSignal(0);
@@ -97,10 +86,11 @@ export function CategoryWindow(props: CategoryWindowProps) {
 
 	const handlePointerMove = (e: PointerEvent) => {
 		if (dragging()) {
-			setPosition({
-				x: e.clientX - dragOffset().x,
-				y: e.clientY - dragOffset().y,
-			});
+			setCategoryWindowPosition(
+				props.category,
+				e.clientX - dragOffset().x,
+				e.clientY - dragOffset().y,
+			);
 		}
 	};
 
@@ -145,49 +135,31 @@ export function CategoryWindow(props: CategoryWindowProps) {
 		<Show when={isVisible()}>
 			<div
 				ref={windowRef}
+				class="vape-panel"
 				style={{
 					position: "fixed",
 					left: `${position().x}px`,
 					top: `${position().y}px`,
 					width: "220px",
 					height: `${windowHeight()}px`,
-					"background-color": COLORS.main,
-					"border-radius": "5px",
-					"box-shadow":
-						"0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)",
+					"background-color": "var(--vape-main)",
 					"z-index": "10002",
-					overflow: "hidden",
-					"user-select": "none",
 					transition: "height 0.16s linear",
-					"backdrop-filter": "blur(10px)",
 				}}
 				on:pointerdown={handlePointerDown}
 				on:contextmenu={handleContextMenu}
 			>
 				{/* Blur background effect */}
-				<div
-					style={{
-						position: "absolute",
-						inset: "-48px -48px",
-						"backdrop-filter": "blur(24px)",
-						"background-size": "cover",
-						opacity: "0.3",
-						"pointer-events": "none",
-						"z-index": "-1",
-					}}
-				/>
+				<div class="vape-blur-bg" />
 
 				{/* Header */}
 				<div
 					{...{ [dragHandleAttrName]: "" }}
+					class="vape-header"
 					style={{
-						display: "flex",
-						"align-items": "center",
-						height: "41px",
-						padding: "0 12px",
 						cursor: dragging() ? "grabbing" : "grab",
 						"border-bottom": expanded()
-							? `1px solid ${COLORS.divider}`
+							? `1px solid var(--vape-divider)`
 							: "none",
 						position: "relative",
 					}}
@@ -205,7 +177,7 @@ export function CategoryWindow(props: CategoryWindowProps) {
 					<span
 						style={{
 							"margin-left": "8px",
-							color: COLORS.text,
+							color: "var(--vape-text)",
 							"font-size": "13px",
 							flex: "1",
 							"pointer-events": "none",
@@ -215,17 +187,10 @@ export function CategoryWindow(props: CategoryWindowProps) {
 						{props.info.data.name}
 					</span>
 					<button
+						class="vape-close-btn"
 						style={{
 							width: "40px",
 							height: "40px",
-							background: "none",
-							border: "none",
-							cursor: "pointer",
-							display: "flex",
-							"align-items": "center",
-							"justify-content": "center",
-							transition: "opacity 0.16s linear",
-							opacity: "0.7",
 						}}
 						type="button"
 						on:click={() => setExpanded(!expanded())}
@@ -303,22 +268,17 @@ function ModuleButton(props: { mod: Mod; onExpandChange: () => void }) {
 	return (
 		<div>
 			<div
+				class="vape-row"
 				style={{
-					display: "flex",
-					"align-items": "center",
-					height: "40px",
-					padding: "0 12px",
 					"background-color": toggled()
-						? COLORS.accent
+						? "var(--vape-accent)"
 						: hovered() || expanded()
-							? COLORS.mainLight
-							: COLORS.main,
+							? "var(--vape-main-light)"
+							: "var(--vape-main)",
 					"border-bottom": toggled()
-						? `1px solid ${COLORS.dividerDark}`
+						? `1px solid var(--vape-divider-dark)`
 						: "none",
-					cursor: "pointer",
 					position: "relative",
-					transition: "background-color 0.16s linear",
 				}}
 				on:pointerenter={() => setHovered(true)}
 				on:pointerleave={() => setHovered(false)}
@@ -330,8 +290,8 @@ function ModuleButton(props: { mod: Mod; onExpandChange: () => void }) {
 						color: toggled()
 							? "rgb(255, 255, 255)"
 							: hovered() || expanded()
-								? COLORS.text
-								: COLORS.textDark,
+								? "var(--vape-text)"
+								: "var(--vape-text-dark)",
 						"font-size": "14px",
 						flex: "1",
 						"margin-left": "12px",
@@ -356,7 +316,7 @@ function ModuleButton(props: { mod: Mod; onExpandChange: () => void }) {
 							"background-color": "rgba(255, 255, 255, 0.08)",
 							"border-radius": "4px",
 							"font-size": "12px",
-							color: COLORS.textDarker,
+							color: "var(--vape-text-darker)",
 							"margin-right": "8px",
 							cursor: "pointer",
 							transition: "background-color 0.16s linear",
@@ -398,17 +358,9 @@ function ModuleButton(props: { mod: Mod; onExpandChange: () => void }) {
 
 				{/* Dots button */}
 				<button
+					class="vape-icon-btn"
 					style={{
-						width: "25px",
-						height: "40px",
-						background: "none",
-						border: "none",
-						cursor: "pointer",
-						display: "flex",
-						"align-items": "center",
-						"justify-content": "center",
 						opacity: toggled() ? "0.5" : "0.7",
-						transition: "opacity 0.16s linear",
 					}}
 					type="button"
 					on:click={(e) => {
@@ -446,8 +398,8 @@ function ModuleButton(props: { mod: Mod; onExpandChange: () => void }) {
 			<Show when={expanded()}>
 				<div
 					style={{
-						"background-color": COLORS.mainDark,
-						"border-top": `1px solid ${COLORS.divider}`,
+						"background-color": "var(--vape-main-dark)",
+						"border-top": `1px solid var(--vape-divider)`,
 					}}
 				>
 					<ModuleSettings
@@ -462,14 +414,14 @@ function ModuleButton(props: { mod: Mod; onExpandChange: () => void }) {
 
 function ModuleSettings(props: { mod: Mod; onExpandChange: () => void }) {
 	return (
-		<div style={{ "background-color": COLORS.mainDark }}>
+		<div style={{ "background-color": "var(--vape-main-dark)" }}>
 			<Show
 				when={props.mod.settings.length > 0}
 				fallback={
 					<div style={{ padding: "12px", "text-align": "center" }}>
 						<span
 							style={{
-								color: COLORS.textDarker,
+								color: "var(--vape-text-darker)",
 								"font-size": "11px",
 								"font-family": "Arial, sans-serif",
 							}}
