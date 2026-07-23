@@ -83,9 +83,6 @@ function ProfilesPanel() {
 				}}
 				on:pointerdown={handlePointerDown}
 			>
-				{/* Blur background */}
-				<div class="vape-blur-bg" />
-
 				{/* Header */}
 				<div
 					{...{ [dragHandleAttrName]: "" }}

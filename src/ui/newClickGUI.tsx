@@ -149,9 +149,6 @@ export function CategoryWindow(props: CategoryWindowProps) {
 				on:pointerdown={handlePointerDown}
 				on:contextmenu={handleContextMenu}
 			>
-				{/* Blur background effect */}
-				<div class="vape-blur-bg" />
-
 				{/* Header */}
 				<div
 					{...{ [dragHandleAttrName]: "" }}

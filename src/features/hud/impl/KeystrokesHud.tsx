@@ -109,12 +109,7 @@ export default class KeystrokesHud extends HudElement {
 		return this.keysPressed[0]().has(key);
 	}
 
-	private renderKey(
-		key: string,
-		label: string,
-		width = 40,
-		height = 40,
-	) {
+	private renderKey(key: string, label: string, width = 40, height = 40) {
 		const pressed = this.isPressed(key);
 		const textColor = this.textColorSetting.value();
 		const bgColor = this.bgColorSetting.value();

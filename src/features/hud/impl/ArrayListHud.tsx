@@ -217,7 +217,9 @@ export default class ArrayListHud extends HudElement {
 								class="vape-hud-text"
 								style={{
 									"--hud-font-size": `${this.fontSizeSetting.value()}px`,
-									"--hud-color": this.getRainbowColor(index()),
+									"--hud-color": this.getRainbowColor(
+										index(),
+									),
 									"--hud-shadow": `2px 2px 2px ${this.getShadowColor()}`,
 									"letter-spacing": "0.3px",
 									padding: "1px 4px",
