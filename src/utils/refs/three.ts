@@ -7,7 +7,7 @@ import { Vector3 } from "three";
 // even though it works in regexr (you can see /g in the flags enabled) but idk
 // https://regexr.com/8nl99, feel free to paste ts as long as the code you put it in is under AGPL
 // (which most importantly, requires your code to be open source if the project is public!!! no proprietary/closed source garbage here).
-const THREE_IMPORT_REGEX = /from\s*"(\.\/three-\w+\.js)"/;
+const THREE_IMPORT_REGEX = /from\s*"(\.\/three-[^(\.js)"]+\.js)"/;
 
 export function getThreeImport(): string | undefined {
 	const m = gameScript.match(THREE_IMPORT_REGEX);
