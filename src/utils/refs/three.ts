@@ -43,7 +43,10 @@ function findObjectByCode(codeFilter: (code: string) => boolean) {
 	return Object.values(three).find((x) => codeFilter(x.toString()));
 }
 
-function findObjectByType(type: string) {
+function findObjectByType<const N extends string>(
+	type: N,
+	//@ts-expect-error: it auto-completes fine
+): typeof import("three")[N] {
 	return findObjectByCode((x) => x.includes(`this.type=\`${type}\``));
 }
 
@@ -52,8 +55,28 @@ const THREE = {
 		return findObjectByType("BoxGeometry");
 	},
 
+	get BufferAttribute() {
+		return findObjectByType("BufferAttribute");
+	},
+
+	get BufferGeometry() {
+		return findObjectByType("BufferGeometry");
+	},
+
+	get Line() {
+		return findObjectByType("Line");
+	},
+
+	get LineBasicMaterial() {
+		return findObjectByType("LineBasicMaterial");
+	},
+
 	get Mesh() {
 		return findObjectByType("Mesh");
+	},
+
+	get MeshBasicMaterial() {
+		return findObjectByType("MeshBasicMaterial");
 	},
 
 	get Vec3(): typeof Vector3 {

@@ -66,9 +66,9 @@ function SettingsPanel() {
 					overflow: "hidden",
 					"user-select": "none",
 				}}
-			on:pointerdown={handlePointerDown}
-		>
-			{/* Header */}
+				on:pointerdown={handlePointerDown}
+			>
+				{/* Header */}
 				<div
 					{...{ [dragHandleAttrName]: "" }}
 					class="vape-header"

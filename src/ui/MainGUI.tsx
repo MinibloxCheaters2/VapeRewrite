@@ -1,4 +1,11 @@
-import { createSignal, For, onCleanup, onMount, Show } from "solid-js";
+import {
+	createEffect,
+	createSignal,
+	For,
+	onCleanup,
+	onMount,
+	Show,
+} from "solid-js";
 import { render } from "solid-js/web";
 import { REAL_CLIENT_NAME } from "@/Client";
 import type HudElement from "@/features/hud/api/BaseHudElement";
@@ -13,14 +20,92 @@ import {
 	SliderComponent,
 	ToggleComponent,
 } from "./components";
+
 import {
+	blurBackground,
+	guiBindIndicator,
+	guiThemeRainbow,
+	multiKeybinding,
+	notificationsEnabled,
+	rainbowMode,
+	rainbowSpeed,
+	rainbowUpdateRate,
+	scaleValue,
+	setBlurBackground,
+	setGuiBindIndicator,
+	setGuiThemeRainbow,
+	setMultiKeybinding,
+	setNotificationsEnabled,
+	setRainbowMode,
+	setRainbowSpeed,
+	setRainbowUpdateRate,
+	setScaleValue,
+	setShowLegitMode,
+	setShowTooltips,
+	setTeamsByServerEnabled,
+	setToggleAlertEnabled,
+	setUseTeamColor,
+	showLegitMode,
+	showTooltips,
+	teamsByServerEnabled,
+	toggleAlertEnabled,
+	useTeamColor,
+} from "./globalSettings";
+import {
+	categoryWindows,
 	guiVisible,
 	isCategoryWindowVisible,
+	setCategoryWindowPositions,
+	setFriendsPanelVisible,
+	setTargetsPanelVisible,
 	toggleCategoryWindow,
+	toggleLegitWindow,
 } from "./guiState";
+import { LegitWindow } from "./LegitWindow";
 import { CategoryWindow } from "./newClickGUI";
 import { setProfilesPanelVisible } from "./ProfilesPanel";
 import shadowWrapper from "./shadowWrapper";
+
+function hsvToRgbString(h: number, s: number, v: number): string {
+	const i = Math.floor(h * 6);
+	const f = h * 6 - i;
+	const p = v * (1 - s);
+	const q = v * (1 - f * s);
+	const t = v * (1 - (1 - f) * s);
+	let r: number, g: number, b: number;
+	switch (i % 6) {
+		case 0:
+			r = v;
+			g = t;
+			b = p;
+			break;
+		case 1:
+			r = q;
+			g = v;
+			b = p;
+			break;
+		case 2:
+			r = p;
+			g = v;
+			b = t;
+			break;
+		case 3:
+			r = p;
+			g = q;
+			b = v;
+			break;
+		case 4:
+			r = t;
+			g = p;
+			b = v;
+			break;
+		default:
+			r = v;
+			g = p;
+			b = q;
+	}
+	return `rgb(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)})`;
+}
 
 function MainGUI() {
 	const [position, setPosition] = createSignal({ x: 6, y: 60 });
@@ -86,20 +171,59 @@ function MainGUI() {
 	const [settingsMain, setSettingsMain] = createSignal(true);
 	const [activeSettingsCategory, setActiveSettingsCategory] =
 		createSignal("");
-	const [multiKeybinding, setMultiKeybinding] = createSignal(false);
-	const [teamsByServer, setTeamsByServer] = createSignal("Auto");
-	const [useTeamColor, setUseTeamColor] = createSignal(false);
-	const [blurBackground, setBlurBackground] = createSignal(true);
-	const [guiBindIndicator, setGuiBindIndicator] = createSignal(true);
-	const [showTooltips, setShowTooltips] = createSignal(true);
-	const [showLegitMode, setShowLegitMode] = createSignal(false);
-	const [scaleValue, setScaleValue] = createSignal(1);
-	const [guiThemeRainbow, setGuiThemeRainbow] = createSignal(false);
-	const [rainbowMode, setRainbowMode] = createSignal("Normal");
-	const [rainbowSpeed, setRainbowSpeed] = createSignal(1);
-	const [rainbowUpdateRate, setRainbowUpdateRate] = createSignal(60);
-	const [notifications, setNotifications] = createSignal(true);
-	const [toggleAlert, setToggleAlert] = createSignal(false);
+	// Settings state (signals imported from globalSettings.ts)
+
+	const blurOverlay = document.createElement("div");
+	blurOverlay.style.cssText =
+		"position:fixed;inset:0;backdrop-filter:blur(24px);pointer-events:none;z-index:10000;";
+	createEffect(() => {
+		const host = shadowWrapper.host;
+		if (guiVisible()) {
+			document.body.appendChild(blurOverlay);
+			host.style.position = "fixed";
+			host.style.inset = "0";
+			host.style.zIndex = "10001";
+			host.style.pointerEvents = "none";
+		} else {
+			blurOverlay.remove();
+			host.style.position = "";
+			host.style.inset = "";
+			host.style.zIndex = "";
+			host.style.pointerEvents = "";
+		}
+	});
+	onCleanup(() => blurOverlay.remove());
+
+	let guiRainbowTimer: ReturnType<typeof setTimeout> | undefined;
+	createEffect(() => {
+		if (guiRainbowTimer !== undefined) {
+			clearTimeout(guiRainbowTimer);
+			guiRainbowTimer = undefined;
+		}
+		if (!guiThemeRainbow()) {
+			shadowWrapper.host.style.setProperty(
+				"--vape-accent",
+				"rgb(5, 134, 105)",
+			);
+			return;
+		}
+		const speed = rainbowSpeed();
+		const rate = rainbowUpdateRate();
+		const interval = rate > 0 ? 1000 / rate : 16;
+
+		const tick = () => {
+			const hue = (Date.now() * 0.001 * 0.2 * speed) % 1;
+			shadowWrapper.host.style.setProperty(
+				"--vape-accent",
+				hsvToRgbString(hue, 0.9, 1),
+			);
+			guiRainbowTimer = setTimeout(tick, interval);
+		};
+		guiRainbowTimer = setTimeout(tick, interval);
+	});
+	onCleanup(() => {
+		if (guiRainbowTimer !== undefined) clearTimeout(guiRainbowTimer);
+	});
 
 	const openSettingsCategory = (name: string) => {
 		setActiveSettingsCategory(name);
@@ -113,6 +237,26 @@ function MainGUI() {
 		setShowSettings(false);
 		setSettingsMain(true);
 		setActiveSettingsCategory("");
+	};
+
+	const sortGUI = () => {
+		const visible = Object.keys(categoryWindows()).filter(
+			(k) => categoryWindows()[k],
+		);
+		const panelWidth = 220;
+		const gap = 6;
+		const startX = 230;
+		const startY = 60;
+
+		const newPos: Record<string, { x: number; y: number }> = {};
+		let x = startX;
+
+		for (const cat of visible) {
+			newPos[cat] = { x, y: startY };
+			x += panelWidth + gap;
+		}
+
+		setCategoryWindowPositions((prev) => ({ ...prev, ...newPos }));
 	};
 
 	const toggleHud = (hudClass: new () => HudElement) => {
@@ -129,7 +273,6 @@ function MainGUI() {
 
 	return (
 		<Show when={guiVisible()}>
-			<div class="vape-bg-blur" />
 			<div
 				ref={windowRef}
 				class="vape-panel"
@@ -146,16 +289,16 @@ function MainGUI() {
 					overflow: "hidden",
 					"user-select": "none",
 				}}
-			on:pointerdown={handlePointerDown}
-		>
-			{/* Header */}
-			<div
-				{...{ [dragHandleAttrName]: "" }}
-				class="vape-header"
-				style={{
-					cursor: dragging() ? "grabbing" : "grab",
-				}}
+				on:pointerdown={handlePointerDown}
 			>
+
+				<div
+					{...{ [dragHandleAttrName]: "" }}
+					class="vape-header"
+					style={{
+						cursor: dragging() ? "grabbing" : "grab",
+					}}
+				>
 					<Show
 						when={!showSettings()}
 						fallback={
@@ -271,7 +414,6 @@ function MainGUI() {
 					</Show>
 				</div>
 
-				{/* Settings button (only in main view) */}
 				<Show when={!showSettings()}>
 					<button
 						class="vape-icon-btn"
@@ -300,10 +442,10 @@ function MainGUI() {
 				</Show>
 
 				<Show when={!showSettings()}>
-					{/* Divider */}
+
 					<div class="vape-divider" />
 
-					{/* Categories */}
+
 					<div
 						style={{
 							padding: "4px 0",
@@ -319,7 +461,7 @@ function MainGUI() {
 						</For>
 					</div>
 
-					{/* Misc divider */}
+
 					<div
 						style={{
 							height: "27px",
@@ -350,22 +492,28 @@ function MainGUI() {
 						/>
 					</div>
 
-					{/* Misc items */}
+
 					<div
 						style={{
 							padding: "4px 0",
 						}}
 					>
-						<MiscItem label="Friends" />
+						<MiscItem
+							label="Friends"
+							onClick={() => setFriendsPanelVisible(true)}
+						/>
 						<MiscItem
 							label="Profiles"
 							subText="default"
 							onClick={() => setProfilesPanelVisible(true)}
 						/>
-						<MiscItem label="Targets" />
+						<MiscItem
+							label="Targets"
+							onClick={() => setTargetsPanelVisible(true)}
+						/>
 					</div>
 
-					{/* Bottom bar */}
+
 					<div class="vape-bottom-bar">
 						<div class="vape-divider" />
 						<button
@@ -397,7 +545,7 @@ function MainGUI() {
 						</button>
 					</div>
 
-					{/* Overlays shadow + popup */}
+
 					<div
 						style={{
 							position: "absolute",
@@ -569,7 +717,7 @@ function MainGUI() {
 					</div>
 				</Show>
 
-				{/* Settings view */}
+
 				<Show when={showSettings()}>
 					<div class="vape-divider" />
 					<div
@@ -608,17 +756,10 @@ function MainGUI() {
 											"Modules"
 										}
 									>
-										<DropdownComponent
+										<ToggleComponent
 											name="Teams by server"
-											value={teamsByServer()}
-											options={[
-												"Auto",
-												"Hypixel",
-												"Minemen",
-											]}
-											onChange={(v) =>
-												setTeamsByServer(v as string)
-											}
+											enabled={teamsByServerEnabled()}
+											onChange={setTeamsByServerEnabled}
 										/>
 										<ToggleComponent
 											name="Use team color"
@@ -726,7 +867,7 @@ function MainGUI() {
 										/>
 										<ActionButton
 											label="Sort GUI"
-											onClick={() => {}}
+											onClick={sortGUI}
 										/>
 									</Show>
 									<Show
@@ -737,13 +878,13 @@ function MainGUI() {
 									>
 										<ToggleComponent
 											name="Notifications"
-											enabled={notifications()}
-											onChange={setNotifications}
+											enabled={notificationsEnabled()}
+											onChange={setNotificationsEnabled}
 										/>
 										<ToggleComponent
 											name="Toggle alert"
-											enabled={toggleAlert()}
-											onChange={setToggleAlert}
+											enabled={toggleAlertEnabled()}
+											onChange={setToggleAlertEnabled}
 										/>
 									</Show>
 								</>
@@ -856,7 +997,7 @@ function MainGUI() {
 				</Show>
 			</div>
 
-			{/* Category overlay windows */}
+
 			<For each={categoryEntries}>
 				{(entry) => (
 					<Show when={isCategoryWindowVisible(entry.key)}>
@@ -868,7 +1009,10 @@ function MainGUI() {
 				)}
 			</For>
 
-			{/* Search panel */}
+
+			<LegitWindow />
+
+
 			<div
 				class="vape-panel"
 				style={{
@@ -883,10 +1027,10 @@ function MainGUI() {
 					"box-shadow":
 						"0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)",
 					"z-index": "10002",
-				overflow: "hidden",
-			}}
-		>
-			<div
+					overflow: "hidden",
+				}}
+			>
+				<div
 					style={{
 						display: "flex",
 						"align-items": "center",
@@ -894,34 +1038,37 @@ function MainGUI() {
 						padding: "0 8px",
 					}}
 				>
-					<button
-						class="vape-icon-btn"
-						style={{
-							width: "29px",
-							height: "16px",
-							padding: "0",
-						}}
-						type="button"
-						title="Legit mode"
-					>
-						<img
-							src={getResourceURL("legit")}
-							alt="Legit"
+					<Show when={showLegitMode()}>
+						<button
+							class="vape-icon-btn"
 							style={{
 								width: "29px",
 								height: "16px",
+								padding: "0",
+							}}
+							type="button"
+							title="Legit mode"
+							on:click={() => toggleLegitWindow()}
+						>
+							<img
+								src={getResourceURL("legit")}
+								alt="Legit"
+								style={{
+									width: "29px",
+									height: "16px",
+								}}
+							/>
+						</button>
+						<div
+							style={{
+								width: "2px",
+								height: "12px",
+								"background-color": "rgba(255,255,255,0.14)",
+								"margin-left": "6px",
+								"flex-shrink": "0",
 							}}
 						/>
-					</button>
-					<div
-						style={{
-							width: "2px",
-							height: "12px",
-							"background-color": "rgba(255,255,255,0.14)",
-							"margin-left": "6px",
-							"flex-shrink": "0",
-						}}
-					/>
+					</Show>
 					<input
 						type="text"
 						value={searchText()}
@@ -1046,13 +1193,23 @@ function CategoryButton(props: { category: string; info: CategoryInfo }) {
 		toggleCategoryWindow(props.category);
 	};
 
+	const iconFilter = () => {
+		if (expanded())
+			return "brightness(0) invert(0.53) sepia(1) saturate(500%) hue-rotate(149deg)";
+		if (hovered()) return "brightness(0.78)";
+		return "brightness(0.62)";
+	};
+
+	const iconSize = props.info.data.size;
+
 	return (
 		<button
 			class="vape-btn-row"
 			style={{
-				background: hovered()
-					? "var(--vape-main-light)"
-					: "var(--vape-main)",
+				background:
+					hovered() || expanded()
+						? "var(--vape-main-light)"
+						: "var(--vape-main)",
 			}}
 			on:pointerenter={() => setHovered(true)}
 			on:pointerleave={() => setHovered(false)}
@@ -1060,7 +1217,17 @@ function CategoryButton(props: { category: string; info: CategoryInfo }) {
 			on:contextmenu={handleContextMenu}
 			type="button"
 		>
-			<img src={props.info.iconURL} alt={props.category} />
+			<img
+				src={props.info.iconURL}
+				alt={props.category}
+				style={{
+					width: `${iconSize[0]}px`,
+					height: `${iconSize[1]}px`,
+					"margin-left": "13px",
+					filter: iconFilter(),
+					transition: "filter 0.16s linear",
+				}}
+			/>
 			<span
 				style={{
 					"margin-left": "12px",
@@ -1084,6 +1251,7 @@ function CategoryButton(props: { category: string; info: CategoryInfo }) {
 				style={{
 					width: "4px",
 					height: "8px",
+					filter: "brightness(0) invert(0.47)",
 					transform: expanded() ? "translateX(6px)" : "translateX(0)",
 					transition: "transform 0.16s linear",
 				}}
@@ -1235,7 +1403,7 @@ function SettingsCategoryButton(props: {
 				style={{
 					width: "4px",
 					height: "8px",
-					filter: "brightness(0.55)",
+					filter: "brightness(0) invert(0.47)",
 				}}
 			/>
 		</button>

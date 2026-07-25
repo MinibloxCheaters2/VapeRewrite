@@ -10,4 +10,6 @@ bun.lock
 package-lock.json
 .DS_Store
 rolldown.config.*.js
+/references/
 # screw your trash AI.
+.devcontainer/devcontainer-lock.json

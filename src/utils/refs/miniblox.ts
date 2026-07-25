@@ -45,7 +45,7 @@ function values() {
 	return initOrR(vals, () => Object.values(miniblox));
 }
 
-function findObject<T>(filter: <X>(clazz: unknown) => clazz is X) {
+function findObject<T>(filter: (clazz: unknown) => clazz is T) {
 	return values().find(filter) as T | undefined;
 }
 
@@ -55,8 +55,8 @@ function _findObjectByCode<T>(codeFilter: (code: string) => boolean) {
 	) as T | undefined;
 }
 
-function filterObject(filter: <X>(clazz: unknown) => clazz is X) {
-	return values().filter(filter);
+function filterObject<T>(filter: (clazz: unknown) => clazz is T) {
+	return values().filter(filter) as T[];
 }
 
 function _filterObjectByCode<T>(codeFilter: (code: string) => boolean) {
@@ -85,7 +85,7 @@ let _ItemStack: typeof ItemStack | undefined;
 let _ItemBow: typeof ItemBow | undefined;
 let _ItemBlock: typeof ItemBlock | undefined;
 
-let _packets: Message<object>[];
+let _packets: Message<object>[] | undefined;
 let CSocket: typeof ClientSocket | undefined;
 let _playerControllerMP: PlayerControllerMP | undefined;
 let _Message: typeof Message | undefined;
@@ -156,20 +156,18 @@ const Miniblox = {
 		});
 	},
 	get ClientSocket() {
-		return initOrR(
-			CSocket,
-			() =>
-				findObject(
-					(x) =>
-						// raw classes are "functions" (because their constructors are)
-						typeof x === "function" &&
-						"sendPacket" in x &&
-						"socket" in x &&
-						"disconnectMessage" in x &&
-						"netSim" in x &&
-						"serverBaseUrl" in x &&
-						"setUrl" in x,
-				) as typeof ClientSocket,
+		return initOrR(CSocket, () =>
+			findObject<typeof ClientSocket>(
+				(x) =>
+					// raw classes are "functions" (because their constructors are)
+					typeof x === "function" &&
+					"sendPacket" in x &&
+					"socket" in x &&
+					"disconnectMessage" in x &&
+					"netSim" in x &&
+					"serverBaseUrl" in x &&
+					"setUrl" in x,
+			),
 		);
 	},
 	get playerControllerMP() {
@@ -232,7 +230,7 @@ const Miniblox = {
 
 	get Enchantments(): typeof Enchantments {
 		return initOrR(_Enchantments, () =>
-			findObject(
+			findObject<typeof Enchantments>(
 				(x) =>
 					x != null &&
 					typeof x === "function" &&
@@ -386,6 +384,7 @@ const Miniblox = {
 			function method1() {
 				return findObject(
 					(x) =>
+						x !== null &&
 						typeof x === "object" &&
 						"gameScene" in x &&
 						"GameSceneClass" in x &&
