@@ -1,4 +1,5 @@
 import type { Entity, EntityLivingBase } from "@wq2/miniblox-sdk";
+import { teamsByServerEnabled } from "@/ui/globalSettings";
 import Miniblox from "../refs/miniblox";
 
 export function getTeam(entity: Entity) {
@@ -26,8 +27,10 @@ export function findTargets(
 		if (!base) return false;
 		const distCheck = player.getDistanceSqToEntity(e) < sqRange;
 		if (!distCheck) return false;
-		const teamCheck = localTeam && localTeam === getTeam(e);
-		if (teamCheck) return false;
+		if (teamsByServerEnabled()) {
+			const teamCheck = localTeam && localTeam === getTeam(e);
+			if (teamCheck) return false;
+		}
 		const wallCheck = checkWalls && !player.canEntityBeSeen(e);
 		if (wallCheck) return false;
 		return true;

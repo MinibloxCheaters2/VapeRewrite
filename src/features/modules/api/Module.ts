@@ -4,6 +4,7 @@ import { addBind, removeBind, setBind } from "@/features/binds/handler";
 import Configurable from "@/features/config/Configurable";
 import { updateLoadedConfig } from "@/features/config/configs";
 import type { BaseSetting } from "@/features/config/Settings";
+import { toggleAlertEnabled } from "@/ui/globalSettings";
 import { showNotification } from "@/ui/notifications";
 import type { Category } from "./Category";
 
@@ -117,12 +118,14 @@ export default abstract class Mod extends Configurable {
 	/** Toggles this module and sends a notification. */
 	public toggle(): void {
 		this.toggleSilently();
-		showNotification(
-			this.name,
-			this.enabled ? "Enabled" : "Disabled",
-			"info",
-			2000,
-		);
+		if (toggleAlertEnabled()) {
+			showNotification(
+				this.name,
+				this.enabled ? "Enabled" : "Disabled",
+				"info",
+				2000,
+			);
+		}
 	}
 
 	private set state(value: boolean) {

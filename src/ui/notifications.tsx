@@ -1,6 +1,7 @@
 import { createSignal, For, onCleanup, onMount } from "solid-js";
 import { render } from "solid-js/web";
 import getResourceURL from "@/utils/helpers/cachedResourceURL";
+import { notificationsEnabled } from "./globalSettings";
 import shadowWrapper from "./shadowWrapper";
 
 type NotificationType = "info" | "warning" | "alert";
@@ -28,6 +29,7 @@ export function showNotification(
 	type: NotificationType = "info",
 	duration: number = 3000,
 ) {
+	if (!notificationsEnabled()) return;
 	const id = notificationId++;
 	const notification: Notification = { id, title, message, type, duration };
 
@@ -117,13 +119,13 @@ function NotificationItem(props: {
 					top: "16px",
 					right: "10px",
 					color: "var(--vape-text)",
-					fontSize: "14px",
-					fontWeight: "600",
-					fontFamily: "Arial, sans-serif",
-					textAlign: "left",
-					whiteSpace: "nowrap",
+					"font-size": "14px",
+					"font-weight": "600",
+					"font-family": "Arial, sans-serif",
+					"text-align": "left",
+					"white-space": "nowrap",
 					overflow: "hidden",
-					textOverflow: "ellipsis",
+					"text-overflow": "ellipsis",
 				}}
 			>
 				{props.notification.title}
@@ -135,13 +137,13 @@ function NotificationItem(props: {
 					left: "47px",
 					top: "44px",
 					color: "rgb(0, 0, 0)",
-					fontSize: "14px",
-					fontFamily: "Arial, sans-serif",
+					"font-size": "14px",
+					"font-family": "Arial, sans-serif",
 					opacity: "0.5",
-					textAlign: "left",
-					whiteSpace: "nowrap",
+					"text-align": "left",
+					"white-space": "nowrap",
 					overflow: "hidden",
-					textOverflow: "ellipsis",
+					"text-overflow": "ellipsis",
 				}}
 			>
 				{props.notification.message}
@@ -154,12 +156,12 @@ function NotificationItem(props: {
 					top: "43px",
 					right: "10px",
 					color: "var(--vape-text-dark)",
-					fontSize: "14px",
-					fontFamily: "Arial, sans-serif",
-					textAlign: "left",
-					whiteSpace: "nowrap",
+					"font-size": "14px",
+					"font-family": "Arial, sans-serif",
+					"text-align": "left",
+					"white-space": "nowrap",
 					overflow: "hidden",
-					textOverflow: "ellipsis",
+					"text-overflow": "ellipsis",
 				}}
 			>
 				{props.notification.message}
@@ -172,9 +174,9 @@ function NotificationItem(props: {
 					left: "3px",
 					right: "10px",
 					height: "3px",
-					backgroundColor: PROGRESS_COLORS[props.notification.type],
-					borderRadius: "1px",
-					transformOrigin: "left center",
+					"background-color": PROGRESS_COLORS[props.notification.type],
+					"border-radius": "1px",
+					"transform-origin": "left center",
 					animation: mounted()
 						? `ntProgress ${props.notification.duration}ms linear forwards`
 						: "none",

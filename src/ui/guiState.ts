@@ -63,6 +63,20 @@ export function toggleGUI() {
 	setGuiVisible(newState);
 }
 
+export const [legitWindowVisible, setLegitWindowVisible] = createSignal(false);
+export const [legitWindowPosition, setLegitWindowPosition] = createSignal({
+	x: 300,
+	y: 100,
+});
+export function toggleLegitWindow() {
+	setLegitWindowVisible((v) => !v);
+}
+
+export const [friendsPanelVisible, setFriendsPanelVisible] =
+	createSignal(false);
+export const [targetsPanelVisible, setTargetsPanelVisible] =
+	createSignal(false);
+
 try {
 	// Register \ key (Backslash)
 	addBind("Backslash", "gui-toggle", (e) => {

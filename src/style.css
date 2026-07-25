@@ -1,6 +1,6 @@
 /* this is put inside the shadow root */
 
-:root {
+:host {
 	--vape-main: rgb(26, 25, 26);
 	--vape-main-light: rgb(30, 29, 30);
 	--vape-main-dark: rgb(24, 23, 24);
@@ -102,14 +102,8 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	box-shadow: var(--vape-shadow);
 	overflow: hidden;
 	user-select: none;
-}
-
-.vape-bg-blur {
-	position: fixed;
-	inset: 0;
-	backdrop-filter: blur(24px);
-	pointer-events: none;
-	z-index: 10000;
+	background-color: var(--vape-main);
+	pointer-events: auto;
 }
 
 .vape-header {
@@ -178,6 +172,7 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	align-items: center;
 	transition: var(--vape-transition);
 	position: relative;
+	padding-right: 20px;
 }
 
 .vape-section-pad {

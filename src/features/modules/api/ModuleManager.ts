@@ -11,6 +11,7 @@ import TargetStrafe from "../impl/blatant/TargetStrafe.js";
 import TickBase from "../impl/blatant/TickBase.js";
 import AutoClicker from "../impl/combat/AutoClicker.js";
 import Criticals from "../impl/combat/Criticals.js";
+import NoRecoil from "../impl/combat/NoRecoil.js";
 import Velocity from "../impl/combat/Velocity.js";
 import WTap from "../impl/combat/WTap.js";
 import AutoArmor from "../impl/inventory/AutoArmor.js";
@@ -24,6 +25,7 @@ import AutoRejoin from "../impl/utility/AutoRejoin.js";
 import AutoRespawn from "../impl/utility/AutoRespawn.js";
 import AutoSword from "../impl/utility/AutoSword.js";
 import FilterBypass from "../impl/utility/FilterBypass.js";
+import NoFlash from "../impl/utility/NoFlashbang.js";
 import PacketLogger from "../impl/utility/PacketLogger.js";
 import Paranoia from "../impl/utility/Paranoia.js";
 import PingSpoof from "../impl/utility/PingSpoof.js";
@@ -103,6 +105,8 @@ export default class ModuleManager {
 		new MurderMystery(),
 		new Paranoia(),
 		this.maceKill,
+		new NoRecoil(),
+		new NoFlash(),
 	] as const;
 
 	/** Each module's name */

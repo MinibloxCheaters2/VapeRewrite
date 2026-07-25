@@ -51,6 +51,14 @@
 // @resource    guiback https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/misc/back.png
 // @resource    search https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/search.png
 // @resource    legit https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/misc/legit.png
+// @resource    legittab https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/tabs/legit.png
+// @resource    friendstab https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/tabs/friends.png
+// @resource    closemini https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/misc/closemini.png
+// @resource    customsettings https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/misc/customsettings.png
+// @resource    targetplayers1 https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/targets/players1.png
+// @resource    targetplayers2 https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/targets/players2.png
+// @resource    targetnpc1 https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/targets/npc1.png
+// @resource    targetnpc2 https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/targets/npc2.png
 // @run-at      document-idle
 // ==/UserScript==
 
