@@ -8,6 +8,7 @@ import Mod from "../../api/Module";
  *
  * Speed 1.2x: Works short-term, long-term causes 0,0 teleport
  * Speed 2.0x+: Instant kick (packet rate limit)
+ * TODO: properly implement this
  */
 export default class Timer extends Mod {
 	public name = "Timer";
@@ -21,52 +22,9 @@ export default class Timer extends Mod {
 	private isHooked = false;
 
 	protected onEnable(): void {
-		this.hookFixedUpdate();
 	}
 
 	protected onDisable(): void {
-		this.unhookFixedUpdate();
-	}
-
-	/**
-	 * Hook the game's fixedUpdate to call it multiple times per frame
-	 */
-	private hookFixedUpdate(): void {
-		if (this.isHooked) return;
-
-		const { player } = Miniblox;
-		if (!player) return;
-
-		// Get the player's fixedUpdate method
-		const playerProto = Object.getPrototypeOf(player);
-		if (!playerProto?.fixedUpdate) return;
-
-		// Store original function
-		this.originalFixedUpdate = playerProto.fixedUpdate;
-		this.isHooked = true;
-
-		const self = this;
-		let accumulator = 0;
-
-		// Replace with accelerated version
-		playerProto.fixedUpdate = function (this: typeof player) {
-			if (!self.enabled || !self.originalFixedUpdate) {
-				// If disabled, call original once
-				self.originalFixedUpdate?.call(this);
-				return;
-			}
-
-			const speed = self.speedSetting.value();
-
-			// Accumulate the speed multiplier
-			accumulator += speed;
-
-			// Call fixedUpdate for each accumulated call
-			while (accumulator >= 1.0) {
-				self.originalFixedUpdate.call(this);
-				accumulator -= 1.0;
-			}
-		};
 	}
 
 	/**

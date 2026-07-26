@@ -33,6 +33,7 @@ const globalMusicState: GlobalMusicState = {
 function Visualizer() {
 	const [isVisible, setIsVisible] = createSignal(false);
 	const [coverImage, setCoverImage] = createSignal("");
+	// oxlint-disable-next-line no-unassigned-vars
 	let canvasRef: HTMLCanvasElement | undefined;
 	let animationFrameId: number | undefined;
 

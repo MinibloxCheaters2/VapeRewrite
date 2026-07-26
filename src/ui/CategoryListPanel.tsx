@@ -59,8 +59,11 @@ export default function CategoryListPanel(props: CategoryListPanelProps) {
 	const [arrowHovered, setArrowHovered] = createSignal(false);
 	const [settingsHovered, setSettingsHovered] = createSignal(false);
 
+	// oxlint-disable-next-line no-unassigned-vars
 	let windowRef: HTMLDivElement | undefined;
+	// oxlint-disable-next-line no-unassigned-vars
 	let contentRef: HTMLDivElement | undefined;
+	// oxlint-disable-next-line no-unassigned-vars
 	let childrenTwoRef: HTMLDivElement | undefined;
 	const [windowHeight, setWindowHeight] = createSignal(45);
 
@@ -115,7 +118,7 @@ export default function CategoryListPanel(props: CategoryListPanelProps) {
 		expanded();
 		showSettings();
 		props.items();
-		props.children;
+		void props.children;
 		updateHeight();
 	});
 

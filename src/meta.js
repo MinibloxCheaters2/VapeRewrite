@@ -1,3 +1,4 @@
+/* oxlint-disable unicorn/no-empty-file */
 // ==UserScript==
 // @name        process.env.NAME
 // @namespace   https://codeberg.org/Miniblox

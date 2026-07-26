@@ -31,7 +31,6 @@ import PacketLogger from "../impl/utility/PacketLogger.js";
 import Paranoia from "../impl/utility/Paranoia.js";
 import PingSpoof from "../impl/utility/PingSpoof.js";
 import RejoinOnMute from "../impl/utility/RejoinOnMute.js";
-import ServerCrasher from "../impl/utility/ServerCrasher.js";
 import Sprint from "../impl/utility/Sprint.js";
 import Test from "../impl/utility/Test.js";
 import NoFall from "../impl/world/NoFall.js";
@@ -76,7 +75,6 @@ export default class ModuleManager {
 		this.scaffold,
 		new FilterBypass(),
 		new Fly(),
-		new ServerCrasher(),
 		new KillAura(),
 		new Velocity(),
 		new NoFall(),

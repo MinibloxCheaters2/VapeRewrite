@@ -25,6 +25,7 @@ function HudManagerPanel() {
 	const [showAddMenu, setShowAddMenu] = createSignal(false);
 	const [showSettings, setShowSettings] = createSignal(false);
 
+	// oxlint-disable-next-line no-unassigned-vars
 	let panelRef: HTMLDivElement | undefined;
 
 	const handlePointerDown = (e: PointerEvent) => {
@@ -444,6 +445,7 @@ function HudElementRenderer(props: { hud: JSXHudElement }) {
 	const [dragging, setDragging] = createSignal(false);
 	const [dragOffset, setDragOffset] = createSignal({ x: 0, y: 0 });
 
+	// oxlint-disable-next-line no-unassigned-vars
 	let elementRef: HTMLDivElement | undefined;
 
 	const handlePointerDown = (e: PointerEvent) => {

@@ -53,6 +53,7 @@ export function SliderComponent(props: {
 	const [dragging, setDragging] = createSignal(false);
 	const [hovered, setHovered] = createSignal(false);
 
+	// oxlint-disable-next-line no-unassigned-vars
 	let sliderRef: HTMLDivElement | undefined;
 
 	const handlePointerDown = (e: PointerEvent) => {
@@ -264,8 +265,11 @@ export function ColorSliderComponent(props: {
 	const [draggingSV, setDraggingSV] = createSignal(false);
 	const [draggingOpacity, setDraggingOpacity] = createSignal(false);
 
+	// oxlint-disable-next-line no-unassigned-vars
 	let hueSliderRef: HTMLDivElement | undefined;
+	// oxlint-disable-next-line no-unassigned-vars
 	let svPickerRef: HTMLDivElement | undefined;
+	// oxlint-disable-next-line no-unassigned-vars
 	let opacitySliderRef: HTMLDivElement | undefined;
 
 	const color = () => {

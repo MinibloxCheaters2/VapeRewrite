@@ -101,6 +101,7 @@ function MainGUI() {
 	const [dragging, setDragging] = createSignal(false);
 	const [dragOffset, setDragOffset] = createSignal({ x: 0, y: 0 });
 
+	// oxlint-disable-next-line no-unassigned-vars
 	let windowRef: HTMLDivElement | undefined;
 
 	const handlePointerDown = (e: PointerEvent) => {

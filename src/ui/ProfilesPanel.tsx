@@ -22,6 +22,7 @@ function ProfilesPanel() {
 		...listConfigs().map((n) => ({ name: n, active: false })),
 	]);
 
+	// oxlint-disable-next-line no-unassigned-vars
 	let windowRef: HTMLDivElement | undefined;
 
 	const handlePointerDown = (e: PointerEvent) => {

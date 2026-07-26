@@ -131,7 +131,6 @@ export default new (class PacketQueueManager {
 		if (!this.serverPos) return;
 		if (!this.#posBox) {
 			this.#initPosBox();
-			this.#posBox = this.#posBox as unknown as Mesh;
 		}
 		this.#posBox.visible = true;
 		this.#posBox.position.set(this.serverPos.x, this.serverPos.y + 1, this.serverPos.z);

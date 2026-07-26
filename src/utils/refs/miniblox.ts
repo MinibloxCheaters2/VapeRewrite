@@ -40,6 +40,7 @@ importMiniblox().then((t) => {
 	expose("MinibloxRaw", () => t);
 });
 
+// oxlint-disable-next-line no-unassigned-vars
 let vals: unknown[] | undefined;
 function values() {
 	return initOrR(vals, () => Object.values(miniblox));
@@ -50,7 +51,9 @@ function findObject<T>(filter: (clazz: unknown) => clazz is T) {
 }
 
 function _findObjectByCode<T>(codeFilter: (code: string) => boolean) {
-	return values().find((x) => typeof x === "function" && codeFilter(x.toString())) as T | undefined;
+	return values().find(
+		(x) => typeof x === "function" && codeFilter(x.toString()),
+	) as T | undefined;
 }
 
 function filterObject<T>(filter: (clazz: unknown) => clazz is T) {
@@ -58,9 +61,12 @@ function filterObject<T>(filter: (clazz: unknown) => clazz is T) {
 }
 
 function _filterObjectByCode<T>(codeFilter: (code: string) => boolean) {
-	return values().filter((x) => typeof x === "function" && codeFilter(x.toString())) as T[];
+	return values().filter(
+		(x) => typeof x === "function" && codeFilter(x.toString()),
+	) as T[];
 }
 
+/* oxlint-disable no-unassigned-vars */
 let _game: Game | undefined;
 let _Game: typeof Game | undefined;
 let _world: ClientWorld | undefined;
@@ -110,7 +116,9 @@ function getReferenceMsg() {
 	return method1() ?? method2();
 }
 export function getMsgRuntime(msg: Message<object>): Runtime {
-	return (msg.constructor as (typeof msg)["constructor"] & { runtime: Runtime }).runtime;
+	return (
+		msg.constructor as (typeof msg)["constructor"] & { runtime: Runtime }
+	).runtime;
 }
 
 const Miniblox = {
@@ -119,8 +127,9 @@ const Miniblox = {
 		return initOrR(
 			_packets,
 			() =>
-				(filterObject((x) => typeof x === "function" && "typeName" in x) ??
-					[]) as Message<object>[],
+				(filterObject(
+					(x) => typeof x === "function" && "typeName" in x,
+				) ?? []) as Message<object>[],
 		);
 	},
 	get proto2() {
@@ -135,9 +144,11 @@ const Miniblox = {
 			return packets
 				.filter((x) => x !== undefined && x != null)
 				.map((x) => getMsgRuntime({ constructor: x }))
-				.find((x) => (x as typeof x & { syntax: string })?.syntax === "proto3") as
-				| Runtime
-				| undefined;
+				.find(
+					(x) =>
+						(x as typeof x & { syntax: string })?.syntax ===
+						"proto3",
+				) as Runtime | undefined;
 		});
 	},
 	get Message() {
@@ -185,15 +196,23 @@ const Miniblox = {
 	get Items(): typeof Items {
 		return initOrR(
 			_Items,
-			() => (unsafeWindow as typeof unsafeWindow & { Items: typeof Items }).Items,
+			() =>
+				(unsafeWindow as typeof unsafeWindow & { Items: typeof Items })
+					.Items,
 		);
 	},
 
 	get ItemSword(): typeof ItemSword {
-		return initOrR(_ItemSword, () => Miniblox.Items.iron_sword.constructor as typeof ItemSword);
+		return initOrR(
+			_ItemSword,
+			() => Miniblox.Items.iron_sword.constructor as typeof ItemSword,
+		);
 	},
 	get ItemArmor(): typeof ItemArmor {
-		return initOrR(_ItemArmor, () => Miniblox.Items.iron_boots.constructor as typeof ItemArmor);
+		return initOrR(
+			_ItemArmor,
+			() => Miniblox.Items.iron_boots.constructor as typeof ItemArmor,
+		);
 	},
 
 	get ItemStack(): typeof ItemStack {
@@ -209,7 +228,10 @@ const Miniblox = {
 	},
 
 	get ItemBow(): typeof ItemBow {
-		return initOrR(_ItemBow, () => Miniblox.Items.bow.constructor as typeof ItemBow);
+		return initOrR(
+			_ItemBow,
+			() => Miniblox.Items.bow.constructor as typeof ItemBow,
+		);
 	},
 
 	get Enchantments(): typeof Enchantments {
@@ -229,19 +251,28 @@ const Miniblox = {
 	get Blocks(): AllBlocks {
 		return initOrR(
 			_Blocks,
-			() => (unsafeWindow as typeof unsafeWindow & { Blocks: AllBlocks }).Blocks,
+			() =>
+				(unsafeWindow as typeof unsafeWindow & { Blocks: AllBlocks })
+					.Blocks,
 		);
 	},
 
 	get Materials() {
 		return initOrR(_Materials, () =>
 			findObject(
-				(x) => typeof x === "function" && "redstoneLight" in x && "air" in x && "leaves" in x,
+				(x) =>
+					typeof x === "function" &&
+					"redstoneLight" in x &&
+					"air" in x &&
+					"leaves" in x,
 			),
 		);
 	},
 	get ItemBlock() {
-		return initOrR(_ItemBlock, () => Miniblox.Items.stone.constructor as typeof ItemBlock);
+		return initOrR(
+			_ItemBlock,
+			() => Miniblox.Items.stone.constructor as typeof ItemBlock,
+		);
 	},
 	get hud3D() {
 		/*
@@ -283,7 +314,13 @@ const Miniblox = {
 			const { gameScene } = this.game;
 			const camera = gameScene.camera as PerspectiveCamera; // could use destructuring, but I need this cast
 			const hud3D = camera.children.find((c) => {
-				return "item" in c && "fireGroup" in c && "eat" in c && "swingArm" in c && "leftPunch" in c;
+				return (
+					"item" in c &&
+					"fireGroup" in c &&
+					"eat" in c &&
+					"swingArm" in c &&
+					"leftPunch" in c
+				);
 			}) as unknown as Hud3D;
 			return hud3D;
 		});
@@ -301,7 +338,10 @@ const Miniblox = {
 	get BlockPos() {
 		return initOrR(
 			_BlockPos,
-			() => findObject((x) => typeof x === "function" && "ORIGIN" in x) as typeof BlockPos,
+			() =>
+				findObject(
+					(x) => typeof x === "function" && "ORIGIN" in x,
+				) as typeof BlockPos,
 		);
 	},
 
@@ -326,13 +366,17 @@ const Miniblox = {
 		return initOrR(
 			_EntityLivingBase,
 			() =>
-				Array.from(getInheritanceTree(Miniblox.player as unknown as HasProto)).find((x) => {
+				Array.from(
+					getInheritanceTree(Miniblox.player as unknown as HasProto),
+				).find((x) => {
 					const ctor = (
 						x as unknown as EntityLivingBase & {
 							constructor: typeof EntityLivingBase;
 						}
 					).constructor;
-					return Object.getOwnPropertyNames(ctor).includes("sprintingSpeedBoostModifier");
+					return Object.getOwnPropertyNames(ctor).includes(
+						"sprintingSpeedBoostModifier",
+					);
 				})?.constructor as typeof EntityLivingBase | undefined,
 		);
 	},
@@ -380,7 +424,9 @@ const Miniblox = {
 
 	/** Miniblox.game.world with a remap proxy applied */
 	get world() {
-		return initOrR(_world, () => remapObj(Miniblox.game.world, mappings.world));
+		return initOrR(_world, () =>
+			remapObj(Miniblox.game.world, mappings.world),
+		);
 	},
 
 	/** Convenience reference to Miniblox.game.chat */
@@ -390,7 +436,9 @@ const Miniblox = {
 
 	/** Miniblox.game.player with a remap proxy applied */
 	get player() {
-		return initOrR(_player, () => remapObj(Miniblox.game.player, mappings.ClientEntityPlayer));
+		return initOrR(_player, () =>
+			remapObj(Miniblox.game.player, mappings.ClientEntityPlayer),
+		);
 	},
 };
 expose("Miniblox", () => Miniblox);

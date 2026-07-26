@@ -35,7 +35,10 @@ export function CategoryWindow(props: CategoryWindowProps) {
 
 	const modules = ModuleManager.findModules(P.byCategory(Category[props.category.toUpperCase()]));
 
+
+	// oxlint-disable-next-line no-unassigned-vars
 	let windowRef: HTMLDivElement | undefined;
+	// oxlint-disable-next-line no-unassigned-vars
 	let contentRef: HTMLDivElement | undefined;
 
 	// Update window height when content changes or modules expand/collapse
