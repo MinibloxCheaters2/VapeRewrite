@@ -22,19 +22,22 @@ export async function init() {
 
 	const messages = p.messages;
 	const pkts = Miniblox.packets;
-	const filtered = pkts.length >= 0
-		? messages.filter(
-				(m) =>
-					pkts.find(
-						(x) =>
-							(
-								x.constructor as ((a: object) => unknown) & {
-									typeName: string;
-								}
-							).typeName === m.typeName,
-					) === undefined,
-			)
-		: messages;
+	const filtered =
+		pkts.length >= 0
+			? messages.filter(
+					(m) =>
+						pkts.find(
+							(x) =>
+								(
+									x.constructor as ((
+										a: object,
+									) => unknown) & {
+										typeName: string;
+									}
+								).typeName === m.typeName,
+						) === undefined,
+				)
+			: messages;
 	scrapedMessages.push(...filtered);
 	scrapedEnums.push(...p.enums);
 }

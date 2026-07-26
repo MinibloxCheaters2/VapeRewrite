@@ -6,6 +6,7 @@ import Rotation from "@/utils/aiming/rotation";
 import isKeyDown from "@/utils/input/key";
 import { SETTING } from "@/utils/movement/MovementCorrection";
 import Miniblox from "@/utils/refs/miniblox";
+import THREE from "@/utils/refs/three";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 
@@ -149,18 +150,20 @@ export default class Scaffold extends Mod {
 
 	private findBlockSlots(): number[] {
 		const { player, ItemBlock } = Miniblox;
-		if (!player) return [];
+		if (!player || !ItemBlock) return [];
 
 		const slotsWithBlocks: number[] = [];
 
 		for (let i = 0; i < 9; i++) {
-			const item = player.inventory.main[i];
+			// TODO: support offhand (I'm lazy)
+			const stack = player.inventory.main[i];
+			if (!stack) continue;
+			const { item } = stack;
+			if (!(item instanceof ItemBlock)) continue;
+			const { block } = item;
 			if (
-				item &&
-				item.item instanceof ItemBlock &&
-				item.item.block?.getBoundingBox &&
-				item.item.block.getBoundingBox().max.y === 1 &&
-				item.item.name !== "tnt"
+				block.getBoundingBox().max.y === 1 &&
+				stack.item.name !== "tnt"
 			) {
 				slotsWithBlocks.push(i);
 			}
@@ -169,7 +172,7 @@ export default class Scaffold extends Mod {
 	}
 
 	private getPossibleSides(pos: BlockPos): EnumFacing | null {
-		const { player, EnumFacing, game, Materials } = Miniblox;
+		const { player } = Miniblox;
 		if (
 			this.blockTargetMode === "Air Place" &&
 			this.clutchMode === "Air Place" &&
@@ -178,9 +181,11 @@ export default class Scaffold extends Mod {
 			return player.getHorizontalFacing();
 		}
 
+		const { BlockPos, EnumFacing, game, Materials } = Miniblox;
+		if (!BlockPos) return null;
+		if (!Materials) return null;
 		for (const side of EnumFacing.VALUES) {
 			const offset = side.toVector();
-			const { BlockPos } = Miniblox;
 			const checkPos = new BlockPos(
 				pos.x + offset.x,
 				pos.y + offset.y,
@@ -195,7 +200,8 @@ export default class Scaffold extends Mod {
 	}
 
 	private getRandomHitVec(placePos: BlockPos, face: EnumFacing): Vector3 {
-		const { Vec3, EnumFacing } = Miniblox;
+		const { EnumFacing } = Miniblox;
+		const { Vec3 } = THREE;
 		const rand = () => 0.2 + Math.random() * 0.6;
 		let hitX = placePos.x + 0.5;
 		let hitY = placePos.y + 0.5;
@@ -229,13 +235,13 @@ export default class Scaffold extends Mod {
 		const dz = placePos.z + 0.5 - player.pos.z;
 		const dist = Math.sqrt(dx * dx + dz * dz);
 
-		const IDK = 180 / Math.PI;
+		const RAD2DEG = 180 / Math.PI;
 
 		RotationManager.scheduleRotation(
 			new RotationPlan(
 				new Rotation(
-					Math.atan2(dz, dx) * IDK - 90,
-					-(Math.atan2(dy, dist) * IDK),
+					Math.atan2(dz, dx) * RAD2DEG - 90,
+					-(Math.atan2(dy, dist) * RAD2DEG),
 				),
 				this.movementCorrection.value,
 			),
@@ -346,7 +352,7 @@ export default class Scaffold extends Mod {
 		}
 
 		// TODO: we need hud3D
-		const { Materials /*, hud3D*/ } = Miniblox;
+		const { Materials } = Miniblox;
 		let places = 0;
 
 		for (const pos of positionsToCheck) {
@@ -422,18 +428,22 @@ export default class Scaffold extends Mod {
 				}
 			}
 
+			const hand = playerController.resolveUseHand();
 			// Try to place block
 			if (
 				playerController.onPlayerRightClick(
 					player,
+					//@ts-expect-error: son
 					game.world,
 					item,
 					placePos,
 					placeSide,
 					hitVec,
+					hand
 				)
 			) {
 				//hud3D.swingArm();
+				playerController.swingHand(hand);
 
 				// Handle item stack
 				if (item.stackSize === 0) {

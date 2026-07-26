@@ -15,6 +15,7 @@ import NoRecoil from "../impl/combat/NoRecoil.js";
 import Velocity from "../impl/combat/Velocity.js";
 import WTap from "../impl/combat/WTap.js";
 import AutoArmor from "../impl/inventory/AutoArmor.js";
+import InventoryManager from "../impl/inventory/InventoryManager.js";
 import Breaker from "../impl/minigames/Breaker.js";
 import ChestAura from "../impl/minigames/ChestAura.js";
 import ChestStealer from "../impl/minigames/ChestStealer.js";
@@ -100,6 +101,7 @@ export default class ModuleManager {
 		new AutoClicker(),
 		new Breaker(),
 		new AutoArmor(),
+		new InventoryManager(),
 		new PacketLogger(),
 		new AutoRejoin(),
 		new MurderMystery(),

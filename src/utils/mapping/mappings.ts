@@ -12,7 +12,7 @@ function ofDumps<K extends DumpKey>(...ks: K[]): Record<K, string> {
 		ks
 			.map((k) => [MATCHED_DUMPS[k], k] as const)
 			.filter(([k]) => k !== undefined),
-	);
+	) as unknown as Record<K, string>;
 }
 
 export default new (class Mappings {
@@ -22,7 +22,7 @@ export default new (class Mappings {
 	#ClientEntityPlayer?: Mapping;
 	#ItemArmor?: Mapping;
 	get playerController() {
-		return initOrR(this.#playerController, () => ofDumps("windowClick"));
+		return initOrR(this.#playerController, () => ofDumps("windowClick", "onPlayerRightClick"));
 	}
 	get playerControllerMP() {
 		return initOrR(this.#playerControllerMP, () => ofDumps("syncItem"));
@@ -42,6 +42,9 @@ export default new (class Mappings {
 				"getMoveDirection",
 				"attack",
 				"getEyePos",
+				"getHorizontalFacing",
+				"getFlag",
+				"setFlag"
 			),
 		);
 	}

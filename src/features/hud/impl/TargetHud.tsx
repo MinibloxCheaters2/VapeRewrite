@@ -31,14 +31,13 @@ export default class TargetHud extends HudElement {
 		o: 1,
 	});
 	private targetSignal = createSignal<TargetInfo | null>(null);
-	#updateFrame: number;
+	#updateFrame = 0;
 
 	public onAdd(): void {
 		const update = () => {
 			try {
-				const player = Miniblox.player;
-				const { EntityLivingBase, world } = Miniblox;
-				if (!world || !player) return;
+				const { EntityLivingBase, world, player } = Miniblox;
+				if (!EntityLivingBase || !world || !player) return;
 
 				let closest: TargetInfo | null = null;
 
@@ -47,7 +46,7 @@ export default class TargetHud extends HudElement {
 						entity instanceof EntityLivingBase &&
 						entity.id !== player.id
 					) {
-						const dist = player.getDistanceToEntity(entity);
+						const dist = player.getDistanceSqToEntity(entity);
 						if (dist <= 12) {
 							const health = entity.getHealth?.() ?? 0;
 							const maxHealth = entity.getMaxHealth?.() ?? 20;

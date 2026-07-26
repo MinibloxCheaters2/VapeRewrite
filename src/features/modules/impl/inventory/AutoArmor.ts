@@ -1,83 +1,68 @@
-import type { ItemStack, Slot } from "@wq2/miniblox-sdk";
 import { SlotActionType } from "@wq2/miniblox-sdk";
-import { Subscribe } from "@/event/Bus";
-import remapObj from "@/utils/helpers/remapProxy";
-import { dropItem } from "@/utils/inventory";
-import mappings from "@/utils/mapping/mappings";
+import { Priority, Subscribe } from "@/event/Bus";
+import { findBestArmorPieces } from "@/utils/inventory/armor/ArmorEvaluation";
+import { ArmorItemSlot, Slots } from "@/utils/inventory/ItemSlot";
 import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
-
-function getItemStrength(stack: ItemStack) {
-	if (stack === null) return 0;
-	const itemBase = stack.getItem();
-	let base = 1;
-	const { ItemSword, ItemArmor, Enchantments } = Miniblox;
-
-	if (itemBase instanceof ItemSword) base += itemBase.attackDamage;
-	else if (itemBase instanceof ItemArmor) {
-		const proxied = remapObj(itemBase, mappings.ItemArmor);
-		base += proxied.damageReduceAmount;
-	}
-
-	const nbtTagList = stack.getEnchantmentTagList();
-	if (nbtTagList != null) {
-		for (const { id, lvl } of nbtTagList) {
-			if (id === Enchantments.sharpness.effectId) base += lvl * 1.25;
-			else if (id === Enchantments.protection.effectId)
-				base += Math.floor(((6 + lvl * lvl) / 3) * 0.75);
-			else if (id === Enchantments.efficiency.effectId)
-				base += lvl * lvl + 1;
-			else if (id === Enchantments.power.effectId) base += lvl;
-			else base += lvl * 0.01;
-		}
-	}
-
-	return base * stack.stackSize;
-}
-
-function getArmorSlot(armorSlot: number, slots: (Slot | null)[]) {
-	let returned = armorSlot;
-	let dist = 0;
-	const { ItemArmor } = Miniblox; // *slight* optimization, doesn't matter that much since it just stops you from constantly hitting cache
-	for (let i = 0; i < 40; i++) {
-		const stack = slots[i]?.getStack();
-		if (!stack) continue;
-		const item = stack.getItem();
-
-		if (item instanceof ItemArmor && 3 - item.armorType === armorSlot) {
-			const strength = getItemStrength(stack);
-			if (strength > dist) {
-				returned = i;
-				dist = strength;
-			}
-		}
-	}
-	return returned;
-}
 
 export default class AutoArmor extends Mod {
 	name = "AutoArmor";
 	category = Category.INVENTORY;
 
-	@Subscribe("gameTick")
+	private lastCheckTick = 0;
+
+	@Subscribe("gameTick", Priority.NORMAL)
 	private onTick() {
 		const { player, playerController } = Miniblox;
-		// if (player.openContainer === player.inventoryContainer) {
+		if (!player) return;
+
+		const currentTick = Math.floor(Date.now() / 50);
+		if (currentTick - this.lastCheckTick < 20) return;
+		this.lastCheckTick = currentTick;
+
+		const allSlots = Slots.All;
+		const bestArmor = findBestArmorPieces(allSlots);
+
+		const armorSlots = [
+			ArmorItemSlot.FEET,
+			ArmorItemSlot.LEGS,
+			ArmorItemSlot.CHEST,
+			ArmorItemSlot.HEAD,
+		];
+
 		for (let i = 0; i < 4; i++) {
-			const slots = player.inventoryContainer.inventorySlots;
-			const slot = getArmorSlot(i, slots);
-			if (slot !== i) {
-				if (slots[i]?.getHasStack()) dropItem(i);
+			const armorSlot = armorSlots[i];
+			const currentStack = armorSlot.getStack();
+			const bestPiece = bestArmor.get(i);
+
+			if (!bestPiece) continue;
+
+			const bestStack = bestPiece.slot.getStack();
+			if (!bestStack) continue;
+
+			// Skip if already wearing the best armor
+			if (currentStack && currentStack === bestStack) continue;
+
+			// If the armor slot is occupied by a worse piece, drop it first
+			if (currentStack) {
 				playerController.windowClick(
 					player.openContainer.windowId,
-					slot,
-					0,
-					SlotActionType.PICKUP_RIGHT,
+					armorSlot.index,
+					1,
+					SlotActionType.PICKUP_LEFT,
 					player,
 				);
 			}
+
+			// Swap the best armor into the slot
+			playerController.windowClick(
+				player.openContainer.windowId,
+				bestPiece.slot.index,
+				0,
+				SlotActionType.PICKUP_RIGHT,
+				player,
+			);
 		}
-		// }
 	}
 }

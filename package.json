@@ -32,7 +32,7 @@
 	},
 	"devDependencies": {
 		"@wq2/packet-gen-wasm": "^0.0.2",
-		"@wq2/miniblox-sdk": "3.46.147-0.0.0",
+		"@wq2/miniblox-sdk": "3.46.147-0.0.3",
 		"@biomejs/biome": "^2.5.5",
 		"@types/three": "^0.184.1",
 		"@violentmonkey/types": "^0.3.3",

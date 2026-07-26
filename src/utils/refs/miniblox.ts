@@ -267,7 +267,10 @@ const Miniblox = {
 		);
 	},
 	get ItemBlock() {
-		return initOrR(_ItemBlock, () => Miniblox.Blocks.stone.constructor);
+		return initOrR(
+			_ItemBlock,
+			() => Miniblox.Items.stone.constructor as typeof ItemBlock,
+		);
 	},
 	get hud3D() {
 		/*
@@ -331,8 +334,12 @@ const Miniblox = {
 	},
 
 	get BlockPos() {
-		return initOrR(_BlockPos, () =>
-			findObject((x) => typeof x === "function" && "ORIGIN" in x),
+		return initOrR(
+			_BlockPos,
+			() =>
+				findObject(
+					(x) => typeof x === "function" && "ORIGIN" in x,
+				) as typeof BlockPos,
 		);
 	},
 

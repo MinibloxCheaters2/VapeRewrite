@@ -1,4 +1,6 @@
+// https://raw.githubusercontent.com/MinibloxCheaters2/miniblox-bundle-tracker/51363b8a83adc8e50812de426c2067761a0d071d/bundle-remapped.js
 const DUMP_REGEXES = {
+	// PlayerMovement#applyInput
 	moveForward: /this\.([a-zA-Z]+)=\([a-zA-Z]+\.(up|down)/m,
 	moveStrafe:
 		/this\.([a-zA-Z]+)=\+!!\w\.right\s*\+\s*\(\w\.left\s*\?\s*-1\s*:\s*0\)/m,
@@ -14,6 +16,10 @@ const DUMP_REGEXES = {
 		/this\.([a-zA-Z]*)\(\),\n*\s*this\.isUsingItem\(\)\s*&&/,
 	getEyePos:
 		/(\w+)\(\)\s*{\n*\s*let\s+\w\s*=\s*this\.pos\.clone\(\);\n*\s*return\s+\w.y\s*\+=\s*this\.getEyeHeight/,
+	// BlockFenceGate#getStateForPlacement
+	getHorizontalFacing: /return\s+this\.defaultState\.withState\(`facing`,\s*\w\.(\w+)\(\)\)/,
+	// PlayerController#rightClickMouse
+	onPlayerRightClick: /this\.(\w+)\(\s*\w+,\s*[^.]+\.world,\s*\w,\s*\w+,\s*\w\.side,\s*\w\.hitVec,?\s*,\s*\w\)/,
 	// PlayerMovement#checkHeadInBlock
 	// position:
 	// 	/null;\s*\n*\s*let\s*\w\s*=\s*\w+\.fromVector\(\w+\.([a-zA-Z]+)\)/g,
