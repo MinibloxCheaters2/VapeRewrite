@@ -8,8 +8,7 @@ import { MAIN_LOGGER as logger } from "./utils";
 import { exposedName } from "./utils/mapping/names";
 
 function getStore(): { [k: string]: unknown } {
-	if (!("_store" in getStore))
-		(getStore as typeof getStore & { _store: object })._store = {};
+	if (!("_store" in getStore)) (getStore as typeof getStore & { _store: object })._store = {};
 	return (getStore as typeof getStore & { _store: object })._store;
 }
 

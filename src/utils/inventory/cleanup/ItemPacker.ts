@@ -42,13 +42,11 @@ export class ItemPacker {
 		const leftHotbarSlotIterator = hotbarSlotsToFill?.[Symbol.iterator]();
 
 		for (const filledInItem of itemsToFillIn) {
-			const constraintsSatisfied =
-				constraintProvider.getSatisfactionStatus(filledInItem);
+			const constraintsSatisfied = constraintProvider.getSatisfactionStatus(filledInItem);
 			const allStacksFilled = currentStackCount >= requiredStackCount;
 
 			if (
-				(allStacksFilled &&
-					constraintsSatisfied === SatisfactionStatus.SATISFIED) ||
+				(allStacksFilled && constraintsSatisfied === SatisfactionStatus.SATISFIED) ||
 				constraintsSatisfied === SatisfactionStatus.OVERSATURATED
 			) {
 				continue;
@@ -67,22 +65,14 @@ export class ItemPacker {
 			_currentItemCount += stack?.stackSize ?? 0;
 			currentStackCount++;
 
-			if (
-				leftHotbarSlotIterator == null ||
-				forbiddenSlots.has(filledInItemSlot)
-			) {
+			if (leftHotbarSlotIterator == null || forbiddenSlots.has(filledInItemSlot)) {
 				continue;
 			}
 
-			const targetSlot = this.fillItemIntoSlot(
-				filledInItemSlot,
-				leftHotbarSlotIterator,
-			);
+			const targetSlot = this.fillItemIntoSlot(filledInItemSlot, leftHotbarSlotIterator);
 
 			if (targetSlot && !forbiddenSlotsToFill.has(targetSlot)) {
-				moves.push(
-					ClickAction.performSwap(filledInItemSlot, targetSlot.index),
-				);
+				moves.push(ClickAction.performSwap(filledInItemSlot, targetSlot.index));
 			}
 		}
 

@@ -13,13 +13,7 @@ export default class AutoSword extends Mod {
 
 	private rangeSetting = this.createSliderSetting("Range", 10, 3, 20, 0.5);
 	private swapBackSetting = this.createToggleSetting("Swap Back", true);
-	private swapDelaySetting = this.createSliderSetting(
-		"Swap Back Delay",
-		2,
-		2,
-		20,
-		1,
-	);
+	private swapDelaySetting = this.createSliderSetting("Swap Back Delay", 2, 2, 20, 1);
 	private prioritySetting = this.createDropdownSetting(
 		"Priority",
 		["Damage", "Durability"],
@@ -139,10 +133,7 @@ export default class AutoSword extends Mod {
 	// we can use `SubscribeAsync` because we don't modify the event after `await`ing.
 	@SubscribeAsync("sendPacket")
 	private async onPacket({ data: packet }: CancelableWrapper<C2SPacket>) {
-		if (
-			isC2S("SPacketUseEntity", packet) &&
-			packet.action === 1 /*ATTACK*/
-		) {
+		if (isC2S("SPacketUseEntity", packet) && packet.action === 1 /*ATTACK*/) {
 			this.switchToSword();
 			if (this.swapBack) {
 				await waitTicks(this.swapDelay);

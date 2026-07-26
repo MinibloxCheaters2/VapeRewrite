@@ -8,8 +8,7 @@ const bound: { [k: string]: Bind[] } = {};
 
 const keyMap: Record<string | number, string> = {};
 for (let i = 0; i < 26; i++)
-	keyMap[i + 65] = keyMap[`Key${String.fromCharCode(i + 65)}`] =
-		String.fromCharCode(i + 97);
+	keyMap[i + 65] = keyMap[`Key${String.fromCharCode(i + 65)}`] = String.fromCharCode(i + 97);
 for (let i = 0; i < 10; i++) keyMap[48 + i] = keyMap[`Digit${i}`] = `${i}`;
 
 export function normalizeCase(s: string): string {
@@ -25,12 +24,7 @@ export function addBind(key: string, id: string, callback: Callback) {
 	});
 }
 
-export function setBind(
-	oldKey: string,
-	newKey: string,
-	id: string,
-	callback?: Callback,
-): boolean {
+export function setBind(oldKey: string, newKey: string, id: string, callback?: Callback): boolean {
 	const oK = normalizeCase(oldKey);
 	const nK = normalizeCase(newKey);
 	const oldBound = bound[oK];

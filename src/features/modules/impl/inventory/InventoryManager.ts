@@ -11,16 +11,8 @@ import {
 	ItemSortChoice,
 	ItemType,
 } from "@/utils/inventory/cleanup/ItemCategorization";
-import {
-	ClickAction,
-	type InventoryAction,
-} from "@/utils/inventory/InventoryAction";
-import {
-	ArmorItemSlot,
-	HotbarItemSlot,
-	type ItemSlot,
-	Slots,
-} from "@/utils/inventory/ItemSlot";
+import { ClickAction, type InventoryAction } from "@/utils/inventory/InventoryAction";
+import { ArmorItemSlot, HotbarItemSlot, type ItemSlot, Slots } from "@/utils/inventory/ItemSlot";
 import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
@@ -66,15 +58,11 @@ export default class InventoryManager extends Mod {
 
 		// Process scheduled actions
 		if (this.scheduledActions.length > 0) {
-			const readyActions = this.scheduledActions.filter(
-				(a) => this.currentTick >= a.tickDelay,
-			);
+			const readyActions = this.scheduledActions.filter((a) => this.currentTick >= a.tickDelay);
 			if (readyActions.length > 0) {
 				const action = readyActions[0];
 				action.action.performAction();
-				this.scheduledActions = this.scheduledActions.filter(
-					(a) => a !== action,
-				);
+				this.scheduledActions = this.scheduledActions.filter((a) => a !== action);
 			}
 			return;
 		}
@@ -84,10 +72,7 @@ export default class InventoryManager extends Mod {
 		if (inventorySlots.length === 0) return;
 
 		const template = this.buildCleanupTemplate();
-		const plan = new CleanupPlanGenerator(
-			template,
-			inventorySlots,
-		).generatePlan();
+		const plan = new CleanupPlanGenerator(template, inventorySlots).generatePlan();
 
 		// Priority 1: Hotbar swaps
 		if (this.processHotbarSwaps(plan)) return;
@@ -103,10 +88,7 @@ export default class InventoryManager extends Mod {
 		const swap = plan.swaps[0];
 		if (!swap) return false;
 
-		this.scheduleAction(
-			ClickAction.performSwap(swap.from, swap.to.index),
-			Priority.NORMAL,
-		);
+		this.scheduleAction(ClickAction.performSwap(swap.from, swap.to.index), Priority.NORMAL);
 		return true;
 	}
 
@@ -122,34 +104,22 @@ export default class InventoryManager extends Mod {
 		return true;
 	}
 
-	private processItemDisposal(
-		plan: InventoryCleanupPlan,
-		currentSlots: ItemSlot[],
-	): boolean {
+	private processItemDisposal(plan: InventoryCleanupPlan, currentSlots: ItemSlot[]): boolean {
 		const itemsToThrowOut = plan.findItemsToThrowOut(currentSlots);
 		const itemToThrow = itemsToThrowOut[0];
 		if (!itemToThrow) return false;
 
-		this.scheduleAction(
-			ClickAction.performThrow(itemToThrow),
-			Priority.LOW,
-		);
+		this.scheduleAction(ClickAction.performThrow(itemToThrow), Priority.LOW);
 		return true;
 	}
 
-	private scheduleAction(
-		action: InventoryAction,
-		priority: Priority,
-		tickDelay = 0,
-	) {
+	private scheduleAction(action: InventoryAction, priority: Priority, tickDelay = 0) {
 		this.scheduledActions.push({
 			action,
 			tickDelay: this.currentTick + tickDelay,
 			priority,
 		});
-		this.scheduledActions.sort(
-			(a, b) => (b.priority as number) - (a.priority as number),
-		);
+		this.scheduledActions.sort((a, b) => (b.priority as number) - (a.priority as number));
 	}
 
 	private findNonEmptySlotsInInventory(): ItemSlot[] {
@@ -168,7 +138,7 @@ export default class InventoryManager extends Mod {
 			slotContentMap.set(HotbarItemSlot.ALL[i], this.hotbarSlots[i]);
 		}
 
-		const forbiddenSlots = new Set<ItemSlot>([...ArmorItemSlot.ALL]);
+		const forbiddenSlots = new Set<ItemSlot>(ArmorItemSlot.ALL);
 
 		return {
 			slotContentMap,

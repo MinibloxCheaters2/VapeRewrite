@@ -23,7 +23,7 @@ export default class Configurable {
 	private get modName(): string | undefined {
 		if (this instanceof Mod) {
 			if (this.name === "Sackfold") {
-				return "Scaffold"
+				return "Scaffold";
 			} else {
 				return this.name;
 			}
@@ -87,9 +87,7 @@ export default class Configurable {
 		visible?: () => boolean,
 		target: AnySetting[] = this.settings,
 	): DropdownSetting<V> {
-		const [value, setValueSignal] = createSignal(
-			defaultValue ?? options[0],
-		);
+		const [value, setValueSignal] = createSignal(defaultValue ?? options[0]);
 		const setting: DropdownSetting<V> = {
 			name,
 			type: "dropdown",
@@ -134,9 +132,7 @@ export default class Configurable {
 		defaultSelected?: string,
 		visible?: () => boolean,
 	): SubmoduleSetting {
-		const [value, setValueSignal] = createSignal(
-			defaultSelected ?? submoduleNames[0],
-		);
+		const [value, setValueSignal] = createSignal(defaultSelected ?? submoduleNames[0]);
 
 		const items: SubmoduleItem[] = submoduleNames.map((n) => ({
 			name: n,

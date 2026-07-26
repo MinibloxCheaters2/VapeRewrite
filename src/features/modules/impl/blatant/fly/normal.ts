@@ -6,13 +6,7 @@ import Miniblox from "@/utils/refs/miniblox";
 import type Fly from "./index";
 
 export default class NormalSub extends SubModule {
-	readonly speedSetting: SliderSetting = this.createSliderSetting(
-		"Speed",
-		1,
-		0.11,
-		6.0,
-		0.01,
-	);
+	readonly speedSetting: SliderSetting = this.createSliderSetting("Speed", 1, 0.11, 6.0, 0.01);
 
 	onTick(fly: Fly): void {
 		const { player } = Miniblox;

@@ -36,9 +36,7 @@ export default class Paranoia extends Mod {
 		const v = pkt[key];
 		if (typeof v !== "number") {
 			if (alertWrongType) {
-				this.#alert(
-					`Packet ${name} has an improper type for ${String(key)} (got ${typeof v})`,
-				);
+				this.#alert(`Packet ${name} has an improper type for ${String(key)} (got ${typeof v})`);
 			}
 			return;
 		}
@@ -61,8 +59,7 @@ export default class Paranoia extends Mod {
 			isS2C("CPacketUseBed", pkt)
 		)
 			this.#alertFromField(pkt, "id");
-		else if (isS2C("CPacketEntityStatus", pkt))
-			this.#alertFromField(pkt, "entityId");
+		else if (isS2C("CPacketEntityStatus", pkt)) this.#alertFromField(pkt, "entityId");
 		/*else if (isS2C("CPacketPlayerList", pkt))
 			for (const pl of pkt.players) {
 				this.#alertFromField(

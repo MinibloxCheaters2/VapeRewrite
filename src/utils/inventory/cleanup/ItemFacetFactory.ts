@@ -47,12 +47,7 @@ export function getItemFacets(slot: ItemSlot): ItemFacet[] {
 		facets.push(new ArrowItemFacet(slot));
 	} else if (isThrowable(stack)) {
 		facets.push(new ThrowableItemFacet(slot));
-	} else if (
-		isAxe(stack) ||
-		isPickaxe(stack) ||
-		isShovel(stack) ||
-		isHoe(stack)
-	) {
+	} else if (isAxe(stack) || isPickaxe(stack) || isShovel(stack) || isHoe(stack)) {
 		facets.push(new MiningToolItemFacet(slot));
 	}
 

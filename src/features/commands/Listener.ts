@@ -20,19 +20,13 @@ export default new (class CommandListener {
 	}
 
 	static isCommand(msg: string): boolean {
-		return (
-			msg.startsWith(COMMAND_PREFIX) &&
-			!msg.startsWith(COMMAND_PREFIX.repeat(2))
-		);
+		return msg.startsWith(COMMAND_PREFIX) && !msg.startsWith(COMMAND_PREFIX.repeat(2));
 	}
 
 	@Subscribe("sendPacket")
 	async intercept(wrap: CancelableWrapper<C2SPacket>) {
 		const { data: packet } = wrap;
-		if (
-			isC2S("SPacketMessage", packet) &&
-			CommandListener.isCommand(packet.text)
-		) {
+		if (isC2S("SPacketMessage", packet) && CommandListener.isCommand(packet.text)) {
 			wrap.cancel();
 			const removedPrefix = packet.text.slice(COMMAND_PREFIX.length);
 			const r = await dispatcher.parse(removedPrefix, null);
@@ -50,16 +44,10 @@ export default new (class CommandListener {
 					text: `ERROR WHEN EXECUTING "${removedPrefix}": ${e} (this may exclude some useful information, check developer console for more info)`,
 					color: "red",
 				});
-				logger.error(
-					`ERROR WHEN EXECUTING COMMAND "${removedPrefix}":`,
-					e,
-				);
+				logger.error(`ERROR WHEN EXECUTING COMMAND "${removedPrefix}":`, e);
 			}
 		}
-		if (
-			isC2S("SPacketTabComplete", packet) &&
-			CommandListener.isCommand(packet.message)
-		) {
+		if (isC2S("SPacketTabComplete", packet) && CommandListener.isCommand(packet.message)) {
 			wrap.cancel();
 			const removedPrefix = packet.message.slice(COMMAND_PREFIX.length);
 			const r = await dispatcher.parse(removedPrefix, null);
@@ -69,9 +57,7 @@ export default new (class CommandListener {
 
 				const suggestionText = s.getText();
 
-				return words.length <= 1
-					? `${COMMAND_PREFIX}${suggestionText}`
-					: suggestionText;
+				return words.length <= 1 ? `${COMMAND_PREFIX}${suggestionText}` : suggestionText;
 			});
 			Miniblox.chat.autoCompleteReceived(
 				new PacketRefs.c.CPacketTabComplete({

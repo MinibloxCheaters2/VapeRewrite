@@ -9,13 +9,7 @@ export default class KeystrokesHud extends HudElement {
 		this.id = "keystrokes";
 	}
 
-	private fontSizeSetting = this.createSliderSetting(
-		"Font Size",
-		14,
-		8,
-		32,
-		1,
-	);
+	private fontSizeSetting = this.createSliderSetting("Font Size", 14, 8, 32, 1);
 	private textColorSetting = this.createColorSliderSetting("Text Color", {
 		h: 0,
 		s: 0,
@@ -28,15 +22,12 @@ export default class KeystrokesHud extends HudElement {
 		v: 0,
 		o: 0.5,
 	});
-	private pressedColorSetting = this.createColorSliderSetting(
-		"Pressed Color",
-		{
-			h: 0.33,
-			s: 0.7,
-			v: 0.7,
-			o: 0.8,
-		},
-	);
+	private pressedColorSetting = this.createColorSliderSetting("Pressed Color", {
+		h: 0.33,
+		s: 0.7,
+		v: 0.7,
+		o: 0.8,
+	});
 	private showSpaceSetting = this.createToggleSetting("Show Space", true);
 	private showMouseSetting = this.createToggleSetting("Show Mouse", true);
 
@@ -135,9 +126,7 @@ export default class KeystrokesHud extends HudElement {
 	public render() {
 		return (
 			<div class="vape-hud-stack">
-				<div class="vape-key-row-center">
-					{this.renderKey("w", "W")}
-				</div>
+				<div class="vape-key-row-center">{this.renderKey("w", "W")}</div>
 				<div class="vape-key-row">
 					{this.renderKey("a", "A")}
 					{this.renderKey("s", "S")}
@@ -145,9 +134,7 @@ export default class KeystrokesHud extends HudElement {
 				</div>
 
 				{this.showSpaceSetting.value() && (
-					<div class="vape-key-row-center">
-						{this.renderKey(" ", "━━━", 128, 40)}
-					</div>
+					<div class="vape-key-row-center">{this.renderKey(" ", "━━━", 128, 40)}</div>
 				)}
 
 				{this.showMouseSetting.value() && (

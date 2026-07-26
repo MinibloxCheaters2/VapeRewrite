@@ -54,10 +54,7 @@ function extractS2CPacketsFromCombined(pktClass: unknown) {
 			if (field.name === "packets" && field.T?.fields) {
 				for (const sub of field.T.fields) {
 					if (sub.oneof === "packet" && sub.T && sub.name) {
-						discoveredPackets.set(
-							sub.name,
-							sub.T as Message<object>,
-						);
+						discoveredPackets.set(sub.name, sub.T as Message<object>);
 					}
 				}
 				break;
@@ -69,9 +66,7 @@ function extractS2CPacketsFromCombined(pktClass: unknown) {
 }
 
 function findPacketByName(ref: string) {
-	const fromSdk = Miniblox.packets?.find(
-		(x) => "typeName" in x && x.typeName === ref,
-	);
+	const fromSdk = Miniblox.packets?.find((x) => "typeName" in x && x.typeName === ref);
 	const fromDiscovered = discoveredPackets.get(ref);
 	const fromDummy = dummyPackets.get(ref);
 
@@ -88,10 +83,7 @@ function findPacketByName(ref: string) {
 	return result;
 }
 
-function getC2SUncached<
-	K extends SPacketName,
-	V extends SPacketMap[K] = SPacketMap[K],
->(ref: K): V {
+function getC2SUncached<K extends SPacketName, V extends SPacketMap[K] = SPacketMap[K]>(ref: K): V {
 	if (typeof ref === "symbol") {
 		throw "can't get a c2s packet with a name that is a symbol instead of a string.";
 	}
@@ -100,10 +92,9 @@ function getC2SUncached<
 	return result as V;
 }
 
-function getS2CUncached<
-	K extends keyof CPacketMap,
-	V extends CPacketMap[K] = CPacketMap[K],
->(ref: K): V {
+function getS2CUncached<K extends keyof CPacketMap, V extends CPacketMap[K] = CPacketMap[K]>(
+	ref: K,
+): V {
 	if (typeof ref === "symbol") {
 		throw "can't get a s2c packet with a name that is a symbol instead of a string.";
 	}
@@ -122,10 +113,9 @@ function getS2CUncached<
  * const pkt = new PacketRefs.s.SPacketSomething;
  * ```
  */
-export function c2s<
-	K extends keyof SPacketMap,
-	V extends SPacketMap[K] = SPacketMap[K],
->(ref: K): V {
+export function c2s<K extends keyof SPacketMap, V extends SPacketMap[K] = SPacketMap[K]>(
+	ref: K,
+): V {
 	return PacketRefs.s[ref] as V;
 }
 
@@ -139,10 +129,9 @@ export function c2s<
  * const pkt = new PacketRefs.c.CPacketSomething;
  * ```
  */
-export function s2c<
-	K extends keyof CPacketMap,
-	V extends CPacketMap[K] = CPacketMap[K],
->(ref: K): V {
+export function s2c<K extends keyof CPacketMap, V extends CPacketMap[K] = CPacketMap[K]>(
+	ref: K,
+): V {
 	return PacketRefs.c[ref] as V;
 }
 

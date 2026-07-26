@@ -1,11 +1,7 @@
 import type { ItemStack } from "@wq2/miniblox-sdk";
 import Miniblox from "../../refs/miniblox";
 import type { ItemSlot } from "../ItemSlot";
-import {
-	getFoodHealAmount,
-	getFoodSaturationModifier,
-	instanceOfAxe,
-} from "../runtimeClasses";
+import { getFoodHealAmount, getFoodSaturationModifier, instanceOfAxe } from "../runtimeClasses";
 import type { ItemCategory } from "./ItemCategorization";
 import {
 	getDefaultCategory,
@@ -34,10 +30,7 @@ export class ItemFacet {
 	}
 
 	get isInHotbar(): boolean {
-		return (
-			this.itemSlot.slotType === "HOTBAR" ||
-			this.itemSlot.slotType === "OFFHAND"
-		);
+		return this.itemSlot.slotType === "HOTBAR" || this.itemSlot.slotType === "OFFHAND";
 	}
 
 	shouldKeep(): boolean {
@@ -64,8 +57,7 @@ export class WeaponItemFacet extends ItemFacet {
 			attackDamage = item.attackDamage + 1;
 			attackSpeed = 1.6;
 		} else if (instanceOfAxe(item)) {
-			attackDamage =
-				(item as { damageVsEntity?: number }).damageVsEntity ?? 1;
+			attackDamage = (item as { damageVsEntity?: number }).damageVsEntity ?? 1;
 			attackDamage += 1;
 			attackSpeed = 0.8;
 		} else {
@@ -106,12 +98,10 @@ export class WeaponItemFacet extends ItemFacet {
 		let sum = 0;
 
 		const lootingId = Enchantments.looting?.effectId;
-		if (lootingId != null)
-			sum += getEnchantmentLevel(stack, lootingId) * 0.05;
+		if (lootingId != null) sum += getEnchantmentLevel(stack, lootingId) * 0.05;
 
 		const unbreakingId = Enchantments.unbreaking?.effectId;
-		if (unbreakingId != null)
-			sum += getEnchantmentLevel(stack, unbreakingId) * 0.05;
+		if (unbreakingId != null) sum += getEnchantmentLevel(stack, unbreakingId) * 0.05;
 
 		const ench = stack.getEnchantmentTagList();
 		if (ench) {
@@ -192,16 +182,13 @@ export class MiningToolItemFacet extends ItemFacet {
 		}
 
 		const silkTouchId = Enchantments.silkTouch?.effectId;
-		if (silkTouchId != null)
-			sum += getEnchantmentLevel(stack, silkTouchId) * 1.0;
+		if (silkTouchId != null) sum += getEnchantmentLevel(stack, silkTouchId) * 1.0;
 
 		const fortuneId = Enchantments.fortune?.effectId;
-		if (fortuneId != null)
-			sum += getEnchantmentLevel(stack, fortuneId) * 0.33;
+		if (fortuneId != null) sum += getEnchantmentLevel(stack, fortuneId) * 0.33;
 
 		const unbreakingId = Enchantments.unbreaking?.effectId;
-		if (unbreakingId != null)
-			sum += getEnchantmentLevel(stack, unbreakingId) * 0.2;
+		if (unbreakingId != null) sum += getEnchantmentLevel(stack, unbreakingId) * 0.2;
 
 		return sum;
 	}
@@ -213,8 +200,7 @@ export class MiningToolItemFacet extends ItemFacet {
 		if (!bStack) return 1;
 
 		if (other instanceof MiningToolItemFacet) {
-			if (this.miningSpeed !== other.miningSpeed)
-				return this.miningSpeed - other.miningSpeed;
+			if (this.miningSpeed !== other.miningSpeed) return this.miningSpeed - other.miningSpeed;
 		}
 
 		const aValue = MiningToolItemFacet.toolValue(aStack);
@@ -240,12 +226,10 @@ export class BowItemFacet extends ItemFacet {
 		if (flameId != null) sum += getEnchantmentLevel(stack, flameId) * 3.6;
 
 		const infinityId = Enchantments.infinity?.effectId;
-		if (infinityId != null)
-			sum += getEnchantmentLevel(stack, infinityId) * 4.0;
+		if (infinityId != null) sum += getEnchantmentLevel(stack, infinityId) * 4.0;
 
 		const unbreakingId = Enchantments.unbreaking?.effectId;
-		if (unbreakingId != null)
-			sum += getEnchantmentLevel(stack, unbreakingId) * 0.1;
+		if (unbreakingId != null) sum += getEnchantmentLevel(stack, unbreakingId) * 0.1;
 
 		return sum;
 	}
@@ -349,8 +333,7 @@ export class RodItemFacet extends ItemFacet {
 	private static rodValue(stack: ItemStack): number {
 		const { Enchantments } = Miniblox;
 		const unbreakingId = Enchantments.unbreaking?.effectId;
-		if (unbreakingId != null)
-			return getEnchantmentLevel(stack, unbreakingId) * 0.4;
+		if (unbreakingId != null) return getEnchantmentLevel(stack, unbreakingId) * 0.4;
 		return 0;
 	}
 

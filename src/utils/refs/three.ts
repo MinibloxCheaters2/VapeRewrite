@@ -46,7 +46,7 @@ function findObjectByCode(codeFilter: (code: string) => boolean) {
 function findObjectByType<const N extends string>(
 	type: N,
 	//@ts-expect-error: it auto-completes fine
-): typeof import("three")[N] {
+): (typeof import("three"))[N] {
 	return findObjectByCode((x) => x.includes(`this.type=\`${type}\``));
 }
 

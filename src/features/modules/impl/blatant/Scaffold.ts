@@ -17,44 +17,23 @@ export default class Scaffold extends Mod {
 	// Settings
 	private towerSetting = this.createToggleSetting("Tower", true);
 	private expandSetting = this.createSliderSetting("Expand", 1, 0, 5, 0.5);
-	private cycleSetting = this.createSliderSetting(
-		"Cycle Speed",
-		10,
-		0,
-		20,
-		1,
-	);
-	private placesPerTickSetting = this.createSliderSetting(
-		"Places Per Tick",
-		10,
-		0,
-		20,
-		1,
-	);
+	private cycleSetting = this.createSliderSetting("Cycle Speed", 10, 0, 20, 1);
+	private placesPerTickSetting = this.createSliderSetting("Places Per Tick", 10, 0, 20, 1);
 	private sameYSetting = this.createToggleSetting("Same Y", false);
 	private keepYSetting = this.createToggleSetting("Keep Y", false);
-	private techniqueSetting = this.createDropdownSetting("Technique", [
-		"Normal",
-		"Telly",
-	]);
+	private techniqueSetting = this.createDropdownSetting("Technique", ["Normal", "Telly"]);
 	private movementCorrectionSetting = this.createDropdownSetting(
 		"Movement Correction",
 		SETTING,
 		undefined,
 		() => this.rotationMode !== "Off",
 	);
-	private rotationModeSetting = this.createDropdownSetting("Rotation mode", [
-		"Off",
-		"Normal",
-	]);
-	private blockTargetModeSetting = this.createDropdownSetting(
-		"Block target mode",
-		["Air Place", "Clutch"],
-	);
-	private clutchModeSetting = this.createDropdownSetting("Clutch mode", [
+	private rotationModeSetting = this.createDropdownSetting("Rotation mode", ["Off", "Normal"]);
+	private blockTargetModeSetting = this.createDropdownSetting("Block target mode", [
 		"Air Place",
 		"Clutch",
 	]);
+	private clutchModeSetting = this.createDropdownSetting("Clutch mode", ["Air Place", "Clutch"]);
 
 	private autoJumpSetting = this.createToggleSetting("Auto Jump", false);
 	private autoJumpOnlySprintSetting = this.createToggleSetting(
@@ -161,10 +140,7 @@ export default class Scaffold extends Mod {
 			const { item } = stack;
 			if (!(item instanceof ItemBlock)) continue;
 			const { block } = item;
-			if (
-				block.getBoundingBox().max.y === 1 &&
-				stack.item.name !== "tnt"
-			) {
+			if (block.getBoundingBox().max.y === 1 && stack.item.name !== "tnt") {
 				slotsWithBlocks.push(i);
 			}
 		}
@@ -186,11 +162,7 @@ export default class Scaffold extends Mod {
 		if (!Materials) return null;
 		for (const side of EnumFacing.VALUES) {
 			const offset = side.toVector();
-			const checkPos = new BlockPos(
-				pos.x + offset.x,
-				pos.y + offset.y,
-				pos.z + offset.z,
-			);
+			const checkPos = new BlockPos(pos.x + offset.x, pos.y + offset.y, pos.z + offset.z);
 			const state = game.world.getBlockState(checkPos);
 			if (state.getBlock().material !== Materials.air) {
 				return side.getOpposite();
@@ -239,10 +211,7 @@ export default class Scaffold extends Mod {
 
 		RotationManager.scheduleRotation(
 			new RotationPlan(
-				new Rotation(
-					Math.atan2(dz, dx) * RAD2DEG - 90,
-					-(Math.atan2(dy, dist) * RAD2DEG),
-				),
+				new Rotation(Math.atan2(dz, dx) * RAD2DEG - 90, -(Math.atan2(dy, dist) * RAD2DEG)),
 				this.movementCorrection.value,
 			),
 		);
@@ -250,14 +219,9 @@ export default class Scaffold extends Mod {
 
 	@Subscribe("gameTick")
 	onTick(): void {
-		const { player, game, BlockPos, ItemBlock, playerController } =
-			Miniblox;
+		const { player, game, BlockPos, ItemBlock, playerController } = Miniblox;
 
-		if (
-			this.technique === "Telly" &&
-			player.onGround &&
-			player.isSprinting()
-		) {
+		if (this.technique === "Telly" && player.onGround && player.isSprinting()) {
 			player.jump();
 		} else if (
 			this.autoJump &&
@@ -274,9 +238,7 @@ export default class Scaffold extends Mod {
 		if (blockSlots.length === 0) return;
 
 		if (blockSlots.length >= 2 && this.cycleSpeed > 0) {
-			const selected =
-				Math.floor(this.tickCount / this.cycleSpeed) %
-				blockSlots.length;
+			const selected = Math.floor(this.tickCount / this.cycleSpeed) % blockSlots.length;
 			this.switchSlot(blockSlots[selected]);
 		} else {
 			this.switchSlot(blockSlots[0]);
@@ -301,8 +263,7 @@ export default class Scaffold extends Mod {
 			}
 
 			const unchangedMovement =
-				player.motion.x === this.lastMotionX &&
-				player.motion.z === this.lastMotionZ;
+				player.motion.x === this.lastMotionX && player.motion.z === this.lastMotionZ;
 
 			if (unchangedMovement && !player.onGround && player.motion.y > 0) {
 				targetY = this.lastScaffoldY + 1;
@@ -341,10 +302,7 @@ export default class Scaffold extends Mod {
 		];
 
 		// Add diagonal positions for fast strafing
-		if (
-			Math.abs(player.motion.x) > 0.1 ||
-			Math.abs(player.motion.z) > 0.1
-		) {
+		if (Math.abs(player.motion.x) > 0.1 || Math.abs(player.motion.z) > 0.1) {
 			positionsToCheck.push(
 				new BlockPos(flooredFutureX, targetY, playerZ),
 				new BlockPos(playerX, targetY, flooredFutureZ),
@@ -371,11 +329,7 @@ export default class Scaffold extends Mod {
 					for (let x = -dist; x <= dist && !found; x++) {
 						for (let z = -dist; z <= dist && !found; z++) {
 							if (x === 0 && z === 0) continue;
-							const searchPos = new BlockPos(
-								pos.x + x,
-								pos.y,
-								pos.z + z,
-							);
+							const searchPos = new BlockPos(pos.x + x, pos.y, pos.z + z);
 							const side = this.getPossibleSides(searchPos);
 							if (side) {
 								placeSide = side;
@@ -396,16 +350,9 @@ export default class Scaffold extends Mod {
 
 			// Calculate place position
 			const dir = placeSide.getOpposite().toVector();
-			const placePos = new BlockPos(
-				pos.x + dir.x,
-				pos.y + dir.y,
-				pos.z + dir.z,
-			);
+			const placePos = new BlockPos(pos.x + dir.x, pos.y + dir.y, pos.z + dir.z);
 
-			if (
-				this.technique === "Normal" ||
-				(this.technique === "Telly" && !player.onGround)
-			) {
+			if (this.technique === "Normal" || (this.technique === "Telly" && !player.onGround)) {
 				this.applyRotation(placePos);
 			}
 
@@ -415,15 +362,10 @@ export default class Scaffold extends Mod {
 			// Tower mode
 			if (this.tower && isKeyDown("Space") && player.onGround) {
 				const centerDist = Math.sqrt(
-					(player.pos.x - (playerX + 0.5)) ** 2 +
-						(player.pos.z - (playerZ + 0.5)) ** 2,
+					(player.pos.x - (playerX + 0.5)) ** 2 + (player.pos.z - (playerZ + 0.5)) ** 2,
 				);
 
-				if (
-					centerDist < 0.3 &&
-					player.motion.y < 0.2 &&
-					player.motion.y >= 0
-				) {
+				if (centerDist < 0.3 && player.motion.y < 0.2 && player.motion.y >= 0) {
 					player.motion.y = 0.42;
 				}
 			}
@@ -439,7 +381,7 @@ export default class Scaffold extends Mod {
 					placePos,
 					placeSide,
 					hitVec,
-					hand
+					hand,
 				)
 			) {
 				//hud3D.swingArm();

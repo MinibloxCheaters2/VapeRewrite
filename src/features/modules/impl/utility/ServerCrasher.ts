@@ -6,13 +6,7 @@ import Mod from "../../api/Module";
 export default class ServerCrasher extends Mod {
 	public name = "ServerCrasher";
 	public category = Category.UTILITY;
-	#packetsPerTickSetting = this.createSliderSetting(
-		"PacketsPerTick",
-		20,
-		1,
-		500,
-		1,
-	);
+	#packetsPerTickSetting = this.createSliderSetting("PacketsPerTick", 20, 1, 500, 1);
 
 	get #packetsPerTick() {
 		return this.#packetsPerTickSetting.value();

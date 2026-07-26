@@ -38,10 +38,7 @@ export default class KillAura extends Mod {
 	private angleSetting = this.createSliderSetting("Angle", 360, 1, 360, 1);
 	private autoBlockSetting = this.createToggleSetting("Auto Block", true);
 	private wallCheckSetting = this.createToggleSetting("Wall Check", false);
-	private movementCorrectionSetting = this.createDropdownSetting(
-		"Movement Correction",
-		SETTING,
-	);
+	private movementCorrectionSetting = this.createDropdownSetting("Movement Correction", SETTING);
 
 	get movementCorrection() {
 		return this.movementCorrectionSetting.value();
@@ -77,8 +74,7 @@ export default class KillAura extends Mod {
 
 	unblock() {
 		if (this.blocking) {
-			const { ClientSocket, BlockPos, EnumFacing, playerControllerMP } =
-				Miniblox;
+			const { ClientSocket, BlockPos, EnumFacing, playerControllerMP } = Miniblox;
 			// auto-remapping proxy again lol
 			playerControllerMP.syncItem();
 			ClientSocket.sendPacket(
@@ -98,24 +94,13 @@ export default class KillAura extends Mod {
 		const hitVec = player.getEyePos().clone().clamp(box.min, box.max);
 
 		const aimPos = player.pos.clone().sub(e.pos);
-		const newYaw = wrapAngleTo180_radians(
-			Math.atan2(aimPos.x, aimPos.z) - player.lastReportedYaw,
-		);
-		const checkYaw = wrapAngleTo180_radians(
-			Math.atan2(aimPos.x, aimPos.z) - player.yaw,
-		);
+		const newYaw = wrapAngleTo180_radians(Math.atan2(aimPos.x, aimPos.z) - player.lastReportedYaw);
+		const checkYaw = wrapAngleTo180_radians(Math.atan2(aimPos.x, aimPos.z) - player.yaw);
 
-		if (
-			first &&
-			Math.abs(checkYaw) > MAX_OFFSET_RAD &&
-			Math.abs(checkYaw) < deg2rad(this.angle)
-		) {
+		if (first && Math.abs(checkYaw) > MAX_OFFSET_RAD && Math.abs(checkYaw) < deg2rad(this.angle)) {
 			RotationManager.scheduleRotation(
 				new RotationPlan(
-					new Rotation(
-						player.lastReportedYaw + newYaw,
-						RotationManager.activeRotation.pitch,
-					),
+					new Rotation(player.lastReportedYaw + newYaw, RotationManager.activeRotation.pitch),
 					this.movementCorrection.value,
 				),
 			);

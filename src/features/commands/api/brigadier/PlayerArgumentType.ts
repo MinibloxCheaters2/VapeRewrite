@@ -9,9 +9,7 @@ import {
 import type { EntityPlayer } from "@wq2/miniblox-sdk";
 import Miniblox from "@/utils/refs/miniblox";
 
-export const PLAYER_NOT_FOUND = new CommandErrorType(
-	(found) => `Player "${found}" not found`,
-);
+export const PLAYER_NOT_FOUND = new CommandErrorType((found) => `Player "${found}" not found`);
 
 export default class ModuleArgumentType extends ArgumentType<EntityPlayer> {
 	listSuggestions(
@@ -20,11 +18,7 @@ export default class ModuleArgumentType extends ArgumentType<EntityPlayer> {
 	): Promise<Suggestions> {
 		const suggestions = Miniblox.world.players
 			.values()
-			.filter((m) =>
-				m.name
-					.toLowerCase()
-					.startsWith(builder.getRemaining().toLowerCase()),
-			)
+			.filter((m) => m.name.toLowerCase().startsWith(builder.getRemaining().toLowerCase()))
 			.map((m) => m.name);
 		let b = builder;
 		for (const suggestion of suggestions) {

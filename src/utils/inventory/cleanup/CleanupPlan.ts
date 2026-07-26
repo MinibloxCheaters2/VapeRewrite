@@ -66,10 +66,7 @@ export class InventoryCleanupPlan {
 	): void {
 		if (stacks.length <= 1) return;
 
-		while (
-			stacks.length > 0 &&
-			stacks[stacks.length - 1].count + stacks[0].count > maxStackSize
-		) {
+		while (stacks.length > 0 && stacks[stacks.length - 1].count + stacks[0].count > maxStackSize) {
 			stacks.pop();
 		}
 

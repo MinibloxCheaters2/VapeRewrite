@@ -76,11 +76,10 @@ export class CategoryInfo {
 	}
 }
 
-export const categoryInfoSet: Record<Category, CategoryInfo> =
-	Object.fromEntries(
-		Object.entries(categoryDataSet).map(([k, v]) => {
-			//@ts-expect-error: Numerical TypeScript enums have aliases for their names, it produces `Enum[Enum["KEY"] = 0] = "KEY";`
-			const c = Category[k];
-			return [c, new CategoryInfo(v)];
-		}),
-	);
+export const categoryInfoSet: Record<Category, CategoryInfo> = Object.fromEntries(
+	Object.entries(categoryDataSet).map(([k, v]) => {
+		//@ts-expect-error: Numerical TypeScript enums have aliases for their names, it produces `Enum[Enum["KEY"] = 0] = "KEY";`
+		const c = Category[k];
+		return [c, new CategoryInfo(v)];
+	}),
+);

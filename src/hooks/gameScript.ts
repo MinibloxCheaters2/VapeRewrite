@@ -9,10 +9,8 @@ function isIndexPath(pathname: string): boolean {
 
 function isIndexScript(script: HTMLScriptElement): boolean {
 	const { src } = script;
-	if (src.length <= 17 /*length of /assets/index- + length of .js*/)
-		return false;
-	if (script.type !== "module" || script.crossOrigin !== "anonymous")
-		return false;
+	if (src.length <= 17 /*length of /assets/index- + length of .js*/) return false;
+	if (script.type !== "module" || script.crossOrigin !== "anonymous") return false;
 	try {
 		return isIndexPath(new URL(src).pathname);
 	} catch {
@@ -24,11 +22,7 @@ export const MATCHED_DUMPS = {} as Record<DumpKey, string>;
 export let gameScript: string;
 export let scriptEl: HTMLScriptElement;
 
-function matchDump(
-	code: string,
-	key: DumpKey,
-	regex: RegExp,
-): [DumpKey, string | undefined] {
+function matchDump(code: string, key: DumpKey, regex: RegExp): [DumpKey, string | undefined] {
 	const matched = code.match(regex);
 	return [key, matched?.[1]];
 }
@@ -53,9 +47,7 @@ async function runDumps(code: string): Promise<void> {
 }
 
 async function init() {
-	const sc = Object.values(document.scripts).find((script) =>
-		isIndexScript(script),
-	);
+	const sc = Object.values(document.scripts).find((script) => isIndexScript(script));
 	if (!sc) {
 		logger.error("Failed to find game script");
 		return;

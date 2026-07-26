@@ -11,35 +11,16 @@ export default class ChestStealer extends Mod {
 	public name = "ChestStealer";
 	public category = Category.MINIGAMES;
 
-	private delaySetting = this.createSliderSetting(
-		"Delay (ms)",
-		100,
-		0,
-		500,
-		10,
-	);
-	private randomDelayToggleSetting = this.createToggleSetting(
-		"Random Delay",
-		false,
-	);
-	private maxRandomDelaySetting = this.createSliderSetting(
-		"Max Random (ms)",
-		150,
-		0,
-		500,
-		10,
-		() => this.randomDelayToggleSetting.value(),
+	private delaySetting = this.createSliderSetting("Delay (ms)", 100, 0, 500, 10);
+	private randomDelayToggleSetting = this.createToggleSetting("Random Delay", false);
+	private maxRandomDelaySetting = this.createSliderSetting("Max Random (ms)", 150, 0, 500, 10, () =>
+		this.randomDelayToggleSetting.value(),
 	);
 	private autoCloseSetting = this.createToggleSetting("Auto Close", true);
-	private closeEmptySetting = this.createToggleSetting(
-		"Close When Empty",
-		true,
-		() => this.autoCloseSetting.value(),
+	private closeEmptySetting = this.createToggleSetting("Close When Empty", true, () =>
+		this.autoCloseSetting.value(),
 	);
-	private blacklistSetting = this.createTextBoxSetting(
-		"Blacklist Items (comma separated)",
-		"",
-	);
+	private blacklistSetting = this.createTextBoxSetting("Blacklist Items (comma separated)", "");
 	private notifySetting = this.createToggleSetting("Notify", true);
 
 	private lastClickTime = 0;
@@ -88,9 +69,7 @@ export default class ChestStealer extends Mod {
 
 	private isBlacklisted(itemName: string): boolean {
 		const name = itemName.toLowerCase();
-		return this.blacklist.some(
-			(item) => name.includes(item) || item.includes(name),
-		);
+		return this.blacklist.some((item) => name.includes(item) || item.includes(name));
 	}
 
 	protected onEnable(): void {

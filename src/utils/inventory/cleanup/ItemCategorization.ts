@@ -86,9 +86,7 @@ export class ItemCategoryConstraintGroup implements ItemNumberConstraintGroup {
 	}
 }
 
-export class ItemFunctionCategoryConstraintGroup
-	implements ItemNumberConstraintGroup
-{
+export class ItemFunctionCategoryConstraintGroup implements ItemNumberConstraintGroup {
 	readonly acceptableRange: { first: number; last: number };
 	readonly priority: number;
 	readonly function: ItemFunction;
@@ -104,8 +102,7 @@ export class ItemFunctionCategoryConstraintGroup
 	}
 
 	equals(other: ItemNumberConstraintGroup): boolean {
-		if (!(other instanceof ItemFunctionCategoryConstraintGroup))
-			return false;
+		if (!(other instanceof ItemFunctionCategoryConstraintGroup)) return false;
 		return this.function === other.function;
 	}
 
@@ -114,10 +111,7 @@ export class ItemFunctionCategoryConstraintGroup
 	}
 }
 
-export function getEnchantmentLevel(
-	stack: ItemStack,
-	effectId: number,
-): number {
+export function getEnchantmentLevel(stack: ItemStack, effectId: number): number {
 	const nbt = stack.getEnchantmentTagList();
 	if (!nbt) return 0;
 	let total = 0;
@@ -186,11 +180,7 @@ export function isRod(stack: ItemStack): boolean {
 
 export function isThrowable(stack: ItemStack): boolean {
 	const item = stack.getItem();
-	return (
-		instanceOf(item, "snowball") ||
-		instanceOf(item, "egg") ||
-		instanceOf(item, "ender_pearl")
-	);
+	return instanceOf(item, "snowball") || instanceOf(item, "egg") || instanceOf(item, "ender_pearl");
 }
 
 export function isPearl(stack: ItemStack): boolean {

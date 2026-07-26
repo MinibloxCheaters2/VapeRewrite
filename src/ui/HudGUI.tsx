@@ -171,19 +171,15 @@ function HudManagerPanel() {
 					}}
 					type="button"
 					disabled={!selectedHud()}
-					on:click={() =>
-						selectedHud() && setShowSettings(!showSettings())
-					}
+					on:click={() => selectedHud() && setShowSettings(!showSettings())}
 					on:pointerenter={(e) => {
 						if (selectedHud()) {
-							e.currentTarget.style.backgroundColor =
-								"var(--vape-main-light)";
+							e.currentTarget.style.backgroundColor = "var(--vape-main-light)";
 						}
 					}}
 					on:pointerleave={(e) => {
 						if (selectedHud()) {
-							e.currentTarget.style.backgroundColor =
-								"var(--vape-main-light)";
+							e.currentTarget.style.backgroundColor = "var(--vape-main-light)";
 						}
 					}}
 				>
@@ -245,12 +241,10 @@ function HudManagerPanel() {
 					type="button"
 					on:click={handleClose}
 					on:pointerenter={(e) => {
-						e.currentTarget.style.backgroundColor =
-							"var(--vape-main-light)";
+						e.currentTarget.style.backgroundColor = "var(--vape-main-light)";
 					}}
 					on:pointerleave={(e) => {
-						e.currentTarget.style.backgroundColor =
-							"var(--vape-main-light)";
+						e.currentTarget.style.backgroundColor = "var(--vape-main-light)";
 					}}
 				>
 					<span
@@ -273,8 +267,7 @@ function HudManagerPanel() {
 							left: "40px",
 							"background-color": "var(--vape-main-dark)",
 							"border-radius": "6px",
-							"box-shadow":
-								"0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)",
+							"box-shadow": "0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)",
 							padding: "4px",
 							"min-width": "150px",
 						}}
@@ -297,18 +290,15 @@ function HudManagerPanel() {
 											"font-size": "13px",
 											"font-family": "Arial, sans-serif",
 											"border-radius": "4px",
-											transition:
-												"background-color 0.16s linear",
+											transition: "background-color 0.16s linear",
 										}}
 										type="button"
 										on:click={() => handleAddHud(hudClass)}
 										on:pointerenter={(e) => {
-											e.currentTarget.style.backgroundColor =
-												"var(--vape-main-light)";
+											e.currentTarget.style.backgroundColor = "var(--vape-main-light)";
 										}}
 										on:pointerleave={(e) => {
-											e.currentTarget.style.backgroundColor =
-												"transparent";
+											e.currentTarget.style.backgroundColor = "transparent";
 										}}
 									>
 										{instance.name}
@@ -328,8 +318,7 @@ function HudManagerPanel() {
 							left: "80px",
 							"background-color": "var(--vape-main-dark)",
 							"border-radius": "6px",
-							"box-shadow":
-								"0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)",
+							"box-shadow": "0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)",
 							padding: "8px 0",
 							"min-width": "220px",
 						}}
@@ -337,8 +326,7 @@ function HudManagerPanel() {
 						<div
 							style={{
 								padding: "0 12px 8px 12px",
-								"border-bottom":
-									"1px solid var(--vape-divider)",
+								"border-bottom": "1px solid var(--vape-divider)",
 								"margin-bottom": "4px",
 							}}
 						>
@@ -416,24 +404,13 @@ function HudSettings(props: { hud: BaseHudElement }) {
 											return (
 												<DropdownComponent
 													name={setting.name}
-													value={getName(
-														setting.value(),
-													)}
-													options={setting.options.map(
-														getName,
-													)}
+													value={getName(setting.value())}
+													options={setting.options.map(getName)}
 													onChange={(val) => {
-														const option =
-															setting.options.find(
-																(o: ModeLike) =>
-																	getName(
-																		o,
-																	) === val,
-															);
-														if (option)
-															setting.setValue(
-																option,
-															);
+														const option = setting.options.find(
+															(o: ModeLike) => getName(o) === val,
+														);
+														if (option) setting.setValue(option);
 													}}
 													onExpandChange={() => {}}
 												/>
@@ -521,15 +498,8 @@ function HudElementRenderer(props: { hud: JSXHudElement }) {
 					top: `${props.hud.positionAccessor().y}px`,
 					"z-index": "9999",
 					"user-select": "none",
-					cursor: hudManagerActive()
-						? dragging()
-							? "grabbing"
-							: "grab"
-						: "default",
-					outline:
-						isSelected() && hudManagerActive()
-							? "2px solid var(--vape-accent)"
-							: "none",
+					cursor: hudManagerActive() ? (dragging() ? "grabbing" : "grab") : "default",
+					outline: isSelected() && hudManagerActive() ? "2px solid var(--vape-accent)" : "none",
 					"outline-offset": "2px",
 				}}
 				on:pointerdown={handlePointerDown}

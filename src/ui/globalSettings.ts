@@ -1,11 +1,9 @@
 import { createSignal } from "solid-js";
 
-export const [notificationsEnabled, setNotificationsEnabled] =
-	createSignal(true);
+export const [notificationsEnabled, setNotificationsEnabled] = createSignal(true);
 export const [toggleAlertEnabled, setToggleAlertEnabled] = createSignal(false);
 
-export const [teamsByServerEnabled, setTeamsByServerEnabled] =
-	createSignal(true);
+export const [teamsByServerEnabled, setTeamsByServerEnabled] = createSignal(true);
 
 export const [rainbowMode, setRainbowMode] = createSignal("Normal");
 export const [rainbowSpeed, setRainbowSpeed] = createSignal(1);
@@ -30,8 +28,7 @@ export const [friendsColorVal, setFriendsColorVal] = createSignal(1);
 
 export const [targetsList, setTargetsList] = createSignal<string[]>([]);
 export const [targetsEnabled, setTargetsEnabled] = createSignal<string[]>([]);
-export const [targetPlayersEnabled, setTargetPlayersEnabled] =
-	createSignal(true);
+export const [targetPlayersEnabled, setTargetPlayersEnabled] = createSignal(true);
 export const [targetNPCsEnabled, setTargetNPCsEnabled] = createSignal(false);
 export const [showHealth, setShowHealth] = createSignal(false);
 export const [injureMode, setInjureMode] = createSignal(false);

@@ -11,15 +11,12 @@ export default new (class ShadowWrapper {
 		const iframe = document.createElement("iframe");
 		document.body.appendChild(iframe);
 
-		const attachShadow = (
-			iframe.contentWindow as Window & typeof globalThis
-		).Element.prototype.attachShadow;
+		const attachShadow = (iframe.contentWindow as Window & typeof globalThis).Element.prototype
+			.attachShadow;
 		iframe.remove();
 
 		const container = document.createElement("div");
-		const shadow = attachShadow.apply(container, [
-			{ mode: "closed" },
-		]) as ShadowRoot;
+		const shadow = attachShadow.apply(container, [{ mode: "closed" }]) as ShadowRoot;
 		document.body.appendChild(container);
 		this.#host = container;
 		return shadow;

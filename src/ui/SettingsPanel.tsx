@@ -5,8 +5,7 @@ import { dragHandleAttrName } from "@/utils/mapping/names";
 import { guiVisible } from "./guiState";
 import shadowWrapper from "./shadowWrapper";
 
-export const [settingsPanelVisible, setSettingsPanelVisible] =
-	createSignal(false);
+export const [settingsPanelVisible, setSettingsPanelVisible] = createSignal(false);
 
 function SettingsPanel() {
 	const [position, setPosition] = createSignal({ x: 240, y: 60 });
@@ -60,8 +59,7 @@ function SettingsPanel() {
 					width: "300px",
 					"background-color": "var(--vape-main)",
 					"border-radius": "5px",
-					"box-shadow":
-						"0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)",
+					"box-shadow": "0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)",
 					"z-index": "10001",
 					overflow: "hidden",
 					"user-select": "none",

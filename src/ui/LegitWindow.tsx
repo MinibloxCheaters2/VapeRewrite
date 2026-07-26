@@ -1,12 +1,4 @@
-import {
-	createSignal,
-	For,
-	Match,
-	onCleanup,
-	onMount,
-	Show,
-	Switch,
-} from "solid-js";
+import { createSignal, For, Match, onCleanup, onMount, Show, Switch } from "solid-js";
 import type { AnySetting } from "@/features/config/Settings";
 import type LegitModule from "@/features/modules/api/LegitModule";
 import LegitModuleManager from "@/features/modules/api/LegitModuleManager";
@@ -187,9 +179,7 @@ export function LegitWindow() {
 								padding: "14px",
 							}}
 						>
-							<For each={LegitModuleManager.modules}>
-								{(mod) => <LegitModuleCard mod={mod} />}
-							</For>
+							<For each={LegitModuleManager.modules}>{(mod) => <LegitModuleCard mod={mod} />}</For>
 						</div>
 					</Show>
 				</div>
@@ -210,11 +200,9 @@ function LegitModuleCard(props: { mod: LegitModule }) {
 		return "var(--vape-main-dark)";
 	};
 
-	const titleColor = () =>
-		props.mod.enabled ? "var(--vape-text)" : "var(--vape-text-darker)";
+	const titleColor = () => (props.mod.enabled ? "var(--vape-text)" : "var(--vape-text-darker)");
 
-	const knobBg = () =>
-		props.mod.enabled ? "var(--vape-accent)" : "rgba(255,255,255,0.14)";
+	const knobBg = () => (props.mod.enabled ? "var(--vape-accent)" : "rgba(255,255,255,0.14)");
 
 	const knobInnerLeft = () => (props.mod.enabled ? "12px" : "2px");
 
@@ -310,9 +298,7 @@ function LegitModuleCard(props: { mod: LegitModule }) {
 						width: "2px",
 						height: "12px",
 						"pointer-events": "none",
-						filter: dotsHovered()
-							? "brightness(0) invert(0.78)"
-							: "brightness(0) invert(0.47)",
+						filter: dotsHovered() ? "brightness(0) invert(0.78)" : "brightness(0) invert(0.47)",
 						transition: "filter 0.16s linear",
 					}}
 				/>
@@ -416,14 +402,11 @@ function LegitModuleCard(props: { mod: LegitModule }) {
 								"overflow-y": "auto",
 								"overflow-x": "hidden",
 								"scrollbar-width": "thin",
-								"scrollbar-color":
-									"rgba(255,255,255,0.25) transparent",
+								"scrollbar-color": "rgba(255,255,255,0.25) transparent",
 							}}
 						>
 							<For each={props.mod.settings}>
-								{(setting) => (
-									<LegitSettingRenderer setting={setting} />
-								)}
+								{(setting) => <LegitSettingRenderer setting={setting} />}
 							</For>
 						</div>
 					</div>
@@ -438,21 +421,15 @@ function LegitSettingRenderer(props: { setting: AnySetting }) {
 		<Switch>
 			<Match when={props.setting.type === "toggle"}>
 				{(() => {
-					const s =
-						props.setting as import("@/features/config/Settings").ToggleSetting;
+					const s = props.setting as import("@/features/config/Settings").ToggleSetting;
 					return (
-						<ToggleComponent
-							name={s.name}
-							enabled={s.value()}
-							onChange={(v) => s.setValue(v)}
-						/>
+						<ToggleComponent name={s.name} enabled={s.value()} onChange={(v) => s.setValue(v)} />
 					);
 				})()}
 			</Match>
 			<Match when={props.setting.type === "slider"}>
 				{(() => {
-					const s =
-						props.setting as import("@/features/config/Settings").SliderSetting;
+					const s = props.setting as import("@/features/config/Settings").SliderSetting;
 					return (
 						<SliderComponent
 							name={s.name}
@@ -467,8 +444,7 @@ function LegitSettingRenderer(props: { setting: AnySetting }) {
 			</Match>
 			<Match when={props.setting.type === "dropdown"}>
 				{(() => {
-					const s =
-						props.setting as import("@/features/config/Settings").DropdownSetting;
+					const s = props.setting as import("@/features/config/Settings").DropdownSetting;
 					return (
 						<DropdownComponent
 							name={s.name}
@@ -481,8 +457,7 @@ function LegitSettingRenderer(props: { setting: AnySetting }) {
 			</Match>
 			<Match when={props.setting.type === "textbox"}>
 				{(() => {
-					const s =
-						props.setting as import("@/features/config/Settings").TextBoxSetting;
+					const s = props.setting as import("@/features/config/Settings").TextBoxSetting;
 					return (
 						<TextBoxComponent
 							name={s.name}
@@ -495,8 +470,7 @@ function LegitSettingRenderer(props: { setting: AnySetting }) {
 			</Match>
 			<Match when={props.setting.type === "colorslider"}>
 				{(() => {
-					const s =
-						props.setting as import("@/features/config/Settings").ColorSliderSetting;
+					const s = props.setting as import("@/features/config/Settings").ColorSliderSetting;
 					return (
 						<ColorSliderComponent
 							name={s.name}

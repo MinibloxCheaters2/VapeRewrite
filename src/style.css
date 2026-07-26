@@ -11,8 +11,7 @@
 	--vape-divider: rgba(255, 255, 255, 0.072);
 	--vape-divider-dark: rgba(48, 48, 48, 0.52);
 	--vape-radius: 5px;
-	--vape-shadow:
-		0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
+	--vape-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
 	--vape-transition: background-color 0.16s linear;
 	--vape-font: Arial, sans-serif;
 }

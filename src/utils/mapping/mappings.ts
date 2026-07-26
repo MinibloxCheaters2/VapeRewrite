@@ -9,9 +9,7 @@ import type { Mapping } from "../helpers/remapProxy";
 
 function ofDumps<K extends DumpKey>(...ks: K[]): Record<K, string> {
 	return Object.fromEntries(
-		ks
-			.map((k) => [MATCHED_DUMPS[k], k] as const)
-			.filter(([k]) => k !== undefined),
+		ks.map((k) => [MATCHED_DUMPS[k], k] as const).filter(([k]) => k !== undefined),
 	) as unknown as Record<K, string>;
 }
 
@@ -44,7 +42,7 @@ export default new (class Mappings {
 				"getEyePos",
 				"getHorizontalFacing",
 				"getFlag",
-				"setFlag"
+				"setFlag",
 			),
 		);
 	}

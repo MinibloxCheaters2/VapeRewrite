@@ -17,11 +17,7 @@ import {
 	targetsEnabled,
 	targetsList,
 } from "./globalSettings";
-import {
-	guiVisible,
-	setTargetsPanelVisible,
-	targetsPanelVisible,
-} from "./guiState";
+import { guiVisible, setTargetsPanelVisible, targetsPanelVisible } from "./guiState";
 import shadowWrapper from "./shadowWrapper";
 
 function TargetSubButton(props: {
@@ -56,9 +52,7 @@ function TargetSubButton(props: {
 				style={{
 					position: "absolute",
 					inset: "1px",
-					"background-color": props.enabled
-						? "var(--vape-accent)"
-						: "var(--vape-main)",
+					"background-color": props.enabled ? "var(--vape-accent)" : "var(--vape-main)",
 					"border-radius": "var(--vape-radius)",
 				}}
 			/>
@@ -134,18 +128,14 @@ function TargetsPanelContent() {
 						label="Players"
 						icon={getResourceURL("targetplayers2")}
 						enabled={targetPlayersEnabled()}
-						onClick={() =>
-							setTargetPlayersEnabled(!targetPlayersEnabled())
-						}
+						onClick={() => setTargetPlayersEnabled(!targetPlayersEnabled())}
 					/>
 					<TargetSubButton
 						label="NPCs"
 						icon={getResourceURL("targetnpc2")}
 						iconSize={[9, 12]}
 						enabled={targetNPCsEnabled()}
-						onClick={() =>
-							setTargetNPCsEnabled(!targetNPCsEnabled())
-						}
+						onClick={() => setTargetNPCsEnabled(!targetNPCsEnabled())}
 					/>
 				</div>
 				<ToggleComponent
@@ -158,16 +148,8 @@ function TargetsPanelContent() {
 					enabled={targetNPCsEnabled()}
 					onChange={setTargetNPCsEnabled}
 				/>
-				<ToggleComponent
-					name="Show health"
-					enabled={showHealth()}
-					onChange={setShowHealth}
-				/>
-				<ToggleComponent
-					name="Injure mode"
-					enabled={injureMode()}
-					onChange={setInjureMode}
-				/>
+				<ToggleComponent name="Show health" enabled={showHealth()} onChange={setShowHealth} />
+				<ToggleComponent name="Injure mode" enabled={injureMode()} onChange={setInjureMode} />
 			</CategoryListPanel>
 		</Show>
 	);

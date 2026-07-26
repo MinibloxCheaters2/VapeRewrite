@@ -9,20 +9,8 @@ export default class Spider extends Mod {
 	public name = "Spider";
 	public category = Category.BLATANT;
 
-	private climbSpeedSetting = this.createSliderSetting(
-		"Climb Speed",
-		0.2,
-		0.05,
-		0.5,
-		0.05,
-	);
-	private wallDetectRangeSetting = this.createSliderSetting(
-		"Wall Range",
-		0.3,
-		0.1,
-		0.6,
-		0.05,
-	);
+	private climbSpeedSetting = this.createSliderSetting("Climb Speed", 0.2, 0.05, 0.5, 0.05);
+	private wallDetectRangeSetting = this.createSliderSetting("Wall Range", 0.3, 0.1, 0.6, 0.05);
 	private autoClimbSetting = this.createToggleSetting("Auto Climb", false);
 
 	get climbSpeed() {
@@ -75,11 +63,7 @@ export default class Spider extends Mod {
 	}
 
 	private isCollidingHorizontally(): boolean {
-		const anyCollidingBlock = oneInRange(
-			this.wallDetectRange,
-			defaultFilter,
-			0,
-		);
+		const anyCollidingBlock = oneInRange(this.wallDetectRange, defaultFilter, 0);
 		return anyCollidingBlock !== undefined;
 	}
 
@@ -92,8 +76,7 @@ export default class Spider extends Mod {
 
 		if (!nearWall) return;
 
-		const shouldClimb =
-			this.autoClimb || player.motion.y < 0 || player.onGround;
+		const shouldClimb = this.autoClimb || player.motion.y < 0 || player.onGround;
 
 		if (shouldClimb) {
 			player.motion.y = this.climbSpeed;

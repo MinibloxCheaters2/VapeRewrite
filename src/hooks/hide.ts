@@ -5,10 +5,7 @@
 
 import { exposedName } from "@/utils/mapping/names";
 
-function replaceAndCopyFunction<OP, OR>(
-	oldFunc: (...args: OP[]) => OR,
-	newFunc: (r: OR) => OR,
-) {
+function replaceAndCopyFunction<OP, OR>(oldFunc: (...args: OP[]) => OR, newFunc: (r: OR) => OR) {
 	return new Proxy(oldFunc, {
 		apply(orig, origID, origArgs) {
 			const result = orig.apply(origID, origArgs);
@@ -27,18 +24,12 @@ function spliceIt<T>(arr: T[], item: T): T[] | [] {
 	return arr.splice(idx, 1);
 }
 
-Object.getOwnPropertyNames = replaceAndCopyFunction(
-	Object.getOwnPropertyNames,
-	(list) => {
-		spliceIt(list, exposedName);
-		return list;
-	},
-);
+Object.getOwnPropertyNames = replaceAndCopyFunction(Object.getOwnPropertyNames, (list) => {
+	spliceIt(list, exposedName);
+	return list;
+});
 
-Object.getOwnPropertyDescriptors = replaceAndCopyFunction(
-	Object.getOwnPropertyDescriptors,
-	(l) => {
-		delete l[exposedName];
-		return l;
-	},
-);
+Object.getOwnPropertyDescriptors = replaceAndCopyFunction(Object.getOwnPropertyDescriptors, (l) => {
+	delete l[exposedName];
+	return l;
+});

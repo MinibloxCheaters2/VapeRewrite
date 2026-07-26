@@ -43,9 +43,7 @@ export class ModuleConfig {
 }
 
 function serializeModules(): Record<string, ModuleConfig> {
-	return Object.fromEntries(
-		ModuleManager.modules.map((x) => [x.name, ModuleConfig.from(x)]),
-	);
+	return Object.fromEntries(ModuleManager.modules.map((x) => [x.name, ModuleConfig.from(x)]));
 }
 
 export class Config {
@@ -59,8 +57,7 @@ export class Config {
 	}
 
 	public static deserialize(_name: string, json: string): Config {
-		const data: Record</* module name*/ string, ModuleConfig> =
-			JSON.parse(json);
+		const data: Record</* module name*/ string, ModuleConfig> = JSON.parse(json);
 		return new Config(data);
 	}
 }
@@ -76,8 +73,7 @@ export class NamedConfig extends Config {
 	}
 
 	public static deserialize(name: string, json: string): NamedConfig {
-		const data: Record</* module name*/ string, ModuleConfig> =
-			JSON.parse(json);
+		const data: Record</* module name*/ string, ModuleConfig> = JSON.parse(json);
 		return new NamedConfig(name, data);
 	}
 }
@@ -116,9 +112,7 @@ export function loadConfig(name: string = loadedConfig.name) {
 
 		iterSubSettings(mod, (setting) => {
 			if (lookup.has(setting.name)) {
-				(setting.setValue as (value: unknown) => void)(
-					lookup.get(setting.name),
-				);
+				(setting.setValue as (value: unknown) => void)(lookup.get(setting.name));
 			}
 		});
 	}
@@ -182,9 +176,7 @@ export function updateLoadedConfig(moduleName?: string, settingName?: string) {
 	const serialized = serializeBaseSetting<unknown>(setting);
 	const moduleConfig = loadedConfig.modules[moduleName];
 	if (moduleConfig) {
-		const index = moduleConfig.settings.findIndex(
-			(s) => s.name === settingName,
-		);
+		const index = moduleConfig.settings.findIndex((s) => s.name === settingName);
 		if (index !== -1) {
 			moduleConfig.settings[index] = serialized;
 		}

@@ -20,21 +20,13 @@ export default class MurderMystery extends Mod {
 		if (!plr) return;
 		for (const equipment of data.equipment) {
 			//@ts-expect-error: TODO: typings for this in @wq2/miniblox-sdk
-			const is: ItemStack | undefined = ItemStack.fromProto(
-				equipment.item,
-			);
+			const is: ItemStack | undefined = ItemStack.fromProto(equipment.item);
 			const item = is?.getItem();
 			if (!item) continue;
 			if (item instanceof ItemSword) {
-				showNotification(
-					"MurderMystery",
-					`${plr.getName()} is holding a sword`,
-				);
+				showNotification("MurderMystery", `${plr.getName()} is holding a sword`);
 			} else if (item instanceof ItemBow) {
-				showNotification(
-					"MurderMystery",
-					`${plr.getName()} is holding a bow`,
-				);
+				showNotification("MurderMystery", `${plr.getName()} is holding a bow`);
 			}
 		}
 	}

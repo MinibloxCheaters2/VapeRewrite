@@ -119,12 +119,7 @@ export default abstract class Mod extends Configurable {
 	public toggle(): void {
 		this.toggleSilently();
 		if (toggleAlertEnabled()) {
-			showNotification(
-				this.name,
-				this.enabled ? "Enabled" : "Disabled",
-				"info",
-				2000,
-			);
+			showNotification(this.name, this.enabled ? "Enabled" : "Disabled", "info", 2000);
 		}
 	}
 

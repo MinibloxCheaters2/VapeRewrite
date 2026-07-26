@@ -1,11 +1,7 @@
 import { createSignal, For } from "solid-js";
 import { REAL_CLIENT_NAME } from "@/Client";
 import ModuleManager from "@/features/modules/api/ModuleManager";
-import {
-	rainbowMode,
-	rainbowSpeed,
-	rainbowUpdateRate,
-} from "@/ui/globalSettings";
+import { rainbowMode, rainbowSpeed, rainbowUpdateRate } from "@/ui/globalSettings";
 import getResourceURL from "@/utils/helpers/cachedResourceURL";
 import HudElement from "../api/JSXHudElement";
 
@@ -82,13 +78,7 @@ export default class ArrayListHud extends HudElement {
 		this.id = "arraylist";
 	}
 
-	private fontSizeSetting = this.createSliderSetting(
-		"Font Size",
-		14,
-		8,
-		32,
-		1,
-	);
+	private fontSizeSetting = this.createSliderSetting("Font Size", 14, 8, 32, 1);
 	private fontFamilySetting = this.createDropdownSetting(
 		"Font",
 		["Arial", "Verdana", "Courier New", "Georgia", "Times New Roman"],
@@ -113,27 +103,20 @@ export default class ArrayListHud extends HudElement {
 		o: 0.8,
 	});
 	private showLogoSetting = this.createToggleSetting("Show Logo", true);
-	private addCustomTextSetting = this.createToggleSetting(
-		"Add custom text",
-		false,
-	);
-	private customTextContentSetting = this.createTextBoxSetting(
-		"Custom text",
-		"",
-	);
+	private addCustomTextSetting = this.createToggleSetting("Add custom text", false);
+	private customTextContentSetting = this.createTextBoxSetting("Custom text", "");
 	private customFontSetting = this.createDropdownSetting(
 		"Custom Font",
 		["Arial", "Verdana", "Courier New", "Georgia", "Times New Roman"],
 		"Arial",
 	);
-	private setCustomTextColorToggle = this.createToggleSetting(
-		"Set custom text color",
-		false,
-	);
-	private customTextColorSetting = this.createColorSliderSetting(
-		"Color of custom text",
-		{ h: 0, s: 0, v: 0.78, o: 1 },
-	);
+	private setCustomTextColorToggle = this.createToggleSetting("Set custom text color", false);
+	private customTextColorSetting = this.createColorSliderSetting("Color of custom text", {
+		h: 0,
+		s: 0,
+		v: 0.78,
+		o: 1,
+	});
 
 	private rainbowOffsetSignal = createSignal(0);
 	#rainbowTimer?: ReturnType<typeof setTimeout>;
@@ -146,9 +129,7 @@ export default class ArrayListHud extends HudElement {
 
 		const tick = () => {
 			const speed = rainbowSpeed();
-			this.rainbowOffsetSignal[1](
-				(this.rainbowOffsetSignal[0]() + 0.2 * speed * (1 / 60)) % 1,
-			);
+			this.rainbowOffsetSignal[1]((this.rainbowOffsetSignal[0]() + 0.2 * speed * (1 / 60)) % 1);
 			this.#rainbowTimer = setTimeout(tick, updateInterval());
 		};
 
@@ -188,8 +169,7 @@ export default class ArrayListHud extends HudElement {
 				[0.67, 1, 1],
 				[0.83, 1, 1],
 			];
-			const band =
-				Math.floor(baseHue * retroColors.length) % retroColors.length;
+			const band = Math.floor(baseHue * retroColors.length) % retroColors.length;
 			const [h, s, v] = retroColors[band];
 			return hsvToRgb(h, s, v, alpha);
 		}
@@ -242,9 +222,7 @@ export default class ArrayListHud extends HudElement {
 						style={{
 							display: "flex",
 							"align-items": "center",
-							"justify-content": isRightSide()
-								? "flex-end"
-								: "flex-start",
+							"justify-content": isRightSide() ? "flex-end" : "flex-start",
 							"margin-bottom": "4px",
 							gap: "2px",
 						}}
@@ -272,47 +250,37 @@ export default class ArrayListHud extends HudElement {
 					</div>
 				)}
 
-				{this.addCustomTextSetting.value() &&
-					this.customTextContentSetting.value() !== "" && (
-						<div
-							class="vape-hud-text"
-							style={{
-								"--hud-font-size": "25px",
-								"--hud-font": this.customFontSetting.value(),
-								"--hud-color":
-									this.setCustomTextColorToggle.value()
-										? hsvToRgb(
-												this.customTextColorSetting.value()
-													.h,
-												this.customTextColorSetting.value()
-													.s,
-												this.customTextColorSetting.value()
-													.v,
-												this.customTextColorSetting.value()
-													.o,
-											)
-										: this.getRainbowColor(0),
-								"--hud-shadow": `2px 2px 2px ${this.getShadowColor()}`,
-								"letter-spacing": "0.3px",
-								padding: "1px 4px",
-								"justify-content": isRightSide()
-									? "flex-end"
-									: "flex-start",
-								"text-align": isRightSide() ? "right" : "left",
-								"margin-bottom": "4px",
-							}}
-						>
-							{this.customTextContentSetting.value()}
-						</div>
-					)}
+				{this.addCustomTextSetting.value() && this.customTextContentSetting.value() !== "" && (
+					<div
+						class="vape-hud-text"
+						style={{
+							"--hud-font-size": "25px",
+							"--hud-font": this.customFontSetting.value(),
+							"--hud-color": this.setCustomTextColorToggle.value()
+								? hsvToRgb(
+										this.customTextColorSetting.value().h,
+										this.customTextColorSetting.value().s,
+										this.customTextColorSetting.value().v,
+										this.customTextColorSetting.value().o,
+									)
+								: this.getRainbowColor(0),
+							"--hud-shadow": `2px 2px 2px ${this.getShadowColor()}`,
+							"letter-spacing": "0.3px",
+							padding: "1px 4px",
+							"justify-content": isRightSide() ? "flex-end" : "flex-start",
+							"text-align": isRightSide() ? "right" : "left",
+							"margin-bottom": "4px",
+						}}
+					>
+						{this.customTextContentSetting.value()}
+					</div>
+				)}
 
 				<div
 					style={{
 						display: "flex",
 						"flex-direction": "column",
-						"align-items": isRightSide()
-							? "flex-end"
-							: "flex-start",
+						"align-items": isRightSide() ? "flex-end" : "flex-start",
 						gap: "1px",
 					}}
 				>
@@ -322,9 +290,7 @@ export default class ArrayListHud extends HudElement {
 								class="vape-hud-text"
 								style={{
 									"--hud-font-size": `${this.fontSizeSetting.value()}px`,
-									"--hud-color": this.getRainbowColor(
-										index(),
-									),
+									"--hud-color": this.getRainbowColor(index()),
 									"--hud-shadow": `2px 2px 2px ${this.getShadowColor()}`,
 									"letter-spacing": "0.3px",
 									padding: "1px 4px",

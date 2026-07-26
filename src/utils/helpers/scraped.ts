@@ -4,11 +4,7 @@
  */
 
 import type { Message } from "@wq2/miniblox-sdk";
-import type {
-	MappedEnumGroup,
-	MappedMessage,
-	Syntax,
-} from "@wq2/packet-gen-wasm";
+import type { MappedEnumGroup, MappedMessage, Syntax } from "@wq2/packet-gen-wasm";
 import { ready as packetsPromise } from "../network/WasmTest";
 import Miniblox, { type Runtime } from "../refs/miniblox";
 
@@ -29,9 +25,7 @@ export async function init() {
 						pkts.find(
 							(x) =>
 								(
-									x.constructor as ((
-										a: object,
-									) => unknown) & {
+									x.constructor as ((a: object) => unknown) & {
 										typeName: string;
 									}
 								).typeName === m.typeName,
@@ -47,8 +41,7 @@ export function asMessage<T extends object>(msg: MappedMessage): Message<T> {
 	const runtime: Runtime | undefined =
 		msg.syntax === _Syntax.Proto3 ? Miniblox.proto3 : Miniblox.proto2;
 
-	if (runtime === undefined)
-		throw new Error(`Failed to find runtime for ${msg.syntax}`);
+	if (runtime === undefined) throw new Error(`Failed to find runtime for ${msg.syntax}`);
 	return class packetClass extends msgClass<T> {
 		constructor(args?: T) {
 			super();

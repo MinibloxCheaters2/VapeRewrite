@@ -8,21 +8,10 @@ export default class LiquidWalk extends Mod {
 	public category = Category.WORLD;
 
 	// Settings
-	private speedSetting = this.createSliderSetting(
-		"Speed",
-		1.0,
-		0.5,
-		2.0,
-		0.1,
-	);
+	private speedSetting = this.createSliderSetting("Speed", 1.0, 0.5, 2.0, 0.1);
 	private bounceSetting = this.createToggleSetting("Bounce", true);
-	private bounceHeightSetting = this.createSliderSetting(
-		"Bounce Height",
-		0.5,
-		0.1,
-		1.0,
-		0.1,
-		() => this.bounceSetting.value(),
+	private bounceHeightSetting = this.createSliderSetting("Bounce Height", 0.5, 0.1, 1.0, 0.1, () =>
+		this.bounceSetting.value(),
 	);
 	private waterOnlySetting = this.createToggleSetting("Water Only", false);
 
@@ -47,16 +36,11 @@ export default class LiquidWalk extends Mod {
 		if (!player || !game || !Materials) return false;
 
 		const { BlockPos } = Miniblox;
-		const pos = new BlockPos(
-			Math.floor(player.pos.x),
-			Math.floor(testY),
-			Math.floor(player.pos.z),
-		);
+		const pos = new BlockPos(Math.floor(player.pos.x), Math.floor(testY), Math.floor(player.pos.z));
 
 		const block = game.world.getBlockState(pos).getBlock();
 		return (
-			block.material === Materials.water ||
-			(!this.waterOnly && block.material === Materials.lava)
+			block.material === Materials.water || (!this.waterOnly && block.material === Materials.lava)
 		);
 	}
 

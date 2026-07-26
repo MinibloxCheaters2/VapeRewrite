@@ -10,10 +10,7 @@ export default class ChestSpamDupe implements Tagged {
 	private onTick() {
 		const { player, chat } = Miniblox;
 		// TODO: would it work, even with your inventory?
-		if (
-			!player.openContainer ||
-			player.openContainer === player.inventoryContainer
-		) {
+		if (!player.openContainer || player.openContainer === player.inventoryContainer) {
 			chat.addChat({
 				text: "Open a chest to dupe!",
 			});

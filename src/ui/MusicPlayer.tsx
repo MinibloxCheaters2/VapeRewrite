@@ -37,12 +37,7 @@ function Visualizer() {
 	let animationFrameId: number | undefined;
 
 	const startVisualizer = () => {
-		if (
-			!globalMusicState.audioElement ||
-			!globalMusicState.analyser ||
-			!canvasRef
-		)
-			return;
+		if (!globalMusicState.audioElement || !globalMusicState.analyser || !canvasRef) return;
 
 		const ctx = canvasRef.getContext("2d");
 		if (!ctx) return;
@@ -71,8 +66,7 @@ function Visualizer() {
 
 			for (let i = 0; i < barCount; i++) {
 				const dataIndex = Math.floor((i / barCount) * bufferLength);
-				const barHeight =
-					(dataArray[dataIndex] / 255) * canvasRef?.height * 0.9;
+				const barHeight = (dataArray[dataIndex] / 255) * canvasRef?.height * 0.9;
 
 				const gradient = ctx.createLinearGradient(
 					0,
@@ -84,12 +78,7 @@ function Visualizer() {
 				gradient.addColorStop(1, "rgba(5, 134, 105, 0.4)");
 
 				ctx.fillStyle = gradient;
-				ctx.fillRect(
-					i * barWidth + 1,
-					canvasRef?.height - barHeight,
-					barWidth - 2,
-					barHeight,
-				);
+				ctx.fillRect(i * barWidth + 1, canvasRef?.height - barHeight, barWidth - 2, barHeight);
 			}
 		};
 
@@ -203,27 +192,19 @@ function MusicPlayer() {
 				const wnd = window as typeof window & {
 					webkitAudioContext: typeof AudioContext;
 				};
-				globalMusicState.audioContext = new (
-					wnd.AudioContext ?? wnd.webkitAudioContext
-				)();
+				globalMusicState.audioContext = new (wnd.AudioContext ?? wnd.webkitAudioContext)();
 				console.log("AudioContext created");
 			}
 
 			if (!globalMusicState.analyser) {
-				globalMusicState.analyser =
-					globalMusicState.audioContext.createAnalyser();
+				globalMusicState.analyser = globalMusicState.audioContext.createAnalyser();
 				globalMusicState.analyser.fftSize = 256;
 				console.log("Analyser created");
 			}
 
-			const source =
-				globalMusicState.audioContext.createMediaElementSource(
-					audioElement,
-				);
+			const source = globalMusicState.audioContext.createMediaElementSource(audioElement);
 			source.connect(globalMusicState.analyser);
-			globalMusicState.analyser.connect(
-				globalMusicState.audioContext.destination,
-			);
+			globalMusicState.analyser.connect(globalMusicState.audioContext.destination);
 			audioElement._audioSource = source;
 			console.log("Audio source connected to analyser and destination");
 		} catch (error) {
@@ -382,20 +363,11 @@ function MusicPlayer() {
 					<div
 						style={{
 							position: "relative",
-							width: expanded()
-								? searching()
-									? "360px"
-									: "340px"
-								: "80px",
-							height: expanded()
-								? searching()
-									? "440px"
-									: "160px"
-								: "80px",
+							width: expanded() ? (searching() ? "360px" : "340px") : "80px",
+							height: expanded() ? (searching() ? "440px" : "160px") : "80px",
 							"background-color": "rgba(26, 25, 26, 0.95)",
 							"border-radius": "16px",
-							"box-shadow":
-								"0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)",
+							"box-shadow": "0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)",
 							overflow: "hidden",
 							transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
 						}}
@@ -457,24 +429,18 @@ function MusicPlayer() {
 												type="text"
 												placeholder="🔍 Search music..."
 												value={searchQuery()}
-												on:input={(e) =>
-													handleSearchInput(
-														e.currentTarget.value,
-													)
-												}
+												on:input={(e) => handleSearchInput(e.currentTarget.value)}
 												autofocus
 												style={{
 													flex: "1",
 													padding: "10px 12px",
 													border: "1px solid rgba(5, 134, 105, 0.3)",
 													"border-radius": "8px",
-													background:
-														"rgba(0, 0, 0, 0.4)",
+													background: "rgba(0, 0, 0, 0.4)",
 													color: "rgb(200, 200, 200)",
 													"font-size": "13px",
 													outline: "none",
-													"font-family":
-														"Arial, sans-serif",
+													"font-family": "Arial, sans-serif",
 												}}
 											/>
 											<button
@@ -486,8 +452,7 @@ function MusicPlayer() {
 												style={{
 													width: "36px",
 													height: "36px",
-													background:
-														"rgba(255, 255, 255, 0.1)",
+													background: "rgba(255, 255, 255, 0.1)",
 													border: "none",
 													"border-radius": "8px",
 													color: "rgb(200, 200, 200)",
@@ -496,16 +461,13 @@ function MusicPlayer() {
 													display: "flex",
 													"align-items": "center",
 													"justify-content": "center",
-													transition:
-														"background 0.2s",
+													transition: "background 0.2s",
 												}}
 												on:pointerenter={(e) => {
-													e.currentTarget.style.background =
-														"rgba(255, 255, 255, 0.2)";
+													e.currentTarget.style.background = "rgba(255, 255, 255, 0.2)";
 												}}
 												on:pointerleave={(e) => {
-													e.currentTarget.style.background =
-														"rgba(255, 255, 255, 0.1)";
+													e.currentTarget.style.background = "rgba(255, 255, 255, 0.1)";
 												}}
 											>
 												✕
@@ -524,17 +486,13 @@ function MusicPlayer() {
 												fallback={
 													<div
 														style={{
-															"text-align":
-																"center",
-															padding:
-																"40px 20px",
+															"text-align": "center",
+															padding: "40px 20px",
 															color: "rgb(100, 100, 100)",
 															"font-size": "13px",
 														}}
 													>
-														{searchQuery()
-															? "No results found"
-															: "Enter a search term"}
+														{searchQuery() ? "No results found" : "Enter a search term"}
 													</div>
 												}
 											>
@@ -544,35 +502,22 @@ function MusicPlayer() {
 															e.stopPropagation();
 															loadTrack(track);
 															setSearching(false);
-															setTimeout(
-																() =>
-																	playTrack(),
-																100,
-															);
+															setTimeout(() => playTrack(), 100);
 														}}
 														style={{
 															display: "flex",
 															gap: "10px",
 															padding: "10px",
-															"border-radius":
-																"8px",
+															"border-radius": "8px",
 															cursor: "pointer",
-															transition:
-																"background 0.2s",
-															"margin-bottom":
-																"6px",
+															transition: "background 0.2s",
+															"margin-bottom": "6px",
 														}}
-														on:pointerenter={(
-															e,
-														) => {
-															e.currentTarget.style.background =
-																"rgba(5, 134, 105, 0.2)";
+														on:pointerenter={(e) => {
+															e.currentTarget.style.background = "rgba(5, 134, 105, 0.2)";
 														}}
-														on:pointerleave={(
-															e,
-														) => {
-															e.currentTarget.style.background =
-																"transparent";
+														on:pointerleave={(e) => {
+															e.currentTarget.style.background = "transparent";
 														}}
 													>
 														<img
@@ -584,54 +529,39 @@ function MusicPlayer() {
 															style={{
 																width: "45px",
 																height: "45px",
-																"border-radius":
-																	"6px",
-																"object-fit":
-																	"cover",
+																"border-radius": "6px",
+																"object-fit": "cover",
 															}}
 														/>
 														<div
 															style={{
 																flex: "1",
-																"min-width":
-																	"0",
+																"min-width": "0",
 															}}
 														>
 															<div
 																style={{
-																	"font-size":
-																		"13px",
-																	"font-weight":
-																		"600",
+																	"font-size": "13px",
+																	"font-weight": "600",
 																	color: "rgb(200, 200, 200)",
-																	"white-space":
-																		"nowrap",
-																	overflow:
-																		"hidden",
-																	"text-overflow":
-																		"ellipsis",
-																	"margin-bottom":
-																		"4px",
+																	"white-space": "nowrap",
+																	overflow: "hidden",
+																	"text-overflow": "ellipsis",
+																	"margin-bottom": "4px",
 																}}
 															>
 																{track.name}
 															</div>
 															<div
 																style={{
-																	"font-size":
-																		"11px",
+																	"font-size": "11px",
 																	color: "rgb(150, 150, 150)",
-																	"white-space":
-																		"nowrap",
-																	overflow:
-																		"hidden",
-																	"text-overflow":
-																		"ellipsis",
+																	"white-space": "nowrap",
+																	overflow: "hidden",
+																	"text-overflow": "ellipsis",
 																}}
 															>
-																{
-																	track.artist_name
-																}
+																{track.artist_name}
 															</div>
 														</div>
 													</div>
@@ -645,9 +575,7 @@ function MusicPlayer() {
 								<Show when={!searching()}>
 									<div style={{ height: "100%" }}>
 										{/* Track info */}
-										<div
-											style={{ "margin-bottom": "10px" }}
-										>
+										<div style={{ "margin-bottom": "10px" }}>
 											<div
 												style={{
 													"font-size": "14px",
@@ -659,8 +587,7 @@ function MusicPlayer() {
 													"margin-bottom": "4px",
 												}}
 											>
-												{currentTrack()?.name ||
-													"No track selected"}
+												{currentTrack()?.name || "No track selected"}
 											</div>
 											<div
 												style={{
@@ -671,8 +598,7 @@ function MusicPlayer() {
 													"text-overflow": "ellipsis",
 												}}
 											>
-												{currentTrack()?.artist_name ||
-													"Click search to select"}
+												{currentTrack()?.artist_name || "Click search to select"}
 											</div>
 										</div>
 
@@ -684,8 +610,7 @@ function MusicPlayer() {
 												"margin-bottom": "10px",
 											}}
 										>
-											{formatTime(currentTime())} /{" "}
-											{formatTime(duration())}
+											{formatTime(currentTime())} / {formatTime(duration())}
 										</div>
 
 										{/* Controls */}
@@ -714,35 +639,25 @@ function MusicPlayer() {
 													border: "2px solid rgb(5, 134, 105)",
 													background: "transparent",
 													color: "rgb(5, 134, 105)",
-													cursor: currentTrack()
-														? "pointer"
-														: "not-allowed",
+													cursor: currentTrack() ? "pointer" : "not-allowed",
 													"font-size": "16px",
 													display: "flex",
 													"align-items": "center",
 													"justify-content": "center",
 													transition: "all 0.2s",
-													opacity: currentTrack()
-														? "1"
-														: "0.3",
+													opacity: currentTrack() ? "1" : "0.3",
 												}}
 												on:pointerenter={(e) => {
 													if (currentTrack()) {
-														e.currentTarget.style.background =
-															"rgb(5, 134, 105)";
-														e.currentTarget.style.color =
-															"white";
-														e.currentTarget.style.transform =
-															"scale(1.05)";
+														e.currentTarget.style.background = "rgb(5, 134, 105)";
+														e.currentTarget.style.color = "white";
+														e.currentTarget.style.transform = "scale(1.05)";
 													}
 												}}
 												on:pointerleave={(e) => {
-													e.currentTarget.style.background =
-														"transparent";
-													e.currentTarget.style.color =
-														"rgb(5, 134, 105)";
-													e.currentTarget.style.transform =
-														"scale(1)";
+													e.currentTarget.style.background = "transparent";
+													e.currentTarget.style.color = "rgb(5, 134, 105)";
+													e.currentTarget.style.transform = "scale(1)";
 												}}
 											>
 												{isPlaying() ? "⏸" : "▶"}
@@ -754,10 +669,7 @@ function MusicPlayer() {
 													e.stopPropagation();
 													playNextTrack();
 												}}
-												disabled={
-													!currentTrack() ||
-													searchResults().length === 0
-												}
+												disabled={!currentTrack() || searchResults().length === 0}
 												style={{
 													width: "36px",
 													height: "36px",
@@ -766,9 +678,7 @@ function MusicPlayer() {
 													background: "transparent",
 													color: "rgb(5, 134, 105)",
 													cursor:
-														currentTrack() &&
-														searchResults().length >
-															0
+														currentTrack() && searchResults().length > 0
 															? "pointer"
 															: "not-allowed",
 													"font-size": "14px",
@@ -776,34 +686,19 @@ function MusicPlayer() {
 													"align-items": "center",
 													"justify-content": "center",
 													transition: "all 0.2s",
-													opacity:
-														currentTrack() &&
-														searchResults().length >
-															0
-															? "1"
-															: "0.3",
+													opacity: currentTrack() && searchResults().length > 0 ? "1" : "0.3",
 												}}
 												on:pointerenter={(e) => {
-													if (
-														currentTrack() &&
-														searchResults().length >
-															0
-													) {
-														e.currentTarget.style.background =
-															"rgb(5, 134, 105)";
-														e.currentTarget.style.color =
-															"white";
-														e.currentTarget.style.transform =
-															"scale(1.05)";
+													if (currentTrack() && searchResults().length > 0) {
+														e.currentTarget.style.background = "rgb(5, 134, 105)";
+														e.currentTarget.style.color = "white";
+														e.currentTarget.style.transform = "scale(1.05)";
 													}
 												}}
 												on:pointerleave={(e) => {
-													e.currentTarget.style.background =
-														"transparent";
-													e.currentTarget.style.color =
-														"rgb(5, 134, 105)";
-													e.currentTarget.style.transform =
-														"scale(1)";
+													e.currentTarget.style.background = "transparent";
+													e.currentTarget.style.color = "rgb(5, 134, 105)";
+													e.currentTarget.style.transform = "scale(1)";
 												}}
 											>
 												⏭
@@ -820,30 +715,22 @@ function MusicPlayer() {
 													padding: "10px",
 													"border-radius": "8px",
 													border: "1px solid rgba(5, 134, 105, 0.3)",
-													background:
-														"rgba(0, 0, 0, 0.3)",
+													background: "rgba(0, 0, 0, 0.3)",
 													color: "rgb(150, 150, 150)",
 													cursor: "pointer",
 													"font-size": "13px",
 													transition: "all 0.2s",
-													"font-family":
-														"Arial, sans-serif",
+													"font-family": "Arial, sans-serif",
 												}}
 												on:pointerenter={(e) => {
-													e.currentTarget.style.background =
-														"rgba(5, 134, 105, 0.2)";
-													e.currentTarget.style.color =
-														"rgb(5, 134, 105)";
-													e.currentTarget.style.borderColor =
-														"rgb(5, 134, 105)";
+													e.currentTarget.style.background = "rgba(5, 134, 105, 0.2)";
+													e.currentTarget.style.color = "rgb(5, 134, 105)";
+													e.currentTarget.style.borderColor = "rgb(5, 134, 105)";
 												}}
 												on:pointerleave={(e) => {
-													e.currentTarget.style.background =
-														"rgba(0, 0, 0, 0.3)";
-													e.currentTarget.style.color =
-														"rgb(150, 150, 150)";
-													e.currentTarget.style.borderColor =
-														"rgba(5, 134, 105, 0.3)";
+													e.currentTarget.style.background = "rgba(0, 0, 0, 0.3)";
+													e.currentTarget.style.color = "rgb(150, 150, 150)";
+													e.currentTarget.style.borderColor = "rgba(5, 134, 105, 0.3)";
 												}}
 											>
 												🔍 Search

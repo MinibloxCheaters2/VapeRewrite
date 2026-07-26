@@ -52,11 +52,7 @@ dispatcher.register(
 					const byY = e.get<number>("byY");
 					const byZ = e.get<number>("byZ");
 					const pos = Miniblox.player.pos.clone();
-					Miniblox.player.setPosition(
-						pos.x + byX,
-						pos.y + byY,
-						pos.z + byZ,
-					);
+					Miniblox.player.setPosition(pos.x + byX, pos.y + byY, pos.z + byZ);
 					Miniblox.chat.addChat({
 						text: `Clipped X: ${byX}, Y: ${byY}, Z: ${byZ} blocks!`,
 						color: "blue",

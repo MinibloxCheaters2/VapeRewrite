@@ -19,10 +19,7 @@ const MAX_FALL_HEIGHT = 3;
 export default class NoFall extends Mod {
 	public name = "NoFall";
 	public category = Category.WORLD;
-	#modeSetting = this.createDropdownSetting("Mode", [
-		"Normal",
-		"Ground Spoof",
-	]);
+	#modeSetting = this.createDropdownSetting("Mode", ["Normal", "Ground Spoof"]);
 	#doJump = false;
 
 	private get mode() {
@@ -41,8 +38,7 @@ export default class NoFall extends Mod {
 					{
 						if (
 							PacketFallDistance.currentFallDistance >=
-							/*Miniblox.player.getMaxFallHeight()*/ MAX_FALL_HEIGHT -
-								FALL_HEIGHT_BUFFER
+							/*Miniblox.player.getMaxFallHeight()*/ MAX_FALL_HEIGHT - FALL_HEIGHT_BUFFER
 						)
 							this.#doJump = true;
 						if (this.#doJump) {
@@ -58,8 +54,7 @@ export default class NoFall extends Mod {
 					if (
 						!packet.onGround &&
 						PacketFallDistance.currentFallDistance >=
-							/*Miniblox.player.getMaxFallHeight()*/ MAX_FALL_HEIGHT -
-								FALL_HEIGHT_BUFFER
+							/*Miniblox.player.getMaxFallHeight()*/ MAX_FALL_HEIGHT - FALL_HEIGHT_BUFFER
 					) {
 						packet.onGround = true;
 						Miniblox.player.fallDistance = 0;

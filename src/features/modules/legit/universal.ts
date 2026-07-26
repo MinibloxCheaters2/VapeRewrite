@@ -32,20 +32,8 @@ class Atmosphere extends LegitModule {
 
 	readonly rain = this.createToggleSetting("Rain");
 	readonly thunder = this.createToggleSetting("Thunder");
-	readonly rainStrength = this.createSliderSetting(
-		"Rain Strength",
-		1,
-		0,
-		1,
-		0.01,
-	);
-	readonly thunderStrength = this.createSliderSetting(
-		"Thunder Strength",
-		1,
-		0,
-		1,
-		0.01,
-	);
+	readonly rainStrength = this.createSliderSetting("Rain Strength", 1, 0, 1, 0.01);
+	readonly thunderStrength = this.createSliderSetting("Thunder Strength", 1, 0, 1, 0.01);
 
 	#savedRain = false;
 	#savedThunder = false;
@@ -76,20 +64,8 @@ register(new Atmosphere());
 class Breadcrumbs extends LegitModule {
 	readonly name = "Breadcrumbs";
 	readonly tooltip = "Shows a trail behind your character";
-	private readonly lifetimeSetting = this.createSliderSetting(
-		"Lifetime",
-		3,
-		1,
-		10,
-		0.1,
-	);
-	private readonly spacingSetting = this.createSliderSetting(
-		"Spacing",
-		1,
-		0.5,
-		5,
-		0.01,
-	);
+	private readonly lifetimeSetting = this.createSliderSetting("Lifetime", 3, 1, 10, 0.1);
+	private readonly spacingSetting = this.createSliderSetting("Spacing", 1, 0.5, 5, 0.01);
 	private readonly colorSetting = this.createColorSliderSetting("Color", {
 		h: 0.5,
 		s: 0,
@@ -165,10 +141,7 @@ class Breadcrumbs extends LegitModule {
 			}
 
 			const maxLife = this.lifetime;
-			while (
-				this.#points.length > 0 &&
-				now - this.#points[0].time > maxLife
-			) {
+			while (this.#points.length > 0 && now - this.#points[0].time > maxLife) {
 				this.#points.shift();
 			}
 
@@ -179,10 +152,7 @@ class Breadcrumbs extends LegitModule {
 				}
 				const arr = new Float32Array(coords);
 				this.#line.geometry.clearGroups();
-				this.#line.geometry.setAttribute(
-					"position",
-					new THREE.BufferAttribute(arr, 3),
-				);
+				this.#line.geometry.setAttribute("position", new THREE.BufferAttribute(arr, 3));
 				this.#line.visible = true;
 			} else {
 				this.#line.visible = false;
@@ -190,9 +160,7 @@ class Breadcrumbs extends LegitModule {
 
 			const c = this.color;
 			const hex =
-				(Math.round(c.v * 255) << 16) |
-				(Math.round(c.v * 255) << 8) |
-				Math.round(c.v * 255);
+				(Math.round(c.v * 255) << 16) | (Math.round(c.v * 255) << 8) | Math.round(c.v * 255);
 			this.#material?.color.setHex(hex);
 
 			this.#rafId = requestAnimationFrame(tick);
@@ -242,10 +210,7 @@ class Keystrokes extends LegitModule {
 	readonly name = "Keystrokes";
 	readonly tooltip = "Shows movement keys on-screen";
 	readonly customSize = { width: 110, height: 176 };
-	readonly keyStyle = this.createDropdownSetting("Key Style", [
-		"Keyboard",
-		"Arrow",
-	]);
+	readonly keyStyle = this.createDropdownSetting("Key Style", ["Keyboard", "Arrow"]);
 	readonly color = this.createColorSliderSetting("Color", {
 		h: 0,
 		s: 0,

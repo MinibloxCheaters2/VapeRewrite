@@ -20,10 +20,7 @@ export default class AntiBan extends Mod {
 	category = Category.UTILITY;
 
 	private integration = this.createToggleSetting("AccountGen", false);
-	private endpoint = this.createTextBoxSetting(
-		"APIServerLocation",
-		"http://localhost:3785/",
-	);
+	private endpoint = this.createTextBoxSetting("APIServerLocation", "http://localhost:3785/");
 
 	private nonAccountModeSetting = this.createDropdownSetting(
 		"NonAccountMode",
@@ -78,10 +75,7 @@ export default class AntiBan extends Mod {
 		})
 			.then(() => true)
 			.catch((e) => {
-				logger.error(
-					"Failed to check if API server is online (probably offline):",
-					e,
-				);
+				logger.error("Failed to check if API server is online (probably offline):", e);
 				return false;
 			});
 	}
@@ -90,19 +84,13 @@ export default class AntiBan extends Mod {
 	async #generateAccount(): Promise<AccountData> {
 		const r = await fetch(this.generateMinibloxAccountEndpoint);
 		if (!r.ok) {
-			throw new Error(
-				"Failed to generate account, check API server logs!",
-			);
+			throw new Error("Failed to generate account, check API server logs!");
 		}
 		return await r.json();
 	}
 
 	public async canUseAccountGen(): Promise<boolean> {
-		return (
-			this.genEnabled &&
-			this.apiServerLocation &&
-			(await this.isAPIServerOnline())
-		);
+		return this.genEnabled && this.apiServerLocation && (await this.isAPIServerOnline());
 	}
 
 	public handleNonAccount(): NonAccountData {

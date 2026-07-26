@@ -1,11 +1,4 @@
-import {
-	createEffect,
-	createSignal,
-	For,
-	onCleanup,
-	onMount,
-	Show,
-} from "solid-js";
+import { createEffect, createSignal, For, onCleanup, onMount, Show } from "solid-js";
 import Category, { type CategoryInfo } from "@/features/modules/api/Category";
 import type Mod from "@/features/modules/api/Module";
 import ModuleManager, { P } from "@/features/modules/api/ModuleManager";
@@ -35,15 +28,12 @@ export function CategoryWindow(props: CategoryWindowProps) {
 	const [expanded, setExpanded] = createSignal(false);
 	const [dragging, setDragging] = createSignal(false);
 
-	const position = () =>
-		categoryWindowPositions()[props.category] ?? { x: 6, y: 60 };
+	const position = () => categoryWindowPositions()[props.category] ?? { x: 6, y: 60 };
 	const [dragOffset, setDragOffset] = createSignal({ x: 0, y: 0 });
 	const [windowHeight, setWindowHeight] = createSignal(41);
 	const [updateTrigger, setUpdateTrigger] = createSignal(0);
 
-	const modules = ModuleManager.findModules(
-		P.byCategory(Category[props.category.toUpperCase()]),
-	);
+	const modules = ModuleManager.findModules(P.byCategory(Category[props.category.toUpperCase()]));
 
 	let windowRef: HTMLDivElement | undefined;
 	let contentRef: HTMLDivElement | undefined;
@@ -128,8 +118,7 @@ export function CategoryWindow(props: CategoryWindowProps) {
 	// 	return Math.min(contentRef.scrollHeight, 560);
 	// };
 
-	const isVisible = () =>
-		guiVisible() && isCategoryWindowVisible(props.category);
+	const isVisible = () => guiVisible() && isCategoryWindowVisible(props.category);
 
 	return (
 		<Show when={isVisible()}>
@@ -155,9 +144,7 @@ export function CategoryWindow(props: CategoryWindowProps) {
 					class="vape-header"
 					style={{
 						cursor: dragging() ? "grabbing" : "grab",
-						"border-bottom": expanded()
-							? `1px solid var(--vape-divider)`
-							: "none",
+						"border-bottom": expanded() ? `1px solid var(--vape-divider)` : "none",
 						position: "relative",
 					}}
 				>
@@ -205,9 +192,7 @@ export function CategoryWindow(props: CategoryWindowProps) {
 								width: "9px",
 								height: "4px",
 								filter: "brightness(0.55)",
-								transform: expanded()
-									? "rotate(0deg)"
-									: "rotate(180deg)",
+								transform: expanded() ? "rotate(0deg)" : "rotate(180deg)",
 								transition: "transform 0.16s linear",
 							}}
 						/>
@@ -224,12 +209,7 @@ export function CategoryWindow(props: CategoryWindowProps) {
 						}}
 					>
 						<For each={modules}>
-							{(mod) => (
-								<ModuleButton
-									mod={mod}
-									onExpandChange={triggerHeightUpdate}
-								/>
-							)}
+							{(mod) => <ModuleButton mod={mod} onExpandChange={triggerHeightUpdate} />}
 						</For>
 					</div>
 				</Show>
@@ -272,9 +252,7 @@ function ModuleButton(props: { mod: Mod; onExpandChange: () => void }) {
 						: hovered() || expanded()
 							? "var(--vape-main-light)"
 							: "var(--vape-main)",
-					"border-bottom": toggled()
-						? `1px solid var(--vape-divider-dark)`
-						: "none",
+					"border-bottom": toggled() ? `1px solid var(--vape-divider-dark)` : "none",
 					position: "relative",
 				}}
 				on:pointerenter={() => setHovered(true)}
@@ -320,21 +298,16 @@ function ModuleButton(props: { mod: Mod; onExpandChange: () => void }) {
 							"font-family": "Arial, sans-serif",
 						}}
 						on:pointerenter={(e) => {
-							e.currentTarget.style.backgroundColor =
-								"rgba(255, 255, 255, 0.12)";
+							e.currentTarget.style.backgroundColor = "rgba(255, 255, 255, 0.12)";
 						}}
 						on:pointerleave={(e) => {
-							e.currentTarget.style.backgroundColor =
-								"rgba(255, 255, 255, 0.08)";
+							e.currentTarget.style.backgroundColor = "rgba(255, 255, 255, 0.08)";
 						}}
 						on:click={(e) => {
 							e.stopImmediatePropagation();
 							e.stopPropagation();
 							setListening(true);
-							document.addEventListener(
-								"keydown",
-								handleKeyboardEvent,
-							);
+							document.addEventListener("keydown", handleKeyboardEvent);
 						}}
 					>
 						{bind() === "" ? (
@@ -383,9 +356,7 @@ function ModuleButton(props: { mod: Mod; onExpandChange: () => void }) {
 						style={{
 							width: "3px",
 							height: "16px",
-							filter: toggled()
-								? "brightness(0.2)"
-								: "brightness(0.4)",
+							filter: toggled() ? "brightness(0.2)" : "brightness(0.4)",
 						}}
 					/>
 				</button>
@@ -399,10 +370,7 @@ function ModuleButton(props: { mod: Mod; onExpandChange: () => void }) {
 						"border-top": `1px solid var(--vape-divider)`,
 					}}
 				>
-					<ModuleSettings
-						mod={props.mod}
-						onExpandChange={props.onExpandChange}
-					/>
+					<ModuleSettings mod={props.mod} onExpandChange={props.onExpandChange} />
 				</div>
 			</Show>
 		</div>
@@ -469,9 +437,7 @@ function ModuleSettings(props: { mod: Mod; onExpandChange: () => void }) {
 													value={setting.value()}
 													options={setting.options}
 													onChange={setting.setValue}
-													onExpandChange={
-														props.onExpandChange
-													}
+													onExpandChange={props.onExpandChange}
 												/>
 											);
 										case "textbox":
@@ -479,9 +445,7 @@ function ModuleSettings(props: { mod: Mod; onExpandChange: () => void }) {
 												<TextBoxComponent
 													name={setting.name}
 													value={setting.value()}
-													placeholder={
-														setting.placeholder
-													}
+													placeholder={setting.placeholder}
 													onChange={setting.setValue}
 												/>
 											);
@@ -490,13 +454,9 @@ function ModuleSettings(props: { mod: Mod; onExpandChange: () => void }) {
 												<SubmoduleComponent
 													name={setting.name}
 													value={setting.value()}
-													submodules={
-														setting.submodules
-													}
+													submodules={setting.submodules}
 													onChange={setting.setValue}
-													onExpandChange={
-														props.onExpandChange
-													}
+													onExpandChange={props.onExpandChange}
 												/>
 											);
 										case "colorslider":

@@ -12,11 +12,7 @@ import {
 } from "./ItemCategorization";
 import type { ItemFacet } from "./ItemFacet";
 import { getItemFacets } from "./ItemFacetFactory";
-import {
-	type ItemAmountConstraintProvider,
-	ItemPacker,
-	SatisfactionStatus,
-} from "./ItemPacker";
+import { type ItemAmountConstraintProvider, ItemPacker, SatisfactionStatus } from "./ItemPacker";
 
 export interface CleanupPlanPlacementTemplate {
 	slotContentMap: Map<ItemSlot, ItemSortChoice>;
@@ -35,10 +31,7 @@ export class CleanupPlanGenerator implements ItemAmountConstraintProvider {
 
 	private readonly categoryToSlotsMap: Map<string, ItemSlot[]>;
 
-	constructor(
-		template: CleanupPlanPlacementTemplate,
-		availableItems: ItemSlot[],
-	) {
+	constructor(template: CleanupPlanPlacementTemplate, availableItems: ItemSlot[]) {
 		this.availableItems = availableItems;
 		this.template = template;
 
@@ -64,10 +57,7 @@ export class CleanupPlanGenerator implements ItemAmountConstraintProvider {
 			itemFacets.push(...facets);
 		}
 
-		const facetsGroupedByType = new Map<
-			string,
-			{ category: ItemCategory; items: ItemFacet[] }
-		>();
+		const facetsGroupedByType = new Map<string, { category: ItemCategory; items: ItemFacet[] }>();
 		for (const facet of itemFacets) {
 			const key = categoryKey(facet.category);
 			const existing = facetsGroupedByType.get(key);
@@ -82,9 +72,7 @@ export class CleanupPlanGenerator implements ItemAmountConstraintProvider {
 		}
 
 		const sortedEntries = [...facetsGroupedByType.values()].sort(
-			(a, b) =>
-				getAllocationPriority(b.category.type) -
-				getAllocationPriority(a.category.type),
+			(a, b) => getAllocationPriority(b.category.type) - getAllocationPriority(a.category.type),
 		);
 
 		for (const { category, items } of sortedEntries) {
@@ -102,17 +90,10 @@ export class CleanupPlanGenerator implements ItemAmountConstraintProvider {
 		);
 	}
 
-	private processItemCategory(
-		category: ItemCategory,
-		availableItems: ItemFacet[],
-	): void {
-		const hotbarSlotsToFill = this.categoryToSlotsMap.get(
-			categoryKey(category),
-		);
+	private processItemCategory(category: ItemCategory, availableItems: ItemFacet[]): void {
+		const hotbarSlotsToFill = this.categoryToSlotsMap.get(categoryKey(category));
 
-		const prioritizedItemList = [...availableItems].sort((a, b) =>
-			a.compareTo(b),
-		);
+		const prioritizedItemList = [...availableItems].sort((a, b) => a.compareTo(b));
 
 		const requiredMoves = this.packer.packItems(
 			prioritizedItemList,
@@ -160,18 +141,12 @@ export class CleanupPlanGenerator implements ItemAmountConstraintProvider {
 		constraints.sort((a, b) => b.group.priority - a.group.priority);
 
 		for (const constraintInfo of constraints) {
-			const currentCount =
-				this.currentLimit.get(
-					constraintGroupKey(constraintInfo.group),
-				) ?? 0;
-			const projectedCount =
-				currentCount + constraintInfo.amountAddedByItem;
+			const currentCount = this.currentLimit.get(constraintGroupKey(constraintInfo.group)) ?? 0;
+			const projectedCount = currentCount + constraintInfo.amountAddedByItem;
 
 			if (projectedCount > constraintInfo.group.acceptableRange.last) {
 				return SatisfactionStatus.OVERSATURATED;
-			} else if (
-				currentCount < constraintInfo.group.acceptableRange.first
-			) {
+			} else if (currentCount < constraintInfo.group.acceptableRange.first) {
 				return SatisfactionStatus.NOT_SATISFIED;
 			}
 		}
@@ -185,10 +160,7 @@ export class CleanupPlanGenerator implements ItemAmountConstraintProvider {
 		for (const constraintInfo of constraints) {
 			const key = constraintGroupKey(constraintInfo.group);
 			const current = this.currentLimit.get(key) ?? 0;
-			this.currentLimit.set(
-				key,
-				current + constraintInfo.amountAddedByItem,
-			);
+			this.currentLimit.set(key, current + constraintInfo.amountAddedByItem);
 		}
 	}
 }

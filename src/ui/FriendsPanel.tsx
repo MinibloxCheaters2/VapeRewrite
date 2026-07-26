@@ -19,11 +19,7 @@ import {
 	setUseFriends,
 	useFriends,
 } from "./globalSettings";
-import {
-	friendsPanelVisible,
-	guiVisible,
-	setFriendsPanelVisible,
-} from "./guiState";
+import { friendsPanelVisible, guiVisible, setFriendsPanelVisible } from "./guiState";
 import shadowWrapper from "./shadowWrapper";
 
 function FriendsPanelContent() {
@@ -79,11 +75,7 @@ function FriendsPanelContent() {
 						setFriendsColorVal(v);
 					}}
 				/>
-				<ToggleComponent
-					name="Use friends"
-					enabled={useFriends()}
-					onChange={setUseFriends}
-				/>
+				<ToggleComponent name="Use friends" enabled={useFriends()} onChange={setUseFriends} />
 			</CategoryListPanel>
 		</Show>
 	);

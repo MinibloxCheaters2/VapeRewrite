@@ -34,16 +34,9 @@ function getEnchantmentLevel(stack: ItemStack, effectId: number): number {
 	return total;
 }
 
-function getDamageFactor(
-	damage: number,
-	defensePoints: number,
-	toughness: number,
-): number {
+function getDamageFactor(damage: number, defensePoints: number, toughness: number): number {
 	const f = 2.0 + toughness / 4.0;
-	const g = Math.min(
-		Math.max(defensePoints - damage / f, defensePoints * 0.2),
-		20.0,
-	);
+	const g = Math.min(Math.max(defensePoints - damage / f, defensePoints * 0.2), 20.0);
 	return 1.0 - g / 25.0;
 }
 
@@ -70,18 +63,10 @@ function getEnchantmentThreshold(stack: ItemStack): number {
 	const enchIds = [
 		Enchantments.featherFalling?.effectId,
 		Enchantments.thorns?.effectId,
-		(
-			Enchantments as unknown as Record<
-				string,
-				{ effectId: number } | undefined
-			>
-		).respiration?.effectId,
-		(
-			Enchantments as unknown as Record<
-				string,
-				{ effectId: number } | undefined
-			>
-		).aquaAffinity?.effectId,
+		(Enchantments as unknown as Record<string, { effectId: number } | undefined>).respiration
+			?.effectId,
+		(Enchantments as unknown as Record<string, { effectId: number } | undefined>).aquaAffinity
+			?.effectId,
 		Enchantments.unbreaking?.effectId,
 	];
 	let sum = 0;
@@ -101,10 +86,7 @@ interface ArmorItemProxy {
 }
 
 function getArmorProps(stack: ItemStack): ArmorItemProxy {
-	const proxied = remapObj(
-		stack.getItem(),
-		mappings.ItemArmor,
-	) as unknown as ArmorItemProxy;
+	const proxied = remapObj(stack.getItem(), mappings.ItemArmor) as unknown as ArmorItemProxy;
 	return {
 		damageReduceAmount: proxied?.damageReduceAmount ?? 0,
 		armorType: proxied?.armorType ?? 0,
@@ -117,8 +99,7 @@ function getThresholdedDamageReduction(
 	defensePointsExcludingSlot: number,
 	toughnessExcludingSlot: number,
 ): number {
-	const { damageReduceAmount: armorDefense, toughness: armorToughness } =
-		getArmorProps(stack);
+	const { damageReduceAmount: armorDefense, toughness: armorToughness } = getArmorProps(stack);
 
 	const parameters = {
 		defensePoints: defensePointsExcludingSlot + armorDefense,
@@ -126,21 +107,15 @@ function getThresholdedDamageReduction(
 	};
 
 	return (
-		getDamageFactor(
-			EXPECTED_DAMAGE,
-			parameters.defensePoints,
-			parameters.toughness,
-		) *
+		getDamageFactor(EXPECTED_DAMAGE, parameters.defensePoints, parameters.toughness) *
 		(1 - getThresholdedEnchantmentDamageReduction(stack))
 	);
 }
 
 function createArmorPiece(slot: ItemSlot, stack: ItemStack): ArmorPiece {
-	const { damageReduceAmount: defensePoints, armorType: slotType } =
-		getArmorProps(stack);
+	const { damageReduceAmount: defensePoints, armorType: slotType } = getArmorProps(stack);
 	const maxDmg = stack.getMaxDamage();
-	const durabilityRatio =
-		maxDmg > 0 ? (maxDmg - stack.getItemDamage()) / maxDmg : 1;
+	const durabilityRatio = maxDmg > 0 ? (maxDmg - stack.getItemDamage()) / maxDmg : 1;
 
 	const nbt = stack.getEnchantmentTagList();
 	let enchantmentScore = 0;
@@ -236,28 +211,18 @@ function createComparator(
 			params.toughness.get(b.slotType) ?? 0,
 		);
 
-		const aEnchantThreshold = Math.round(
-			getEnchantmentThreshold(aStack) * 1000,
-		);
-		const bEnchantThreshold = Math.round(
-			getEnchantmentThreshold(bStack) * 1000,
-		);
+		const aEnchantThreshold = Math.round(getEnchantmentThreshold(aStack) * 1000);
+		const bEnchantThreshold = Math.round(getEnchantmentThreshold(bStack) * 1000);
 
-		if (aDamageReduction !== bDamageReduction)
-			return aDamageReduction - bDamageReduction;
-		if (aEnchantThreshold !== bEnchantThreshold)
-			return aEnchantThreshold - bEnchantThreshold;
-		if (a.enchantmentScore !== b.enchantmentScore)
-			return a.enchantmentScore - b.enchantmentScore;
-		if (a.durabilityRatio !== b.durabilityRatio)
-			return a.durabilityRatio - b.durabilityRatio;
+		if (aDamageReduction !== bDamageReduction) return aDamageReduction - bDamageReduction;
+		if (aEnchantThreshold !== bEnchantThreshold) return aEnchantThreshold - bEnchantThreshold;
+		if (a.enchantmentScore !== b.enchantmentScore) return a.enchantmentScore - b.enchantmentScore;
+		if (a.durabilityRatio !== b.durabilityRatio) return a.durabilityRatio - b.durabilityRatio;
 		return 0;
 	};
 }
 
-export function findBestArmorPieces(
-	slots: ItemSlot[],
-): Map<number, ArmorPiece | null> {
+export function findBestArmorPieces(slots: ItemSlot[]): Map<number, ArmorPiece | null> {
 	const armorByType = groupArmorByType(slots);
 	const currentBestPieces = new Map<number, ArmorPiece | null>();
 
@@ -265,10 +230,7 @@ export function findBestArmorPieces(
 		currentBestPieces.set(
 			slotType,
 			pieces.reduce(
-				(best, piece) =>
-					piece.defensePoints > (best?.defensePoints ?? 0)
-						? piece
-						: best,
+				(best, piece) => (piece.defensePoints > (best?.defensePoints ?? 0) ? piece : best),
 				null as ArmorPiece | null,
 			),
 		);
@@ -282,8 +244,7 @@ export function findBestArmorPieces(
 			currentBestPieces.set(
 				slotType,
 				pieces.reduce(
-					(best, piece) =>
-						!best || comparator(piece, best) > 0 ? piece : best,
+					(best, piece) => (!best || comparator(piece, best) > 0 ? piece : best),
 					null as ArmorPiece | null,
 				),
 			);

@@ -46,11 +46,7 @@ const initialPositions: Record<string, { x: number; y: number }> = {
 export const [categoryWindowPositions, setCategoryWindowPositions] =
 	createSignal<Record<string, { x: number; y: number }>>(initialPositions);
 
-export function setCategoryWindowPosition(
-	category: string,
-	x: number,
-	y: number,
-) {
+export function setCategoryWindowPosition(category: string, x: number, y: number) {
 	setCategoryWindowPositions((prev) => ({
 		...prev,
 		[category]: { x, y },
@@ -72,10 +68,8 @@ export function toggleLegitWindow() {
 	setLegitWindowVisible((v) => !v);
 }
 
-export const [friendsPanelVisible, setFriendsPanelVisible] =
-	createSignal(false);
-export const [targetsPanelVisible, setTargetsPanelVisible] =
-	createSignal(false);
+export const [friendsPanelVisible, setFriendsPanelVisible] = createSignal(false);
+export const [targetsPanelVisible, setTargetsPanelVisible] = createSignal(false);
 
 try {
 	// Register \ key (Backslash)

@@ -12,13 +12,7 @@ export default class TickBase extends Mod {
 	private tick = false;
 	// set to `Date.now()` in playerTick
 	#lastBoost = -1;
-	#boostsDelaySetting = this.createSliderSetting(
-		"Boost Delay",
-		150,
-		1,
-		1e3,
-		1,
-	);
+	#boostsDelaySetting = this.createSliderSetting("Boost Delay", 150, 1, 1e3, 1);
 	#boostsSetting = this.createSliderSetting("Boosts", 2, 1, 50, 1);
 
 	get #boostDelay() {

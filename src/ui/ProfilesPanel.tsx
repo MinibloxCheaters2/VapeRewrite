@@ -6,8 +6,7 @@ import { dragHandleAttrName } from "@/utils/mapping/names";
 import { guiVisible } from "./guiState";
 import shadowWrapper from "./shadowWrapper";
 
-export const [profilesPanelVisible, setProfilesPanelVisible] =
-	createSignal(false);
+export const [profilesPanelVisible, setProfilesPanelVisible] = createSignal(false);
 
 interface Profile {
 	name: string;
@@ -60,9 +59,7 @@ function ProfilesPanel() {
 
 	const selectProfile = (profileName: string) => {
 		saveConfig(configName());
-		setProfiles((prev) =>
-			prev.map((p) => ({ ...p, active: p.name === profileName })),
-		);
+		setProfiles((prev) => prev.map((p) => ({ ...p, active: p.name === profileName })));
 		loadConfig(profileName);
 	};
 
@@ -148,35 +145,27 @@ function ProfilesPanel() {
 								class="vape-btn-row"
 								style={{
 									padding: "0 12px",
-									"background-color": profile.active
-										? "var(--vape-accent)"
-										: "var(--vape-main)",
+									"background-color": profile.active ? "var(--vape-accent)" : "var(--vape-main)",
 								}}
 								on:click={() => selectProfile(profile.name)}
 								on:pointerenter={(e) => {
 									if (!profile.active) {
-										e.currentTarget.style.backgroundColor =
-											"var(--vape-main-light)";
+										e.currentTarget.style.backgroundColor = "var(--vape-main-light)";
 									}
 								}}
 								on:pointerleave={(e) => {
 									if (!profile.active) {
-										e.currentTarget.style.backgroundColor =
-											"var(--vape-main)";
+										e.currentTarget.style.backgroundColor = "var(--vape-main)";
 									}
 								}}
 							>
 								<span
 									style={{
-										color: profile.active
-											? "rgb(255, 255, 255)"
-											: "var(--vape-text)",
+										color: profile.active ? "rgb(255, 255, 255)" : "var(--vape-text)",
 										"font-size": "14px",
 										flex: "1",
 										"font-family": "Arial, sans-serif",
-										"font-weight": profile.active
-											? "700"
-											: "normal",
+										"font-weight": profile.active ? "700" : "normal",
 									}}
 								>
 									{profile.name}
@@ -188,11 +177,7 @@ function ProfilesPanel() {
 
 				{/* Add profile button */}
 
-				<input
-					type="text"
-					value={configName()}
-					onChange={(e) => setConfigName(e.target.value)}
-				/>
+				<input type="text" value={configName()} onChange={(e) => setConfigName(e.target.value)} />
 
 				<button
 					class="vape-btn-row"
@@ -203,12 +188,10 @@ function ProfilesPanel() {
 					type="submit"
 					on:click={() => saveConfig(configName())}
 					on:pointerenter={(e) => {
-						e.currentTarget.style.backgroundColor =
-							"var(--vape-main-light)";
+						e.currentTarget.style.backgroundColor = "var(--vape-main-light)";
 					}}
 					on:pointerleave={(e) => {
-						e.currentTarget.style.backgroundColor =
-							"var(--vape-main)";
+						e.currentTarget.style.backgroundColor = "var(--vape-main)";
 					}}
 				>
 					<span

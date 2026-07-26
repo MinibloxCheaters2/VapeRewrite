@@ -10,8 +10,7 @@ export default class AutoClicker extends Mod {
 	@Subscribe("gameTick")
 	private onTick() {
 		const { playerController, player } = Miniblox;
-		if (playerController.objectMouseOver.block || player.isUsingItem())
-			return;
+		if (playerController.objectMouseOver.block || player.isUsingItem()) return;
 		if (playerController.key.leftClick) playerController.leftClick();
 	}
 }

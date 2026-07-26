@@ -8,14 +8,9 @@ export function getTeam(entity: Entity) {
 	return entry.color !== "white" ? entry.color : undefined;
 }
 
-export function findTargets(
-	range = 6,
-	_angle = 360,
-	checkWalls = false,
-): EntityLivingBase[] {
+export function findTargets(range = 6, _angle = 360, checkWalls = false): EntityLivingBase[] {
 	const { player, EntityLivingBase, world } = Miniblox;
-	if (world === undefined)
-		throw new Error("findTargets called while world is null");
+	if (world === undefined) throw new Error("findTargets called while world is null");
 	const localTeam = getTeam(player);
 
 	const sqRange = range * range;

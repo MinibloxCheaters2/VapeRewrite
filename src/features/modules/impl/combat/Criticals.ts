@@ -34,7 +34,6 @@ export default class Criticals extends Mod {
 
 	@Subscribe("sendPacket")
 	private onPacket({ data: pkt }: CancelableWrapper<C2SPacket>) {
-		if (isC2S("SPacketUseEntity", pkt) && pkt.action === 1 /*ATTACK*/)
-			Criticals.sendCritPackets();
+		if (isC2S("SPacketUseEntity", pkt) && pkt.action === 1 /*ATTACK*/) Criticals.sendCritPackets();
 	}
 }

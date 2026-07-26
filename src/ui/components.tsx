@@ -15,9 +15,7 @@ export function ToggleComponent(props: {
 		<div
 			class="vape-row"
 			style={{
-				"--row-bg": hovered()
-					? "var(--vape-main-light)"
-					: "var(--vape-main-dark)",
+				"--row-bg": hovered() ? "var(--vape-main-light)" : "var(--vape-main-dark)",
 			}}
 			on:pointerenter={() => setHovered(true)}
 			on:pointerleave={() => setHovered(false)}
@@ -27,9 +25,7 @@ export function ToggleComponent(props: {
 			<div
 				class="vape-toggle-track"
 				style={{
-					"--toggle-bg": props.enabled
-						? "var(--vape-accent)"
-						: "rgba(255, 255, 255, 0.08)",
+					"--toggle-bg": props.enabled ? "var(--vape-accent)" : "rgba(255, 255, 255, 0.08)",
 				}}
 			>
 				<div
@@ -77,10 +73,7 @@ export function SliderComponent(props: {
 	const updateValue = (e: PointerEvent) => {
 		if (!sliderRef) return;
 		const rect = sliderRef.getBoundingClientRect();
-		const percent = Math.max(
-			0,
-			Math.min(1, (e.clientX - rect.left) / rect.width),
-		);
+		const percent = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
 		const newValue = props.min + percent * (props.max - props.min);
 		props.onChange(Math.round(newValue * 100) / 100);
 	};
@@ -88,8 +81,7 @@ export function SliderComponent(props: {
 	document.addEventListener("pointermove", handlePointerMove);
 	document.addEventListener("pointerup", handlePointerUp);
 
-	const percentage = () =>
-		((props.value - props.min) / (props.max - props.min)) * 100;
+	const percentage = () => ((props.value - props.min) / (props.max - props.min)) * 100;
 
 	return (
 		<div
@@ -106,19 +98,10 @@ export function SliderComponent(props: {
 					alt={props.tooltip}
 					onChange={(e) => props.onChange(e.target.valueAsNumber)}
 				/>
-				<Show when={props.unit}>
-					{(unit) => <span class="vape-label-sm">{unit()}</span>}
-				</Show>
+				<Show when={props.unit}>{(unit) => <span class="vape-label-sm">{unit()}</span>}</Show>
 			</div>
-			<div
-				ref={sliderRef}
-				class="vape-slider-wrap"
-				on:pointerdown={handlePointerDown}
-			>
-				<div
-					class="vape-slider-fill"
-					style={{ width: `${Math.max(4, percentage())}%` }}
-				>
+			<div ref={sliderRef} class="vape-slider-wrap" on:pointerdown={handlePointerDown}>
+				<div class="vape-slider-fill" style={{ width: `${Math.max(4, percentage())}%` }}>
 					<div
 						style={{
 							position: "absolute",
@@ -136,8 +119,7 @@ export function SliderComponent(props: {
 						<div
 							class="vape-slider-thumb"
 							style={{
-								"--thumb-size":
-									hovered() || dragging() ? "16px" : "14px",
+								"--thumb-size": hovered() || dragging() ? "16px" : "14px",
 							}}
 						/>
 					</div>
@@ -171,9 +153,7 @@ export function DropdownComponent(props: {
 			<div
 				class="vape-row"
 				style={{
-					"--row-bg": hovered()
-						? "var(--vape-main-light)"
-						: "var(--vape-main-dark)",
+					"--row-bg": hovered() ? "var(--vape-main-light)" : "var(--vape-main-dark)",
 				}}
 				on:pointerenter={() => setHovered(true)}
 				on:pointerleave={() => setHovered(false)}
@@ -188,9 +168,7 @@ export function DropdownComponent(props: {
 						width: "9px",
 						height: "4px",
 						filter: "brightness(0.55)",
-						transform: expanded()
-							? "rotate(0deg)"
-							: "rotate(180deg)",
+						transform: expanded() ? "rotate(0deg)" : "rotate(180deg)",
 						transition: "transform 0.16s linear",
 					}}
 				/>
@@ -202,30 +180,23 @@ export function DropdownComponent(props: {
 							<div
 								class="vape-dropdown-item"
 								style={{
-									"--item-bg":
-										option === props.value
-											? "rgba(255, 255, 255, 0.05)"
-											: "transparent",
+									"--item-bg": option === props.value ? "rgba(255, 255, 255, 0.05)" : "transparent",
 								}}
 								on:click={() => {
 									props.onChange(option);
 									setExpanded(false);
 									if (props.onExpandChange) {
-										requestAnimationFrame(() =>
-											props.onExpandChange?.(),
-										);
+										requestAnimationFrame(() => props.onExpandChange?.());
 									}
 								}}
 								on:pointerenter={(e) => {
 									if (option !== props.value) {
-										e.currentTarget.style.backgroundColor =
-											"rgba(255, 255, 255, 0.03)";
+										e.currentTarget.style.backgroundColor = "rgba(255, 255, 255, 0.03)";
 									}
 								}}
 								on:pointerleave={(e) => {
 									if (option !== props.value) {
-										e.currentTarget.style.backgroundColor =
-											"transparent";
+										e.currentTarget.style.backgroundColor = "transparent";
 									}
 								}}
 							>
@@ -233,9 +204,7 @@ export function DropdownComponent(props: {
 									class="vape-dropdown-text"
 									style={{
 										"--item-color":
-											option === props.value
-												? "var(--vape-text)"
-												: "var(--vape-text-dark)",
+											option === props.value ? "var(--vape-text)" : "var(--vape-text-dark)",
 									}}
 								>
 									{getName(option)}
@@ -270,9 +239,7 @@ export function TextBoxComponent(props: {
 				value={props.value}
 				placeholder={props.placeholder}
 				style={{
-					"--input-bg": focused()
-						? "var(--vape-main-light)"
-						: "rgba(255, 255, 255, 0.05)",
+					"--input-bg": focused() ? "var(--vape-main-light)" : "rgba(255, 255, 255, 0.05)",
 				}}
 				on:input={(e) => props.onChange(e.currentTarget.value)}
 				on:focus={() => setFocused(true)}
@@ -368,34 +335,22 @@ export function ColorSliderComponent(props: {
 	const updateHue = (e: PointerEvent) => {
 		if (!hueSliderRef) return;
 		const rect = hueSliderRef.getBoundingClientRect();
-		const percent = Math.max(
-			0,
-			Math.min(1, (e.clientX - rect.left) / rect.width),
-		);
+		const percent = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
 		props.onChange(percent, props.sat, props.value, props.opacity);
 	};
 
 	const updateSV = (e: PointerEvent) => {
 		if (!svPickerRef) return;
 		const rect = svPickerRef.getBoundingClientRect();
-		const s = Math.max(
-			0,
-			Math.min(1, (e.clientX - rect.left) / rect.width),
-		);
-		const v = Math.max(
-			0,
-			Math.min(1, 1 - (e.clientY - rect.top) / rect.height),
-		);
+		const s = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+		const v = Math.max(0, Math.min(1, 1 - (e.clientY - rect.top) / rect.height));
 		props.onChange(props.hue, s, v, props.opacity);
 	};
 
 	const updateOpacity = (e: PointerEvent) => {
 		if (!opacitySliderRef) return;
 		const rect = opacitySliderRef.getBoundingClientRect();
-		const percent = Math.max(
-			0,
-			Math.min(1, (e.clientX - rect.left) / rect.width),
-		);
+		const percent = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
 		props.onChange(props.hue, props.sat, props.value, percent);
 	};
 
@@ -416,10 +371,7 @@ export function ColorSliderComponent(props: {
 
 	return (
 		<div style={{ "background-color": "var(--vape-main-dark)" }}>
-			<div
-				class="vape-color-header"
-				on:click={() => setExpanded(!expanded())}
-			>
+			<div class="vape-color-header" on:click={() => setExpanded(!expanded())}>
 				<span class="vape-label-sm">{props.name}</span>
 				<div style={{ flex: "1" }} />
 				<div

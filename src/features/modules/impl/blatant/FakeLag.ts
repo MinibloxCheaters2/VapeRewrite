@@ -3,10 +3,7 @@ import { Subscribe } from "@/event/Bus";
 import { isC2S } from "@/utils";
 import { SimpleVec3 } from "@/utils/math/vec";
 import { findTargets } from "@/utils/movement/target";
-import packetQueueManager, {
-	Action,
-	type PacketOutcome,
-} from "@/utils/network/packetQueueManager";
+import packetQueueManager, { Action, type PacketOutcome } from "@/utils/network/packetQueueManager";
 import Miniblox from "@/utils/refs/miniblox";
 import { getRandomArbitrary } from "@/utils/time/random";
 import Category from "../../api/Category";
@@ -52,8 +49,7 @@ export default class FakeLag extends Mod {
 	#flushPreconditions(packet: C2SPacket): boolean {
 		if (this.#flushOnAction) {
 			return (
-				(isC2S("SPacketEntityAction", packet) &&
-					packet.id === Miniblox.player.id) ||
+				(isC2S("SPacketEntityAction", packet) && packet.id === Miniblox.player.id) ||
 				isC2S("SPacketUseEntity", packet) ||
 				isC2S("SPacketUseItem", packet) ||
 				isC2S("SPacketPlayerAction", packet) ||
@@ -74,10 +70,7 @@ export default class FakeLag extends Mod {
 	private handleQueue(outcome: PacketOutcome<C2SPacket>) {
 		if (!this.#enemyNearby) return;
 
-		if (
-			packetQueueManager.laggingFor() > this.#delay ||
-			this.#flushPreconditions(outcome.packet)
-		) {
+		if (packetQueueManager.laggingFor() > this.#delay || this.#flushPreconditions(outcome.packet)) {
 			outcome.action = Action.FLUSH;
 			return;
 		}
@@ -98,19 +91,11 @@ export default class FakeLag extends Mod {
 		const srvPos = svPos
 			? SimpleVec3.fromFloatVec3(svPos)
 			: SimpleVec3.fromThreeVec3(Miniblox.player.pos);
-		const serverPos = playerPos
-			.clone()
-			.setX(srvPos.x)
-			.setY(srvPos.y)
-			.setZ(srvPos.z);
+		const serverPos = playerPos.clone().setX(srvPos.x).setY(srvPos.y).setZ(srvPos.z);
 
-		const serverDistance = Math.min(
-			...targets.map((e) => e.pos.distanceTo(serverPos)),
-		);
+		const serverDistance = Math.min(...targets.map((e) => e.pos.distanceTo(serverPos)));
 
-		const clientDistance = Math.min(
-			...targets.map((e) => e.pos.distanceTo(Miniblox.player.pos)),
-		);
+		const clientDistance = Math.min(...targets.map((e) => e.pos.distanceTo(Miniblox.player.pos)));
 
 		if (serverDistance < clientDistance) {
 			return;

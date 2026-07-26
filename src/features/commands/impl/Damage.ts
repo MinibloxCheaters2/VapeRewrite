@@ -7,8 +7,7 @@ dispatcher.register(
 		argument("amount", new IntegerArgumentType()).executes(async (e) => {
 			const amount = e.get<number>("amount");
 			for (let i = 1; i < amount; i++) {
-				Miniblox.game.controller.objectMouseOver.hitVec =
-					Miniblox.player.pos.clone();
+				Miniblox.game.controller.objectMouseOver.hitVec = Miniblox.player.pos.clone();
 				Miniblox.playerController.attackEntity(Miniblox.player);
 			}
 			Miniblox.chat.addChat({

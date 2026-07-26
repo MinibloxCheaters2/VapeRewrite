@@ -41,12 +41,7 @@ function hookSendPacket() {
 				).constructor;
 				if ("typeName" in ctor && typeof ctor.typeName === "string") {
 					const name = ctor.typeName;
-					if (
-						name &&
-						!Miniblox.packets?.some(
-							(x) => "typeName" in x && x.typeName === name,
-						)
-					) {
+					if (name && !Miniblox.packets?.some((x) => "typeName" in x && x.typeName === name)) {
 						discoveredPackets.set(name, ctor);
 					}
 				}
@@ -107,9 +102,7 @@ function hookReceivePacket() {
 	});*/
 	const cs = Miniblox.ClientSocket;
 	if (!cs) {
-		logger.warn(
-			"Can't hook receive packet without a ClientSocket reference",
-		);
+		logger.warn("Can't hook receive packet without a ClientSocket reference");
 		return;
 	}
 	const parser = cs.socket.io.opts.parser as {

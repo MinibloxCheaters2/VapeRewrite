@@ -17,11 +17,13 @@
 		"clean": "del-cli dist",
 		"ci": "run-s lint",
 		"build:js": "rolldown -c",
-		"build:prod": "cross-env NODE_ENV=production run-s ci build:js",
+		"build:prod": "cross-env NODE_ENV=production run-s build:js",
 		"build": "cross-env NODE_ENV=production run-s build:prod",
 		"devbuild": "run-s clean dev",
-		"lint": "biome check",
-		"lint:fix": "biome check --fix"
+		"lint": "oxlint check",
+		"lint:fix": "oxlint check --fix",
+		"fmt": "oxfmt check",
+		"fmt:fix": "oxfmt check --fix"
 	},
 	"dependencies": {
 		"@wq2/brigadier-ts": "^1.0.8",
@@ -31,25 +33,26 @@
 		"solid-js": "^1.9.14"
 	},
 	"devDependencies": {
-		"@wq2/packet-gen-wasm": "^0.0.2",
-		"@wq2/miniblox-sdk": "3.46.147-0.0.3",
-		"@biomejs/biome": "^2.5.5",
 		"@types/three": "^0.184.1",
 		"@violentmonkey/types": "^0.3.3",
+		"@wq2/miniblox-sdk": "3.46.147-0.0.3",
+		"@wq2/packet-gen-wasm": "^0.0.2",
 		"@wq2/rolldown-plugin-solid-oxc": "^0.1.2",
+		"@wq2/rolldown-plugin-swc": "^0.0.2",
 		"cross-env": "^10.1.0",
 		"del-cli": "^7.0.0",
 		"lint-staged": "^17.1.1",
 		"npm-run-all": "^4.1.5",
+		"oxfmt": "^0.60.0",
+		"oxlint": "^1.75.0",
 		"read-package-up": "^12.0.0",
-		"@wq2/rolldown-plugin-swc": "^0.0.2",
 		"rolldown-plugin-userscript": "^1.1.3",
 		"socket.io-client": "^4.8.3",
 		"typescript": "^7.0.2"
 	},
 	"lint-staged": {
 		"*.{ts,tsx,js,css}": [
-			"biome check --fix"
+			"oxlint --fix"
 		]
 	},
 	"trustedDependencies": [

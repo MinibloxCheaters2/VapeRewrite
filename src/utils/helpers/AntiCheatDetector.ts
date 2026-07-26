@@ -62,8 +62,7 @@ export default new (class AntiCheatDetector {
 					return true;
 				} else if (
 					Miniblox.player.serverUsesInputMovement() ||
-					(this.#firstInput !== -1 &&
-						Date.now() - this.#firstInput >= 0.5e3)
+					(this.#firstInput !== -1 && Date.now() - this.#firstInput >= 0.5e3)
 				) {
 					this.verdict = DetectedAC.OLD;
 					return true;

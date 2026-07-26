@@ -7,24 +7,11 @@ export default class Fly extends Mod {
 	public name = "Fly";
 	public category = Category.BLATANT;
 
-	private modesGroup = this.createSubmoduleGroup(
-		"Modes",
-		["Normal"],
-		"Normal",
-	);
+	private modesGroup = this.createSubmoduleGroup("Modes", ["Normal"], "Normal");
 
-	public normalSub = new NormalSub(
-		this,
-		this.modesGroup.submodules[0].settings,
-	);
+	public normalSub = new NormalSub(this, this.modesGroup.submodules[0].settings);
 
-	public verticalSetting = this.createSliderSetting(
-		"Vertical",
-		1,
-		0.05,
-		100,
-		0.01,
-	);
+	public verticalSetting = this.createSliderSetting("Vertical", 1, 0.05, 100, 0.01);
 
 	private get mode(): string {
 		return this.modesGroup.value();

@@ -32,9 +32,7 @@ export default class PingSpoof extends Mod {
 		if (
 			isC2S("SPacketPing", o.packet) &&
 			(this.#infinite ||
-				packetQueueManager.laggingFor((a) =>
-					isC2S("SPacketPing", a.packet),
-				) >= this.#delay)
+				packetQueueManager.laggingFor((a) => isC2S("SPacketPing", a.packet)) >= this.#delay)
 		) {
 			o.action = Action.QUEUE;
 		} else {

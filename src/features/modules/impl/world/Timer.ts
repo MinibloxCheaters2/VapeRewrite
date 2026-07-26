@@ -14,13 +14,7 @@ export default class Timer extends Mod {
 	public category = Category.BLATANT;
 
 	// Timer speed multiplier
-	private speedSetting = this.createSliderSetting(
-		"Speed",
-		1.2,
-		1.0,
-		3.0,
-		0.1,
-	);
+	private speedSetting = this.createSliderSetting("Speed", 1.2, 1.0, 3.0, 0.1);
 
 	// Original fixedUpdate function
 	private originalFixedUpdate: (() => void) | null = null;

@@ -5,13 +5,9 @@ import dispatcher from "../api/CommandDispatcher";
 
 dispatcher.register(
 	literal("say").then(
-		argument("what", new StringArgumentType("greedy_phrase")).executes(
-			async (e) => {
-				const what = e.get<string>("what");
-				Miniblox.ClientSocket.sendPacket(
-					new PacketRefs.s.SPacketMessage({ text: what }),
-				);
-			},
-		),
+		argument("what", new StringArgumentType("greedy_phrase")).executes(async (e) => {
+			const what = e.get<string>("what");
+			Miniblox.ClientSocket.sendPacket(new PacketRefs.s.SPacketMessage({ text: what }));
+		}),
 	),
 );

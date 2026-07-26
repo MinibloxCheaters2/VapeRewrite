@@ -33,17 +33,13 @@ export function isSolid(b: Block) {
 
 export function withBlock<T>(fn: (block: Block) => T): (pos: BlockPos) => T {
 	const { world } = Miniblox;
-	if (world === undefined)
-		throw new Error("Can't call withBlock(fn) while not in world");
+	if (world === undefined) throw new Error("Can't call withBlock(fn) while not in world");
 	return (pos) => fn(world.getBlock(pos));
 }
 
-export function withBlockState<T>(
-	fn: (block: BlockState) => T,
-): (pos: BlockPos) => T {
+export function withBlockState<T>(fn: (block: BlockState) => T): (pos: BlockPos) => T {
 	const { world } = Miniblox;
-	if (world === undefined)
-		throw new Error("Can't call withBlockState(fn) while not in world");
+	if (world === undefined) throw new Error("Can't call withBlockState(fn) while not in world");
 	return (pos) => fn(world.getBlockState(pos));
 }
 
@@ -51,21 +47,10 @@ export const defaultFilter: BlockFilter = (b) =>
 	// biome-ignore lint/style/noNonNullAssertion: you shouldn't call this while the world is null anyways
 	isSolid(Miniblox.world!.getBlock(b));
 
-export function allBlocksInRange(
-	hRange: number,
-	vRange: number = hRange,
-): BlockPos[] {
+export function allBlocksInRange(hRange: number, vRange: number = hRange): BlockPos[] {
 	const { player, BlockPos } = Miniblox;
-	const min = new BlockPos(
-		player.pos.x - hRange,
-		player.pos.y - vRange,
-		player.pos.z - hRange,
-	);
-	const max = new BlockPos(
-		player.pos.x + hRange,
-		player.pos.y + vRange,
-		player.pos.z + hRange,
-	);
+	const min = new BlockPos(player.pos.x - hRange, player.pos.y - vRange, player.pos.z - hRange);
+	const max = new BlockPos(player.pos.x + hRange, player.pos.y + vRange, player.pos.z + hRange);
 	return BlockPos.getAllInBoxMutable(min, max);
 }
 

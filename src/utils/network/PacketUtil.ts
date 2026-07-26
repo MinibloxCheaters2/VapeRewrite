@@ -36,9 +36,7 @@ export function sendSilently(pkt: C2SPacket) {
 	if (!Miniblox.ClientSocket.socket) {
 		return;
 	}
-	const typeName = (
-		pkt.constructor as ((a: object) => unknown) & { typeName: string }
-	).typeName;
+	const typeName = (pkt.constructor as ((a: object) => unknown) & { typeName: string }).typeName;
 	// TODO: Miniblox.ClientSocket.socket.send might also work?
 	Miniblox.ClientSocket.socket.emit(typeName, pkt);
 }

@@ -17,13 +17,7 @@ export default class TargetHud extends HudElement {
 		this.id = "target";
 	}
 
-	private fontSizeSetting = this.createSliderSetting(
-		"Font Size",
-		14,
-		8,
-		32,
-		1,
-	);
+	private fontSizeSetting = this.createSliderSetting("Font Size", 14, 8, 32, 1);
 	private textColorSetting = this.createColorSliderSetting("Text Color", {
 		h: 0,
 		s: 0,
@@ -42,10 +36,7 @@ export default class TargetHud extends HudElement {
 				let closest: TargetInfo | null = null;
 
 				for (const entity of world.entities.values()) {
-					if (
-						entity instanceof EntityLivingBase &&
-						entity.id !== player.id
-					) {
+					if (entity instanceof EntityLivingBase && entity.id !== player.id) {
 						const dist = player.getDistanceSqToEntity(entity);
 						if (dist <= 12) {
 							const health = entity.getHealth?.() ?? 0;
@@ -82,14 +73,8 @@ export default class TargetHud extends HudElement {
 
 		if (!target) return null;
 
-		const healthPct =
-			target.maxHealth > 0 ? target.health / target.maxHealth : 0;
-		const healthBarColor =
-			healthPct > 0.5
-				? "#4CAF50"
-				: healthPct > 0.25
-					? "#FF9800"
-					: "#f44336";
+		const healthPct = target.maxHealth > 0 ? target.health / target.maxHealth : 0;
+		const healthBarColor = healthPct > 0.5 ? "#4CAF50" : healthPct > 0.25 ? "#FF9800" : "#f44336";
 
 		return (
 			<div
@@ -114,9 +99,7 @@ export default class TargetHud extends HudElement {
 						{target.health}/{target.maxHealth}
 					</span>
 				</div>
-				<div class="vape-hud-text-sm vape-hud-dim">
-					Distance: {target.distance}
-				</div>
+				<div class="vape-hud-text-sm vape-hud-dim">Distance: {target.distance}</div>
 			</div>
 		);
 	}

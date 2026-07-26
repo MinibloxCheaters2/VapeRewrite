@@ -43,17 +43,13 @@ export default new (class PacketQueueManager {
 
 	get serverPos(): PBFloatVector3 | undefined {
 		return getPosFromPacket(
-			this.packetQueue.find(
-				(p) => getPosFromPacket(p.packet) !== undefined,
-			)?.packet,
+			this.packetQueue.find((p) => getPosFromPacket(p.packet) !== undefined)?.packet,
 		);
 	}
 
 	get serverRot(): Rotation | undefined {
 		return Rotation.fromPacket(
-			this.packetQueue.find(Rotation.hasRotation)?.packet as
-				| IRotation
-				| undefined,
+			this.packetQueue.find(Rotation.hasRotation)?.packet as IRotation | undefined,
 		);
 	}
 
@@ -71,9 +67,7 @@ export default new (class PacketQueueManager {
 	laggingFor(filter?: (pkt: PacketRecord<C2SPacket>) => boolean): number {
 		if (!this.lagging) return 0;
 		const item =
-			filter !== undefined
-				? this.packetQueue.find((a) => filter(a))
-				: this.packetQueue[0];
+			filter !== undefined ? this.packetQueue.find((a) => filter(a)) : this.packetQueue[0];
 		if (item === undefined) return 0;
 		return Date.now() - item.time;
 	}
@@ -140,17 +134,11 @@ export default new (class PacketQueueManager {
 			this.#posBox = this.#posBox as unknown as Mesh;
 		}
 		this.#posBox.visible = true;
-		this.#posBox.position.set(
-			this.serverPos.x,
-			this.serverPos.y + 1,
-			this.serverPos.z,
-		);
+		this.#posBox.position.set(this.serverPos.x, this.serverPos.y + 1, this.serverPos.z);
 	}
 
 	#initPosBox() {
-		const mesh = new THREE.Mesh(
-			new THREE.BoxGeometry(1, Miniblox.player.height, 1),
-		);
+		const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, Miniblox.player.height, 1));
 		this.#posBox = mesh;
 		const mtr = mesh.material as Material;
 		mtr.depthTest = false;

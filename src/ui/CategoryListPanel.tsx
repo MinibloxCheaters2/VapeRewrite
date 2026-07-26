@@ -49,9 +49,7 @@ export interface CategoryListPanelProps {
 export default function CategoryListPanel(props: CategoryListPanelProps) {
 	const accent = () => props.accentColor || "rgb(5, 134, 105)";
 
-	const [position, setPosition] = createSignal(
-		props.initialPosition || { x: 240, y: 46 },
-	);
+	const [position, setPosition] = createSignal(props.initialPosition || { x: 240, y: 46 });
 	const [dragging, setDragging] = createSignal(false);
 	const [dragOffset, setDragOffset] = createSignal({ x: 0, y: 0 });
 	const [expanded, setExpanded] = createSignal(false);
@@ -152,9 +150,7 @@ export default function CategoryListPanel(props: CategoryListPanelProps) {
 					class="vape-header"
 					style={{
 						cursor: dragging() ? "grabbing" : "grab",
-						"border-bottom": expanded()
-							? `1px solid var(--vape-divider)`
-							: "none",
+						"border-bottom": expanded() ? `1px solid var(--vape-divider)` : "none",
 						position: "relative",
 					}}
 				>
@@ -188,9 +184,7 @@ export default function CategoryListPanel(props: CategoryListPanelProps) {
 							width: "24px",
 							height: "24px",
 							"border-radius": "50%",
-							background: settingsHovered()
-								? "rgba(255,255,255,0.06)"
-								: "transparent",
+							background: settingsHovered() ? "rgba(255,255,255,0.06)" : "transparent",
 						}}
 						type="button"
 						on:click={(e) => {
@@ -239,9 +233,7 @@ export default function CategoryListPanel(props: CategoryListPanelProps) {
 								filter: arrowHovered()
 									? "brightness(0) invert(0.87)"
 									: "brightness(0) invert(0.47)",
-								transform: expanded()
-									? "rotate(0deg)"
-									: "rotate(180deg)",
+								transform: expanded() ? "rotate(0deg)" : "rotate(180deg)",
 								transition: "transform 0.16s linear",
 							}}
 						/>
@@ -262,12 +254,9 @@ export default function CategoryListPanel(props: CategoryListPanelProps) {
 						{/* Item list */}
 						<For each={props.items()}>
 							{(item) => {
-								const isItemEnabled = () =>
-									props.enabledItems().includes(item);
-								const [itemHovered, setItemHovered] =
-									createSignal(false);
-								const [dotHovered, setDotHovered] =
-									createSignal(false);
+								const isItemEnabled = () => props.enabledItems().includes(item);
+								const [itemHovered, setItemHovered] = createSignal(false);
+								const [dotHovered, setDotHovered] = createSignal(false);
 
 								return (
 									<div
@@ -277,19 +266,14 @@ export default function CategoryListPanel(props: CategoryListPanelProps) {
 											"background-color": itemHovered()
 												? "var(--vape-main-light)"
 												: "var(--vape-main)",
-											"border-radius":
-												"var(--vape-radius)",
+											"border-radius": "var(--vape-radius)",
 											position: "relative",
 											cursor: "pointer",
 											"margin-left": "10px",
 											"margin-top": "3px",
 										}}
-										on:pointerenter={() =>
-											setItemHovered(true)
-										}
-										on:pointerleave={() =>
-											setItemHovered(false)
-										}
+										on:pointerenter={() => setItemHovered(true)}
+										on:pointerleave={() => setItemHovered(false)}
 										on:click={() => props.toggleItem(item)}
 									>
 										{/* Dot */}
@@ -300,12 +284,11 @@ export default function CategoryListPanel(props: CategoryListPanelProps) {
 												position: "absolute",
 												left: "10px",
 												top: "12px",
-												"background-color":
-													isItemEnabled()
-														? accent()
-														: itemHovered()
-															? "rgba(255,255,255,0.22)"
-															: "rgba(255,255,255,0.072)",
+												"background-color": isItemEnabled()
+													? accent()
+													: itemHovered()
+														? "rgba(255,255,255,0.22)"
+														: "rgba(255,255,255,0.072)",
 												"border-radius": "50%",
 											}}
 										>
@@ -316,10 +299,7 @@ export default function CategoryListPanel(props: CategoryListPanelProps) {
 													position: "absolute",
 													left: "1px",
 													top: "1px",
-													"background-color":
-														isItemEnabled()
-															? accent()
-															: "var(--vape-main)",
+													"background-color": isItemEnabled() ? accent() : "var(--vape-main)",
 													"border-radius": "50%",
 												}}
 											/>
@@ -336,8 +316,7 @@ export default function CategoryListPanel(props: CategoryListPanelProps) {
 												"line-height": "32px",
 												color: "var(--vape-text)",
 												"font-size": "15px",
-												"font-family":
-													"Arial, sans-serif",
+												"font-family": "Arial, sans-serif",
 												"text-align": "left",
 												"white-space": "nowrap",
 												overflow: "hidden",
@@ -368,29 +347,21 @@ export default function CategoryListPanel(props: CategoryListPanelProps) {
 												padding: "0",
 											}}
 											type="button"
-											on:pointerenter={() =>
-												setDotHovered(true)
-											}
-											on:pointerleave={() =>
-												setDotHovered(false)
-											}
+											on:pointerenter={() => setDotHovered(true)}
+											on:pointerleave={() => setDotHovered(false)}
 											on:click={(e) => {
 												e.stopPropagation();
 												props.removeItem(item);
 											}}
 										>
 											<img
-												src={getResourceURL(
-													"closemini",
-												)}
+												src={getResourceURL("closemini")}
 												alt=""
 												style={{
 													width: "7px",
 													height: "7px",
 													filter: "brightness(0) invert(0.8)",
-													opacity: dotHovered()
-														? "0.7"
-														: "0.5",
+													opacity: dotHovered() ? "0.7" : "0.5",
 												}}
 											/>
 										</button>
@@ -419,15 +390,11 @@ export default function CategoryListPanel(props: CategoryListPanelProps) {
 							<input
 								type="text"
 								value={addText()}
-								placeholder={
-									props.placeholder || "Add entry..."
-								}
+								placeholder={props.placeholder || "Add entry..."}
 								style={{
 									width: "165px",
 									height: "100%",
-									"background-color": addHovered()
-										? "rgba(255,255,255,0.14)"
-										: "var(--vape-main)",
+									"background-color": addHovered() ? "rgba(255,255,255,0.14)" : "var(--vape-main)",
 									color: "white",
 									"font-size": "15px",
 									"font-family": "Arial, sans-serif",
@@ -436,9 +403,7 @@ export default function CategoryListPanel(props: CategoryListPanelProps) {
 									padding: "0 10px",
 									outline: "none",
 								}}
-								on:input={(e) =>
-									setAddText(e.currentTarget.value)
-								}
+								on:input={(e) => setAddText(e.currentTarget.value)}
 								on:keydown={(e) => {
 									if (e.key === "Enter") handleAdd();
 								}}

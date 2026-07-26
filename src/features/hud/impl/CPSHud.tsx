@@ -9,23 +9,14 @@ export default class CPSHud extends HudElement {
 		this.id = "cps";
 	}
 
-	private fontSizeSetting = this.createSliderSetting(
-		"Font Size",
-		14,
-		8,
-		32,
-		1,
-	);
+	private fontSizeSetting = this.createSliderSetting("Font Size", 14, 8, 32, 1);
 	private textColorSetting = this.createColorSliderSetting("Text Color", {
 		h: 0,
 		s: 0,
 		v: 1,
 		o: 1,
 	});
-	private showBothSetting = this.createToggleSetting(
-		"Show Both Buttons",
-		true,
-	);
+	private showBothSetting = this.createToggleSetting("Show Both Buttons", true);
 
 	private leftCPSSignal = createSignal(0);
 	private rightCPSSignal = createSignal(0);
@@ -54,10 +45,7 @@ export default class CPSHud extends HudElement {
 			this.leftCPSSignal[1](this.leftClicks.length);
 			this.rightCPSSignal[1](this.rightClicks.length);
 
-			this.#cpsUpdateInterval = setTimeout(
-				updateCPS,
-				50,
-			) as unknown as number;
+			this.#cpsUpdateInterval = setTimeout(updateCPS, 50) as unknown as number;
 		};
 
 		document.addEventListener("mousedown", handleMouseDown);
@@ -89,8 +77,7 @@ export default class CPSHud extends HudElement {
 			>
 				{showBoth ? (
 					<>
-						L: {this.leftCPSSignal[0]()} | R:{" "}
-						{this.rightCPSSignal[0]()}
+						L: {this.leftCPSSignal[0]()} | R: {this.rightCPSSignal[0]()}
 					</>
 				) : (
 					<>CPS: {this.leftCPSSignal[0]()}</>

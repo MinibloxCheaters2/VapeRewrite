@@ -52,20 +52,14 @@ function NotificationContainer() {
 		>
 			<For each={notifications()}>
 				{(notification, index) => (
-					<NotificationItem
-						notification={notification}
-						offset={29 + 78 * (index() + 1)}
-					/>
+					<NotificationItem notification={notification} offset={29 + 78 * (index() + 1)} />
 				)}
 			</For>
 		</div>
 	);
 }
 
-function NotificationItem(props: {
-	notification: Notification;
-	offset: number;
-}) {
+function NotificationItem(props: { notification: Notification; offset: number }) {
 	const [exiting, setExiting] = createSignal(false);
 	const [mounted, setMounted] = createSignal(false);
 
@@ -91,8 +85,7 @@ function NotificationItem(props: {
 				height: "75px",
 				"background-color": "rgba(26, 25, 26, 0.5)",
 				"border-radius": "5px",
-				"box-shadow":
-					"0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)",
+				"box-shadow": "0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)",
 				overflow: "hidden",
 				"pointer-events": "auto",
 				animation: exiting()
@@ -174,8 +167,7 @@ function NotificationItem(props: {
 					left: "3px",
 					right: "10px",
 					height: "3px",
-					"background-color":
-						PROGRESS_COLORS[props.notification.type],
+					"background-color": PROGRESS_COLORS[props.notification.type],
 					"border-radius": "1px",
 					"transform-origin": "left center",
 					animation: mounted()

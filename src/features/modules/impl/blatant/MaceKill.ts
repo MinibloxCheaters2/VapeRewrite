@@ -34,11 +34,7 @@ export default class MaceKill extends Mod {
 
 	@Subscribe("sendPacket")
 	onSendPacket({ data: pkt }: CancelableWrapper<C2SPacket>) {
-		if (
-			this.hackyFallDamageFix &&
-			isC2S("SPacketPlayerPosLook", pkt) &&
-			pkt.onGround
-		) {
+		if (this.hackyFallDamageFix && isC2S("SPacketPlayerPosLook", pkt) && pkt.onGround) {
 			pkt.onGround = false;
 			this.hackyFallDamageFix = false;
 		}

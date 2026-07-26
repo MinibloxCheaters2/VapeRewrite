@@ -1,11 +1,6 @@
 import type { Block, BlockPos } from "@wq2/miniblox-sdk";
 import { Subscribe } from "@/event/Bus";
-import {
-	type BlockHandler,
-	blockHandlers,
-	handleInRange,
-	withBlock,
-} from "@/utils";
+import { type BlockHandler, blockHandlers, handleInRange, withBlock } from "@/utils";
 import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
@@ -55,10 +50,6 @@ export default class Breaker extends Mod {
 			});
 			return;
 		}
-		handleInRange(
-			this.#range,
-			this.#shouldBreakBlockPos,
-			withBlock(this.#handlerForBlock),
-		);
+		handleInRange(this.#range, this.#shouldBreakBlockPos, withBlock(this.#handlerForBlock));
 	}
 }

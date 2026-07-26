@@ -1,6 +1,4 @@
-export type Constructor = (
-	...args: never
-) => unknown | (HasProto & { name: string });
+export type Constructor = (...args: never) => unknown | (HasProto & { name: string });
 
 export interface HasProto {
 	__proto__: Constructor;
