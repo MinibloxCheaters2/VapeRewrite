@@ -174,7 +174,8 @@ function NotificationItem(props: {
 					left: "3px",
 					right: "10px",
 					height: "3px",
-					"background-color": PROGRESS_COLORS[props.notification.type],
+					"background-color":
+						PROGRESS_COLORS[props.notification.type],
 					"border-radius": "1px",
 					"transform-origin": "left center",
 					animation: mounted()

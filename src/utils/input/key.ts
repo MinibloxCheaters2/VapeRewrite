@@ -1,9 +1,16 @@
 import Miniblox from "../refs/miniblox";
 
-const pressedKeys: Record<string, boolean> = {};
+let pressedKeys: Record<string, boolean> = {};
 
-document.addEventListener("keydown", (x) => (pressedKeys[x.code] = true));
-document.addEventListener("keyup", (x) => (pressedKeys[x.code] = false));
+function handler(value: boolean) {
+	return (e: KeyboardEvent) => {
+		pressedKeys[e.code] = value;
+	};
+}
+
+window.addEventListener("keydown", handler(true));
+window.addEventListener("keyup", handler(false));
+window.addEventListener("blur", () => (pressedKeys = {}));
 
 export default function isKeyDown(key: string): boolean {
 	const { Game } = Miniblox;

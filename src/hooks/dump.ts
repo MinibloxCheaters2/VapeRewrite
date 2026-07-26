@@ -1,4 +1,3 @@
-// TODO: a lot of these got broken by global name remapping, and he is remapping more methods now.
 const DUMP_REGEXES = {
 	moveForward: /this\.([a-zA-Z]+)=\([a-zA-Z]+\.(up|down)/m,
 	moveStrafe:

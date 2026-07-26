@@ -22,7 +22,7 @@ export async function init() {
 
 	const messages = p.messages;
 	const pkts = Miniblox.packets;
-	const filtered = pkts
+	const filtered = pkts.length >= 0
 		? messages.filter(
 				(m) =>
 					pkts.find(
@@ -49,13 +49,7 @@ export function asMessage<T extends object>(msg: MappedMessage): Message<T> {
 	return class packetClass extends msgClass<T> {
 		constructor(args?: T) {
 			super();
-			(
-				runtime as {
-					util: {
-						initPartial: (a: T | undefined, b: msgClass<T>) => void;
-					};
-				}
-			).util.initPartial(args, this);
+			runtime?.util.initPartial(args, this);
 		}
 
 		static fromBinary(a: unknown, b: unknown) {

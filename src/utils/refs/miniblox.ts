@@ -93,12 +93,12 @@ export interface Runtime {
 	util: {
 		setEnumType(): void;
 		initPartial(a: object | undefined, b: object): void;
-		equals(a: object, b: object): boolean;
+		equals(self: typeof Message, a: object, b: object): boolean;
 	};
 	syntax: string;
 }
-let _proto2: object | undefined;
-let _proto3: object | undefined;
+let _proto2: Runtime | undefined;
+let _proto3: Runtime | undefined;
 
 // search for exposed globals: `globalThis\.\w+ = `
 // note: you could also search for window, but there's a bunch of false positives for stuff like onbeforeunload
@@ -113,7 +113,7 @@ function getReferenceMsg() {
 	}
 	return method1() ?? method2();
 }
-function getMsgRuntime(msg: Message<object>): Runtime {
+export function getMsgRuntime(msg: Message<object>): Runtime {
 	return (
 		msg.constructor as (typeof msg)["constructor"] & { runtime: Runtime }
 	).runtime;
@@ -121,7 +121,7 @@ function getMsgRuntime(msg: Message<object>): Runtime {
 
 const Miniblox = {
 	/** note: not all packets are here, only the ones vector exports. */
-	get packets(): Message<object>[] | undefined {
+	get packets(): Message<object>[] {
 		return initOrR(
 			_packets,
 			() =>
@@ -166,7 +166,11 @@ const Miniblox = {
 					"disconnectMessage" in x &&
 					"netSim" in x &&
 					"serverBaseUrl" in x &&
-					"setUrl" in x,
+					"setUrl" in x &&
+					"connect" in x &&
+					"on" in x &&
+					"once" in x &&
+					"disconnect" in x,
 			),
 		);
 	},

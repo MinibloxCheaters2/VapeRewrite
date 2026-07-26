@@ -291,7 +291,6 @@ function MainGUI() {
 				}}
 				on:pointerdown={handlePointerDown}
 			>
-
 				<div
 					{...{ [dragHandleAttrName]: "" }}
 					class="vape-header"
@@ -442,9 +441,7 @@ function MainGUI() {
 				</Show>
 
 				<Show when={!showSettings()}>
-
 					<div class="vape-divider" />
-
 
 					<div
 						style={{
@@ -460,7 +457,6 @@ function MainGUI() {
 							)}
 						</For>
 					</div>
-
 
 					<div
 						style={{
@@ -492,7 +488,6 @@ function MainGUI() {
 						/>
 					</div>
 
-
 					<div
 						style={{
 							padding: "4px 0",
@@ -512,7 +507,6 @@ function MainGUI() {
 							onClick={() => setTargetsPanelVisible(true)}
 						/>
 					</div>
-
 
 					<div class="vape-bottom-bar">
 						<div class="vape-divider" />
@@ -544,7 +538,6 @@ function MainGUI() {
 							/>
 						</button>
 					</div>
-
 
 					<div
 						style={{
@@ -716,7 +709,6 @@ function MainGUI() {
 						</div>
 					</div>
 				</Show>
-
 
 				<Show when={showSettings()}>
 					<div class="vape-divider" />
@@ -997,7 +989,6 @@ function MainGUI() {
 				</Show>
 			</div>
 
-
 			<For each={categoryEntries}>
 				{(entry) => (
 					<Show when={isCategoryWindowVisible(entry.key)}>
@@ -1009,9 +1000,7 @@ function MainGUI() {
 				)}
 			</For>
 
-
 			<LegitWindow />
-
 
 			<div
 				class="vape-panel"
