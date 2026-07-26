@@ -8,9 +8,11 @@ import { SETTING } from "@/utils/movement/MovementCorrection";
 import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
+import {INJECT_DATE} from "@/Client.ts"
 
 export default class Scaffold extends Mod {
-	public name = "Scaffold";
+	//public name = "Scaffold";
+	public name = INJECT_DATE.getMonth() === 7 && INJECT_DATE.getDate() === 26 ? "Sackfold" : "Scaffold";
 	public category = Category.BLATANT;
 
 	// Settings
