@@ -21,7 +21,13 @@ export default class Configurable {
 	protected modNameForConfig?: string;
 
 	private get modName(): string | undefined {
-		if (this instanceof Mod) return this.name;
+		if (this instanceof Mod) {
+			if (this.name === "Sackfold") {
+				return "Scaffold"
+			} else {
+				return this.name;
+			}
+		}
 		return this.modNameForConfig;
 	}
 
