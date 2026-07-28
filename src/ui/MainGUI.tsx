@@ -166,9 +166,9 @@ function MainGUI() {
 	blurOverlay.style.cssText =
 		"position:fixed;inset:0;backdrop-filter:blur(24px);pointer-events:none;z-index:10000;";
 	createEffect(() => {
-		const host = shadowWrapper.host;
+		const host = shadowWrapper.wrapper;
 		if (guiVisible()) {
-			document.body.appendChild(blurOverlay);
+			shadowWrapper.wrapper.appendChild(blurOverlay);
 			host.style.position = "fixed";
 			host.style.inset = "0";
 			host.style.zIndex = "10001";
@@ -190,7 +190,6 @@ function MainGUI() {
 			guiRainbowTimer = undefined;
 		}
 		if (!guiThemeRainbow()) {
-			shadowWrapper.host.style.setProperty("--vape-accent", "rgb(5, 134, 105)");
 			return;
 		}
 		const speed = rainbowSpeed();
@@ -939,6 +938,7 @@ function MainGUI() {
 						/>
 					</Show>
 					<input
+						id="search"
 						type="text"
 						value={searchText()}
 						on:input={(e) => setSearchText(e.currentTarget.value)}
