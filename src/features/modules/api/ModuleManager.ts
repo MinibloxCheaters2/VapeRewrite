@@ -104,7 +104,7 @@ export default class ModuleManager {
 		new Paranoia(),
 		this.maceKill,
 		new NoRecoil(),
-		new NoFlash(),
+		new NoFlash()
 	] as const;
 
 	/** Each module's name */

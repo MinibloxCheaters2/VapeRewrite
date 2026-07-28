@@ -173,7 +173,7 @@ const Miniblox = {
 					"on" in x &&
 					"once" in x &&
 					"disconnect" in x,
-			),
+			) as typeof ClientSocket,
 		);
 	},
 	get playerControllerMP() {
@@ -244,7 +244,7 @@ const Miniblox = {
 					"fireProtection" in x &&
 					"featherFalling" in x &&
 					"init" in x,
-			),
+			)!,
 		);
 	},
 

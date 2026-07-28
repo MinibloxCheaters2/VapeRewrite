@@ -1,8 +1,7 @@
 # VapeRewrite
 
-A new Userscript for Vape! This time, I'm not slacking.
-While this is in progress, Vape and Impact will receive no updates beyond critical fixes.
-We're mostly around the same feature set as Vape, but with more features.
+Currently the only UserScript cheeto for Miniblox that is being updated frequently.
+(ballcrack is really outdated and has little to no features compared to this)
 
 ## So, why does VapeRewrite need a new base?
 

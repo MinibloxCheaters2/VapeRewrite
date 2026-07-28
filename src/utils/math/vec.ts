@@ -8,7 +8,11 @@ export class SimpleVec3 {
 		public x: number = 0,
 		public y: number = 0,
 		public z: number = 0,
-	) {}
+	) { }
+
+	subtracted(from: SimpleVec3) {
+		return new SimpleVec3(this.x - from.x, this.y - from.y, this.z - from.z);
+	}
 
 	static fromFloatVec3(v: PBFloatVector3): SimpleVec3 {
 		return new SimpleVec3(v.x, v.y, v.z);

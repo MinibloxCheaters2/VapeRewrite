@@ -3,33 +3,19 @@ import Category from "../../../api/Category";
 import Mod from "../../../api/Module";
 import NormalSub from "./normal";
 
-export default class Fly extends Mod {
-	public name = "Fly";
+export default class Speed extends Mod {
+	public name = "Speed";
 	public category = Category.BLATANT;
 
-	private modesGroup = this.createSubmoduleGroup("Modes", ["Normal"], "Normal");
+	// TODO: new ac speed is probably easy
+	private modesGroup = this.createSubmoduleGroup("Modes", [
+		"Vanilla (Old AC / Planets)"
+	], "Vanilla");
 
 	public normalSub = new NormalSub(this, this.modesGroup.submodules[0].settings);
 
-	public verticalSetting = this.createSliderSetting("Vertical", 1, 0.05, 100, 0.01);
-
 	private get mode(): string {
 		return this.modesGroup.value();
-	}
-
-	protected onDisable(): void {
-		if (this.mode === "Normal") {
-			this.normalSub.onDisable(this);
-		}
-	}
-
-	@Subscribe("gameTick")
-	public onTick() {
-		switch (this.mode) {
-			case "Normal":
-				this.normalSub.onTick();
-				break;
-		}
 	}
 
 	public getTag(): string {
