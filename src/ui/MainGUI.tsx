@@ -6,6 +6,7 @@ import HudManager from "@/features/hud/api/HudManager";
 import { Category, CategoryInfo } from "@/features/modules/api/Category";
 import type Mod from "@/features/modules/api/Module";
 import ModuleManager from "@/features/modules/api/ModuleManager";
+import { loadedConfig } from "@/features/config/configs";
 import getResourceURL from "@/utils/helpers/cachedResourceURL";
 import { dragHandleAttrName } from "@/utils/mapping/names";
 import { DropdownComponent, SliderComponent, ToggleComponent } from "./components";
@@ -189,7 +190,7 @@ function MainGUI() {
 			clearTimeout(guiRainbowTimer);
 			guiRainbowTimer = undefined;
 		}
-		if (!guiThemeRainbow()) {
+		if (!guiThemeRainbow() || (!guiVisible() && !ModuleManager.hudManager.stateAccessor())) {
 			return;
 		}
 		const speed = rainbowSpeed();
@@ -455,13 +456,13 @@ function MainGUI() {
 							padding: "4px 0",
 						}}
 					>
-						<MiscItem label="Friends" onClick={() => setFriendsPanelVisible(true)} />
+						<MiscItem label="Friends" onClick={() => setFriendsPanelVisible((v) => !v)} />
 						<MiscItem
 							label="Profiles"
-							subText="default"
+							subText={loadedConfig.name}
 							onClick={() => setProfilesPanelVisible(true)}
 						/>
-						<MiscItem label="Targets" onClick={() => setTargetsPanelVisible(true)} />
+						<MiscItem label="Targets" onClick={() => setTargetsPanelVisible((v) => !v)} />
 					</div>
 
 					<div class="vape-bottom-bar">

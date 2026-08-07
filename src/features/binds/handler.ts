@@ -47,7 +47,7 @@ export function removeBind(key: string, id: string): boolean {
 	if (!b) return false;
 	const idx = b.findIndex((b) => b.id === id);
 	if (idx === -1) return false;
-	b.splice(idx);
+	b.splice(idx, 1);
 	return true;
 }
 

@@ -19,7 +19,13 @@ import {
 	setUseFriends,
 	useFriends,
 } from "./globalSettings";
-import { friendsPanelVisible, guiVisible, setFriendsPanelVisible } from "./guiState";
+import {
+	friendsPanelPosition,
+	friendsPanelVisible,
+	guiVisible,
+	setFriendsPanelPosition,
+	setFriendsPanelVisible,
+} from "./guiState";
 import shadowWrapper from "./shadowWrapper";
 
 function FriendsPanelContent() {
@@ -47,9 +53,10 @@ function FriendsPanelContent() {
 				name="Friends"
 				iconURL={getResourceURL("friendstab")}
 				iconSize={[17, 16]}
-				placeholder="Roblox username"
+				placeholder="Miniblox username"
 				accentColor={`rgb(${Math.round(friendsColorHue() * 255)}, ${Math.round(friendsColorSat() * 255)}, ${Math.round(friendsColorVal() * 255)})`}
-				initialPosition={{ x: 240, y: 46 }}
+				position={friendsPanelPosition}
+				onPositionChange={setFriendsPanelPosition}
 				visible={isVisible()}
 				setVisible={setFriendsPanelVisible}
 				items={friendsList}

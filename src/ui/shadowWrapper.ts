@@ -46,12 +46,12 @@ export default new (class ShadowWrapper {
 	}
 
 	/**
-	* Don't make this public or use this outside of this shadow wrapper.
-	* Why? Because pretty much everything you can do with this can also be done with the shadow wrapper.
-	* Putting stuff in the document's body is detectable.
-	* I don't know a way to create a shadow root without a div wrapper.
-	* Vector doesn't really care about doing client-sided detections as of right now, so we're fine.
-	*/
+	 * Don't make this public or use this outside of this shadow wrapper.
+	 * Why? Because pretty much everything you can do with this can also be done with the shadow wrapper.
+	 * Putting stuff in the document's body is detectable.
+	 * I don't know a way to create a shadow root without a div wrapper.
+	 * Vector doesn't really care about doing client-sided detections as of right now, so we're fine.
+	 */
 	private get host() {
 		this.#root ??= this.#makeShadowRoot();
 		return this.#host;

@@ -12,7 +12,10 @@ import { CPacketName } from "@/utils";
  * I'm not forcing the game to use `pumpInline` just because of ts.
  */
 export class S2CData<P extends S2CPacket = S2CPacket, N extends CPacketName = CPacketName> {
-	constructor(public name: N, public packet: P) {}
+	constructor(
+		public name: N,
+		public packet: P,
+	) {}
 }
 
 type ClientEvents = {

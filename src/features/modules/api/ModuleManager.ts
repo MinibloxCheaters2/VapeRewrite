@@ -106,7 +106,7 @@ export default class ModuleManager {
 		this.maceKill,
 		new NoRecoil(),
 		new NoFlash(),
-		new Speed()
+		new Speed(),
 	] as const;
 
 	/** Each module's name */

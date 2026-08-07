@@ -21,11 +21,9 @@ export default class Timer extends Mod {
 	private originalFixedUpdate: (() => void) | null = null;
 	private isHooked = false;
 
-	protected onEnable(): void {
-	}
+	protected onEnable(): void {}
 
-	protected onDisable(): void {
-	}
+	protected onDisable(): void {}
 
 	/**
 	 * Restore original fixedUpdate

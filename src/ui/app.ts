@@ -1,5 +1,7 @@
 import "./shadowWrapper";
 import "@/features/modules/legit";
+import { initConfig } from "@/features/config/configs";
+import { loadBinds } from "@/features/binds/storage";
 import { initHudSystem } from "@/features/hud";
 // global CSS
 import globalCss from "../style.css";
@@ -16,6 +18,10 @@ import { initTargetsPanel } from "./TargetsPanel";
 
 // Initialize HUD system
 initHudSystem();
+
+// Apply persisted config + binds now that modules are registered
+loadBinds();
+initConfig();
 
 // Initialize GUIs
 initMainGUI();

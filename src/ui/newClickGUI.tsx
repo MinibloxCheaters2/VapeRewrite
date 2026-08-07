@@ -12,10 +12,12 @@ import {
 	ToggleComponent,
 } from "./components";
 import {
+	categoryExpanded,
 	categoryWindowPositions,
 	guiVisible,
 	isCategoryWindowVisible,
 	setCategoryWindowPosition,
+	toggleCategoryExpanded,
 } from "./guiState";
 import { SubmoduleComponent } from "./SubmoduleComponent";
 
@@ -25,7 +27,7 @@ interface CategoryWindowProps {
 }
 
 export function CategoryWindow(props: CategoryWindowProps) {
-	const [expanded, setExpanded] = createSignal(false);
+	const expanded = () => categoryExpanded()[props.category] ?? false;
 	const [dragging, setDragging] = createSignal(false);
 
 	const position = () => categoryWindowPositions()[props.category] ?? { x: 6, y: 60 };
@@ -34,7 +36,6 @@ export function CategoryWindow(props: CategoryWindowProps) {
 	const [updateTrigger, setUpdateTrigger] = createSignal(0);
 
 	const modules = ModuleManager.findModules(P.byCategory(Category[props.category.toUpperCase()]));
-
 
 	// oxlint-disable-next-line no-unassigned-vars
 	let windowRef: HTMLDivElement | undefined;
@@ -93,7 +94,7 @@ export function CategoryWindow(props: CategoryWindowProps) {
 
 	const handleContextMenu = (e: PointerEvent) => {
 		e.preventDefault();
-		setExpanded(!expanded());
+		toggleCategoryExpanded(props.category);
 	};
 
 	onMount(() => {
@@ -180,7 +181,7 @@ export function CategoryWindow(props: CategoryWindowProps) {
 							height: "40px",
 						}}
 						type="button"
-						on:click={() => setExpanded(!expanded())}
+						on:click={() => toggleCategoryExpanded(props.category)}
 						on:pointerenter={(e) => {
 							e.currentTarget.style.opacity = "1";
 						}}

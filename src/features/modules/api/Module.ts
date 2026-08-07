@@ -1,6 +1,7 @@
 import { createSignal } from "solid-js";
 import Bus from "@/Bus";
 import { addBind, removeBind, setBind } from "@/features/binds/handler";
+import { saveBinds } from "@/features/binds/storage";
 import Configurable from "@/features/config/Configurable";
 import { updateLoadedConfig } from "@/features/config/configs";
 import type SubModule from "@/features/config/SubModule";
@@ -75,6 +76,7 @@ export default abstract class Mod extends Configurable {
 		this.#updateBind(this.bindSignal[0](), value);
 
 		this.bindSignal[1](value);
+		saveBinds();
 	}
 
 	get stateAccessor() {
@@ -133,7 +135,11 @@ export default abstract class Mod extends Configurable {
 		this.#registeredSubModules.clear();
 	}
 
-	protected override onSubmoduleChange(groupName: string, oldValue: string, newValue: string): void {
+	protected override onSubmoduleChange(
+		groupName: string,
+		oldValue: string,
+		newValue: string,
+	): void {
 		const submodules = this.submoduleGroups.get(groupName);
 		if (!submodules) return;
 

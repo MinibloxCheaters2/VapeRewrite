@@ -17,7 +17,13 @@ import {
 	targetsEnabled,
 	targetsList,
 } from "./globalSettings";
-import { guiVisible, setTargetsPanelVisible, targetsPanelVisible } from "./guiState";
+import {
+	guiVisible,
+	setTargetsPanelPosition,
+	setTargetsPanelVisible,
+	targetsPanelPosition,
+	targetsPanelVisible,
+} from "./guiState";
 import shadowWrapper from "./shadowWrapper";
 
 function TargetSubButton(props: {
@@ -104,9 +110,10 @@ function TargetsPanelContent() {
 				name="Targets"
 				iconURL={getResourceURL("friendstab")}
 				iconSize={[17, 16]}
-				placeholder="Roblox username"
+				placeholder="Miniblox username"
 				accentColor="rgb(5, 134, 105)"
-				initialPosition={{ x: 260, y: 60 }}
+				position={targetsPanelPosition}
+				onPositionChange={setTargetsPanelPosition}
 				visible={isVisible()}
 				setVisible={setTargetsPanelVisible}
 				items={targetsList}

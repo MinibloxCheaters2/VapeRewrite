@@ -22,8 +22,12 @@ export interface CategoryListPanelProps {
 	placeholder?: string;
 	/** Accent color used for dots and add button */
 	accentColor?: string;
-	/** Initial position {x, y} */
+	/** Initial position {x, y} (used when no controlled `position` is provided) */
 	initialPosition?: { x: number; y: number };
+	/** Controlled position accessor. When provided, position is driven by it. */
+	position?: Accessor<{ x: number; y: number }>;
+	/** Called whenever the panel is dragged. Required to persist a controlled position. */
+	onPositionChange?: (pos: { x: number; y: number }) => void;
 	/** Current visibility signal */
 	visible: boolean;
 	/** Setter to toggle visibility */
@@ -49,7 +53,14 @@ export interface CategoryListPanelProps {
 export default function CategoryListPanel(props: CategoryListPanelProps) {
 	const accent = () => props.accentColor || "rgb(5, 134, 105)";
 
-	const [position, setPosition] = createSignal(props.initialPosition || { x: 240, y: 46 });
+	const [localPosition, setLocalPosition] = createSignal(
+		props.initialPosition || { x: 240, y: 46 },
+	);
+	const position = () => props.position?.() ?? localPosition();
+	const setPosition = (pos: { x: number; y: number }) => {
+		if (props.onPositionChange) props.onPositionChange(pos);
+		else setLocalPosition(pos);
+	};
 	const [dragging, setDragging] = createSignal(false);
 	const [dragOffset, setDragOffset] = createSignal({ x: 0, y: 0 });
 	const [expanded, setExpanded] = createSignal(false);

@@ -20,7 +20,8 @@ export function isS2C<const K extends keyof CPacketMap>(
 	name: K,
 	pkt: unknown,
 ): pkt is InstanceType<CPacketMap[K]> {
-	return (pkt instanceof S2CData && pkt.name === name) || (
+	return (
+		(pkt instanceof S2CData && pkt.name === name) ||
 		(
 			pkt as typeof pkt & {
 				constructor: { typeName: K };

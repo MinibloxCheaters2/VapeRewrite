@@ -113,17 +113,12 @@ export function hookReceivePacket() {
 	origEmit = parser.Decoder.prototype.emit;
 	parser.Decoder.prototype.emit = new Proxy(origEmit, {
 		apply(target, thisArg, argArray) {
-			const { type, nsp, data } = argArray[1] as
-				{
-					type: 2 | number;
-					nsp: "/";
-					data: object | [string, object];
-				};
-			if (
-				type === 2 &&
-				data instanceof Array &&
-				typeof data[0] === "string"
-			) {
+			const { type, nsp, data } = argArray[1] as {
+				type: 2 | number;
+				nsp: "/";
+				data: object | [string, object];
+			};
+			if (type === 2 && data instanceof Array && typeof data[0] === "string") {
 				argArray.splice(1, 1);
 				const cw = new CancelableWrapper((data as [string, object])[1]);
 				Bus.emit("receivePacket", cw);

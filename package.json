@@ -19,11 +19,9 @@
 		"build:js": "rolldown -c",
 		"build:prod": "cross-env NODE_ENV=production run-s build:js",
 		"build": "cross-env NODE_ENV=production run-s build:prod",
-		"devbuild": "run-s clean dev",
-		"lint": "oxlint check",
-		"lint:fix": "oxlint check --fix",
-		"fmt": "oxfmt check",
-		"fmt:fix": "oxfmt check --fix"
+		"lint": "oxlint check src",
+		"lint:fix": "oxlint check src --fix",
+		"fmt": "oxfmt check src"
 	},
 	"dependencies": {
 		"@wq2/brigadier-ts": "^1.0.8",

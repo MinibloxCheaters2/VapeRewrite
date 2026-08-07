@@ -1,6 +1,6 @@
-import { createSignal, For, Show } from "solid-js";
+import { createEffect, createSignal, For, Show } from "solid-js";
 import { render } from "solid-js/web";
-import { listConfigs, loadConfig, saveConfig } from "@/features/config/configs";
+import { listConfigs, loadConfig, loadedConfig, saveConfig } from "@/features/config/configs";
 import getResourceURL from "@/utils/helpers/cachedResourceURL";
 import { dragHandleAttrName } from "@/utils/mapping/names";
 import { guiVisible } from "./guiState";
@@ -17,10 +17,13 @@ function ProfilesPanel() {
 	const [position, setPosition] = createSignal({ x: 240, y: 120 });
 	const [dragging, setDragging] = createSignal(false);
 	const [dragOffset, setDragOffset] = createSignal({ x: 0, y: 0 });
-	const [profiles, setProfiles] = createSignal<Profile[]>([
-		{ name: "default", active: true },
-		...listConfigs().map((n) => ({ name: n, active: false })),
-	]);
+	const [profiles, setProfiles] = createSignal<Profile[]>([]);
+
+	const [configName, setConfigName] = createSignal("");
+
+	function refreshProfiles() {
+		setProfiles(listConfigs().map((n) => ({ name: n, active: n === loadedConfig.name })));
+	}
 
 	// oxlint-disable-next-line no-unassigned-vars
 	let windowRef: HTMLDivElement | undefined;
@@ -58,13 +61,26 @@ function ProfilesPanel() {
 
 	const isVisible = () => guiVisible() && profilesPanelVisible();
 
+	// Refresh the profile list whenever the panel becomes visible so newly
+	// created profiles and the active one stay in sync.
+	createEffect(() => {
+		if (isVisible()) refreshProfiles();
+	});
+
 	const selectProfile = (profileName: string) => {
-		saveConfig(configName());
-		setProfiles((prev) => prev.map((p) => ({ ...p, active: p.name === profileName })));
+		saveConfig(loadedConfig.name);
 		loadConfig(profileName);
+		refreshProfiles();
 	};
 
-	const [configName, setConfigName] = createSignal("");
+	const createProfile = () => {
+		const name = configName().trim();
+		if (!name) return;
+		saveConfig(name);
+		loadConfig(name);
+		setConfigName("");
+		refreshProfiles();
+	};
 
 	return (
 		<Show when={isVisible()}>
@@ -187,7 +203,7 @@ function ProfilesPanel() {
 						"background-color": "var(--vape-main)",
 					}}
 					type="submit"
-					on:click={() => saveConfig(configName())}
+					on:click={createProfile}
 					on:pointerenter={(e) => {
 						e.currentTarget.style.backgroundColor = "var(--vape-main-light)";
 					}}

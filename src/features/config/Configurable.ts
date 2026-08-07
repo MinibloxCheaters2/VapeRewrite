@@ -140,7 +140,7 @@ export default class Configurable {
 			settings: sm.settings,
 		}));
 
-		const initial = defaultSelected ?? (submodules[0]?.name ?? "");
+		const initial = defaultSelected ?? submodules[0]?.name ?? "";
 		const [value, setValueSignal] = createSignal(initial);
 
 		const setting: SubmoduleSetting = {
@@ -161,7 +161,7 @@ export default class Configurable {
 		return setting;
 	}
 
-	protected onSubmoduleChange(groupName: string, oldValue: string, newValue: string): void {
+	protected onSubmoduleChange(_groupName: string, _oldValue: string, _newValue: string): void {
 		// Override in subclasses to handle sub-module lifecycle
 	}
 
