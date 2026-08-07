@@ -28,6 +28,7 @@ import initOrR from "../helpers/initOrR";
 import remapObj from "../helpers/remapProxy";
 import { getInheritanceTree, type HasProto } from "../helpers/tree";
 import mappings from "../mapping/mappings";
+import logger from "../logging/loggers";
 
 export async function importMiniblox() {
 	return await import(scriptEl.src);
@@ -321,7 +322,7 @@ const Miniblox = {
 					this.player.getHorizontalFacing();
 				}
 			});*/
-			const ef = this.player.getHorizontalDirection();
+			const ef = Miniblox.player.getHorizontalDirection();
 			return ef.constructor as typeof EnumFacing;
 		});
 	},
@@ -355,21 +356,28 @@ const Miniblox = {
 	get game() {
 		return initOrR(_game, () => {
 			function method1() {
-				return findObject(
-					(x) =>
-						x !== null &&
-						typeof x === "object" &&
-						"gameScene" in x &&
-						"GameSceneClass" in x &&
-						"player" in x &&
-						"world" in x,
-				) as Game;
+				try {
+					return findObject(
+						(x) =>
+							x !== null &&
+							typeof x === "object" &&
+							"gameScene" in x &&
+							"GameSceneClass" in x &&
+							"player" in x &&
+							"world" in x,
+					) as Game;
+				} catch (e) {
+					logger.warn("Failed to find game from exports, falling back to next method. Error:", e);
+					return undefined;
+				}
 			}
 			function method2() {
 				const elem = document.querySelector("#react");
 				const fiber = elem && Object.values(elem)[0];
-				if (!fiber?.updateQueue?.baseState?.element?.props?.game)
-					throw new Error("React not mounted!");
+				if (!fiber?.updateQueue?.baseState?.element?.props?.game) {
+					logger.error("2nd method failed: React not mounted!");
+					return undefined;
+				}
 				return fiber.updateQueue.baseState.element.props.game as Game;
 			}
 			return method1() ?? method2();

@@ -44,8 +44,9 @@ export default class Configurable {
 			name,
 			type: "toggle",
 			value,
-			setValue: (value) => {
-				setValueSignal(value);
+			setValue: (v) => {
+				if (value() === v) return;
+				setValueSignal(v);
 				if (this.modName) updateLoadedConfig(this.modName, name);
 			},
 			visible,
@@ -68,8 +69,9 @@ export default class Configurable {
 			name,
 			type: "slider",
 			value,
-			setValue: (value) => {
-				setValueSignal(value);
+			setValue: (v) => {
+				if (value() === v) return;
+				setValueSignal(v);
 				if (this.modName) updateLoadedConfig(this.modName, name);
 			},
 			min,
@@ -93,8 +95,9 @@ export default class Configurable {
 			name,
 			type: "dropdown",
 			value,
-			setValue: (value) => {
-				setValueSignal(() => value);
+			setValue: (v) => {
+				if (value() === v) return;
+				setValueSignal(() => v);
 				if (this.modName) updateLoadedConfig(this.modName, name);
 			},
 			options,
@@ -116,8 +119,9 @@ export default class Configurable {
 			name,
 			type: "textbox",
 			value,
-			setValue: (value) => {
-				setValueSignal(value);
+			setValue: (v) => {
+				if (value() === v) return;
+				setValueSignal(v);
 				if (this.modName) updateLoadedConfig(this.modName, name);
 			},
 			placeholder,
@@ -149,6 +153,7 @@ export default class Configurable {
 			value,
 			setValue: (v) => {
 				const oldValue = value();
+				if (oldValue === v) return;
 				setValueSignal(v);
 				this.onSubmoduleChange(name, oldValue, v);
 				if (this.modName) updateLoadedConfig(this.modName, name);
@@ -182,6 +187,8 @@ export default class Configurable {
 			type: "colorslider",
 			value: color,
 			setValue: (value) => {
+				const c = color();
+				if (c.h === value.h && c.s === value.s && c.v === value.v && c.o === value.o) return;
 				setColorSignal(value);
 				if (this.modName) updateLoadedConfig(this.modName, name);
 			},
@@ -189,6 +196,8 @@ export default class Configurable {
 			sat: () => color().s,
 			opacity: () => color().o,
 			setColor: (h: number, s: number, v: number, o: number) => {
+				const c = color();
+				if (c.h === h && c.s === s && c.v === v && c.o === o) return;
 				setColorSignal({ h, s, v, o });
 				if (this.modName) updateLoadedConfig(this.modName, name);
 			},

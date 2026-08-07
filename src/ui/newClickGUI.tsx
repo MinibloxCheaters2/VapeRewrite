@@ -34,6 +34,10 @@ export function CategoryWindow(props: CategoryWindowProps) {
 	const [dragOffset, setDragOffset] = createSignal({ x: 0, y: 0 });
 	const [windowHeight, setWindowHeight] = createSignal(41);
 	const [updateTrigger, setUpdateTrigger] = createSignal(0);
+	// Keep the height transition disabled until the initial height has been
+	// measured, so re-opening the GUI doesn't replay the expand animation for
+	// categories that are already open.
+	const [heightAnimated, setHeightAnimated] = createSignal(false);
 
 	const modules = ModuleManager.findModules(P.byCategory(Category[props.category.toUpperCase()]));
 
@@ -52,9 +56,14 @@ export function CategoryWindow(props: CategoryWindowProps) {
 			requestAnimationFrame(() => {
 				const height = contentRef.scrollHeight;
 				setWindowHeight(41 + height);
+				// Enable the height transition only after the initial height has
+				// been applied, so an already-open category doesn't replay its
+				// expand animation when the GUI is re-opened.
+				requestAnimationFrame(() => setHeightAnimated(true));
 			});
 		} else {
 			setWindowHeight(41);
+			setHeightAnimated(true);
 		}
 	});
 
@@ -137,7 +146,7 @@ export function CategoryWindow(props: CategoryWindowProps) {
 					height: `${windowHeight()}px`,
 					"background-color": "var(--vape-main)",
 					"z-index": "10002",
-					transition: "height 0.16s linear",
+					transition: heightAnimated() ? "height 0.16s linear" : "none",
 				}}
 				on:pointerdown={handlePointerDown}
 				on:contextmenu={handleContextMenu}

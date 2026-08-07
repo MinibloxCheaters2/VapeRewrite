@@ -6,7 +6,7 @@ import Dupe from "../Dupe";
 export default class ChestSpamDupe implements Tagged {
 	tag = "Chest Spam";
 
-	@Subscribe("gameTick")
+	@Subscribe("playerTick")
 	private onTick() {
 		const { player, chat } = Miniblox;
 		if (!player.openContainer || player.openContainer === player.inventoryContainer) {

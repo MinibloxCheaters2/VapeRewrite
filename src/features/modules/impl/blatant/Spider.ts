@@ -67,7 +67,7 @@ export default class Spider extends Mod {
 		return anyCollidingBlock !== undefined;
 	}
 
-	@Subscribe("gameTick")
+	@Subscribe("playerTick")
 	public onTick() {
 		const { player } = Miniblox;
 		if (!player) return;

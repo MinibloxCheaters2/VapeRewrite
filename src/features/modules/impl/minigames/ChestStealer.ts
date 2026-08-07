@@ -133,7 +133,7 @@ export default class ChestStealer extends Mod {
 		}
 	}
 
-	@Subscribe("gameTick")
+	@Subscribe("playerTick")
 	public onTick() {
 		const { playerController, player } = Miniblox;
 		if (!playerController || this.currentWindowId === null) {

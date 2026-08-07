@@ -9,7 +9,7 @@ import type Fly from "./index";
 export default class NormalSub extends SubModule<Fly> {
 	readonly speedSetting: SliderSetting = this.createSliderSetting("Speed", 1, 0.11, 6.0, 0.01);
 
-	@Subscribe("gameTick")
+	@Subscribe("playerTick")
 	onTick(): void {
 		const { player } = Miniblox;
 		const dir = getMoveDirection(this.speedSetting.value());

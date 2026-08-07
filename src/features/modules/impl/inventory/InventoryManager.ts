@@ -49,7 +49,7 @@ export default class InventoryManager extends Mod {
 		ItemSortChoice.BLOCK,
 	];
 
-	@Subscribe("gameTick", Priority.NORMAL)
+	@Subscribe("playerTick", Priority.NORMAL)
 	private onTick() {
 		const { player } = Miniblox;
 		if (!player) return;

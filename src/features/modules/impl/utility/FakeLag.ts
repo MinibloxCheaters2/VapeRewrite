@@ -60,7 +60,7 @@ export default class FakeLag extends Mod {
 		return false;
 	}
 
-	@Subscribe("gameTick")
+	@Subscribe("playerTick")
 	private onTick() {
 		this.#targetsInRange = findTargets(this.#range);
 		this.#enemyNearby = this.#targetsInRange.length !== 0;

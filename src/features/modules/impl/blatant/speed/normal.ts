@@ -8,7 +8,7 @@ import type Speed from "./index";
 export default class Normal extends SubModule<Speed> {
 	readonly speedSetting: SliderSetting = this.createSliderSetting("Speed", 1, 0.11, 6.0, 0.01);
 
-	@Subscribe("gameTick")
+	@Subscribe("playerTick")
 	onTick(): void {
 		const { player } = Miniblox;
 		const dir = getMoveDirection(this.speedSetting.value());

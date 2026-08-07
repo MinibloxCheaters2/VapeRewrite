@@ -58,7 +58,7 @@ export default class LiquidWalk extends Mod {
 		return this.isInLiquid(player.pos.y);
 	}
 
-	@Subscribe("gameTick")
+	@Subscribe("playerTick")
 	public onTick() {
 		const { player } = Miniblox;
 		if (!player) return;

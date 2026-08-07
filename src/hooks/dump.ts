@@ -6,10 +6,11 @@ const DUMP_REGEXES = {
 	// PathNavigateGround#isPositionClear
 	iterator: /of\s*\w+\.([a-zA-Z]+)\(new/,
 	// EntityBoat#update
-	normalizeAngle: /(\w+)\(this\.boatYaw\s*-\s*this.yaw\)/,
+	// normalizeAngle: /(\w+)\(this\.boatYaw\s*-\s*this.yaw\)/, // useless
 	// PlayerMovement#updatePlayerMoveState
 	applyInput: /this\.(\w+)\(this\.currentInput\)/,
-	getMoveDirection: /([a-zA-Z]+)\(\w\)[\s\S]*?>=\s*1e-4[\s\S]*?Math\.cos\(this\.yaw\)/,
+	// false flags from some random method.
+	// getMoveDirection: /([a-zA-Z]+)\(\w\)[\s\S]*?>=\s*1e-4[\s\S]*?Math\.cos\(this\.yaw\)/,
 	updatePlayerMoveState: /this\.([a-zA-Z]*)\(\),\n*\s*this\.isUsingItem\(\)\s*&&/,
 	getEyePos:
 		/(\w+)\(\)\s*{\n*\s*let\s+\w\s*=\s*this\.pos\.clone\(\);\n*\s*return\s+\w.y\s*\+=\s*this\.getEyeHeight/,

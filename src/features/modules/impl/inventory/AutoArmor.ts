@@ -12,7 +12,7 @@ export default class AutoArmor extends Mod {
 
 	private lastCheckTick = 0;
 
-	@Subscribe("gameTick", Priority.NORMAL)
+	@Subscribe("playerTick", Priority.NORMAL)
 	private onTick() {
 		const { player, playerController } = Miniblox;
 		if (!player) return;

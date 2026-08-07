@@ -41,7 +41,7 @@ export default class Breaker extends Mod {
 			: blockHandlers.breakBlock;
 	}
 
-	@Subscribe("gameTick")
+	@Subscribe("playerTick")
 	private onTick() {
 		if (!this.#couldBreakAnything()) {
 			this.toggleSilently();

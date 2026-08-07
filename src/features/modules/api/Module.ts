@@ -187,6 +187,7 @@ export default abstract class Mod extends Configurable {
 	}
 
 	set enabled(value: boolean) {
+		if (this.state === value) return;
 		this.state = value;
 		if (value) {
 			this.onEnableInternal();

@@ -217,7 +217,7 @@ export default class Scaffold extends Mod {
 		);
 	}
 
-	@Subscribe("gameTick")
+	@Subscribe("playerTick")
 	onTick(): void {
 		const { player, game, BlockPos, ItemBlock, playerController } = Miniblox;
 

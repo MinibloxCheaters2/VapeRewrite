@@ -56,7 +56,7 @@ export default class TargetStrafe extends Mod {
 		return this.onlyWhenMovingSetting.value();
 	}
 
-	@Subscribe("gameTick")
+	@Subscribe("playerTick")
 	public onTick() {
 		const { player } = Miniblox;
 		if (this.onlyOnGround && !player.onGround) return;
