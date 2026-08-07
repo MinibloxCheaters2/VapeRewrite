@@ -1,5 +1,5 @@
 import Blink from "../impl/blatant/Blink.js";
-import FakeLag from "../impl/blatant/FakeLag.js";
+import FakeLag from "../impl/utility/FakeLag.js";
 import Fly from "../impl/blatant/fly/index.js";
 import KillAura from "../impl/blatant/KillAura.js";
 import MaceKill from "../impl/blatant/MaceKill.js";
