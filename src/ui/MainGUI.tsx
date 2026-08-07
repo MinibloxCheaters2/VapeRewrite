@@ -224,28 +224,35 @@ function MainGUI() {
 	const sortGUI = () => {
 		const visible = Object.keys(categoryWindows()).filter((k) => categoryWindows()[k]);
 		const panelWidth = 220;
+		const panelHeight = 530; // TODO: ts should NOT be hardkobed
 		const gap = 6;
 		const startX = 230;
 		const startY = 60;
 
 		const newPos: Record<string, { x: number; y: number }> = {};
 		let x = startX;
+		let y = startY;
 
 		for (const cat of visible) {
-			newPos[cat] = { x, y: startY };
+			newPos[cat] = { x, y };
 			x += panelWidth + gap;
+			if (x >= window.innerWidth - gap) {
+				y += panelHeight;
+				x = startX;
+			}
 		}
 
 		setCategoryWindowPositions((prev) => ({ ...prev, ...newPos }));
 	};
 
 	const toggleHud = (hudClass: new () => HudElement) => {
-		const name = new hudClass().name;
+		const hud = new hudClass();
+		const name = hud.name;
 		const element = HudManager.getHudElements().find((h) => h.name === name);
 		if (element) {
 			HudManager.removeHudElement(element);
 		} else {
-			HudManager.addHudElement(new hudClass());
+			HudManager.addHudElement(hud);
 		}
 	};
 
@@ -1000,10 +1007,6 @@ function SearchResultItem(props: { mod: Mod }) {
 			on:pointerenter={() => setHovered(true)}
 			on:pointerleave={() => setHovered(false)}
 			on:click={() => props.mod.toggle()}
-			on:contextmenu={(e: PointerEvent) => {
-				e.preventDefault();
-				toggleCategoryWindow(Category[props.mod.category]?.toLowerCase());
-			}}
 		>
 			<span
 				style={{

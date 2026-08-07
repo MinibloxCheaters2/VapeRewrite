@@ -1,6 +1,7 @@
 import type { C2SPacket } from "@wq2/miniblox-sdk";
 import Miniblox from "../refs/miniblox";
 import type { CPacketMap, SPacketMap } from "./packetRefs";
+import { S2CData } from "@/event/Events";
 
 export function isC2S<const K extends keyof SPacketMap>(
 	name: K,
@@ -19,7 +20,7 @@ export function isS2C<const K extends keyof CPacketMap>(
 	name: K,
 	pkt: unknown,
 ): pkt is InstanceType<CPacketMap[K]> {
-	return (
+	return (pkt instanceof S2CData && pkt.name === name) || (
 		(
 			pkt as typeof pkt & {
 				constructor: { typeName: K };

@@ -6,6 +6,7 @@ import MaceKill from "../impl/blatant/MaceKill.js";
 import NoSlow from "../impl/blatant/NoSlow.js";
 import Phase from "../impl/blatant/Phase.js";
 import Scaffold from "../impl/blatant/Scaffold.js";
+import Speed from "../impl/blatant/speed/index.js";
 import Spider from "../impl/blatant/Spider.js";
 import TargetStrafe from "../impl/blatant/TargetStrafe.js";
 import TickBase from "../impl/blatant/TickBase.js";
@@ -104,7 +105,8 @@ export default class ModuleManager {
 		new Paranoia(),
 		this.maceKill,
 		new NoRecoil(),
-		new NoFlash()
+		new NoFlash(),
+		new Speed()
 	] as const;
 
 	/** Each module's name */

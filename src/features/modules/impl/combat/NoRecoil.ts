@@ -11,7 +11,8 @@ export default class NoRecoil extends Mod {
 
 	@Subscribe("receivePacket")
 	private onPacket(wrap: CancelableWrapper<S2CPacket>) {
-		if (isS2C("CPacketApplyRecoil", wrap)) {
+		if (isS2C("CPacketApplyRecoil", wrap.data)) {
+			console.log("cancelled");
 			wrap.cancel();
 		}
 	}

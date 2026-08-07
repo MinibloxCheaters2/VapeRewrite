@@ -84,7 +84,7 @@ let origEmit: Decoder["emit"];
 /**
  * exported because connect hook needs to run ts
  */
-function hookReceivePacket() {
+export function hookReceivePacket() {
 	/*
 	const SPacketUpdateInventory =
 		Miniblox.player.inventory.sendInventoryToServer();
@@ -102,7 +102,7 @@ function hookReceivePacket() {
 	});*/
 	const cs = Miniblox.ClientSocket;
 	if (!cs) {
-		logger.warn("Can't hook receive packet without a ClientSocket reference");
+		logger.error("Can't hook receive packet without a ClientSocket reference");
 		return;
 	}
 	const parser = cs.socket.io.opts.parser as {
@@ -113,24 +113,22 @@ function hookReceivePacket() {
 	origEmit = parser.Decoder.prototype.emit;
 	parser.Decoder.prototype.emit = new Proxy(origEmit, {
 		apply(target, thisArg, argArray) {
-			const [, { type, nsp, data }] = argArray[0] as [
-				string,
+			const { type, nsp, data } = argArray[1] as
 				{
 					type: 2 | number;
 					nsp: "/";
 					data: object | [string, object];
-				},
-			];
+				};
 			if (
 				type === 2 &&
-				// biome-ignore lint/suspicious/useIsArray: don't downcast my array :(
 				data instanceof Array &&
 				typeof data[0] === "string"
 			) {
-				argArray.splice(1);
+				argArray.splice(1, 1);
 				const cw = new CancelableWrapper((data as [string, object])[1]);
 				Bus.emit("receivePacket", cw);
 				data[1] = cw.data;
+				if (cw.canceled) return;
 				return Reflect.apply(target, thisArg, [
 					argArray[0],
 					{
@@ -150,7 +148,6 @@ function hookReceivePacket() {
 const packetHook = {
 	init() {
 		hookSendPacket();
-		hookReceivePacket();
 	},
 };
 waitForReact().then(() => packetHook.init());

@@ -1,7 +1,7 @@
 import { createSignal } from "solid-js";
 
 export const [notificationsEnabled, setNotificationsEnabled] = createSignal(true);
-export const [toggleAlertEnabled, setToggleAlertEnabled] = createSignal(false);
+export const [toggleAlertEnabled, setToggleAlertEnabled] = createSignal(true);
 
 export const [teamsByServerEnabled, setTeamsByServerEnabled] = createSignal(true);
 
@@ -13,7 +13,7 @@ export const [guiThemeRainbow, setGuiThemeRainbow] = createSignal(false);
 export const [blurBackground, setBlurBackground] = createSignal(true);
 export const [guiBindIndicator, setGuiBindIndicator] = createSignal(true);
 export const [showTooltips, setShowTooltips] = createSignal(true);
-export const [showLegitMode, setShowLegitMode] = createSignal(false);
+export const [showLegitMode, setShowLegitMode] = createSignal(true);
 export const [scaleValue, setScaleValue] = createSignal(1);
 export const [useTeamColor, setUseTeamColor] = createSignal(false);
 export const [multiKeybinding, setMultiKeybinding] = createSignal(false);

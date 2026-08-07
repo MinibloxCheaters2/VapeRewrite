@@ -2,17 +2,26 @@ import type { C2SPacket, S2CPacket } from "@wq2/miniblox-sdk";
 import type { PacketOutcome } from "@/utils/network/packetQueueManager";
 import type Cancelable from "./Cancelable";
 import type CancelableWrapper from "./CancelableWrapper";
+import { CPacketName } from "@/utils";
+
+/**
+ * Used because network decoding (S -> C) is now done in a worker.
+ * This means that it passes through `postMessage` and `structuredClone`,
+ * removing the `prototype` data, which means it appears as a plain object.
+ * Why a class? because then I can just do `instanceof`.
+ * I'm not forcing the game to use `pumpInline` just because of ts.
+ */
+export class S2CData<P extends S2CPacket = S2CPacket, N extends CPacketName = CPacketName> {
+	constructor(public name: N, public packet: P) {}
+}
 
 type ClientEvents = {
-	// biome-ignore lint/suspicious/noConfusingVoidType: void is used as an empty type for 0-parameter events.
 	gameTick: void;
 	playerTick: Cancelable;
-	// biome-ignore lint/suspicious/noConfusingVoidType: void is used as an empty type for 0-parameter events.
 	render: void;
 	sendPacket: CancelableWrapper<C2SPacket>;
-	receivePacket: CancelableWrapper<S2CPacket>;
+	receivePacket: CancelableWrapper<S2CData>;
 	queueC2SPacket: PacketOutcome<C2SPacket>;
-	// biome-ignore lint/suspicious/noConfusingVoidType: void is used as an empty type for 0-parameter events.
 	connect: void;
 };
 

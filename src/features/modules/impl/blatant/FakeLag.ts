@@ -17,8 +17,8 @@ export default class FakeLag extends Mod {
 	#enemyNearby = false;
 
 	#rng = this.createSliderSetting("Range", 12, 1, 18, 0.1);
-	#miD = this.createSliderSetting("MinDelayMS", 267, 0, 1.5e3, 1.5);
-	#maD = this.createSliderSetting("MaxDelayMS", 342, 1, 1.5e3, 1.5);
+	#miD = this.createSliderSetting("MinDelayMS", 999, 0, 9e3, 1.5);
+	#maD = this.createSliderSetting("MaxDelayMS", 999, 1, 9e3, 1.5);
 	#fOA = this.createToggleSetting("FlushOnAction", true);
 
 	get #range() {

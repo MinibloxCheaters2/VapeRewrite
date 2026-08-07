@@ -1,6 +1,7 @@
 import { createSignal } from "solid-js";
 import Mod from "../modules/api/Module";
 import { updateLoadedConfig } from "./configs";
+import type SubModule from "./SubModule";
 import type {
 	AnySetting,
 	ColorSettingValue,
@@ -126,32 +127,42 @@ export default class Configurable {
 		return setting;
 	}
 
-	protected createSubmoduleGroup(
+	protected submoduleGroups = new Map<string, SubModule<any>[]>();
+
+	protected createSubmoduleGroup<T extends SubModule<any>>(
 		name: string,
-		submoduleNames: string[],
+		submodules: T[],
 		defaultSelected?: string,
 		visible?: () => boolean,
 	): SubmoduleSetting {
-		const [value, setValueSignal] = createSignal(defaultSelected ?? submoduleNames[0]);
-
-		const items: SubmoduleItem[] = submoduleNames.map((n) => ({
-			name: n,
-			settings: [],
+		const items: SubmoduleItem[] = submodules.map((sm) => ({
+			name: sm.name,
+			settings: sm.settings,
 		}));
+
+		const initial = defaultSelected ?? (submodules[0]?.name ?? "");
+		const [value, setValueSignal] = createSignal(initial);
 
 		const setting: SubmoduleSetting = {
 			type: "submodule",
 			name,
 			value,
 			setValue: (v) => {
+				const oldValue = value();
 				setValueSignal(v);
+				this.onSubmoduleChange(name, oldValue, v);
 				if (this.modName) updateLoadedConfig(this.modName, name);
 			},
 			submodules: items,
 			visible,
 		};
+		this.submoduleGroups.set(name, submodules);
 		this.settings.push(setting);
 		return setting;
+	}
+
+	protected onSubmoduleChange(groupName: string, oldValue: string, newValue: string): void {
+		// Override in subclasses to handle sub-module lifecycle
 	}
 
 	protected createColorSliderSetting(

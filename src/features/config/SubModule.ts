@@ -1,11 +1,16 @@
 import type Mod from "../modules/api/Module";
 import Configurable from "./Configurable";
-import type { AnySetting } from "./Settings";
 
 export default class SubModule<P extends Mod> extends Configurable {
-	constructor(public parent: P, target: AnySetting[]) {
+	public readonly name: string;
+
+	constructor(public parent: P, name?: string) {
 		super();
 		this.modNameForConfig = parent.name;
-		this.settings = target;
+		this.name = name ?? this.constructor.name;
 	}
+
+	onEnable(): void {}
+	onDisable(): void {}
+	getTag(): string | undefined { return undefined; }
 }

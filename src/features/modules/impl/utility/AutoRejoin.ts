@@ -4,6 +4,7 @@ import type CancelableWrapper from "@/event/CancelableWrapper";
 import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
+import { isS2C } from "@/utils";
 
 export default class AutoRejoin extends Mod {
 	name = "AutoRejoin";

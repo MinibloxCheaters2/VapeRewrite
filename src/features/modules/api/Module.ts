@@ -3,7 +3,8 @@ import Bus from "@/Bus";
 import { addBind, removeBind, setBind } from "@/features/binds/handler";
 import Configurable from "@/features/config/Configurable";
 import { updateLoadedConfig } from "@/features/config/configs";
-import type { BaseSetting } from "@/features/config/Settings";
+import type SubModule from "@/features/config/SubModule";
+import type { BaseSetting, SubmoduleSetting } from "@/features/config/Settings";
 import { toggleAlertEnabled } from "@/ui/globalSettings";
 import { showNotification } from "@/ui/notifications";
 import type { Category } from "./Category";
@@ -86,12 +87,15 @@ export default abstract class Mod extends Configurable {
 		return setting;
 	}
 
+	#registeredSubModules = new Set<SubModule<any>>();
+
 	/**
 	 * Do NOT override this, override {@link onEnable} instead
 	 * This registers the module and calls {@link onEnable}.
 	 */
 	private onEnableInternal(): void {
 		Bus.registerSubscriber(this);
+		this.#registerActiveSubModules();
 		this.onEnable();
 	}
 
@@ -100,8 +104,53 @@ export default abstract class Mod extends Configurable {
 	 * This deregisters the module and calls {@link onDisable}.
 	 */
 	private onDisableInternal(): void {
+		this.#unregisterAllSubModules();
 		Bus.unregisterSubscriber(this);
 		this.onDisable();
+	}
+
+	#registerActiveSubModules(): void {
+		for (const [groupName, submodules] of this.submoduleGroups) {
+			const setting = this.settings.find(
+				(s): s is SubmoduleSetting => s.type === "submodule" && s.name === groupName,
+			);
+			if (!setting) continue;
+			const activeName = setting.value();
+			const sm = submodules.find((s) => s.name === activeName);
+			if (sm && !this.#registeredSubModules.has(sm)) {
+				Bus.registerSubscriber(sm);
+				sm.onEnable();
+				this.#registeredSubModules.add(sm);
+			}
+		}
+	}
+
+	#unregisterAllSubModules(): void {
+		for (const sm of this.#registeredSubModules) {
+			Bus.unregisterSubscriber(sm);
+			sm.onDisable();
+		}
+		this.#registeredSubModules.clear();
+	}
+
+	protected override onSubmoduleChange(groupName: string, oldValue: string, newValue: string): void {
+		const submodules = this.submoduleGroups.get(groupName);
+		if (!submodules) return;
+
+		const oldSM = submodules.find((sm) => sm.name === oldValue);
+		const newSM = submodules.find((sm) => sm.name === newValue);
+
+		if (oldSM && this.#registeredSubModules.has(oldSM)) {
+			Bus.unregisterSubscriber(oldSM);
+			oldSM.onDisable();
+			this.#registeredSubModules.delete(oldSM);
+		}
+
+		if (newSM && this.enabled) {
+			Bus.registerSubscriber(newSM);
+			newSM.onEnable();
+			this.#registeredSubModules.add(newSM);
+		}
 	}
 
 	/** Called when the module is enabled. */
