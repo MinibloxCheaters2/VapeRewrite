@@ -142,13 +142,6 @@ createEffect(() => {
 });
 
 try {
-	// Register \ key (Backslash)
-	addBind("Backslash", "gui-toggle", (e) => {
-		e.preventDefault();
-		e.stopPropagation();
-		toggleGUI();
-	});
-
 	// Also register RightShift as alternative
 	addBind("ShiftRight", "gui-toggle-shift", (e) => {
 		e.preventDefault();

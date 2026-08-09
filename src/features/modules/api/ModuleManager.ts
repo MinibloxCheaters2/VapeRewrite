@@ -39,6 +39,7 @@ import Timer from "../impl/world/Timer.js";
 import type Category from "./Category.js";
 import type Mod from "./Module.js";
 import AdBypass from "../impl/utility/AdBypass.js";
+import AntiSpamBypass from "../impl/utility/AntiSpamBypass.js";
 
 /** some basic predicates for finding modules */
 export const P = {
@@ -107,7 +108,8 @@ export default class ModuleManager {
 		new NoRecoil(),
 		new NoFlash(),
 		new Speed(),
-		new AdBypass(),
+		AdBypass.INSTANCE,
+		new AntiSpamBypass()
 	] as const;
 
 	/** Each module's name */
