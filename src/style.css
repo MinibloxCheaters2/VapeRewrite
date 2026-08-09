@@ -488,3 +488,83 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	border-radius: 3px;
 	transition: width 0.2s ease;
 }
+
+.vape-target-hud {
+	position: relative;
+	overflow: hidden;
+	box-sizing: border-box;
+	border-radius: 4px;
+	user-select: none;
+}
+
+.vape-target-avatar {
+	position: absolute;
+	left: 19px;
+	top: 17px;
+	width: 26px;
+	height: 27px;
+	background-color: rgba(0, 0, 0, 0.3);
+	border-radius: 3px;
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.vape-target-name {
+	position: absolute;
+	left: 54px;
+	top: 20px;
+	width: 145px;
+	height: 20px;
+	line-height: 20px;
+	font-size: 15px;
+	font-weight: 700;
+	color: white;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.vape-target-health-bkg {
+	position: absolute;
+	left: 20px;
+	top: 56px;
+	width: 200px;
+	height: 9px;
+	background-color: rgba(0, 0, 0, 0.4);
+	border-radius: 2px;
+	overflow: hidden;
+}
+
+.vape-target-health-fill {
+	position: absolute;
+	left: 0;
+	top: 0;
+	height: 100%;
+	border-radius: 2px;
+	transition:
+		width 0.3s ease,
+		background-color 0.3s ease;
+}
+
+.vape-target-health-extra {
+	position: absolute;
+	right: 0;
+	top: 0;
+	height: 100%;
+	background-color: #ffa500;
+	border-radius: 2px;
+	transition: width 0.3s ease;
+}
+
+.vape-target-health-flash {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: #ff3b3b;
+	border-radius: 2px;
+	pointer-events: none;
+}

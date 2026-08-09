@@ -59,11 +59,7 @@ export default new (class CommandListener {
 
 				return words.length <= 1 ? `${COMMAND_PREFIX}${suggestionText}` : suggestionText;
 			});
-			Miniblox.chat.autoCompleteReceived(
-				new PacketRefs.c.CPacketTabComplete({
-					matches: applied,
-				}),
-			);
+			Miniblox.chat.autoCompleteReceived({matches: applied});
 		}
 	}
 })();

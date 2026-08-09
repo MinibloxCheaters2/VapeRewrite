@@ -19,7 +19,6 @@ export default class Scaffold extends Mod {
 	private expandSetting = this.createSliderSetting("Expand", 1, 0, 5, 0.5);
 	private cycleSetting = this.createSliderSetting("Cycle Speed", 10, 0, 20, 1);
 	private placesPerTickSetting = this.createSliderSetting("Places Per Tick", 10, 0, 20, 1);
-	private sameYSetting = this.createToggleSetting("Same Y", false);
 	private keepYSetting = this.createToggleSetting("Keep Y", false);
 	private techniqueSetting = this.createDropdownSetting("Technique", ["Normal", "Telly"]);
 	private movementCorrectionSetting = this.createDropdownSetting(
@@ -65,10 +64,6 @@ export default class Scaffold extends Mod {
 		return this.placesPerTickSetting.value();
 	}
 
-	get sameY() {
-		return this.sameYSetting.value();
-	}
-
 	get keepY() {
 		return this.keepYSetting.value();
 	}
@@ -100,8 +95,8 @@ export default class Scaffold extends Mod {
 	}
 
 	protected onEnable(): void {
-		const { player, game } = Miniblox;
-		if (player && game) {
+		const game = Miniblox.game;
+		if (game) {
 			this.oldHeldSlot = game.info.selectedSlot;
 		}
 		this.tickCount = 0;
@@ -111,18 +106,17 @@ export default class Scaffold extends Mod {
 	}
 
 	protected onDisable(): void {
-		const { player, game } = Miniblox;
-		if (player && game && this.oldHeldSlot !== undefined) {
-			this.switchSlot(this.oldHeldSlot);
-		}
 		this.lastScaffoldY = null;
 		this.lastMotionX = 0;
 		this.lastMotionZ = 0;
+		if (Miniblox.game && this.oldHeldSlot !== undefined) {
+			this.switchSlot(this.oldHeldSlot);
+		}
 	}
 
 	private switchSlot(slot: number): void {
+		if (!Miniblox.game) return;
 		const { player, game } = Miniblox;
-		if (!player || !game) return;
 		player.inventory.currentItem = slot;
 		game.info.selectedSlot = slot;
 	}
@@ -246,39 +240,21 @@ export default class Scaffold extends Mod {
 
 		const item = player.inventory.getCurrentItem();
 		if (!item || !(item.getItem() instanceof ItemBlock)) return;
-
-		// Check if player is moving
 		const isMoving = player.moveForward !== 0 || player.moveStrafe !== 0;
-
-		// Calculate positions
 		const playerX = Math.floor(player.pos.x);
 		const playerY = Math.floor(player.pos.y);
 		const playerZ = Math.floor(player.pos.z);
 
-		// Determine target Y coordinate
 		let targetY: number;
 		if (this.keepY) {
 			if (this.lastScaffoldY === null) {
 				this.lastScaffoldY = playerY - 1;
 			}
 
-			const unchangedMovement =
-				player.motion.x === this.lastMotionX && player.motion.z === this.lastMotionZ;
-
-			if (unchangedMovement && !player.onGround && player.motion.y > 0) {
+			if (isMoving && player.motion.y > 0) {
 				targetY = this.lastScaffoldY + 1;
 			} else {
 				targetY = this.lastScaffoldY;
-			}
-		} else if (this.sameY) {
-			if (isMoving) {
-				if (this.lastScaffoldY === null) {
-					this.lastScaffoldY = playerY - 1;
-				}
-				targetY = this.lastScaffoldY;
-			} else {
-				targetY = playerY - 1;
-				this.lastScaffoldY = targetY;
 			}
 		} else {
 			targetY = playerY - 1;

@@ -29,7 +29,7 @@ export default class SpeedHud extends HudElement {
 				if (player) {
 					const now = performance.now();
 					const dt = (now - this.#lastTime) / 1000;
-					const pos = player.position;
+					const pos = player.pos;
 
 					if (this.#lastPos && dt > 0) {
 						const dx = pos.x - this.#lastPos.x;

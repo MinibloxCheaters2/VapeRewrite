@@ -6,6 +6,7 @@ import Miniblox from "@/utils/refs/miniblox";
 import { getRandomArbitrary } from "@/utils/time/random";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
+import { S2CData } from "@/event/Events";
 
 export default class ChestStealer extends Mod {
 	public name = "ChestStealer";
@@ -99,14 +100,14 @@ export default class ChestStealer extends Mod {
 		playerController.windowClick(
 			this.currentWindowId,
 			slotId,
-			0,
+			1,
 			SlotActionType.PICKUP_RIGHT,
 			Miniblox.player,
 		);
 	}
 
 	@Subscribe("receivePacket")
-	private onPacket({ data: packet }: CancelableWrapper<S2CPacket>) {
+	private onPacket({ data: packet }: CancelableWrapper<S2CData>) {
 		if (isS2C("CPacketOpenWindow", packet)) {
 			this.currentWindowId = packet.windowId;
 			this.lastClickTime = Date.now();
@@ -134,9 +135,10 @@ export default class ChestStealer extends Mod {
 	}
 
 	@Subscribe("playerTick")
-	public onTick() {
+	private onTick() {
 		const { playerController, player } = Miniblox;
-		if (!playerController || this.currentWindowId === null) {
+		if (!playerController) {
+			this.currentWindowId = null;
 			return;
 		}
 

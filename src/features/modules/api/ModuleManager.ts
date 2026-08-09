@@ -38,6 +38,7 @@ import NoFall from "../impl/world/NoFall.js";
 import Timer from "../impl/world/Timer.js";
 import type Category from "./Category.js";
 import type Mod from "./Module.js";
+import AdBypass from "../impl/utility/AdBypass.js";
 
 /** some basic predicates for finding modules */
 export const P = {
@@ -62,7 +63,6 @@ export default class ModuleManager {
 	static readonly phase = new Phase();
 	static readonly scaffold = new Scaffold();
 	static readonly hudManager = new HudManagerModule();
-	static readonly maceKill = new MaceKill();
 
 	private constructor() {
 		throw new Error("everything in module manager is static lol");
@@ -103,10 +103,11 @@ export default class ModuleManager {
 		new AutoRejoin(),
 		new MurderMystery(),
 		new Paranoia(),
-		this.maceKill,
+		new MaceKill(),
 		new NoRecoil(),
 		new NoFlash(),
 		new Speed(),
+		new AdBypass(),
 	] as const;
 
 	/** Each module's name */

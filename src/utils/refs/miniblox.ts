@@ -5,6 +5,7 @@ import type {
 	ClientEntityPlayer,
 	ClientSocket,
 	ClientWorld,
+	Controls,
 	Enchantments,
 	EntityLivingBase,
 	EnumFacing,
@@ -83,11 +84,23 @@ let _ItemArmor: typeof ItemArmor | undefined;
 let _ItemStack: typeof ItemStack | undefined;
 let _ItemBow: typeof ItemBow | undefined;
 let _ItemBlock: typeof ItemBlock | undefined;
+let _controls: Controls | undefined;
+let _skinManager: SkinManagerLike | undefined;
 
 let _packets: Message<object>[] | undefined;
 let CSocket: typeof ClientSocket | undefined;
 let _playerControllerMP: PlayerControllerMP | undefined;
 let _Message: typeof Message | undefined;
+/**
+ * Duck-typed shape of the obfuscated skin manager instance. The SDK never
+ * exports a SkinManager type, so this is the local source of truth.
+ */
+export interface SkinManagerLike {
+	hasSkin(entity: EntityLivingBase): boolean;
+	downloadSkin(entity: EntityLivingBase): Promise<void> | void;
+	getSkin(entity: EntityLivingBase): { atlas?: { image?: HTMLImageElement | HTMLCanvasElement }; ratio?: number } | undefined;
+}
+
 export interface Runtime {
 	util: {
 		setEnumType(): void;
@@ -303,6 +316,12 @@ const Miniblox = {
 		);
 	},
 
+	get controls() {
+		return initOrR(_controls, () =>
+			findObject((x) => x != null && typeof x === "object" && "pitchObject" in x),
+		);
+	},
+
 	get BlockPos() {
 		return initOrR(
 			_BlockPos,
@@ -359,7 +378,7 @@ const Miniblox = {
 				try {
 					return findObject(
 						(x) =>
-							x !== null &&
+							x != null &&
 							typeof x === "object" &&
 							"gameScene" in x &&
 							"GameSceneClass" in x &&
@@ -398,6 +417,24 @@ const Miniblox = {
 	/** Convenience reference to Miniblox.game.chat */
 	get chat() {
 		return initOrR(_chat, () => Miniblox.game.chat);
+	},
+
+	/**
+	 * Duck-typed reference to the skin manager. The game object's skinManager
+	 * property is renamed by obfuscation, so locate the instance by scanning
+	 * for the skin manager method set in the module exports (then the game
+	 * object) instead of probing Miniblox.game.skinManager directly.
+	 */
+	get skinManager() {
+		return initOrR(_skinManager, () => {
+			const isSkinManager = (x: unknown): x is SkinManagerLike =>
+				x != null &&
+				typeof x === "object" &&
+				"hasSkin" in x &&
+				"downloadSkin" in x &&
+				"getSkin" in x;
+			return findObject(isSkinManager) ?? Object.values(Miniblox.game ?? {}).find(isSkinManager);
+		});
 	},
 
 	/** Miniblox.game.player with a remap proxy applied */

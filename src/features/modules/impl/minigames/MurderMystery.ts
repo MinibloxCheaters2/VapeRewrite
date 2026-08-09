@@ -6,12 +6,13 @@ import { isS2C } from "@/utils";
 import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
+import { S2CData } from "@/event/Events";
 
 export default class MurderMystery extends Mod {
 	name = "MurderMystery";
 	category = Category.MINIGAMES;
 	@Subscribe("receivePacket")
-	private onReceivePacket({ data }: CancelableWrapper<S2CPacket>) {
+	private onReceivePacket({ data }: CancelableWrapper<S2CData>) {
 		if (!isS2C("CPacketEntityEquipment", data)) return;
 		const { player, world, ItemStack, ItemSword, ItemBow } = Miniblox;
 		if (!world) return;

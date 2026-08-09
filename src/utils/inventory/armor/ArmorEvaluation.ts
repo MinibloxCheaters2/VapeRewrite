@@ -24,6 +24,13 @@ const ENCHANTMENT_DAMAGE_REDUCTION = [0.04, 0.08, 0.15, 0.08];
 const OTHER_ENCHANTMENTS = [4, 7, 6, 5, 3];
 const OTHER_ENCHANTMENT_PER_LEVEL = [3.0, 1.0, 0.1, 0.05, 0.01];
 
+// Infernium armor ignites attackers on hit (like thorns). Worth roughly thorns III per piece.
+const INFERNIUM_THORNS_BONUS = 3.0;
+
+function isInferniumItem(stack: ItemStack): boolean {
+	return stack.getItem().name?.toLowerCase().includes("infernium") ?? false;
+}
+
 function getEnchantmentLevel(stack: ItemStack, effectId: number): number {
 	const nbt = stack.getEnchantmentTagList();
 	if (!nbt) return 0;
@@ -76,6 +83,9 @@ function getEnchantmentThreshold(stack: ItemStack): number {
 		const lvl = getEnchantmentLevel(stack, effectId);
 		sum += lvl * OTHER_ENCHANTMENT_PER_LEVEL[i];
 	}
+
+	if (isInferniumItem(stack)) sum += INFERNIUM_THORNS_BONUS;
+
 	return sum;
 }
 
@@ -214,7 +224,7 @@ function createComparator(
 		const aEnchantThreshold = Math.round(getEnchantmentThreshold(aStack) * 1000);
 		const bEnchantThreshold = Math.round(getEnchantmentThreshold(bStack) * 1000);
 
-		if (aDamageReduction !== bDamageReduction) return aDamageReduction - bDamageReduction;
+		if (aDamageReduction !== bDamageReduction) return bDamageReduction - aDamageReduction;
 		if (aEnchantThreshold !== bEnchantThreshold) return aEnchantThreshold - bEnchantThreshold;
 		if (a.enchantmentScore !== b.enchantmentScore) return a.enchantmentScore - b.enchantmentScore;
 		if (a.durabilityRatio !== b.durabilityRatio) return a.durabilityRatio - b.durabilityRatio;

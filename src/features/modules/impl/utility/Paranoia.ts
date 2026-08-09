@@ -10,6 +10,7 @@ import { isS2C } from "@/utils";
 import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
+import { S2CData } from "@/event/Events";
 
 export default class Paranoia extends Mod {
 	name = "Paranoia";
@@ -43,7 +44,7 @@ export default class Paranoia extends Mod {
 		this.#alertIfNotFound(v, name);
 	}
 	@Subscribe("receivePacket")
-	private onReceivePacket({ data: pkt }: CancelableWrapper<S2CPacket>) {
+	private onReceivePacket({ data: pkt }: CancelableWrapper<S2CData>) {
 		if (
 			isS2C("CPacketEntityVelocity", pkt) ||
 			isS2C("CPacketEntityEquipment", pkt) ||

@@ -16,7 +16,7 @@ export class ClickAction implements InventoryAction {
 	) {}
 
 	static performThrow(slot: ItemSlot): ClickAction {
-		return new ClickAction(slot, 1, SlotActionType.PICKUP_LEFT);
+		return new ClickAction(slot, 1, SlotActionType.THROW);
 	}
 
 	static performQuickMove(slot: ItemSlot): ClickAction {
@@ -28,7 +28,7 @@ export class ClickAction implements InventoryAction {
 	}
 
 	static performPickupAll(slot: ItemSlot): ClickAction {
-		return new ClickAction(slot, 0, SlotActionType.PICKUP_LEFT);
+		return new ClickAction(slot, 1, SlotActionType.PICKUP_RIGHT);
 	}
 
 	static performPickup(slot: ItemSlot): ClickAction {

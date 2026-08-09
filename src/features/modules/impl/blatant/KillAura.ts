@@ -4,6 +4,7 @@ import RotationManager, { RotationPlan } from "@/utils/aiming/rotate";
 import Rotation from "@/utils/aiming/rotation";
 import deg2rad from "@/utils/math/radians";
 import { SETTING } from "@/utils/movement/MovementCorrection";
+import { stampTarget } from "@/utils/movement/TargetTracker";
 import { findTargets } from "@/utils/movement/target";
 import PacketRefs from "@/utils/network/packetRefs";
 import Miniblox from "@/utils/refs/miniblox";
@@ -92,6 +93,8 @@ export default class KillAura extends Mod {
 		const { ClientSocket, player } = Miniblox;
 		const box = e.getEntityBoundingBox();
 		const hitVec = player.getEyePos().clone().clamp(box.min, box.max);
+
+		stampTarget(e);
 
 		const aimPos = player.pos.clone().sub(e.pos);
 		const newYaw = wrapAngleTo180_radians(Math.atan2(aimPos.x, aimPos.z) - player.lastReportedYaw);

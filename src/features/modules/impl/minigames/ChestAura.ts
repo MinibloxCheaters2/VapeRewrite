@@ -17,6 +17,10 @@ export default class ChestAura extends Mod {
 	}
 
 	// TODO(ChestAura): clear on world change or disconnect
+	@Subscribe("connect")
+	private onConnect() {
+		this.#lootedPositions.length = 0;
+	}
 
 	@Subscribe("playerTick")
 	private onPlayerTick() {

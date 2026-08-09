@@ -33,6 +33,9 @@ export default new (class RotationManager {
 	get playerRot() {
 		return new Rotation(Miniblox.player.yaw, Miniblox.player.pitch);
 	}
+	get trackedRot() {
+		return this.#trackedRot;
+	}
 	get serverRotation() {
 		return packetQueueManager.serverRot ?? this.#trackedRot;
 	}
@@ -45,9 +48,6 @@ export default new (class RotationManager {
 	@Subscribe("sendPacket", Priority.LOWEST)
 	private onPacket({ data: packet }: CancelableWrapper<C2SPacket>) {
 		if (isC2S("SPacketPlayerPosLook", packet)) {
-			if (Rotation.hasRotation(packet))
-				// biome-ignore lint/style/noNonNullAssertion: we know it's not undefined
-				this.#trackedRot = Rotation.fromPacket(packet)!;
 			const plan = this.#currentPlan;
 			if (!plan) return;
 			if (plan) {
@@ -56,6 +56,15 @@ export default new (class RotationManager {
 					this.#currentPlan = undefined;
 				}
 			}
+			const { yaw, pitch } = plan.target;
+			const { player } = Miniblox;
+			if (yaw - player.lastReportedYaw !== 0 || pitch - player.lastReportedPitch !== 0) {
+				player.lastReportedYaw = yaw;
+				player.lastReportedPitch = pitch;
+				packet.yaw = yaw;
+				packet.pitch = pitch;
+			}
+			if (Rotation.hasRotation(packet)) this.#trackedRot = Rotation.fromPacket(packet)!;
 		}
 	}
 })();

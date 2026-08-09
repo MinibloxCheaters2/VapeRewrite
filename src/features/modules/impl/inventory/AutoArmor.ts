@@ -1,6 +1,7 @@
 import { SlotActionType } from "@wq2/miniblox-sdk";
 import { Priority, Subscribe } from "@/event/Bus";
 import { findBestArmorPieces } from "@/utils/inventory/armor/ArmorEvaluation";
+import { ClickAction } from "@/utils/inventory/InventoryAction";
 import { ArmorItemSlot, Slots } from "@/utils/inventory/ItemSlot";
 import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
@@ -14,55 +15,50 @@ export default class AutoArmor extends Mod {
 
 	@Subscribe("playerTick", Priority.NORMAL)
 	private onTick() {
-		const { player, playerController } = Miniblox;
+		const { player } = Miniblox;
 		if (!player) return;
+
+		if (player.openContainer !== player.inventoryContainer) return;
 
 		const currentTick = Math.floor(Date.now() / 50);
 		if (currentTick - this.lastCheckTick < 20) return;
 		this.lastCheckTick = currentTick;
 
-		const allSlots = Slots.All;
-		const bestArmor = findBestArmorPieces(allSlots);
+		const bestArmor = findBestArmorPieces(Slots.All);
 
-		const armorSlots = [
-			ArmorItemSlot.FEET,
-			ArmorItemSlot.LEGS,
-			ArmorItemSlot.CHEST,
-			ArmorItemSlot.HEAD,
-		];
-
-		for (let i = 0; i < 4; i++) {
-			const armorSlot = armorSlots[i];
-			const currentStack = armorSlot.getStack();
-			const bestPiece = bestArmor.get(i);
-
+		for (let i = 0; i < ArmorItemSlot.ALL.length; i++) {
+			const armorSlot = ArmorItemSlot.ALL[i];
+			const bestPiece = bestArmor.get(3 - i);
 			if (!bestPiece) continue;
 
 			const bestStack = bestPiece.slot.getStack();
 			if (!bestStack) continue;
 
-			// Skip if already wearing the best armor
+			const currentStack = armorSlot.getStack();
 			if (currentStack && currentStack === bestStack) continue;
 
-			// If the armor slot is occupied by a worse piece, drop it first
+			this.dropHeld();
+
 			if (currentStack) {
-				playerController.windowClick(
-					player.openContainer.windowId,
-					armorSlot.index,
-					1,
-					SlotActionType.PICKUP_LEFT,
-					player,
-				);
+				ClickAction.performPickup(armorSlot).performAction();
+				this.dropHeld();
 			}
 
-			// Swap the best armor into the slot
-			playerController.windowClick(
-				player.openContainer.windowId,
-				bestPiece.slot.index,
-				0,
-				SlotActionType.PICKUP_RIGHT,
-				player,
-			);
+			ClickAction.performPickup(bestPiece.slot).performAction();
+			ClickAction.performPickup(armorSlot).performAction();
 		}
+	}
+
+	private dropHeld(): void {
+		const { player, playerController } = Miniblox;
+		if (!player) return;
+
+		playerController.windowClick(
+			player.openContainer.windowId,
+			-999,
+			0,
+			SlotActionType.PICKUP_LEFT,
+			player,
+		);
 	}
 }

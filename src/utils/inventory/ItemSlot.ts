@@ -44,7 +44,7 @@ export class HotbarItemSlot implements ItemSlot {
 	}
 
 	get serverIndex(): number {
-		return 36 + this.index;
+		return 31 + this.index;
 	}
 
 	static OFFHAND: OffhandItemSlot = null as unknown as OffhandItemSlot;
@@ -97,7 +97,7 @@ export class InventoryItemSlot implements ItemSlot {
 	}
 
 	get serverIndex(): number {
-		return 9 + this.index;
+		return 4 + this.index;
 	}
 
 	static readonly ALL: InventoryItemSlot[] = Array.from(

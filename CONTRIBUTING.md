@@ -20,6 +20,13 @@ To make a cheat for Miniblox, you need to understand how Miniblox works...
 [Vite]: https://vite.dev/
 [ThreeJS]: https://threejs.org/
 
+## Useful bundle versions
+
+Unfortunately, Vector has done some things to make reverse-engineering a tiny bit harder.
+It's not as hard, but finding some stuff is annoying sometimes (i.e. remapping more fields/symbols).
+
+See [here](https://github.com/MinibloxCheaters2/miniblox-sdk/blob/main/CONTRIBUTING.md#useful-bundle-versions) for the list.
+
 ## Project structure
 
 ```

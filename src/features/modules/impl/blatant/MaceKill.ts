@@ -34,16 +34,16 @@ export default class MaceKill extends Mod {
 
 	@Subscribe("sendPacket")
 	onSendPacket({ data: pkt }: CancelableWrapper<C2SPacket>) {
-		if (this.hackyFallDamageFix && isC2S("SPacketPlayerPosLook", pkt) && pkt.onGround) {
-			pkt.onGround = false;
-			this.hackyFallDamageFix = false;
-		}
+		// if (this.hackyFallDamageFix && isC2S("SPacketPlayerPosLook", pkt) && pkt.onGround) {
+		// 	pkt.onGround = false;
+		// 	this.hackyFallDamageFix = false;
+		// }
 		if (!isC2S("SPacketUseEntity", pkt) || pkt.action !== 1) return;
 		const { player, Items } = Miniblox;
 		if (player.inventory.getCurrentItem()?.item !== Items.mace) return;
 		teleport(player.pos.y + this.fallDistance, false);
 		teleport(player.pos.y + (this.fallDistance - 0.08), false);
 		teleport(player.pos.y, false);
-		this.hackyFallDamageFix = true;
+		// this.hackyFallDamageFix = true;
 	}
 }

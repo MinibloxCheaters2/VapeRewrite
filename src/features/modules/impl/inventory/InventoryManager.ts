@@ -30,6 +30,10 @@ export default class InventoryManager extends Mod {
 	private scheduledActions: ScheduledAction[] = [];
 	private currentTick = 0;
 
+	private cachedPlan: InventoryCleanupPlan | null = null;
+	private cachedTemplate: CleanupPlanPlacementTemplate | null = null;
+	private lastInventorySignature = 0;
+
 	private readonly maxBlocks = 512;
 	private readonly maxArrows = 128;
 	private readonly maxThrowables = 64;
@@ -47,6 +51,7 @@ export default class InventoryManager extends Mod {
 		ItemSortChoice.FOOD,
 		ItemSortChoice.BLOCK,
 		ItemSortChoice.BLOCK,
+		ItemSortChoice.NONE,
 	];
 
 	@Subscribe("playerTick", Priority.NORMAL)
@@ -69,10 +74,23 @@ export default class InventoryManager extends Mod {
 
 		// Generate and execute cleanup plan
 		const inventorySlots = this.findNonEmptySlotsInInventory();
-		if (inventorySlots.length === 0) return;
+		if (inventorySlots.length === 0) {
+			this.cachedPlan = null;
+			this.lastInventorySignature = 0;
+			return;
+		}
 
-		const template = this.buildCleanupTemplate();
-		const plan = new CleanupPlanGenerator(template, inventorySlots).generatePlan();
+		// Plan generation is expensive (facet construction, enchantment NBT reads, sorting).
+		// Only regenerate when the inventory actually changed; otherwise reuse the cached plan.
+		const signature = this.computeInventorySignature(inventorySlots);
+		if (signature !== this.lastInventorySignature) {
+			this.lastInventorySignature = signature;
+			const template = (this.cachedTemplate ??= this.buildCleanupTemplate());
+			this.cachedPlan = new CleanupPlanGenerator(template, inventorySlots).generatePlan();
+		}
+
+		const plan = this.cachedPlan;
+		if (!plan) return;
 
 		// Priority 1: Hotbar swaps
 		if (this.processHotbarSwaps(plan)) return;
@@ -132,6 +150,22 @@ export default class InventoryManager extends Mod {
 		return slots;
 	}
 
+	/**
+	 * Cheap numeric fingerprint of the current inventory state. Avoids NBT reads,
+	 * so it can run every tick without killing the FPS.
+	 */
+	private computeInventorySignature(slots: ItemSlot[]): number {
+		let hash = 17;
+		for (const slot of slots) {
+			const stack = slot.getStack();
+			hash = hashSignature(hash, slot.index);
+			hash = hashSignature(hash, stack ? stack.getItem().id : 0);
+			hash = hashSignature(hash, stack ? stack.stackSize : 0);
+			hash = hashSignature(hash, stack ? stack.getItemDamage() : 0);
+		}
+		return hash;
+	}
+
 	private buildCleanupTemplate(): CleanupPlanPlacementTemplate {
 		const slotContentMap = new Map<ItemSlot, ItemSortChoice>();
 		for (let i = 0; i < 9; i++) {
@@ -188,4 +222,8 @@ export default class InventoryManager extends Mod {
 
 		return constraints;
 	}
+}
+
+function hashSignature(hash: number, value: number): number {
+	return (hash * 31 + value) | 0;
 }

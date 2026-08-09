@@ -5,6 +5,7 @@ import { isC2S, isS2C } from "@/utils";
 import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
+import { S2CData } from "@/event/Events";
 
 class Log<T extends AnyPacket> {
 	constructor(
@@ -39,7 +40,7 @@ export default class PacketLogger extends Mod {
 	}
 
 	@Subscribe("receivePacket")
-	private onReceivePacket(e: CancelableWrapper<S2CPacket>) {
+	private onReceivePacket(e: CancelableWrapper<S2CData>) {
 		if (!Miniblox.game.inGame) return; // useless
 		if (isPacketBlacklisted(e.data)) return;
 		console.info("S -> C:", e.data);

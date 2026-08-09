@@ -267,6 +267,7 @@ export function getSortChoiceCategory(choice: ItemSortChoice): ItemCategory {
 			return getDefaultCategory(ItemType.THROWABLE);
 		case ItemSortChoice.IGNORE:
 		case ItemSortChoice.NONE:
+		default:
 			return getDefaultCategory(ItemType.NONE);
 	}
 }
