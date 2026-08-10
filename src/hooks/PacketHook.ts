@@ -19,6 +19,7 @@ let origSend: (typeof ClientSocketT)["sendPacket"];
 export const discoveredPackets = new Map<string, Message<object>>();
 
 function hookSendPacket() {
+	if (origSend) return;
 	const cs = Miniblox.ClientSocket;
 	if (!cs) {
 		logger.warn("No ClientSocket! can't hook send packet");
@@ -85,6 +86,7 @@ let origEmit: Decoder["emit"];
  * exported because connect hook needs to run ts
  */
 export function hookReceivePacket() {
+	if (origEmit) return;
 	/*
 	const SPacketUpdateInventory =
 		Miniblox.player.inventory.sendInventoryToServer();

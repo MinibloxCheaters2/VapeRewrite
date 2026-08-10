@@ -1,4 +1,4 @@
-import type {
+import {
 	AllBlocks,
 	BlockPos,
 	Chat,
@@ -21,8 +21,9 @@ import type {
 	Message,
 	PlayerController,
 	PlayerControllerMP,
+	SkinManager,
+	TextureManager,
 } from "@wq2/miniblox-sdk";
-import type { PerspectiveCamera } from "three";
 import { expose } from "@/exposed";
 import { scriptEl } from "@/hooks/gameScript";
 import initOrR from "../helpers/initOrR";
@@ -48,7 +49,7 @@ function values() {
 	return initOrR(vals, () => Object.values(miniblox));
 }
 
-function findObject<T>(filter: (clazz: unknown) => clazz is T) {
+function findObject<T>(filter: (clazz: unknown) => boolean) {
 	return values().find(filter) as T | undefined;
 }
 
@@ -56,7 +57,7 @@ function _findObjectByCode<T>(codeFilter: (code: string) => boolean) {
 	return values().find((x) => typeof x === "function" && codeFilter(x.toString())) as T | undefined;
 }
 
-function filterObject<T>(filter: (clazz: unknown) => clazz is T) {
+function filterObject<T>(filter: (clazz: unknown) => boolean) {
 	return values().filter(filter) as T[];
 }
 
@@ -85,21 +86,13 @@ let _ItemStack: typeof ItemStack | undefined;
 let _ItemBow: typeof ItemBow | undefined;
 let _ItemBlock: typeof ItemBlock | undefined;
 let _controls: Controls | undefined;
-let _skinManager: SkinManagerLike | undefined;
+let _textureManager: TextureManager | undefined;
+let _skinManager: SkinManager | undefined;
 
 let _packets: Message<object>[] | undefined;
 let CSocket: typeof ClientSocket | undefined;
 let _playerControllerMP: PlayerControllerMP | undefined;
 let _Message: typeof Message | undefined;
-/**
- * Duck-typed shape of the obfuscated skin manager instance. The SDK never
- * exports a SkinManager type, so this is the local source of truth.
- */
-export interface SkinManagerLike {
-	hasSkin(entity: EntityLivingBase): boolean;
-	downloadSkin(entity: EntityLivingBase): Promise<void> | void;
-	getSkin(entity: EntityLivingBase): { atlas?: { image?: HTMLImageElement | HTMLCanvasElement }; ratio?: number } | undefined;
-}
 
 export interface Runtime {
 	util: {
@@ -244,7 +237,7 @@ const Miniblox = {
 		);
 	},
 
-	get Blocks(): AllBlocks {
+	get Blocks() {
 		return initOrR(
 			_Blocks,
 			() => (unsafeWindow as typeof unsafeWindow & { Blocks: AllBlocks }).Blocks,
@@ -298,8 +291,8 @@ const Miniblox = {
     }
 */
 		return initOrR(_hud3D, () => {
-			const { gameScene } = this.game;
-			const camera = gameScene.camera as PerspectiveCamera; // could use destructuring, but I need this cast
+			const { gameScene } = Miniblox.game;
+			const {camera} = gameScene; // could use destructuring, but I need this cast
 			const hud3D = camera.children.find((c) => {
 				return "item" in c && "fireGroup" in c && "eat" in c && "swingArm" in c && "leftPunch" in c;
 			}) as unknown as Hud3D;
@@ -419,22 +412,18 @@ const Miniblox = {
 		return initOrR(_chat, () => Miniblox.game.chat);
 	},
 
-	/**
-	 * Duck-typed reference to the skin manager. The game object's skinManager
-	 * property is renamed by obfuscation, so locate the instance by scanning
-	 * for the skin manager method set in the module exports (then the game
-	 * object) instead of probing Miniblox.game.skinManager directly.
-	 */
+	get textureManager(): TextureManager {
+		return initOrR(
+			_textureManager,
+			() =>
+				findObject<TextureManager>(
+					c => typeof c === "object" &&
+						"fontLoader" in c
+				));
+	},
+
 	get skinManager() {
-		return initOrR(_skinManager, () => {
-			const isSkinManager = (x: unknown): x is SkinManagerLike =>
-				x != null &&
-				typeof x === "object" &&
-				"hasSkin" in x &&
-				"downloadSkin" in x &&
-				"getSkin" in x;
-			return findObject(isSkinManager) ?? Object.values(Miniblox.game ?? {}).find(isSkinManager);
-		});
+		return initOrR(_skinManager, () => remapObj(Miniblox.textureManager.skinManager, mappings.SkinManager));
 	},
 
 	/** Miniblox.game.player with a remap proxy applied */

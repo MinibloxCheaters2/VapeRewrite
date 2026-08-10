@@ -1,7 +1,7 @@
 import { createSignal } from "solid-js";
 import type { EntityLivingBase } from "@wq2/miniblox-sdk";
 import { getMostRecentTarget } from "@/utils/movement/TargetTracker";
-import Miniblox, { type SkinManagerLike } from "@/utils/refs/miniblox";
+import Miniblox from "@/utils/refs/miniblox";
 import { guiVisible } from "@/ui/guiState";
 import ModuleManager from "@/features/modules/api/ModuleManager";
 import HudElement from "../api/JSXHudElement";
@@ -92,26 +92,22 @@ function make2DCanvas(
 	const ctx = canvas.getContext("2d")!;
 	return { canvas, ctx };
 }
-
-function getSkinManager(): SkinManagerLike | undefined {
-	return Miniblox.skinManager;
-}
-
 /**
  * Port of the xke() head draw math (64px variant): upscales the skin atlas head
  * region by 8x with image smoothing disabled, then stamps the hat region on top.
  */
 async function renderSkinHead(entity: EntityLivingBase): Promise<string | null> {
-	const manager = getSkinManager();
+	const manager = Miniblox.skinManager;
 	if (!manager) return null;
 
-	if (!manager.hasSkin(entity)) {
+	const id = entity.uuid;
+	if (!manager.hasSkin(id)) {
 		try {
-			await manager.downloadSkin(entity);
+			await manager.downloadSkin(id);
 		} catch {}
 	}
 
-	const skin = manager.getSkin(entity);
+	const skin = manager.getSkin(id);
 	const image = skin?.atlas?.image;
 	if (!image) return null;
 
@@ -159,10 +155,6 @@ export default class TargetHud extends HudElement {
 	#avatarEntity: EntityLivingBase | null = null;
 	#avatarId = 0;
 	#updateFrame = 0;
-	#lastEntity: EntityLivingBase | null = null;
-	#lastHealth = 0;
-	#lastMaxHealth = 0;
-	#lastDamageAt = 0;
 
 	private resolveTarget(): EntityLivingBase | null {
 		// Show the local player while the HUD editor preview is active.
@@ -218,18 +210,6 @@ export default class TargetHud extends HudElement {
 					const health = target.getHealth?.() ?? 0;
 					const maxHealth = target.getMaxHealth?.() ?? health;
 
-					if (this.#lastEntity !== target) {
-						this.#lastEntity = target;
-						this.#lastHealth = health;
-						this.#lastMaxHealth = maxHealth;
-					} else {
-						if (health < this.#lastHealth || maxHealth < this.#lastMaxHealth) {
-							this.#lastDamageAt = performance.now();
-						}
-						this.#lastHealth = health;
-						this.#lastMaxHealth = maxHealth;
-					}
-
 					this.targetSignal[1]({
 						name: this.getName(target),
 						health,
@@ -237,9 +217,6 @@ export default class TargetHud extends HudElement {
 						absorption: target.absorptionAmount ?? 0,
 					});
 				} else {
-					this.#lastEntity = null;
-					this.#lastHealth = 0;
-					this.#lastMaxHealth = 0;
 					this.targetSignal[1](null);
 				}
 			} catch {}
@@ -280,9 +257,6 @@ export default class TargetHud extends HudElement {
 					return hsvToRgb(c.h, c.s, c.v, 1);
 				})()
 			: hsvToRgb(Math.max(0, Math.min(1, healthPct / 2.5)), 0.89, 0.75, 1);
-
-		const flashElapsed = this.#lastDamageAt ? performance.now() - this.#lastDamageAt : Infinity;
-		const flashOpacity = flashElapsed < 500 ? 0.7 * (1 - flashElapsed / 500) : 0;
 
 		return (
 			<div
@@ -337,14 +311,6 @@ export default class TargetHud extends HudElement {
 							width: `${extraScale * 100}%`,
 						}}
 					/>
-					{flashOpacity > 0 && (
-						<div
-							class="vape-target-health-flash"
-							style={{
-								opacity: flashOpacity,
-							}}
-						/>
-					)}
 				</div>
 			</div>
 		);

@@ -557,14 +557,3 @@ input[type="number"]::-webkit-outer-spin-button:hover {
 	border-radius: 2px;
 	transition: width 0.3s ease;
 }
-
-.vape-target-health-flash {
-	position: absolute;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	background-color: #ff3b3b;
-	border-radius: 2px;
-	pointer-events: none;
-}

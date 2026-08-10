@@ -7,6 +7,7 @@ import { hookReceivePacket } from "./PacketHook";
 let orig: (typeof ClientSocket)["connect"] | undefined;
 
 export function hookConnect() {
+	if (orig) return;
 	const { ClientSocket } = Miniblox;
 	if (!ClientSocket) return;
 	orig = ClientSocket.connect;

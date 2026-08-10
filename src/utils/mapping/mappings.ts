@@ -19,6 +19,7 @@ export default new (class Mappings {
 	#world?: Mapping;
 	#ClientEntityPlayer?: Mapping;
 	#ItemArmor?: Mapping;
+	#SkinManager: Mapping;
 	get playerController() {
 		return initOrR(this.#playerController, () => ofDumps("windowClick", "onPlayerRightClick"));
 	}
@@ -31,13 +32,15 @@ export default new (class Mappings {
 	get ItemArmor() {
 		return initOrR(this.#ItemArmor, () => ofDumps("damageReduceAmount"));
 	}
+	get SkinManager() {
+		return initOrR(this.#SkinManager, () => ofDumps());
+	}
 	get ClientEntityPlayer() {
 		return initOrR(this.#ClientEntityPlayer, () =>
 			ofDumps(
 				"moveForward",
 				"moveStrafe",
 				"lastReportedYaw",
-				"getMoveDirection",
 				"attack",
 				"getEyePos",
 				"getHorizontalFacing",

@@ -6,7 +6,7 @@
 import type { C2SPacket } from "@wq2/miniblox-sdk";
 import Bus from "@/Bus";
 import { COMMAND_PREFIX } from "@/Client";
-import { Subscribe } from "@/event/Bus";
+import { Priority, Subscribe } from "@/event/Bus";
 import type CancelableWrapper from "@/event/CancelableWrapper";
 import { isC2S } from "@/utils";
 import logger from "@/utils/logging/loggers";
@@ -23,7 +23,7 @@ export default new (class CommandListener {
 		return msg.startsWith(COMMAND_PREFIX) && !msg.startsWith(COMMAND_PREFIX.repeat(2));
 	}
 
-	@Subscribe("sendPacket")
+	@Subscribe("sendPacket", Priority.HIGHEST)
 	async intercept(wrap: CancelableWrapper<C2SPacket>) {
 		const { data: packet } = wrap;
 		if (isC2S("SPacketMessage", packet) && CommandListener.isCommand(packet.text)) {
