@@ -9,6 +9,8 @@ const DUMP_REGEXES = {
 	// normalizeAngle: /(\w+)\(this\.boatYaw\s*-\s*this.yaw\)/, // useless
 	// PlayerMovement#updatePlayerMoveState
 	applyInput: /this\.(\w+)\(this\.currentInput\)/,
+	// PlayerController#rightClickMouse
+	sendUseItem: /\w\s*&&\s*this\.(\w+)\(\w,\s*.\.world,\s*\w,\s*\w,\s*\w\)/,
 	// false flags from some random method.
 	// getMoveDirection: /([a-zA-Z]+)\(\w\)[\s\S]*?>=\s*1e-4[\s\S]*?Math\.cos\(this\.yaw\)/,
 	updatePlayerMoveState: /this\.([a-zA-Z]*)\(\),\n*\s*this\.isUsingItem\(\)\s*&&/,

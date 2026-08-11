@@ -88,7 +88,6 @@ function getC2SUncached<K extends SPacketName, V extends SPacketMap[K] = SPacket
 		throw "can't get a c2s packet with a name that is a symbol instead of a string.";
 	}
 	const result = findPacketByName(ref as string);
-	if (!result) throw `failed to find packet named ${ref}`;
 	return result as V;
 }
 

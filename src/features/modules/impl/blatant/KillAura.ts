@@ -64,10 +64,19 @@ export default class KillAura extends Mod {
 	block() {
 		if (this.autoBlock) {
 			if (!this.blocking) {
-				const { ClientSocket, playerControllerMP } = Miniblox;
+				const { ClientSocket, playerControllerMP, player, world, playerController } = Miniblox;
 				// auto-remapping proxy!
 				playerControllerMP.syncItem();
-				ClientSocket.sendPacket(new PacketRefs.s.SPacketUseItem());
+				const { SPacketUseItem } = PacketRefs.s;
+				if (SPacketUseItem) {
+					ClientSocket.sendPacket(new PacketRefs.s.SPacketUseItem({
+						initialPress: true,
+						button: "right",
+						hand: 0, // MAIN_HAND
+					}));
+				} else {
+					playerController.sendUseItem(player, world, player.getHeldItem());
+				}
 				this.blocking = true;
 			}
 		} else this.blocking = false;
@@ -75,16 +84,24 @@ export default class KillAura extends Mod {
 
 	unblock() {
 		if (this.blocking) {
-			const { ClientSocket, BlockPos, EnumFacing, playerControllerMP } = Miniblox;
+			const { ClientSocket, BlockPos,
+				EnumFacing, player,
+				playerControllerMP, playerController
+			} = Miniblox;
 			// auto-remapping proxy again lol
 			playerControllerMP.syncItem();
-			ClientSocket.sendPacket(
-				new PacketRefs.s.SPacketPlayerAction({
-					position: BlockPos.ORIGIN.toProto(),
-					facing: EnumFacing.DOWN.getIndex(),
-					action: 5, // PBAction.RELEASE_USE_ITEM
-				}),
-			);
+			const { SPacketPlayerAction } = PacketRefs.s;
+			if (!SPacketPlayerAction) {
+				playerController.onStoppedUsingItem(player);
+			} else {
+				ClientSocket.sendPacket(
+					new PacketRefs.s.SPacketPlayerAction({
+						position: BlockPos.ORIGIN.toProto(),
+						facing: EnumFacing.DOWN.getIndex(),
+						action: 5, // PBAction.RELEASE_USE_ITEM
+					}),
+				);
+			}
 			this.blocking = false;
 		}
 	}
@@ -105,27 +122,37 @@ export default class KillAura extends Mod {
 				new RotationPlan(
 					new Rotation(player.lastReportedYaw + newYaw, RotationManager.activeRotation.pitch),
 					this.movementCorrection.value,
+					1
 				),
 			);
 		}
 
-		// we don't send the attack packet silently,
-		// so the Criticals module will automatically send the packets BEFORE this one sends!
-		ClientSocket.sendPacket(
-			new PacketRefs.s.SPacketUseEntity({
-				id: e.id,
-				action: 1,
-				hitVec: {
-					x: hitVec.x,
-					y: hitVec.y,
-					z: hitVec.z,
-				},
-				//@ts-expect-error: it's new
-				yaw: RotationManager.activeRotation.yaw,
-				pitch: RotationManager.activeRotation.pitch,
-				sequence: player.inputSequenceNumber,
-			}),
-		);
+		const { SPacketUseEntity } = PacketRefs.s;
+		if (SPacketUseEntity === undefined) { // in case you haven't attacked yet
+			const [oldYaw, oldPitch] = [player.yaw, player.pitch];
+			player.yaw = RotationManager.activeRotation.yaw;
+			player.pitch = RotationManager.activeRotation.pitch;
+			Miniblox.playerController.objectMouseOver.hitVec = hitVec;
+			Miniblox.playerController.attackEntity(e);
+			player.yaw = oldYaw;
+			player.pitch = oldPitch;
+		} else {
+			ClientSocket.sendPacket(
+				new SPacketUseEntity({
+					id: e.id,
+					action: 1,
+					hitVec: {
+						x: hitVec.x,
+						y: hitVec.y,
+						z: hitVec.z,
+					},
+					//@ts-expect-error: it's new
+					yaw: RotationManager.activeRotation.yaw,
+					pitch: RotationManager.activeRotation.pitch,
+					sequence: player.inputSequenceNumber,
+				}),
+			);
+		}
 		player.attack(e);
 	}
 
@@ -134,11 +161,11 @@ export default class KillAura extends Mod {
 		// ghetto ahh method
 		let first = true;
 		const targets = findTargets(this.range, this.angle, this.wallCheck);
+		this.block();
 		for (const target of targets) {
-			this.block();
 			this.sendAttack(target, first);
 			first = false;
-			this.unblock();
 		}
+		this.unblock();
 	}
 }

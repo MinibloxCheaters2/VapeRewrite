@@ -21,7 +21,7 @@ export default new (class Mappings {
 	#ItemArmor?: Mapping;
 	#SkinManager: Mapping;
 	get playerController() {
-		return initOrR(this.#playerController, () => ofDumps("windowClick", "onPlayerRightClick"));
+		return initOrR(this.#playerController, () => ofDumps("windowClick", "sendUseItem", "onPlayerRightClick"));
 	}
 	get playerControllerMP() {
 		return initOrR(this.#playerControllerMP, () => ofDumps("syncItem"));
