@@ -1,6 +1,6 @@
 import type { Block, BlockPos } from "@wq2/miniblox-sdk";
 import { Subscribe } from "@/event/Bus";
-import { type BlockHandler, blockHandlers, handleInRange, withBlock } from "@/utils";
+import { type BlockHandler, blockHandlers } from "@/utils";
 import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
@@ -12,10 +12,6 @@ export default class Breaker extends Mod {
 	#breakEggsSetting = this.createToggleSetting("Eggs", true);
 	// #breakBedsSetting = this.createToggleSetting("Beds", false);
 
-	static #ATTEMPT_DELAY = 500;
-
-	#attempts = new Map<string, number>();
-
 	get #range() {
 		return this.#rangeSetting.value();
 	}
@@ -26,24 +22,6 @@ export default class Breaker extends Mod {
 
 	#couldBreakAnything() {
 		return this.#breakEggs;
-	}
-
-	#attemptKey(pos: BlockPos): string {
-		return `${pos.x},${pos.y},${pos.z}`;
-	}
-
-	#canAttempt(pos: BlockPos): boolean {
-		const until = this.#attempts.get(this.#attemptKey(pos));
-		return until === undefined || until <= Date.now();
-	}
-
-	@Subscribe("connect")
-	private onConnect() {
-		this.#attempts.clear();
-	}
-
-	protected override onEnable(): void {
-		this.#attempts.clear();
 	}
 
 	static #eggStateId: number | undefined;
@@ -85,13 +63,13 @@ export default class Breaker extends Mod {
 			});
 			return;
 		}
-		handleInRange(
-			this.#range,
-			(pos) => this.#canAttempt(pos) && this.#shouldBreakBlockPos(pos),
-			(pos) => {
-				this.#attempts.set(this.#attemptKey(pos), Date.now() + Breaker.#ATTEMPT_DELAY);
-				withBlock(this.#handlerForBlock)(pos);
-			},
-		);
+		const { BlockPos, player, world, Blocks } = Miniblox;
+		const offset = this.#range;
+		const start = player.getPosition().subtract(offset, offset, offset);
+		const end = player.getPosition().add(offset, offset, offset);
+		for (const block of BlockPos.getAllInBoxMutable(start, end)) {
+			if (world.getBlock(block) instanceof Blocks.dragon_egg.constructor)
+				blockHandlers.rightClick(block);
+		}
 	}
 }

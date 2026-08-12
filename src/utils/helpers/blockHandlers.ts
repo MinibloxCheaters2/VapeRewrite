@@ -81,30 +81,3 @@ export function oneInRange(
 	}
 	return undefined;
 }
-
-export function allInRange(range: number, filter?: BlockFilter): BlockPos[] {
-	const { BlockPos } = Miniblox;
-	const [min, max] = rangeBounds(range, range);
-	if (filter === undefined) return BlockPos.getAllInBoxMutable(min, max);
-	const matches: BlockPos[] = [];
-	for (const pos of blockPositions(min, max)) {
-		if (filter(pos)) matches.push(pos);
-	}
-	return matches;
-}
-
-export function handleInRange(
-	range: number,
-	filter = defaultFilter,
-	handler = blockHandlers.rightClick,
-): BlockPos[] {
-	const [min, max] = rangeBounds(range, range);
-	const matches: BlockPos[] = [];
-	for (const pos of blockPositions(min, max)) {
-		if (filter(pos)) {
-			matches.push(pos);
-			handler(pos);
-		}
-	}
-	return matches;
-}
