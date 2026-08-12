@@ -12,6 +12,10 @@ export default class Breaker extends Mod {
 	#breakEggsSetting = this.createToggleSetting("Eggs", true);
 	// #breakBedsSetting = this.createToggleSetting("Beds", false);
 
+	static #ATTEMPT_DELAY = 500;
+
+	#attempts = new Map<string, number>();
+
 	get #range() {
 		return this.#rangeSetting.value();
 	}
@@ -24,13 +28,44 @@ export default class Breaker extends Mod {
 		return this.#breakEggs;
 	}
 
-	#shouldBreakBlock(block: Block): boolean {
-		return block === Miniblox.Blocks.dragon_egg;
+	#attemptKey(pos: BlockPos): string {
+		return `${pos.x},${pos.y},${pos.z}`;
 	}
+
+	#canAttempt(pos: BlockPos): boolean {
+		const until = this.#attempts.get(this.#attemptKey(pos));
+		return until === undefined || until <= Date.now();
+	}
+
+	@Subscribe("connect")
+	private onConnect() {
+		this.#attempts.clear();
+	}
+
+	protected override onEnable(): void {
+		this.#attempts.clear();
+	}
+
+	static #eggStateId: number | undefined;
+
+	static #getEggStateId(): number | undefined {
+		if (this.#eggStateId !== undefined) return this.#eggStateId;
+		const egg = Miniblox.Blocks.dragon_egg;
+		for (const [state, id] of Miniblox.Blocks.blockStateToId) {
+			if (state.getBlock() === egg) {
+				this.#eggStateId = id;
+				return id;
+			}
+		}
+		return undefined;
+	}
+
 	#shouldBreakBlockPos(pos: BlockPos): boolean {
-		const block = Miniblox.world?.getBlock?.(pos);
-		if (block === undefined) return false;
-		return this.#shouldBreakBlock(block);
+		const { world } = Miniblox;
+		if (world === undefined) return false;
+		const eggStateId = Breaker.#getEggStateId();
+		if (eggStateId === undefined) return false;
+		return Miniblox.Blocks.blockStateToId.get(world.getBlockState(pos)) === eggStateId;
 	}
 
 	#handlerForBlock(block: Block): BlockHandler {
@@ -50,6 +85,13 @@ export default class Breaker extends Mod {
 			});
 			return;
 		}
-		handleInRange(this.#range, this.#shouldBreakBlockPos, withBlock(this.#handlerForBlock));
+		handleInRange(
+			this.#range,
+			(pos) => this.#canAttempt(pos) && this.#shouldBreakBlockPos(pos),
+			(pos) => {
+				this.#attempts.set(this.#attemptKey(pos), Date.now() + Breaker.#ATTEMPT_DELAY);
+				withBlock(this.#handlerForBlock)(pos);
+			},
+		);
 	}
 }

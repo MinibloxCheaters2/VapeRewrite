@@ -1,4 +1,5 @@
-import type { Block, BlockPos, BlockState } from "@wq2/miniblox-sdk";
+import { BlockPos } from "@wq2/miniblox-sdk";
+import type { Block, BlockState } from "@wq2/miniblox-sdk";
 import PacketRefs from "../network/packetRefs";
 import Miniblox from "../refs/miniblox";
 
@@ -47,10 +48,25 @@ export const defaultFilter: BlockFilter = (b) =>
 	// biome-ignore lint/style/noNonNullAssertion: you shouldn't call this while the world is null anyways
 	isSolid(Miniblox.world!.getBlock(b));
 
-export function allBlocksInRange(hRange: number, vRange: number = hRange): BlockPos[] {
+function rangeBounds(hRange: number, vRange: number): [BlockPos, BlockPos] {
 	const { player, BlockPos } = Miniblox;
-	const min = new BlockPos(player.pos.x - hRange, player.pos.y - vRange, player.pos.z - hRange);
-	const max = new BlockPos(player.pos.x + hRange, player.pos.y + vRange, player.pos.z + hRange);
+	return [
+		new BlockPos(player.pos.x - hRange, player.pos.y - vRange, player.pos.z - hRange),
+		new BlockPos(player.pos.x + hRange, player.pos.y + vRange, player.pos.z + hRange),
+	];
+}
+
+function* blockPositions(min: BlockPos, max: BlockPos): Generator<BlockPos> {
+	const { BlockPos } = Miniblox;
+	for (let x = min.x; x <= max.x; x++)
+		for (let y = min.y; y <= max.y; y++)
+			for (let z = min.z; z <= max.z; z++)
+				yield new BlockPos(x, y, z);
+}
+
+export function allBlocksInRange(hRange: number, vRange: number = hRange): BlockPos[] {
+	const [min, max] = rangeBounds(hRange, vRange);
+	const { BlockPos } = Miniblox;
 	return BlockPos.getAllInBoxMutable(min, max);
 }
 
@@ -59,23 +75,36 @@ export function oneInRange(
 	filter: BlockFilter,
 	vRange: number = hRange,
 ): BlockPos | undefined {
-	const blocks = allBlocksInRange(hRange, vRange);
-	const filtered = blocks.find(filter);
-	return filtered;
+	const [min, max] = rangeBounds(hRange, vRange);
+	for (const pos of blockPositions(min, max)) {
+		if (filter(pos)) return pos;
+	}
+	return undefined;
 }
 
-export function allInRange(range: number, filter?: BlockFilter) {
-	const blocks = allBlocksInRange(range);
-	const filtered = filter !== undefined ? blocks.filter(filter) : blocks;
-	return filtered;
+export function allInRange(range: number, filter?: BlockFilter): BlockPos[] {
+	const { BlockPos } = Miniblox;
+	const [min, max] = rangeBounds(range, range);
+	if (filter === undefined) return BlockPos.getAllInBoxMutable(min, max);
+	const matches: BlockPos[] = [];
+	for (const pos of blockPositions(min, max)) {
+		if (filter(pos)) matches.push(pos);
+	}
+	return matches;
 }
 
 export function handleInRange(
 	range: number,
 	filter = defaultFilter,
 	handler = blockHandlers.rightClick,
-) {
-	const r = allInRange(range, filter);
-	r.forEach(handler);
-	return r;
+): BlockPos[] {
+	const [min, max] = rangeBounds(range, range);
+	const matches: BlockPos[] = [];
+	for (const pos of blockPositions(min, max)) {
+		if (filter(pos)) {
+			matches.push(pos);
+			handler(pos);
+		}
+	}
+	return matches;
 }

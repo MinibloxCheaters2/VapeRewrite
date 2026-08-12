@@ -1,5 +1,6 @@
 import Category from "../../../api/Category";
 import Mod from "../../../api/Module";
+import Minigames from "./minigames";
 import Normal from "./normal";
 
 export default class Speed extends Mod {
@@ -8,5 +9,6 @@ export default class Speed extends Mod {
 
 	// TODO: new ac speed is probably easy
 	public normal = new Normal(this, "Normal");
-	private modesGroup = this.createSubmoduleGroup("Modes", [this.normal]);
+	public minigames = new Minigames(this, "Minigames");
+	private modesGroup = this.createSubmoduleGroup("Mode", [this.normal, this.minigames]);
 }

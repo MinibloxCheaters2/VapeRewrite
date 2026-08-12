@@ -33,7 +33,7 @@
 	"devDependencies": {
 		"@types/three": "^0.184.1",
 		"@violentmonkey/types": "^0.3.3",
-		"@wq2/miniblox-sdk": "3.46.198-0.0.1",
+		"@wq2/miniblox-sdk": "3.46.200-0.0.0",
 		"@wq2/packet-gen-wasm": "^0.0.2",
 		"@wq2/rolldown-plugin-solid-oxc": "^0.1.2",
 		"@wq2/rolldown-plugin-swc": "^0.0.2",

@@ -1,5 +1,6 @@
 import RotationManager from "@/utils/aiming/rotate";
 import { waitForReact } from "@/utils/helpers/waitForReact";
+import MovementCorrection, { getEffectiveMode } from "@/utils/movement/MovementCorrection";
 import Miniblox from "@/utils/refs/miniblox";
 import { ClientEntityPlayer, RenderPlayer } from "@wq2/miniblox-sdk";
 
@@ -14,6 +15,10 @@ function hookRenderPlayer(mesh: RenderPlayer) {
 		apply(target, thisArg, argArray) {
 			const ts: RenderPlayer = thisArg;
 			if (ts.entity.id !== player.id) return Reflect.apply(target, ts, argArray);
+			const plan = RotationManager.currentPlan;
+			const rotation = plan?.target ?? RotationManager.activeRotation;
+			const movementCorrection = getEffectiveMode(plan?.movementCorrection);
+			if (movementCorrection === MovementCorrection.Silent || movementCorrection === MovementCorrection.Strict) return;
 			// just copied the original code
 			ts.position.copy(controls.position);
 			ts.neck.rotation.y = RotationManager.activeRotation.yaw ?? controls.yaw;
