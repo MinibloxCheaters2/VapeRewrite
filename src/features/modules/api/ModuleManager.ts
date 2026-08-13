@@ -109,7 +109,7 @@ export default class ModuleManager {
 		new NoFlash(),
 		new Speed(),
 		AdBypass.INSTANCE,
-		new AntiSpamBypass()
+		new AntiSpamBypass(),
 	] as const;
 
 	/** Each module's name */

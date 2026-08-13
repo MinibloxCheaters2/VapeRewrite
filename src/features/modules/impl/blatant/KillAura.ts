@@ -62,18 +62,23 @@ export default class KillAura extends Mod {
 	}
 
 	block() {
-		if (!this.autoBlock) { this.blocking = false; return; }
+		if (!this.autoBlock) {
+			this.blocking = false;
+			return;
+		}
 		if (this.blocking) return;
 		const { ClientSocket, playerControllerMP, player, world, playerController } = Miniblox;
 		// auto-remapping proxy!
 		playerControllerMP.syncItem();
 		const { SPacketUseItem } = PacketRefs.s;
 		if (SPacketUseItem) {
-			ClientSocket.sendPacket(new PacketRefs.s.SPacketUseItem({
-				initialPress: true,
-				button: "right",
-				hand: 0, // MAIN_HAND
-			}));
+			ClientSocket.sendPacket(
+				new PacketRefs.s.SPacketUseItem({
+					initialPress: true,
+					button: "right",
+					hand: 0, // MAIN_HAND
+				}),
+			);
 		} else {
 			playerController.sendUseItem(player, world, player.getHeldItem());
 		}
@@ -82,10 +87,8 @@ export default class KillAura extends Mod {
 
 	unblock() {
 		if (!this.blocking) return;
-		const { ClientSocket, BlockPos,
-			EnumFacing, player,
-			playerControllerMP, playerController
-		} = Miniblox;
+		const { ClientSocket, BlockPos, EnumFacing, player, playerControllerMP, playerController } =
+			Miniblox;
 		// auto-remapping proxy again lol
 		playerControllerMP.syncItem();
 		const { SPacketPlayerAction } = PacketRefs.s;
@@ -119,13 +122,14 @@ export default class KillAura extends Mod {
 				new RotationPlan(
 					new Rotation(player.lastReportedYaw + newYaw, RotationManager.activeRotation.pitch),
 					this.movementCorrection.value,
-					1
+					1,
 				),
 			);
 		}
 
 		const { SPacketUseEntity } = PacketRefs.s;
-		if (SPacketUseEntity === undefined) { // in case you haven't attacked yet
+		if (SPacketUseEntity === undefined) {
+			// in case you haven't attacked yet
 			const [oldYaw, oldPitch] = [player.yaw, player.pitch];
 			const oldHitVec = Miniblox.playerController.objectMouseOver.hitVec;
 			player.yaw = RotationManager.activeRotation.yaw;

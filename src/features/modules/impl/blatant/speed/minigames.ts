@@ -12,8 +12,8 @@ export default class Minigames extends SubModule<Speed> {
 	private onTick(): void {
 		const { player } = Miniblox;
 		if (!player.isSprinting() || !player.onGround) return;
-		player.motion.x -= Math.sin(player.yaw) * .2;
-		player.motion.z -= Math.cos(player.yaw) * .2;
+		player.motion.x -= Math.sin(player.yaw) * 0.2;
+		player.motion.z -= Math.cos(player.yaw) * 0.2;
 		this.#spoofJump = true;
 	}
 

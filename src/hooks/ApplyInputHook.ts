@@ -18,17 +18,16 @@ export default function hook() {
 			const [e, t] = argArray as [SPacketPlayerInput, boolean];
 			const plan = RotationManager.currentPlan;
 			const movementCorrection = getEffectiveMode(plan.movementCorrection);
-			if (movementCorrection === MovementCorrection.Silent
-				|| movementCorrection === MovementCorrection.Strict
+			if (
+				movementCorrection === MovementCorrection.Silent ||
+				movementCorrection === MovementCorrection.Strict
 			) {
 				[ts.yaw, ts.pitch] = [plan.target.yaw, plan.target.pitch];
 			}
 			ts.onPlayerUpdate = new Proxy(ts.onPlayerUpdate, {
-				apply(target, thisArg, argArray) {
-
-				}
+				apply(target, thisArg, argArray) {},
 			});
-		}
+		},
 	});
 }
 waitForReact().then(hook);

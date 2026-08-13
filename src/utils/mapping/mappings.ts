@@ -21,7 +21,9 @@ export default new (class Mappings {
 	#ItemArmor?: Mapping;
 	#SkinManager: Mapping;
 	get playerController() {
-		return initOrR(this.#playerController, () => ofDumps("windowClick", "sendUseItem", "onPlayerRightClick"));
+		return initOrR(this.#playerController, () =>
+			ofDumps("windowClick", "sendUseItem", "onPlayerRightClick"),
+		);
 	}
 	get playerControllerMP() {
 		return initOrR(this.#playerControllerMP, () => ofDumps("syncItem"));
@@ -47,7 +49,7 @@ export default new (class Mappings {
 				"getFlag",
 				"setFlag",
 				"updatePlayerMoveState",
-				"onPlayerUpdate"
+				"onPlayerUpdate",
 			),
 		);
 	}

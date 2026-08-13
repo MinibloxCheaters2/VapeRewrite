@@ -18,7 +18,11 @@ function hookRenderPlayer(mesh: RenderPlayer) {
 			const plan = RotationManager.currentPlan;
 			const rotation = plan?.target ?? RotationManager.activeRotation;
 			const movementCorrection = getEffectiveMode(plan?.movementCorrection);
-			if (movementCorrection === MovementCorrection.Silent || movementCorrection === MovementCorrection.Strict) return;
+			if (
+				movementCorrection === MovementCorrection.Silent ||
+				movementCorrection === MovementCorrection.Strict
+			)
+				return;
 			// just copied the original code
 			ts.position.copy(controls.position);
 			ts.neck.rotation.y = RotationManager.activeRotation.yaw ?? controls.yaw;

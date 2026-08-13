@@ -188,9 +188,7 @@ export default class TargetHud extends HudElement {
 	}
 
 	private getName(target: EntityLivingBase): string {
-		const raw = this.useDisplayNameSetting.value()
-			? target.getDisplayName?.()
-			: target.getName?.();
+		const raw = this.useDisplayNameSetting.value() ? target.getDisplayName?.() : target.getName?.();
 		const name = (raw ?? target.id ?? "").replace(/§./g, "");
 		return name || String(target.id);
 	}

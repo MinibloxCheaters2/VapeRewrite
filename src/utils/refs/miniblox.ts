@@ -292,7 +292,7 @@ const Miniblox = {
 */
 		return initOrR(_hud3D, () => {
 			const { gameScene } = Miniblox.game;
-			const {camera} = gameScene; // could use destructuring, but I need this cast
+			const { camera } = gameScene; // could use destructuring, but I need this cast
 			const hud3D = camera.children.find((c) => {
 				return "item" in c && "fireGroup" in c && "eat" in c && "swingArm" in c && "leftPunch" in c;
 			}) as unknown as Hud3D;
@@ -413,17 +413,15 @@ const Miniblox = {
 	},
 
 	get textureManager(): TextureManager {
-		return initOrR(
-			_textureManager,
-			() =>
-				findObject<TextureManager>(
-					c => typeof c === "object" &&
-						"fontLoader" in c
-				));
+		return initOrR(_textureManager, () =>
+			findObject<TextureManager>((c) => typeof c === "object" && "fontLoader" in c),
+		);
 	},
 
 	get skinManager() {
-		return initOrR(_skinManager, () => remapObj(Miniblox.textureManager.skinManager, mappings.SkinManager));
+		return initOrR(_skinManager, () =>
+			remapObj(Miniblox.textureManager.skinManager, mappings.SkinManager),
+		);
 	},
 
 	/** Miniblox.game.player with a remap proxy applied */

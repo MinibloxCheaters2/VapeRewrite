@@ -60,8 +60,7 @@ function* blockPositions(min: BlockPos, max: BlockPos): Generator<BlockPos> {
 	const { BlockPos } = Miniblox;
 	for (let x = min.x; x <= max.x; x++)
 		for (let y = min.y; y <= max.y; y++)
-			for (let z = min.z; z <= max.z; z++)
-				yield new BlockPos(x, y, z);
+			for (let z = min.z; z <= max.z; z++) yield new BlockPos(x, y, z);
 }
 
 export function allBlocksInRange(hRange: number, vRange: number = hRange): BlockPos[] {
