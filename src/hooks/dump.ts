@@ -49,6 +49,16 @@ const DUMP_REGEXES = {
 	//EntityManager#shouldRenderEntity
 	isInvisibleToPlayer:
 		/!\w+\.world\.isBlockLoaded\(\w+\)\)\s*\|\|\s*!\w+\s*&&\s*\w+\.(\w+)\(\w+\)/m,
+
+	// all of these 3 are from EntityZombie#update
+	isConverting: /if\s*\(this\.world\.isServer\s*&&\s*this\.(\w+)\(\)\)\s*{\s*/,
+	getConversionTimeBoost: /this\.(\w+)\(\);\s*\(?this\.conversionTime\s*/m,
+	convertToVillager: /this\.conversionTime\s*<=\s*0\s*&&\s*this\.(\w+)\(\)/,
+	// EntityAgeable#setGrowingAge and EntityAgeable#onLivingUpdate
+	setScaleForAge: /this\.(\w+)\(this\.isChild\(\)\)/,
+
+	// SkinManager#loadMob
+	createAtlasMat: /\.image\.width\s*\/\s*64\s*};\s*\w+\.(\w+)\(\w\),\s*\(?/m,
 } as const;
 
 export type DumpKey = keyof typeof DUMP_REGEXES;
