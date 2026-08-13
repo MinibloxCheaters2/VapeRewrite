@@ -92,16 +92,11 @@ function make2DCanvas(
 	const ctx = canvas.getContext("2d")!;
 	return { canvas, ctx };
 }
-/**
- * Port of the xke() head draw math (64px variant): upscales the skin atlas head
- * region by 8x with image smoothing disabled, then stamps the hat region on top.
- */
+
 async function renderSkinHead(entity: EntityLivingBase): Promise<string | null> {
 	const manager = Miniblox.skinManager;
-	if (!manager) return null;
-
-	const id = entity.uuid;
-	if (!manager.hasSkin(id)) {
+	const id = "profile" in entity ? entity.profile.cosmetics.skin : null;
+	if (id && !manager.hasSkin(id)) {
 		try {
 			await manager.downloadSkin(id);
 		} catch {}
@@ -111,7 +106,7 @@ async function renderSkinHead(entity: EntityLivingBase): Promise<string | null> 
 	const image = skin?.atlas?.image;
 	if (!image) return null;
 
-	const ratio = skin.ratio ?? 1;
+	const ratio = skin.ratio;
 	const a = ratio * 8;
 	const { canvas, ctx } = make2DCanvas(a * 8, a * 8);
 	ctx.imageSmoothingEnabled = false;

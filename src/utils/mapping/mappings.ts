@@ -46,6 +46,8 @@ export default new (class Mappings {
 				"getHorizontalFacing",
 				"getFlag",
 				"setFlag",
+				"updatePlayerMoveState",
+				"onPlayerUpdate"
 			),
 		);
 	}

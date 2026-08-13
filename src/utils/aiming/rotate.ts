@@ -65,6 +65,24 @@ export default new (class RotationManager {
 				packet.pitch = pitch;
 			}
 			if (Rotation.hasRotation(packet)) this.#trackedRot = Rotation.fromPacket(packet)!;
+		} else if (isC2S("SPacketPlayerInput", packet)) {
+			const plan = this.#currentPlan;
+			if (!plan) return;
+			if (plan) {
+				plan.resetIn--;
+				if (plan.resetIn <= 0) {
+					this.#currentPlan = undefined;
+				}
+			}
+			const { yaw, pitch } = plan.target;
+			const { player } = Miniblox;
+			if (yaw - player.lastReportedYaw !== 0 || pitch - player.lastReportedPitch !== 0) {
+				player.lastReportedYaw = yaw;
+				player.lastReportedPitch = pitch;
+				packet.yaw = yaw;
+				packet.pitch = pitch;
+			}
+			this.#trackedRot = Rotation.fromPacket(packet)!;
 		}
 	}
 })();

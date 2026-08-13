@@ -23,7 +23,11 @@ export default function hook() {
 			) {
 				[ts.yaw, ts.pitch] = [plan.target.yaw, plan.target.pitch];
 			}
-			ts.onPlayerTick();
+			ts.onPlayerUpdate = new Proxy(ts.onPlayerUpdate, {
+				apply(target, thisArg, argArray) {
+
+				}
+			});
 		}
 	});
 }
