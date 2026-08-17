@@ -1,0 +1,96 @@
+import type { Vector3 } from "three";
+import { expose } from "@/exposed";
+import { gameScript, gameScriptReady } from "@/hooks/gameScript";
+import logger from "../logging/loggers";
+
+// note to self: do NOT add the `g` (global) flag, otherwise it not workong
+// feel free to paste ts as long as the code you put it in is under AGPL
+// (which most importantly, requires your code to be open source if the project is public!!! no proprietary/closed source garbage here).
+const THREE_IMPORT_REGEX = /from\s*"(\.\/three-[^"]+\.js)"/;
+
+export function getThreeImport(): string | undefined {
+	const m = gameScript.match(THREE_IMPORT_REGEX);
+	const v = m?.[1];
+	if (!v) {
+		logger.error("Failed to find ThreeJS import", gameScript, v);
+		return;
+	}
+	return v.replace("./", "./assets/");
+}
+
+export async function importThreeJS() {
+	await gameScriptReady;
+	const url = getThreeImport();
+	if (url === undefined) {
+		logger.error("ThreeJS import thing not found!");
+		return;
+	}
+	return await import(url);
+}
+
+let three: object;
+
+importThreeJS().then((t) => {
+	three = t;
+	expose("THREE_RAW", () => t);
+});
+
+function findObject(filter: (clazz: NewableFunction) => boolean) {
+	return Object.values(three).find(filter);
+}
+
+function findObjectByCode(codeFilter: (code: string) => boolean) {
+	return Object.values(three).find((x) => codeFilter(x.toString()));
+}
+
+function findObjectByType<const N extends string>(
+	type: N,
+	//@ts-expect-error: it auto-completes fine
+): (typeof import("three"))[N] {
+	return findObjectByCode((x) => x.includes(`this.type=\`${type}\``));
+}
+
+const THREE = {
+	get BoxGeometry() {
+		return findObjectByType("BoxGeometry");
+	},
+
+	get BufferAttribute() {
+		return findObjectByType("BufferAttribute");
+	},
+
+	get BufferGeometry() {
+		return findObjectByType("BufferGeometry");
+	},
+
+	get Line() {
+		return findObjectByType("Line");
+	},
+
+	get LineBasicMaterial() {
+		return findObjectByType("LineBasicMaterial");
+	},
+
+	get Mesh() {
+		return findObjectByType("Mesh");
+	},
+
+	get MeshBasicMaterial() {
+		return findObjectByType("MeshBasicMaterial");
+	},
+
+	get Vec3(): typeof Vector3 {
+		return findObject((x) => {
+			return (
+				typeof x === "function" &&
+				"prototype" in x &&
+				typeof x.prototype === "object" &&
+				"isVector3" in x.prototype &&
+				x.prototype.isVector3
+			);
+		});
+	},
+};
+expose("THREE", () => THREE);
+
+export default THREE;

@@ -1,14 +1,15 @@
+import type { Game, PlayerMovement } from "@wq2/miniblox-sdk";
 import Bus from "@/Bus";
 import Cancelable from "@/event/Cancelable";
-import waitForLoad from "@/ui/wait";
-import Refs from "@/utils/helpers/refs";
+import { waitForReact } from "@/utils/helpers/waitForReact";
+import Miniblox from "@/utils/refs/miniblox";
 
-let origGameTick: () => void;
-let origPlayerTick: () => void;
+let origGameTick: Game["fixedUpdate"];
+let origPlayerTick: PlayerMovement["fixedUpdate"];
 
 export function hookGameTick() {
-	origGameTick = Refs.game.fixedUpdate;
-	Refs.game.fixedUpdate = new Proxy(origGameTick, {
+	origGameTick = Miniblox.game.fixedUpdate;
+	Miniblox.game.fixedUpdate = new Proxy(origGameTick, {
 		apply(target, thisArg, argArray) {
 			Bus.emit("gameTick");
 			return Reflect.apply(target, thisArg, argArray);
@@ -17,8 +18,8 @@ export function hookGameTick() {
 }
 
 export function hookPlayerTick() {
-	origPlayerTick = Refs.player.fixedUpdate;
-	Refs.player.fixedUpdate = new Proxy(origPlayerTick, {
+	origPlayerTick = Miniblox.player.fixedUpdate;
+	Miniblox.player.fixedUpdate = new Proxy(origPlayerTick, {
 		apply(target, thisArg, argArray) {
 			const c = new Cancelable();
 			Bus.emit("playerTick", c);
@@ -27,7 +28,7 @@ export function hookPlayerTick() {
 	});
 }
 
-waitForLoad().then(() => {
+waitForReact().then(() => {
 	hookGameTick();
 	hookPlayerTick();
 });

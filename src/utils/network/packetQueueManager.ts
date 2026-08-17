@@ -6,9 +6,9 @@ import Bus from "../../Bus";
 import { Priority, Subscribe } from "../../event/Bus";
 import type CancelableWrapper from "../../event/CancelableWrapper";
 import Rotation, { type IRotation } from "../aiming/rotation";
-import Refs from "../helpers/refs";
-import PacketUtil from "./PacketUtil";
-import { c2s } from "./packetRefs";
+import Miniblox from "../refs/miniblox";
+import THREE from "../refs/three";
+import { isC2S, sendSilently } from "./PacketUtil";
 import getPosFromPacket from "./posPacket";
 
 export class PacketRecord<T> {
@@ -43,17 +43,13 @@ export default new (class PacketQueueManager {
 
 	get serverPos(): PBFloatVector3 | undefined {
 		return getPosFromPacket(
-			this.packetQueue.find(
-				(p) => getPosFromPacket(p.packet) !== undefined,
-			)?.packet,
+			this.packetQueue.find((p) => getPosFromPacket(p.packet) !== undefined)?.packet,
 		);
 	}
 
 	get serverRot(): Rotation | undefined {
 		return Rotation.fromPacket(
-			this.packetQueue.find(Rotation.hasRotation)?.packet as
-				| IRotation
-				| undefined,
+			this.packetQueue.find(Rotation.hasRotation)?.packet as IRotation | undefined,
 		);
 	}
 
@@ -71,9 +67,7 @@ export default new (class PacketQueueManager {
 	laggingFor(filter?: (pkt: PacketRecord<C2SPacket>) => boolean): number {
 		if (!this.lagging) return 0;
 		const item =
-			filter !== undefined
-				? this.packetQueue.find((a) => filter(a))
-				: this.packetQueue[0];
+			filter !== undefined ? this.packetQueue.find((a) => filter(a)) : this.packetQueue[0];
 		if (item === undefined) return 0;
 		return Date.now() - item.time;
 	}
@@ -81,7 +75,7 @@ export default new (class PacketQueueManager {
 	/** this doesn't remove the packet from the packet queue since I'm lazy, you do that yourself. this just sends the packet. */
 	private flushPacket<T extends C2SPacket>(record: PacketRecord<T>) {
 		// TODO: only handling C2S packets
-		PacketUtil.sendSilently(record.packet);
+		sendSilently(record.packet);
 	}
 
 	flush(when?: (p: PacketRecord<AnyPacket>) => boolean) {
@@ -95,8 +89,8 @@ export default new (class PacketQueueManager {
 	}
 
 	#preProcessing(pkt: C2SPacket): PreAction {
-		if (pkt instanceof c2s("SPacketMessage")) return PreAction.PASS;
-		if (pkt instanceof c2s("SPacketRespawn")) return PreAction.FLUSH;
+		if (isC2S("SPacketMessage", pkt)) return PreAction.PASS;
+		if (isC2S("SPacketRespawn", pkt)) return PreAction.FLUSH;
 		return PreAction.GO;
 	}
 
@@ -137,20 +131,13 @@ export default new (class PacketQueueManager {
 		if (!this.serverPos) return;
 		if (!this.#posBox) {
 			this.#initPosBox();
-			this.#posBox = this.#posBox as unknown as Mesh;
 		}
 		this.#posBox.visible = true;
-		this.#posBox.position.set(
-			this.serverPos.x,
-			this.serverPos.y + 1,
-			this.serverPos.z,
-		);
+		this.#posBox.position.set(this.serverPos.x, this.serverPos.y + 1, this.serverPos.z);
 	}
 
 	#initPosBox() {
-		const mesh = new Refs.Mesh(
-			new Refs.BoxGeometry(1, Refs.player.height, 1),
-		);
+		const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, Miniblox.player.height, 1));
 		this.#posBox = mesh;
 		const mtr = mesh.material as Material;
 		mtr.depthTest = false;
@@ -158,7 +145,7 @@ export default new (class PacketQueueManager {
 		mtr.opacity = 0.5;
 		mesh.renderOrder = 6;
 		mesh.visible = true;
-		Refs.game.gameScene.ambientMeshes.add(mesh);
+		Miniblox.game.gameScene.ambientMeshes.add(mesh);
 		return mesh;
 	}
 

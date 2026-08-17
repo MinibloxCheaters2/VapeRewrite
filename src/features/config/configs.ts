@@ -43,9 +43,7 @@ export class ModuleConfig {
 }
 
 function serializeModules(): Record<string, ModuleConfig> {
-	return Object.fromEntries(
-		ModuleManager.modules.map((x) => [x.name, ModuleConfig.from(x)]),
-	);
+	return Object.fromEntries(ModuleManager.modules.map((x) => [x.name, ModuleConfig.from(x)]));
 }
 
 export class Config {
@@ -59,8 +57,7 @@ export class Config {
 	}
 
 	public static deserialize(_name: string, json: string): Config {
-		const data: Record</* module name*/ string, ModuleConfig> =
-			JSON.parse(json);
+		const data: Record</* module name*/ string, ModuleConfig> = JSON.parse(json);
 		return new Config(data);
 	}
 }
@@ -76,8 +73,7 @@ export class NamedConfig extends Config {
 	}
 
 	public static deserialize(name: string, json: string): NamedConfig {
-		const data: Record</* module name*/ string, ModuleConfig> =
-			JSON.parse(json);
+		const data: Record</* module name*/ string, ModuleConfig> = JSON.parse(json);
 		return new NamedConfig(name, data);
 	}
 }
@@ -92,7 +88,30 @@ export function isConfigKey(n: string): boolean {
 	return n.startsWith(CONFIG_KEY_PREFIX);
 }
 
-export let loadedConfig = new NamedConfig("default", {});
+/** Storage key for the name of the config that was loaded last, so it can be restored on script run. */
+const LAST_CONFIG_KEY = "vapeLastConfig";
+
+/**
+ * Lazily builds the initial {@link loadedConfig} from storage so that a stored
+ * "default" config (or the config loaded on the previous run) is picked up
+ * instead of always starting from an empty config.
+ */
+function getInitialConfig(): NamedConfig {
+	const last = GM_getValue<string>(LAST_CONFIG_KEY, "default");
+	for (const name of [last, "default"]) {
+		const raw = GM_getValue<string>(configKey(name), "");
+		if (raw) {
+			try {
+				return NamedConfig.deserialize(name, raw);
+			} catch {
+				logger.error(`Failed to parse config "${name}", falling back to empty config`);
+			}
+		}
+	}
+	return new NamedConfig("default", {});
+}
+
+export let loadedConfig = getInitialConfig();
 
 /** Saves this config to a config named {@link name} */
 export function saveConfig(name: string) {
@@ -103,11 +122,12 @@ export function saveConfig(name: string) {
 export function loadConfig(name: string = loadedConfig.name) {
 	const cfg = GM_getValue(configKey(name), loadedConfig.serialize());
 	loadedConfig = NamedConfig.deserialize(name, cfg);
+	GM_setValue(LAST_CONFIG_KEY, name);
 
 	for (const [name, config] of Object.entries(loadedConfig.modules)) {
 		const mod = ModuleManager.findModule(P.byName(name));
 		if (mod === undefined) {
-			logger.warn("Module not found while loading config:", mod);
+			logger.warn("Module not found while loading config:", name);
 			continue;
 		}
 		mod.enabled = config.enabled;
@@ -116,9 +136,7 @@ export function loadConfig(name: string = loadedConfig.name) {
 
 		iterSubSettings(mod, (setting) => {
 			if (lookup.has(setting.name)) {
-				(setting.setValue as (value: unknown) => void)(
-					lookup.get(setting.name),
-				);
+				(setting.setValue as (value: unknown) => void)(lookup.get(setting.name));
 			}
 		});
 	}
@@ -138,9 +156,40 @@ export async function importConfig(): Promise<void> {
 }
 
 export function listConfigs(): string[] {
-	return GM_listValues()
-		.filter(isConfigKey)
-		.map((a) => a.slice(CONFIG_KEY_PREFIX.length));
+	return [
+		...new Set(
+			GM_listValues()
+				.filter(isConfigKey)
+				.map((a) => a.slice(CONFIG_KEY_PREFIX.length))
+				.filter((name) => name.length > 0),
+		),
+	];
+}
+
+/**
+ * Restores the config that was loaded on the previous run (or a stored
+ * "default") and applies it to the registered modules. Call once after all
+ * modules have been registered.
+ */
+export function initConfig() {
+	loadConfig(loadedConfig.name);
+	// The startup load applies values through the setters, which would otherwise
+	// schedule a save-back. Let it settle first, then re-enable persistence so
+	// the (unchanged) config isn't rewritten on every script run.
+	isStartupLoad = false;
+}
+
+let isStartupLoad = true;
+
+let saveTimeout: ReturnType<typeof setTimeout> | undefined;
+
+function scheduleSave() {
+	if (isStartupLoad) return;
+	if (saveTimeout !== undefined) clearTimeout(saveTimeout);
+	saveTimeout = setTimeout(() => {
+		saveTimeout = undefined;
+		saveConfig(loadedConfig.name);
+	}, 500);
 }
 
 /** Updates the loadedConfig to reflect the current state of modules and settings */
@@ -148,6 +197,7 @@ export function updateLoadedConfig(moduleName?: string, settingName?: string) {
 	if (!moduleName) {
 		// Full update
 		loadedConfig.modules = serializeModules();
+		scheduleSave();
 		return;
 	}
 
@@ -157,6 +207,7 @@ export function updateLoadedConfig(moduleName?: string, settingName?: string) {
 	if (!settingName) {
 		// Update entire module
 		loadedConfig.modules[moduleName] = ModuleConfig.from(mod);
+		scheduleSave();
 		return;
 	}
 
@@ -168,13 +219,18 @@ export function updateLoadedConfig(moduleName?: string, settingName?: string) {
 	if (!setting) return;
 
 	const serialized = serializeBaseSetting<unknown>(setting);
-	const moduleConfig = loadedConfig.modules[moduleName];
-	if (moduleConfig) {
-		const index = moduleConfig.settings.findIndex(
-			(s) => s.name === settingName,
-		);
-		if (index !== -1) {
-			moduleConfig.settings[index] = serialized;
-		}
+	let moduleConfig = loadedConfig.modules[moduleName];
+	if (!moduleConfig) {
+		// Starting from an empty/missing config: create the module entry so the
+		// first change to any of its settings is persisted instead of dropped.
+		moduleConfig = ModuleConfig.from(mod);
+		loadedConfig.modules[moduleName] = moduleConfig;
 	}
+	const index = moduleConfig.settings.findIndex((s) => s.name === settingName);
+	if (index !== -1) {
+		moduleConfig.settings[index] = serialized;
+	} else {
+		moduleConfig.settings.push(serialized);
+	}
+	scheduleSave();
 }

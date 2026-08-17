@@ -1,6 +1,6 @@
 import { Subscribe } from "@/event/Bus";
-import Refs from "@/utils/helpers/refs";
 import { findTargets } from "@/utils/movement/target";
+import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 
@@ -12,32 +12,11 @@ export default class TargetStrafe extends Mod {
 	private radiusSetting = this.createSliderSetting("Radius", 1.8, 1, 4, 0.1);
 	private speedSetting = this.createSliderSetting("Speed", 0.5, 0.1, 1, 0.01);
 	private floatSetting = this.createToggleSetting("Float", true);
-	private floatYSetting = this.createSliderSetting(
-		"FloatY",
-		0.08,
-		0.02,
-		0.2,
-		0.01,
-	);
-	private smoothSetting = this.createSliderSetting(
-		"Smoothness",
-		0.35,
-		0,
-		1,
-		0.01,
-	);
-	private directionSetting = this.createDropdownSetting("Direction", [
-		"Left",
-		"Right",
-	]);
-	private onlyOnGroundSetting = this.createToggleSetting(
-		"Only On Ground",
-		true,
-	);
-	private onlyWhenMovingSetting = this.createToggleSetting(
-		"Only When Moving",
-		false,
-	);
+	private floatYSetting = this.createSliderSetting("FloatY", 0.08, 0.02, 0.2, 0.01);
+	private smoothSetting = this.createSliderSetting("Smoothness", 0.35, 0, 1, 0.01);
+	private directionSetting = this.createDropdownSetting("Direction", ["Left", "Right"]);
+	private onlyOnGroundSetting = this.createToggleSetting("Only On Ground", true);
+	private onlyWhenMovingSetting = this.createToggleSetting("Only When Moving", false);
 	private lastDirX = 0;
 	private lastDirZ = 0;
 
@@ -77,14 +56,13 @@ export default class TargetStrafe extends Mod {
 		return this.onlyWhenMovingSetting.value();
 	}
 
-	@Subscribe("gameTick")
+	@Subscribe("playerTick")
 	public onTick() {
-		const { player } = Refs;
+		const { player } = Miniblox;
 		if (this.onlyOnGround && !player.onGround) return;
 
 		if (this.onlyWhenMoving) {
-			const isMoving =
-				player.moveForward !== 0 || player.moveStrafe !== 0;
+			const isMoving = player.moveForward !== 0 || player.moveStrafe !== 0;
 			if (!isMoving) return;
 		}
 

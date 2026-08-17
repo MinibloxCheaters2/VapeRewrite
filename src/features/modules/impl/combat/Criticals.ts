@@ -1,8 +1,9 @@
 import type { C2SPacket } from "@wq2/miniblox-sdk";
 import { Subscribe } from "@/event/Bus";
 import type CancelableWrapper from "@/event/CancelableWrapper";
-import Refs from "@/utils/helpers/refs";
+import { isC2S } from "@/utils";
 import { c2s } from "@/utils/network/packetRefs";
+import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 
@@ -14,7 +15,7 @@ export default class Criticals extends Mod {
 	public category = Category.COMBAT;
 
 	static sendCritPackets() {
-		const { ClientSocket, player } = Refs;
+		const { ClientSocket, player } = Miniblox;
 		const SPacketPlayerPosLook = c2s("SPacketPlayerPosLook");
 		for (const offset of CRIT_OFFSETS) {
 			const pos = {
@@ -33,10 +34,6 @@ export default class Criticals extends Mod {
 
 	@Subscribe("sendPacket")
 	private onPacket({ data: pkt }: CancelableWrapper<C2SPacket>) {
-		if (
-			pkt instanceof c2s("SPacketUseEntity") &&
-			pkt.action === 1 /*ATTACK*/
-		)
-			Criticals.sendCritPackets();
+		if (isC2S("SPacketUseEntity", pkt) && pkt.action === 1 /*ATTACK*/) Criticals.sendCritPackets();
 	}
 }

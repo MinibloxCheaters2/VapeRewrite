@@ -6,6 +6,11 @@ interface Bind {
 
 const bound: { [k: string]: Bind[] } = {};
 
+const keyMap: Record<string | number, string> = {};
+for (let i = 0; i < 26; i++)
+	keyMap[i + 65] = keyMap[`Key${String.fromCharCode(i + 65)}`] = String.fromCharCode(i + 97);
+for (let i = 0; i < 10; i++) keyMap[48 + i] = keyMap[`Digit${i}`] = `${i}`;
+
 export function normalizeCase(s: string): string {
 	return s.toLowerCase();
 }
@@ -19,12 +24,7 @@ export function addBind(key: string, id: string, callback: Callback) {
 	});
 }
 
-export function setBind(
-	oldKey: string,
-	newKey: string,
-	id: string,
-	callback?: Callback,
-): boolean {
+export function setBind(oldKey: string, newKey: string, id: string, callback?: Callback): boolean {
 	const oK = normalizeCase(oldKey);
 	const nK = normalizeCase(newKey);
 	const oldBound = bound[oK];
@@ -47,12 +47,12 @@ export function removeBind(key: string, id: string): boolean {
 	if (!b) return false;
 	const idx = b.findIndex((b) => b.id === id);
 	if (idx === -1) return false;
-	b.splice(idx);
+	b.splice(idx, 1);
 	return true;
 }
 
 unsafeWindow.addEventListener("keydown", (e) => {
-	bound[normalizeCase(e.key)]?.forEach?.((x) => {
+	bound[normalizeCase(keyMap[e.code] ?? e.code)]?.forEach?.((x) => {
 		x.callback(e);
 	});
 });

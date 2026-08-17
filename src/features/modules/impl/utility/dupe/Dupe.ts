@@ -10,6 +10,6 @@ export default class Dupe extends Mod {
 	category = Category.UTILITY;
 	static readonly INSTANCE = new Dupe();
 
-	@Subscribe("gameTick")
+	@Subscribe("playerTick")
 	private onTick() {}
 }

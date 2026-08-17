@@ -6,22 +6,23 @@
 import type { S2CPacket } from "@wq2/miniblox-sdk";
 import { Subscribe } from "@/event/Bus";
 import type CancelableWrapper from "@/event/CancelableWrapper";
-import { s2c } from "@/utils";
-import Refs from "@/utils/helpers/refs";
+import { isS2C } from "@/utils";
+import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
+import { S2CData } from "@/event/Events";
 
 export default class Paranoia extends Mod {
 	name = "Paranoia";
 	category = Category.UTILITY;
 
 	#alert(debug: string) {
-		Refs.chat.addChat({
+		Miniblox.chat.addChat({
 			text: `[\\green\\Vape Rewrite\\reset\\: \\blue\\STAFF DETECTOR\\red\\] ${debug}`,
 		});
 	}
 	#alertIfNotFound(id: number, pkt: string) {
-		const { world } = Refs;
+		const { world } = Miniblox;
 		if (!world) return;
 		const e = world.entities.get(id);
 		if (e) return;
@@ -36,34 +37,31 @@ export default class Paranoia extends Mod {
 		const v = pkt[key];
 		if (typeof v !== "number") {
 			if (alertWrongType) {
-				this.#alert(
-					`Packet ${name} has an improper type for ${String(key)} (got ${typeof v})`,
-				);
+				this.#alert(`Packet ${name} has an improper type for ${String(key)} (got ${typeof v})`);
 			}
 			return;
 		}
 		this.#alertIfNotFound(v, name);
 	}
 	@Subscribe("receivePacket")
-	private onReceivePacket({ data: pkt }: CancelableWrapper<S2CPacket>) {
+	private onReceivePacket({ data: pkt }: CancelableWrapper<S2CData>) {
 		if (
-			pkt instanceof s2c("CPacketEntityVelocity") ||
-			pkt instanceof s2c("CPacketEntityEquipment") ||
-			pkt instanceof s2c("CPacketAnimation") ||
-			pkt instanceof s2c("CPacketEntityAction") ||
-			pkt instanceof s2c("CPacketEntityMetadata") ||
-			pkt instanceof s2c("CPacketEntityPositionAndRotation") ||
-			pkt instanceof s2c("CPacketEntityRelativePositionAndRotation") ||
-			pkt instanceof s2c("CPacketUpdateHealth") ||
-			pkt instanceof s2c("CPacketEntityEffect") ||
-			pkt instanceof s2c("CPacketEntityProperties") ||
-			pkt instanceof s2c("CPacketRemoveEntityEffect") ||
-			pkt instanceof s2c("CPacketUseBed")
+			isS2C("CPacketEntityVelocity", pkt) ||
+			isS2C("CPacketEntityEquipment", pkt) ||
+			isS2C("CPacketAnimation", pkt) ||
+			isS2C("CPacketEntityAction", pkt) ||
+			isS2C("CPacketEntityMetadata", pkt) ||
+			isS2C("CPacketEntityPositionAndRotation", pkt) ||
+			isS2C("CPacketEntityRelativePositionAndRotation", pkt) ||
+			isS2C("CPacketUpdateHealth", pkt) ||
+			isS2C("CPacketEntityEffect", pkt) ||
+			isS2C("CPacketEntityProperties", pkt) ||
+			isS2C("CPacketRemoveEntityEffect", pkt) ||
+			isS2C("CPacketUseBed", pkt)
 		)
 			this.#alertFromField(pkt, "id");
-		else if (pkt instanceof s2c("CPacketEntityStatus"))
-			this.#alertFromField(pkt, "entityId");
-		/*else if (pkt instanceof s2c("CPacketPlayerList"))
+		else if (isS2C("CPacketEntityStatus", pkt)) this.#alertFromField(pkt, "entityId");
+		/*else if (isS2C("CPacketPlayerList", pkt))
 			for (const pl of pkt.players) {
 				this.#alertFromField(
 					pl,

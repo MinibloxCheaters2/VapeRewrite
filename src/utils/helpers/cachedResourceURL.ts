@@ -18,10 +18,7 @@ const dataURLCache: Record<string, string> = {};
  * but it's particularly handy for direct synchronous decoding of the data on sites
  * that forbid fetching `blob:` in their CSP.
  */
-export default function getResourceURL(
-	name: string,
-	isBlobUrl: boolean = true,
-) {
+export default function getResourceURL(name: string, isBlobUrl: boolean = true) {
 	const cache = isBlobUrl ? blobURLCache : dataURLCache;
 
 	cache[name] ??= GM_getResourceURL(name, isBlobUrl);

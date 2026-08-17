@@ -163,8 +163,7 @@ export default abstract class BaseHudElement {
 			hue: () => color().h,
 			sat: () => color().s,
 			opacity: () => color().o,
-			setColor: (h: number, s: number, v: number, o: number) =>
-				setColor({ h, s, v, o }),
+			setColor: (h: number, s: number, v: number, o: number) => setColor({ h, s, v, o }),
 			visible,
 		};
 		this.settings.push(setting);

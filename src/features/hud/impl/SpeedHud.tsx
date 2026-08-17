@@ -1,5 +1,5 @@
 import { createSignal } from "solid-js";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import HudElement from "../api/JSXHudElement";
 
 export default class SpeedHud extends HudElement {
@@ -10,13 +10,7 @@ export default class SpeedHud extends HudElement {
 		this.id = "speed";
 	}
 
-	private fontSizeSetting = this.createSliderSetting(
-		"Font Size",
-		14,
-		8,
-		32,
-		1,
-	);
+	private fontSizeSetting = this.createSliderSetting("Font Size", 14, 8, 32, 1);
 	private textColorSetting = this.createColorSliderSetting("Text Color", {
 		h: 0,
 		s: 0,
@@ -31,11 +25,11 @@ export default class SpeedHud extends HudElement {
 	public onAdd(): void {
 		const update = () => {
 			try {
-				const player = Refs.player;
+				const player = Miniblox.player;
 				if (player) {
 					const now = performance.now();
 					const dt = (now - this.#lastTime) / 1000;
-					const pos = player.position;
+					const pos = player.pos;
 
 					if (this.#lastPos && dt > 0) {
 						const dx = pos.x - this.#lastPos.x;
@@ -64,12 +58,10 @@ export default class SpeedHud extends HudElement {
 
 		return (
 			<div
+				class="vape-hud-text"
 				style={{
-					"font-family": "Arial, sans-serif",
-					"font-size": `${this.fontSizeSetting.value()}px`,
-					color: textColor,
-					"font-weight": "600",
-					"text-shadow": "2px 2px 4px rgba(0, 0, 0, 0.8)",
+					"--hud-font-size": `${this.fontSizeSetting.value()}px`,
+					"--hud-color": textColor,
 				}}
 			>
 				Speed: {this.speedSignal[0]()} bps

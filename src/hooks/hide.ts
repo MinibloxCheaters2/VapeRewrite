@@ -1,22 +1,19 @@
 /**
- * tries to hide our store from the game.
+ * Hides the exposed store from the game.
  * @module
  */
 
-import { fgExposedName, storeName } from "@/utils/mapping/names";
+import { exposedName } from "@/utils/mapping/names";
 
-function replaceAndCopyFunction<OP, OR>(
-	oldFunc: (...args: OP[]) => OR,
-	newFunc: (r: OR) => OR,
-) {
+function replaceAndCopyFunction<OP, OR>(oldFunc: (...args: OP[]) => OR, newFunc: (r: OR) => OR) {
 	return new Proxy(oldFunc, {
 		apply(orig, origID, origArgs) {
 			const result = orig.apply(origID, origArgs);
 			newFunc(result);
 			return result;
 		},
-		get(orig) {
-			return orig;
+		get(orig, prop, receiver) {
+			return Reflect.get(orig, prop, receiver);
 		},
 	});
 }
@@ -27,20 +24,12 @@ function spliceIt<T>(arr: T[], item: T): T[] | [] {
 	return arr.splice(idx, 1);
 }
 
-Object.getOwnPropertyNames = replaceAndCopyFunction(
-	Object.getOwnPropertyNames,
-	(list) => {
-		spliceIt(list, storeName);
-		spliceIt(list, fgExposedName);
-		return list;
-	},
-);
+Object.getOwnPropertyNames = replaceAndCopyFunction(Object.getOwnPropertyNames, (list) => {
+	spliceIt(list, exposedName);
+	return list;
+});
 
-Object.getOwnPropertyDescriptors = replaceAndCopyFunction(
-	Object.getOwnPropertyDescriptors,
-	(l) => {
-		delete l[storeName];
-		delete l[fgExposedName];
-		return l;
-	},
-);
+Object.getOwnPropertyDescriptors = replaceAndCopyFunction(Object.getOwnPropertyDescriptors, (l) => {
+	delete l[exposedName];
+	return l;
+});

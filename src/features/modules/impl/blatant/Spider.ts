@@ -1,7 +1,7 @@
 // idk if this works lmao
 import { Subscribe } from "@/event/Bus";
 import { defaultFilter, oneInRange } from "@/utils";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 
@@ -9,20 +9,8 @@ export default class Spider extends Mod {
 	public name = "Spider";
 	public category = Category.BLATANT;
 
-	private climbSpeedSetting = this.createSliderSetting(
-		"Climb Speed",
-		0.2,
-		0.05,
-		0.5,
-		0.05,
-	);
-	private wallDetectRangeSetting = this.createSliderSetting(
-		"Wall Range",
-		0.3,
-		0.1,
-		0.6,
-		0.05,
-	);
+	private climbSpeedSetting = this.createSliderSetting("Climb Speed", 0.2, 0.05, 0.5, 0.05);
+	private wallDetectRangeSetting = this.createSliderSetting("Wall Range", 0.3, 0.1, 0.6, 0.05);
 	private autoClimbSetting = this.createToggleSetting("Auto Climb", false);
 
 	get climbSpeed() {
@@ -38,11 +26,11 @@ export default class Spider extends Mod {
 	}
 
 	private isNearWall(): boolean {
-		const { player, game } = Refs;
+		const { player, game } = Miniblox;
 		if (!player || !game) return false;
 
 		const range = this.wallDetectRange;
-		const { BlockPos } = Refs;
+		const { BlockPos } = Miniblox;
 
 		// Check all 4 cardinal directions
 		const directions = [
@@ -64,7 +52,7 @@ export default class Spider extends Mod {
 			);
 
 			const block = game.world.getBlockState(checkPos).getBlock();
-			const { Materials } = Refs;
+			const { Materials } = Miniblox;
 
 			if (Materials && block.material !== Materials.air) {
 				return true;
@@ -75,25 +63,20 @@ export default class Spider extends Mod {
 	}
 
 	private isCollidingHorizontally(): boolean {
-		const anyCollidingBlock = oneInRange(
-			this.wallDetectRange,
-			defaultFilter,
-			0,
-		);
+		const anyCollidingBlock = oneInRange(this.wallDetectRange, defaultFilter, 0);
 		return anyCollidingBlock !== undefined;
 	}
 
-	@Subscribe("gameTick")
+	@Subscribe("playerTick")
 	public onTick() {
-		const { player } = Refs;
+		const { player } = Miniblox;
 		if (!player) return;
 
 		const nearWall = this.isNearWall() || this.isCollidingHorizontally();
 
 		if (!nearWall) return;
 
-		const shouldClimb =
-			this.autoClimb || player.motion.y < 0 || player.onGround;
+		const shouldClimb = this.autoClimb || player.motion.y < 0 || player.onGround;
 
 		if (shouldClimb) {
 			player.motion.y = this.climbSpeed;

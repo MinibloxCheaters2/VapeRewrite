@@ -1,13 +1,19 @@
-import { MATCHED_DUMPS } from "@/hooks/replacement";
-import GExposed from "../../exposedO";
+import Miniblox from "../refs/miniblox";
 
-let fn: (k: string) => boolean;
-let isKeyDown = (k: string): boolean => {
-	if (fn !== undefined) isKeyDown = fn;
-	fn = GExposed.store.run((e) =>
-		e<(k: string) => boolean>(MATCHED_DUMPS.keyPressedPlayer),
-	);
-	return fn(k);
-};
+let pressedKeys: Record<string, boolean> = {};
 
-export default isKeyDown;
+function handler(value: boolean) {
+	return (e: KeyboardEvent) => {
+		pressedKeys[e.code] = value;
+	};
+}
+
+window.addEventListener("keydown", handler(true));
+window.addEventListener("keyup", handler(false));
+window.addEventListener("blur", () => (pressedKeys = {}));
+
+export default function isKeyDown(key: string): boolean {
+	const { Game } = Miniblox;
+	if (!Game.isActive(false)) return false;
+	return pressedKeys[key] ?? false;
+}

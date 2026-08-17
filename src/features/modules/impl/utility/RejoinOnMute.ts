@@ -1,8 +1,8 @@
 import type { C2SPacket } from "@wq2/miniblox-sdk";
 import { Subscribe } from "@/event/Bus";
 import type CancelableWrapper from "@/event/CancelableWrapper";
-import Refs from "@/utils/helpers/refs";
-import { s2c } from "@/utils/network/packetRefs";
+import { isS2C } from "@/utils";
+import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 
@@ -16,17 +16,17 @@ export default class RejoinOnMute extends Mod {
 	@Subscribe("receivePacket")
 	private onRecvPacket({ data: packet }: CancelableWrapper<C2SPacket>) {
 		if (
-			packet instanceof s2c("CPacketMessage") &&
+			isS2C("CPacketMessage", packet) &&
 			packet.color === undefined &&
 			packet.id === undefined &&
-			packet.text.startsWith(`${Refs.player.name}: `) &&
+			packet.text.startsWith(`${Miniblox.player.name}: `) &&
 			packet.text.length < LIMIT
 		) {
-			Refs.chat.addChat({
+			Miniblox.chat.addChat({
 				text: "[RejoinOnMute] You have been muted by a game moderator, rejoining!",
 				color: "yellow",
 			});
-			Refs.game.connect(Refs.game.serverInfo.serverId);
+			Miniblox.game.connect(Miniblox.game.serverInfo.serverId);
 		}
 	}
 }

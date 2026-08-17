@@ -1,11 +1,19 @@
+/* oxlint-disable unicorn/no-empty-file */
 // ==UserScript==
 // @name        process.env.NAME
 // @namespace   https://codeberg.org/Miniblox
 // @description Vape UserScript: The Rewrite
 // @license     AGPL-3.0-or-later
 // @homepageURL https://codeberg.org/Miniblox/VapeRewrite
-// @match       https://miniblox.io/*
-// @match       https://bloxbattles.io/*
+// @match       https://*.miniblox.io/*
+// @match       https://*.miniblox.online/*
+// @match       https://*.bloxbattles.io/*
+// @match       https://*.miniblox.org/*
+//#region mirrors (updated automatically by scripts/mirrors.ts, do NOT REDEEM)
+// @match       https://*.classcraft.pro/*
+// @match       https://*.mathnest.space/*
+// @match       https://*.storyhall.site/*
+//#endregion
 // @icon        https://miniblox.io/favicon.png
 // @grant       GM_addStyle
 // @grant       GM_getValue
@@ -44,7 +52,15 @@
 // @resource    guiback https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/misc/back.png
 // @resource    search https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/search.png
 // @resource    legit https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/misc/legit.png
-// @run-at      document-start
+// @resource    legittab https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/tabs/legit.png
+// @resource    friendstab https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/tabs/friends.png
+// @resource    closemini https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/misc/closemini.png
+// @resource    customsettings https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/misc/customsettings.png
+// @resource    targetplayers1 https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/targets/players1.png
+// @resource    targetplayers2 https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/targets/players2.png
+// @resource    targetnpc1 https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/targets/npc1.png
+// @resource    targetnpc2 https://codeberg.org/Miniblox/VapeRewrite/raw/branch/main/icons/targets/npc2.png
+// @run-at      document-idle
 // ==/UserScript==
 
 /**

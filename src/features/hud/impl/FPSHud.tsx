@@ -1,5 +1,5 @@
 import { createSignal } from "solid-js";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import HudElement from "../api/JSXHudElement";
 
 export default class FPSHud extends HudElement {
@@ -11,13 +11,7 @@ export default class FPSHud extends HudElement {
 		this.id = "fps";
 	}
 
-	private fontSizeSetting = this.createSliderSetting(
-		"Font Size",
-		14,
-		8,
-		32,
-		1,
-	);
+	private fontSizeSetting = this.createSliderSetting("Font Size", 14, 8, 32, 1);
 	private textColorSetting = this.createColorSliderSetting("Text Color", {
 		h: 0,
 		s: 0,
@@ -28,7 +22,7 @@ export default class FPSHud extends HudElement {
 	private fpsSignal = createSignal(0);
 	private lastFrameTime = performance.now();
 	private frameCount = 0;
-	private fpsUpdateInterval = 500; // Update every 500ms
+	private fpsUpdateInterval = 500;
 
 	public onAdd(): void {
 		const updateFPS = () => {
@@ -37,7 +31,7 @@ export default class FPSHud extends HudElement {
 			const elapsed = now - this.lastFrameTime;
 
 			if (elapsed >= this.fpsUpdateInterval) {
-				const fps = Refs.game.resourceMonitor.filteredFPS;
+				const fps = Miniblox.game.resourceMonitor.filteredFPS;
 				this.fpsSignal[1](fps);
 				this.frameCount = 0;
 				this.lastFrameTime = now;
@@ -61,12 +55,10 @@ export default class FPSHud extends HudElement {
 
 		return (
 			<div
+				class="vape-hud-text"
 				style={{
-					"font-family": "Arial, sans-serif",
-					"font-size": `${this.fontSizeSetting.value()}px`,
-					color: textColor,
-					"font-weight": "600",
-					"text-shadow": "2px 2px 4px rgba(0, 0, 0, 0.8)",
+					"--hud-font-size": `${this.fontSizeSetting.value()}px`,
+					"--hud-color": textColor,
 				}}
 			>
 				FPS: {this.fpsSignal[0]()}

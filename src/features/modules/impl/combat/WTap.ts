@@ -1,8 +1,8 @@
 import type { C2SPacket } from "@wq2/miniblox-sdk";
 import { Subscribe } from "@/event/Bus";
 import type CancelableWrapper from "@/event/CancelableWrapper";
-import Refs from "@/utils/helpers/refs";
-import { c2s } from "@/utils/network/packetRefs";
+import { isC2S } from "@/utils";
+import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 
@@ -13,11 +13,11 @@ export default class WTap extends Mod {
 	@Subscribe("sendPacket")
 	private onPacket({ data: packet }: CancelableWrapper<C2SPacket>) {
 		if (
-			packet instanceof c2s("SPacketUseEntity") &&
+			isC2S("SPacketUseEntity", packet) &&
 			packet.action === 1 /*ATTACK*/ &&
-			Refs.player.isSprinting()
+			Miniblox.player.isSprinting()
 		) {
-			Refs.player.serverSprintState = false;
+			Miniblox.player.serverSprintState = false;
 		}
 	}
 }

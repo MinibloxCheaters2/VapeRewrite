@@ -1,5 +1,5 @@
 import { Subscribe } from "@/event/Bus";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 
@@ -8,21 +8,10 @@ export default class LiquidWalk extends Mod {
 	public category = Category.WORLD;
 
 	// Settings
-	private speedSetting = this.createSliderSetting(
-		"Speed",
-		1.0,
-		0.5,
-		2.0,
-		0.1,
-	);
+	private speedSetting = this.createSliderSetting("Speed", 1.0, 0.5, 2.0, 0.1);
 	private bounceSetting = this.createToggleSetting("Bounce", true);
-	private bounceHeightSetting = this.createSliderSetting(
-		"Bounce Height",
-		0.5,
-		0.1,
-		1.0,
-		0.1,
-		() => this.bounceSetting.value(),
+	private bounceHeightSetting = this.createSliderSetting("Bounce Height", 0.5, 0.1, 1.0, 0.1, () =>
+		this.bounceSetting.value(),
 	);
 	private waterOnlySetting = this.createToggleSetting("Water Only", false);
 
@@ -43,40 +32,35 @@ export default class LiquidWalk extends Mod {
 	}
 
 	private isInLiquid(testY: number): boolean {
-		const { player, game, Materials } = Refs;
+		const { player, game, Materials } = Miniblox;
 		if (!player || !game || !Materials) return false;
 
-		const { BlockPos } = Refs;
-		const pos = new BlockPos(
-			Math.floor(player.pos.x),
-			Math.floor(testY),
-			Math.floor(player.pos.z),
-		);
+		const { BlockPos } = Miniblox;
+		const pos = new BlockPos(Math.floor(player.pos.x), Math.floor(testY), Math.floor(player.pos.z));
 
 		const block = game.world.getBlockState(pos).getBlock();
 		return (
-			block.material === Materials.water ||
-			(!this.waterOnly && block.material === Materials.lava)
+			block.material === Materials.water || (!this.waterOnly && block.material === Materials.lava)
 		);
 	}
 
 	private isLiquidBelow(): boolean {
-		const { player } = Refs;
+		const { player } = Miniblox;
 		if (!player) return false;
 
 		return this.isInLiquid(player.pos.y - 0.1);
 	}
 
 	private isLiquidAtFeet(): boolean {
-		const { player } = Refs;
+		const { player } = Miniblox;
 		if (!player) return false;
 
 		return this.isInLiquid(player.pos.y);
 	}
 
-	@Subscribe("gameTick")
+	@Subscribe("playerTick")
 	public onTick() {
-		const { player } = Refs;
+		const { player } = Miniblox;
 		if (!player) return;
 
 		const atLiquid = this.isLiquidAtFeet();

@@ -1,5 +1,5 @@
 import { Subscribe } from "@/event/Bus";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 
@@ -13,9 +13,9 @@ export default class Sprint extends Mod {
 		return this.#legitSetting.value();
 	}
 
-	@Subscribe("gameTick")
+	@Subscribe("playerTick")
 	private onTick() {
-		if (this.#legit) Refs.player.sprintToggleTimer = 7;
-		else Refs.player.setSprinting(true); // TODO: adjust jump yaw so we don't jump forwards when moving backwards?
+		if (this.#legit) Miniblox.player.sprintToggleTimer = 7;
+		else Miniblox.player.setSprinting(true); // TODO: adjust jump yaw so we don't jump forwards when moving backwards?
 	}
 }

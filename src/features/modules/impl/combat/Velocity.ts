@@ -1,17 +1,13 @@
-import type { S2CPacket } from "@wq2/miniblox-sdk";
 import { Subscribe } from "@/event/Bus";
 import type CancelableWrapper from "@/event/CancelableWrapper";
-import Refs from "@/utils/helpers/refs";
-import { s2c } from "@/utils/network/packetRefs";
+import { isS2C } from "@/utils";
+import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
+import { S2CData } from "@/event/Events";
 
-function motionOrReduce<T extends "x" | "y" | "z">(
-	axis: T,
-	n: number,
-	reduce: number,
-) {
-	return reduce === 0 ? Refs.player.motion[axis] : n * reduce;
+function motionOrReduce<T extends "x" | "y" | "z">(axis: T, n: number, reduce: number) {
+	return reduce === 0 ? Miniblox.player.motion[axis] : n * reduce;
 }
 
 export default class Velocity extends Mod {
@@ -31,12 +27,9 @@ export default class Velocity extends Mod {
 	}
 
 	@Subscribe("receivePacket")
-	onPacket(e: CancelableWrapper<S2CPacket>) {
+	onPacket(e: CancelableWrapper<S2CData>) {
 		const { data: packet } = e;
-		if (
-			packet instanceof s2c("CPacketEntityVelocity") &&
-			packet.id === Refs.player.id
-		) {
+		if (isS2C("CPacketEntityVelocity", packet) && packet.id === Miniblox.player.id) {
 			if (this.horizontal === 0 && this.vertical === 0) e.cancel();
 
 			const pH = this.horizontal / 100;
@@ -45,7 +38,7 @@ export default class Velocity extends Mod {
 			packet.motion.y *= motionOrReduce("y", packet.motion.y, pV);
 			packet.motion.z *= motionOrReduce("z", packet.motion.z, pH);
 		}
-		if (packet instanceof s2c("CPacketExplosion") && packet.playerPos) {
+		if (isS2C("CPacketExplosion", packet) && packet.playerPos) {
 			if (this.horizontal === 0 && this.vertical === 0) {
 				packet.playerPos = undefined;
 				return;

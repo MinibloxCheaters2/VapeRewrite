@@ -4,7 +4,8 @@
  */
 
 import type { Chat, ChatData, ChatLog } from "@wq2/miniblox-sdk";
-import Refs from "@/utils/helpers/refs";
+import Bus from "@/Bus";
+import Miniblox from "@/utils/refs/miniblox";
 
 const idSymbol = Symbol();
 
@@ -12,8 +13,11 @@ export type UUIDv4 = `${string}-${string}-4${string}-${string}-${string}`;
 
 export default new (class ChatHook {
 	origAddChat: Chat["addChat"];
+	constructor() {
+		Bus.registerSubscriber(this);
+	}
 	init() {
-		const { chat } = Refs;
+		const { chat } = Miniblox;
 		this.origAddChat = chat.addChat;
 		chat.addChat = new Proxy(chat.addChat, {
 			apply(orig, ts, args: [ChatData]) {
@@ -26,29 +30,21 @@ export default new (class ChatHook {
 			},
 		});
 	}
-	modifyChat(
-		id: UUIDv4,
-		modifier: ChatLog | ((old: ChatLog) => ChatLog),
-	): boolean {
-		const { log } = Refs.chat;
+	modifyChat(id: UUIDv4, modifier: ChatLog | ((old: ChatLog) => ChatLog)): boolean {
+		const { log } = Miniblox.chat;
 		const origIdx = log.findIndex((log) => log[idSymbol] === id);
 		if (origIdx === -1) return false;
 		const orig = log[origIdx];
-		const modified =
-			typeof modifier === "function" ? modifier(orig) : modifier;
+		const modified = typeof modifier === "function" ? modifier(orig) : modifier;
 		log[origIdx] = modified;
 		return true;
 	}
-	modifyChatAppend(
-		id: UUIDv4,
-		modifier: ChatLog | ((old: ChatLog) => ChatLog),
-	): boolean {
-		const { log } = Refs.chat;
+	modifyChatAppend(id: UUIDv4, modifier: ChatLog | ((old: ChatLog) => ChatLog)): boolean {
+		const { log } = Miniblox.chat;
 		const origIdx = log.findIndex((log) => log[idSymbol] === id);
 		if (origIdx === -1) return false;
 		const orig = log[origIdx];
-		const modified =
-			typeof modifier === "function" ? modifier(orig) : modifier;
+		const modified = typeof modifier === "function" ? modifier(orig) : modifier;
 		delete log[origIdx];
 		log.push(modified);
 		return true;

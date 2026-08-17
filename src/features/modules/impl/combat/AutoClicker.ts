@@ -1,5 +1,5 @@
 import { Subscribe } from "@/event/Bus";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 
@@ -9,9 +9,8 @@ export default class AutoClicker extends Mod {
 
 	@Subscribe("gameTick")
 	private onTick() {
-		const { playerController, player } = Refs;
-		if (playerController.objectMouseOver.block || player.isUsingItem())
-			return;
+		const { playerController, player } = Miniblox;
+		if (playerController.objectMouseOver.block || player.isUsingItem()) return;
 		if (playerController.key.leftClick) playerController.leftClick();
 	}
 }

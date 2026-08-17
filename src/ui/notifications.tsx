@@ -1,13 +1,8 @@
 import { createSignal, For, onCleanup, onMount } from "solid-js";
 import { render } from "solid-js/web";
 import getResourceURL from "@/utils/helpers/cachedResourceURL";
+import { notificationsEnabled } from "./globalSettings";
 import shadowWrapper from "./shadowWrapper";
-
-const COLORS = {
-	main: "rgb(26, 25, 26)",
-	text: "rgb(209, 209, 209)",
-	textDark: "rgb(170, 170, 170)",
-};
 
 type NotificationType = "info" | "warning" | "alert";
 
@@ -34,6 +29,7 @@ export function showNotification(
 	type: NotificationType = "info",
 	duration: number = 3000,
 ) {
+	if (!notificationsEnabled()) return;
 	const id = notificationId++;
 	const notification: Notification = { id, title, message, type, duration };
 
@@ -56,20 +52,14 @@ function NotificationContainer() {
 		>
 			<For each={notifications()}>
 				{(notification, index) => (
-					<NotificationItem
-						notification={notification}
-						offset={29 + 78 * (index() + 1)}
-					/>
+					<NotificationItem notification={notification} offset={29 + 78 * (index() + 1)} />
 				)}
 			</For>
 		</div>
 	);
 }
 
-function NotificationItem(props: {
-	notification: Notification;
-	offset: number;
-}) {
+function NotificationItem(props: { notification: Notification; offset: number }) {
 	const [exiting, setExiting] = createSignal(false);
 	const [mounted, setMounted] = createSignal(false);
 
@@ -95,8 +85,7 @@ function NotificationItem(props: {
 				height: "75px",
 				"background-color": "rgba(26, 25, 26, 0.5)",
 				"border-radius": "5px",
-				"box-shadow":
-					"0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)",
+				"box-shadow": "0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)",
 				overflow: "hidden",
 				"pointer-events": "auto",
 				animation: exiting()
@@ -122,14 +111,14 @@ function NotificationItem(props: {
 					left: "46px",
 					top: "16px",
 					right: "10px",
-					color: COLORS.text,
-					fontSize: "14px",
-					fontWeight: "600",
-					fontFamily: "Arial, sans-serif",
-					textAlign: "left",
-					whiteSpace: "nowrap",
+					color: "var(--vape-text)",
+					"font-size": "14px",
+					"font-weight": "600",
+					"font-family": "Arial, sans-serif",
+					"text-align": "left",
+					"white-space": "nowrap",
 					overflow: "hidden",
-					textOverflow: "ellipsis",
+					"text-overflow": "ellipsis",
 				}}
 			>
 				{props.notification.title}
@@ -141,13 +130,13 @@ function NotificationItem(props: {
 					left: "47px",
 					top: "44px",
 					color: "rgb(0, 0, 0)",
-					fontSize: "14px",
-					fontFamily: "Arial, sans-serif",
+					"font-size": "14px",
+					"font-family": "Arial, sans-serif",
 					opacity: "0.5",
-					textAlign: "left",
-					whiteSpace: "nowrap",
+					"text-align": "left",
+					"white-space": "nowrap",
 					overflow: "hidden",
-					textOverflow: "ellipsis",
+					"text-overflow": "ellipsis",
 				}}
 			>
 				{props.notification.message}
@@ -159,13 +148,13 @@ function NotificationItem(props: {
 					left: "46px",
 					top: "43px",
 					right: "10px",
-					color: COLORS.textDark,
-					fontSize: "14px",
-					fontFamily: "Arial, sans-serif",
-					textAlign: "left",
-					whiteSpace: "nowrap",
+					color: "var(--vape-text-dark)",
+					"font-size": "14px",
+					"font-family": "Arial, sans-serif",
+					"text-align": "left",
+					"white-space": "nowrap",
 					overflow: "hidden",
-					textOverflow: "ellipsis",
+					"text-overflow": "ellipsis",
 				}}
 			>
 				{props.notification.message}
@@ -174,13 +163,13 @@ function NotificationItem(props: {
 			<div
 				style={{
 					position: "absolute",
-					bottom: "4px",
+					bottom: "3px",
 					left: "3px",
 					right: "10px",
-					height: "2px",
-					backgroundColor: PROGRESS_COLORS[props.notification.type],
-					borderRadius: "1px",
-					transformOrigin: "left center",
+					height: "3px",
+					"background-color": PROGRESS_COLORS[props.notification.type],
+					"border-radius": "1px",
+					"transform-origin": "left center",
 					animation: mounted()
 						? `ntProgress ${props.notification.duration}ms linear forwards`
 						: "none",
@@ -191,26 +180,6 @@ function NotificationItem(props: {
 }
 
 export function initNotifications() {
-	if (!document.querySelector("#nt-keyframes")) {
-		const keyframesStyle = document.createElement("style");
-		keyframesStyle.id = "nt-keyframes";
-		keyframesStyle.textContent = `
-			@keyframes ntSlideIn {
-				from { transform: translateX(100%); }
-				to { transform: translateX(0); }
-			}
-			@keyframes ntSlideOut {
-				from { transform: translateX(0); }
-				to { transform: translateX(100%); }
-			}
-			@keyframes ntProgress {
-				from { transform: scaleX(1); }
-				to { transform: scaleX(0); }
-			}
-		`;
-		document.head.appendChild(keyframesStyle);
-	}
-
 	const container = document.createElement("div");
 	container.id = "notifications-container";
 	shadowWrapper.wrapper.appendChild(container);

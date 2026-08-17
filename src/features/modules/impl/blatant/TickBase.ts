@@ -1,6 +1,6 @@
 import { Subscribe } from "@/event/Bus";
 import type Cancelable from "@/event/Cancelable";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 
@@ -12,13 +12,7 @@ export default class TickBase extends Mod {
 	private tick = false;
 	// set to `Date.now()` in playerTick
 	#lastBoost = -1;
-	#boostsDelaySetting = this.createSliderSetting(
-		"Boost Delay",
-		150,
-		1,
-		1e3,
-		1,
-	);
+	#boostsDelaySetting = this.createSliderSetting("Boost Delay", 150, 1, 1e3, 1);
 	#boostsSetting = this.createSliderSetting("Boosts", 2, 1, 50, 1);
 
 	get #boostDelay() {
@@ -44,7 +38,7 @@ export default class TickBase extends Mod {
 			this.tick = false;
 			wrap.cancel();
 			for (let i = 0; i < Math.floor(this.#boosts); i++) {
-				Refs.player.fixedUpdate();
+				Miniblox.player.fixedUpdate();
 			}
 		}
 	}
