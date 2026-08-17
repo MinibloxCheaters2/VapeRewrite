@@ -1,6 +1,6 @@
 import { literal } from "@wq2/brigadier-ts";
 import ModuleManager from "@/features/modules/api/ModuleManager";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import dispatcher from "../api/CommandDispatcher";
 
 dispatcher.register(
@@ -8,7 +8,7 @@ dispatcher.register(
 		ModuleManager.modules.forEach((m) => {
 			m.enabled = false;
 		});
-		Refs.chat.addChat({
+		Miniblox.chat.addChat({
 			text: "Disabled all modules!",
 			color: "green",
 		});

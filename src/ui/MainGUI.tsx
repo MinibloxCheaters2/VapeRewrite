@@ -1,4 +1,4 @@
-import { createSignal, For, onCleanup, onMount, Show } from "solid-js";
+import { createEffect, createSignal, For, onCleanup, onMount, Show } from "solid-js";
 import { render } from "solid-js/web";
 import { REAL_CLIENT_NAME } from "@/Client";
 import type HudElement from "@/features/hud/api/BaseHudElement";
@@ -6,39 +6,103 @@ import HudManager from "@/features/hud/api/HudManager";
 import { Category, CategoryInfo } from "@/features/modules/api/Category";
 import type Mod from "@/features/modules/api/Module";
 import ModuleManager from "@/features/modules/api/ModuleManager";
+import { loadedConfig } from "@/features/config/configs";
 import getResourceURL from "@/utils/helpers/cachedResourceURL";
 import { dragHandleAttrName } from "@/utils/mapping/names";
+import { DropdownComponent, SliderComponent, ToggleComponent } from "./components";
+
 import {
-	DropdownComponent,
-	SliderComponent,
-	ToggleComponent,
-} from "./components";
+	blurBackground,
+	guiBindIndicator,
+	guiThemeRainbow,
+	multiKeybinding,
+	notificationsEnabled,
+	rainbowMode,
+	rainbowSpeed,
+	rainbowUpdateRate,
+	scaleValue,
+	setBlurBackground,
+	setGuiBindIndicator,
+	setGuiThemeRainbow,
+	setMultiKeybinding,
+	setNotificationsEnabled,
+	setRainbowMode,
+	setRainbowSpeed,
+	setRainbowUpdateRate,
+	setScaleValue,
+	setShowLegitMode,
+	setShowTooltips,
+	setTeamsByServerEnabled,
+	setToggleAlertEnabled,
+	setUseTeamColor,
+	showLegitMode,
+	showTooltips,
+	teamsByServerEnabled,
+	toggleAlertEnabled,
+	useTeamColor,
+} from "./globalSettings";
 import {
+	categoryWindows,
 	guiVisible,
 	isCategoryWindowVisible,
+	setCategoryWindowPositions,
+	setFriendsPanelVisible,
+	setTargetsPanelVisible,
 	toggleCategoryWindow,
+	toggleLegitWindow,
 } from "./guiState";
+import { LegitWindow } from "./LegitWindow";
 import { CategoryWindow } from "./newClickGUI";
 import { setProfilesPanelVisible } from "./ProfilesPanel";
 import shadowWrapper from "./shadowWrapper";
 
-const COLORS = {
-	main: "rgb(26, 25, 26)",
-	mainLight: "rgb(30, 29, 30)",
-	mainDark: "rgb(24, 23, 24)",
-	text: "rgb(200, 200, 200)",
-	textDark: "rgb(150, 150, 150)",
-	textDarker: "rgb(100, 100, 100)",
-	accent: "rgb(5, 134, 105)",
-	hover: "rgb(30, 29, 30)",
-	divider: "rgba(255, 255, 255, 0.072)",
-};
+function hsvToRgbString(h: number, s: number, v: number): string {
+	const i = Math.floor(h * 6);
+	const f = h * 6 - i;
+	const p = v * (1 - s);
+	const q = v * (1 - f * s);
+	const t = v * (1 - (1 - f) * s);
+	let r: number, g: number, b: number;
+	switch (i % 6) {
+		case 0:
+			r = v;
+			g = t;
+			b = p;
+			break;
+		case 1:
+			r = q;
+			g = v;
+			b = p;
+			break;
+		case 2:
+			r = p;
+			g = v;
+			b = t;
+			break;
+		case 3:
+			r = p;
+			g = q;
+			b = v;
+			break;
+		case 4:
+			r = t;
+			g = p;
+			b = v;
+			break;
+		default:
+			r = v;
+			g = p;
+			b = q;
+	}
+	return `rgb(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)})`;
+}
 
 function MainGUI() {
 	const [position, setPosition] = createSignal({ x: 6, y: 60 });
 	const [dragging, setDragging] = createSignal(false);
 	const [dragOffset, setDragOffset] = createSignal({ x: 0, y: 0 });
 
+	// oxlint-disable-next-line no-unassigned-vars
 	let windowRef: HTMLDivElement | undefined;
 
 	const handlePointerDown = (e: PointerEvent) => {
@@ -96,22 +160,53 @@ function MainGUI() {
 	// Settings state
 	const [showSettings, setShowSettings] = createSignal(false);
 	const [settingsMain, setSettingsMain] = createSignal(true);
-	const [activeSettingsCategory, setActiveSettingsCategory] =
-		createSignal("");
-	const [multiKeybinding, setMultiKeybinding] = createSignal(false);
-	const [teamsByServer, setTeamsByServer] = createSignal("Auto");
-	const [useTeamColor, setUseTeamColor] = createSignal(false);
-	const [blurBackground, setBlurBackground] = createSignal(true);
-	const [guiBindIndicator, setGuiBindIndicator] = createSignal(true);
-	const [showTooltips, setShowTooltips] = createSignal(true);
-	const [showLegitMode, setShowLegitMode] = createSignal(false);
-	const [scaleValue, setScaleValue] = createSignal(1);
-	const [guiThemeRainbow, setGuiThemeRainbow] = createSignal(false);
-	const [rainbowMode, setRainbowMode] = createSignal("Normal");
-	const [rainbowSpeed, setRainbowSpeed] = createSignal(1);
-	const [rainbowUpdateRate, setRainbowUpdateRate] = createSignal(60);
-	const [notifications, setNotifications] = createSignal(true);
-	const [toggleAlert, setToggleAlert] = createSignal(false);
+	const [activeSettingsCategory, setActiveSettingsCategory] = createSignal("");
+	// Settings state (signals imported from globalSettings.ts)
+
+	const blurOverlay = document.createElement("div");
+	blurOverlay.style.cssText =
+		"position:fixed;inset:0;backdrop-filter:blur(24px);pointer-events:none;z-index:10000;";
+	createEffect(() => {
+		const host = shadowWrapper.wrapper;
+		if (guiVisible()) {
+			shadowWrapper.wrapper.appendChild(blurOverlay);
+			host.style.position = "fixed";
+			host.style.inset = "0";
+			host.style.zIndex = "10001";
+			host.style.pointerEvents = "none";
+		} else {
+			blurOverlay.remove();
+			host.style.position = "";
+			host.style.inset = "";
+			host.style.zIndex = "";
+			host.style.pointerEvents = "";
+		}
+	});
+	onCleanup(() => blurOverlay.remove());
+
+	let guiRainbowTimer: ReturnType<typeof setTimeout> | undefined;
+	createEffect(() => {
+		if (guiRainbowTimer !== undefined) {
+			clearTimeout(guiRainbowTimer);
+			guiRainbowTimer = undefined;
+		}
+		if (!guiThemeRainbow() || (!guiVisible() && !ModuleManager.hudManager.stateAccessor())) {
+			return;
+		}
+		const speed = rainbowSpeed();
+		const rate = rainbowUpdateRate();
+		const interval = rate > 0 ? 1000 / rate : 16;
+
+		const tick = () => {
+			const hue = (Date.now() * 0.001 * 0.2 * speed) % 1;
+			shadowWrapper.host.style.setProperty("--vape-accent", hsvToRgbString(hue, 0.9, 1));
+			guiRainbowTimer = setTimeout(tick, interval);
+		};
+		guiRainbowTimer = setTimeout(tick, interval);
+	});
+	onCleanup(() => {
+		if (guiRainbowTimer !== undefined) clearTimeout(guiRainbowTimer);
+	});
 
 	const openSettingsCategory = (name: string) => {
 		setActiveSettingsCategory(name);
@@ -127,71 +222,64 @@ function MainGUI() {
 		setActiveSettingsCategory("");
 	};
 
+	const sortGUI = () => {
+		const visible = Object.keys(categoryWindows()).filter((k) => categoryWindows()[k]);
+		const panelWidth = 220;
+		const panelHeight = 530; // TODO: ts should NOT be hardkobed
+		const gap = 6;
+		const startX = 230;
+		const startY = 60;
+
+		const newPos: Record<string, { x: number; y: number }> = {};
+		let x = startX;
+		let y = startY;
+
+		for (const cat of visible) {
+			newPos[cat] = { x, y };
+			x += panelWidth + gap;
+			if (x >= window.innerWidth - gap) {
+				y += panelHeight;
+				x = startX;
+			}
+		}
+
+		setCategoryWindowPositions((prev) => ({ ...prev, ...newPos }));
+	};
+
 	const toggleHud = (hudClass: new () => HudElement) => {
-		const name = new hudClass().name;
-		const element = HudManager.getHudElements().find(
-			(h) => h.name === name,
-		);
+		const hud = new hudClass();
+		const name = hud.name;
+		const element = HudManager.getHudElements().find((h) => h.name === name);
 		if (element) {
 			HudManager.removeHudElement(element);
 		} else {
-			HudManager.addHudElement(new hudClass());
+			HudManager.addHudElement(hud);
 		}
 	};
 
 	return (
 		<Show when={guiVisible()}>
-			{/* Background blur overlay */}
-			<div
-				style={{
-					position: "fixed",
-					inset: "0",
-					"backdrop-filter": "blur(8px)",
-					"background-color": "rgba(0, 0, 0, 0.3)",
-					"z-index": "9999",
-					"pointer-events": "none",
-				}}
-			/>
-
 			<div
 				ref={windowRef}
+				class="vape-panel"
 				style={{
 					position: "fixed",
 					left: `${position().x}px`,
 					top: `${position().y}px`,
 					width: "220px",
-					"background-color": COLORS.mainDark,
+					"background-color": "var(--vape-main-dark)",
 					"border-radius": "5px",
-					"box-shadow":
-						"0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)",
+					"box-shadow": "0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)",
 					"z-index": "10001",
 					overflow: "hidden",
 					"user-select": "none",
-					"backdrop-filter": "blur(10px)",
 				}}
 				on:pointerdown={handlePointerDown}
 			>
-				{/* Blur background */}
-				<div
-					style={{
-						position: "absolute",
-						inset: "-48px -48px",
-						"backdrop-filter": "blur(24px)",
-						"background-size": "cover",
-						opacity: "0.3",
-						"pointer-events": "none",
-						"z-index": "-1",
-					}}
-				/>
-
-				{/* Header */}
 				<div
 					{...{ [dragHandleAttrName]: "" }}
+					class="vape-header"
 					style={{
-						display: "flex",
-						"align-items": "center",
-						height: "40px",
-						padding: "0 11px",
 						cursor: dragging() ? "grabbing" : "grab",
 					}}
 				>
@@ -202,18 +290,7 @@ function MainGUI() {
 								when={settingsMain()}
 								fallback={
 									<>
-										<button
-											style={{
-												background: "none",
-												border: "none",
-												cursor: "pointer",
-												padding: "0",
-												display: "flex",
-												"align-items": "center",
-											}}
-											type="button"
-											on:click={closeSettingsCategory}
-										>
+										<button class="vape-close-btn" type="button" on:click={closeSettingsCategory}>
 											<img
 												src={getResourceURL("guiback")}
 												alt="Back"
@@ -226,28 +303,16 @@ function MainGUI() {
 										</button>
 										<span
 											style={{
-												color: COLORS.text,
+												color: "var(--vape-text)",
 												"font-size": "14px",
-												"font-family":
-													"Arial, sans-serif",
+												"font-family": "Arial, sans-serif",
 												"margin-left": "10px",
 												flex: "1",
 											}}
 										>
 											{activeSettingsCategory()}
 										</span>
-										<button
-											style={{
-												background: "none",
-												border: "none",
-												cursor: "pointer",
-												padding: "0",
-												display: "flex",
-												"align-items": "center",
-											}}
-											type="button"
-											on:click={closeSettings}
-										>
+										<button class="vape-close-btn" type="button" on:click={closeSettings}>
 											<img
 												src={getResourceURL("close")}
 												alt="Close"
@@ -260,18 +325,7 @@ function MainGUI() {
 									</>
 								}
 							>
-								<button
-									style={{
-										background: "none",
-										border: "none",
-										cursor: "pointer",
-										padding: "0",
-										display: "flex",
-										"align-items": "center",
-									}}
-									type="button"
-									on:click={closeSettings}
-								>
+								<button class="vape-close-btn" type="button" on:click={closeSettings}>
 									<img
 										src={getResourceURL("guiback")}
 										alt="Back"
@@ -284,7 +338,7 @@ function MainGUI() {
 								</button>
 								<span
 									style={{
-										color: COLORS.text,
+										color: "var(--vape-text)",
 										"font-size": "14px",
 										"font-family": "Arial, sans-serif",
 										"margin-left": "10px",
@@ -293,18 +347,7 @@ function MainGUI() {
 								>
 									Settings
 								</span>
-								<button
-									style={{
-										background: "none",
-										border: "none",
-										cursor: "pointer",
-										padding: "0",
-										display: "flex",
-										"align-items": "center",
-									}}
-									type="button"
-									on:click={closeSettings}
-								>
+								<button class="vape-close-btn" type="button" on:click={closeSettings}>
 									<img
 										src={getResourceURL("close")}
 										alt="Close"
@@ -338,18 +381,14 @@ function MainGUI() {
 					</Show>
 				</div>
 
-				{/* Settings button (only in main view) */}
 				<Show when={!showSettings()}>
 					<button
+						class="vape-icon-btn"
 						style={{
 							position: "absolute",
 							top: "0",
 							right: "0",
 							width: "40px",
-							height: "40px",
-							background: "none",
-							border: "none",
-							cursor: "pointer",
 						}}
 						type="button"
 						on:click={() => setShowSettings(true)}
@@ -370,31 +409,18 @@ function MainGUI() {
 				</Show>
 
 				<Show when={!showSettings()}>
-					{/* Divider */}
-					<div
-						style={{
-							height: "1px",
-							"background-color": COLORS.divider,
-						}}
-					/>
+					<div class="vape-divider" />
 
-					{/* Categories */}
 					<div
 						style={{
 							padding: "4px 0",
 						}}
 					>
 						<For each={categoryEntries}>
-							{(entry) => (
-								<CategoryButton
-									category={entry.key}
-									info={entry.info}
-								/>
-							)}
+							{(entry) => <CategoryButton category={entry.key} info={entry.info} />}
 						</For>
 					</div>
 
-					{/* Misc divider */}
 					<div
 						style={{
 							height: "27px",
@@ -404,7 +430,7 @@ function MainGUI() {
 					>
 						<span
 							style={{
-								color: COLORS.textDarker,
+								color: "var(--vape-text-darker)",
 								"font-size": "9px",
 								"font-family": "Arial, sans-serif",
 								"font-weight": "600",
@@ -415,67 +441,42 @@ function MainGUI() {
 							{"\u200A".repeat(10)}MISC
 						</span>
 						<div
+							class="vape-divider"
 							style={{
 								position: "absolute",
 								bottom: "0",
 								left: "0",
 								right: "0",
-								height: "1px",
-								"background-color": COLORS.divider,
 							}}
 						/>
 					</div>
 
-					{/* Misc items */}
 					<div
 						style={{
 							padding: "4px 0",
 						}}
 					>
-						<MiscItem label="Friends" />
+						<MiscItem label="Friends" onClick={() => setFriendsPanelVisible((v) => !v)} />
 						<MiscItem
 							label="Profiles"
-							subText="default"
+							subText={loadedConfig.name}
 							onClick={() => setProfilesPanelVisible(true)}
 						/>
-						<MiscItem label="Targets" />
+						<MiscItem label="Targets" onClick={() => setTargetsPanelVisible((v) => !v)} />
 					</div>
 
-					{/* Bottom bar */}
-					<div
-						style={{
-							position: "relative",
-							height: "36px",
-							"background-color": COLORS.main,
-						}}
-					>
-						<div
-							style={{
-								position: "absolute",
-								top: "0",
-								left: "0",
-								right: "0",
-								height: "1px",
-								"background-color": COLORS.divider,
-							}}
-						/>
+					<div class="vape-bottom-bar">
+						<div class="vape-divider" />
 						<button
+							class="vape-action-btn"
 							style={{
 								position: "absolute",
 								right: "5px",
 								top: "7px",
 								width: "24px",
 								height: "24px",
-								background: overlayHovered()
-									? "rgba(255,255,255,0.06)"
-									: "transparent",
-								border: "none",
+								background: overlayHovered() ? "rgba(255,255,255,0.06)" : "transparent",
 								"border-radius": "50%",
-								cursor: "pointer",
-								display: "flex",
-								"align-items": "center",
-								"justify-content": "center",
-								transition: "background-color 0.16s linear",
 							}}
 							type="button"
 							on:click={() => setOverlaysOpen(true)}
@@ -493,7 +494,6 @@ function MainGUI() {
 						</button>
 					</div>
 
-					{/* Overlays shadow + popup */}
 					<div
 						style={{
 							position: "absolute",
@@ -520,11 +520,9 @@ function MainGUI() {
 								bottom: "0",
 								left: "0",
 								right: "0",
-								"background-color": COLORS.main,
+								"background-color": "var(--vape-main)",
 								"border-radius": "5px",
-								transform: overlaysOpen()
-									? "translateY(0)"
-									: "translateY(100%)",
+								transform: overlaysOpen() ? "translateY(0)" : "translateY(100%)",
 								transition: "transform 0.2s linear",
 							}}
 						>
@@ -548,7 +546,7 @@ function MainGUI() {
 								<span
 									style={{
 										"margin-left": "12px",
-										color: COLORS.text,
+										color: "var(--vape-text)",
 										"font-size": "15px",
 										"font-family": "Arial, sans-serif",
 										flex: "1",
@@ -557,18 +555,7 @@ function MainGUI() {
 									Overlays
 								</span>
 								<button
-									style={{
-										width: "24px",
-										height: "24px",
-										background: "none",
-										border: "none",
-										cursor: "pointer",
-										display: "flex",
-										"align-items": "center",
-										"justify-content": "center",
-										opacity: "0.7",
-										transition: "opacity 0.16s linear",
-									}}
+									class="vape-close-btn"
 									type="button"
 									on:click={() => setOverlaysOpen(false)}
 									on:pointerenter={(e) => {
@@ -588,21 +575,12 @@ function MainGUI() {
 									/>
 								</button>
 							</div>
-							<div
-								style={{
-									height: "1px",
-									"background-color": COLORS.divider,
-								}}
-							/>
+							<div class="vape-divider" />
 							<For each={hudTypes}>
 								{(hudClass) => {
 									const name = new hudClass().name;
-									const [toggleHovered, setToggleHovered] =
-										createSignal(false);
-									const isOn = () =>
-										HudManager.hudElementsAccessor().some(
-											(h) => h.name === name,
-										);
+									const [toggleHovered, setToggleHovered] = createSignal(false);
+									const isOn = () => HudManager.hudElementsAccessor().some((h) => h.name === name);
 									return (
 										<button
 											style={{
@@ -614,26 +592,20 @@ function MainGUI() {
 												display: "flex",
 												"align-items": "center",
 												padding: "0 10px 0 36px",
-												transition:
-													"background-color 0.16s linear",
+												transition: "background-color 0.16s linear",
 											}}
 											type="button"
 											on:click={() => {
 												toggleHud(hudClass);
 											}}
-											on:pointerenter={() =>
-												setToggleHovered(true)
-											}
-											on:pointerleave={() =>
-												setToggleHovered(false)
-											}
+											on:pointerenter={() => setToggleHovered(true)}
+											on:pointerleave={() => setToggleHovered(false)}
 										>
 											<span
 												style={{
-													color: COLORS.text,
+													color: "var(--vape-text)",
 													"font-size": "14px",
-													"font-family":
-														"Arial, sans-serif",
+													"font-family": "Arial, sans-serif",
 													flex: "1",
 													"text-align": "left",
 												}}
@@ -646,13 +618,12 @@ function MainGUI() {
 													width: "22px",
 													height: "12px",
 													"background-color": isOn()
-														? COLORS.accent
+														? "var(--vape-accent)"
 														: toggleHovered()
 															? "rgb(111, 110, 111)"
 															: "rgb(58, 57, 58)",
 													"border-radius": "6px",
-													transition:
-														"background-color 0.16s linear",
+													transition: "background-color 0.16s linear",
 													"flex-shrink": "0",
 												}}
 											>
@@ -660,16 +631,12 @@ function MainGUI() {
 													style={{
 														position: "absolute",
 														top: "2px",
-														left: isOn()
-															? "12px"
-															: "2px",
+														left: isOn() ? "12px" : "2px",
 														width: "8px",
 														height: "8px",
-														"background-color":
-															COLORS.main,
+														"background-color": "var(--vape-main)",
 														"border-radius": "50%",
-														transition:
-															"left 0.16s linear",
+														transition: "left 0.16s linear",
 													}}
 												/>
 											</div>
@@ -681,14 +648,8 @@ function MainGUI() {
 					</div>
 				</Show>
 
-				{/* Settings view */}
 				<Show when={showSettings()}>
-					<div
-						style={{
-							height: "1px",
-							"background-color": COLORS.divider,
-						}}
-					/>
+					<div class="vape-divider" />
 					<div
 						style={{
 							"max-height": "480px",
@@ -699,43 +660,20 @@ function MainGUI() {
 							when={settingsMain()}
 							fallback={
 								<>
-									<Show
-										when={
-											activeSettingsCategory() ===
-											"General"
-										}
-									>
+									<Show when={activeSettingsCategory() === "General"}>
 										<ToggleComponent
 											name="Enable Multi-Keybinding"
 											enabled={multiKeybinding()}
 											onChange={setMultiKeybinding}
 										/>
-										<ActionButton
-											label="Self Destruct"
-											onClick={() => {}}
-										/>
-										<ActionButton
-											label="Re-inject"
-											disabled
-										/>
+										<ActionButton label="Self Destruct" onClick={() => {}} />
+										<ActionButton label="Re-inject" disabled />
 									</Show>
-									<Show
-										when={
-											activeSettingsCategory() ===
-											"Modules"
-										}
-									>
-										<DropdownComponent
+									<Show when={activeSettingsCategory() === "Modules"}>
+										<ToggleComponent
 											name="Teams by server"
-											value={teamsByServer()}
-											options={[
-												"Auto",
-												"Hypixel",
-												"Minemen",
-											]}
-											onChange={(v) =>
-												setTeamsByServer(v as string)
-											}
+											enabled={teamsByServerEnabled()}
+											onChange={setTeamsByServerEnabled}
 										/>
 										<ToggleComponent
 											name="Use team color"
@@ -743,11 +681,7 @@ function MainGUI() {
 											onChange={setUseTeamColor}
 										/>
 									</Show>
-									<Show
-										when={
-											activeSettingsCategory() === "GUI"
-										}
-									>
+									<Show when={activeSettingsCategory() === "GUI"}>
 										<ToggleComponent
 											name="Blur background"
 											enabled={blurBackground()}
@@ -774,16 +708,14 @@ function MainGUI() {
 												"align-items": "center",
 												height: "40px",
 												padding: "0 12px",
-												"background-color":
-													COLORS.mainDark,
+												"background-color": "var(--vape-main-dark)",
 											}}
 										>
 											<span
 												style={{
-													color: COLORS.textDarker,
+													color: "var(--vape-text-darker)",
 													"font-size": "14px",
-													"font-family":
-														"Arial, sans-serif",
+													"font-family": "Arial, sans-serif",
 												}}
 											>
 												Auto-rescale
@@ -791,10 +723,9 @@ function MainGUI() {
 											<div style={{ flex: "1" }} />
 											<span
 												style={{
-													color: COLORS.textDarker,
+													color: "var(--vape-text-darker)",
 													"font-size": "11px",
-													"font-family":
-														"Arial, sans-serif",
+													"font-family": "Arial, sans-serif",
 													opacity: "0.5",
 												}}
 											>
@@ -812,14 +743,8 @@ function MainGUI() {
 										<DropdownComponent
 											name="Rainbow Mode"
 											value={rainbowMode()}
-											options={[
-												"Normal",
-												"Gradient",
-												"Retro",
-											]}
-											onChange={(v) =>
-												setRainbowMode(v as string)
-											}
+											options={["Normal", "Gradient", "Retro"]}
+											onChange={(v) => setRainbowMode(v as string)}
 										/>
 										<SliderComponent
 											name="Rainbow Speed"
@@ -837,30 +762,19 @@ function MainGUI() {
 											step={1}
 											onChange={setRainbowUpdateRate}
 										/>
-										<ActionButton
-											label="Reset GUI positions"
-											onClick={() => {}}
-										/>
-										<ActionButton
-											label="Sort GUI"
-											onClick={() => {}}
-										/>
+										<ActionButton label="Reset GUI positions" onClick={() => {}} />
+										<ActionButton label="Sort GUI" onClick={sortGUI} />
 									</Show>
-									<Show
-										when={
-											activeSettingsCategory() ===
-											"Notifications"
-										}
-									>
+									<Show when={activeSettingsCategory() === "Notifications"}>
 										<ToggleComponent
 											name="Notifications"
-											enabled={notifications()}
-											onChange={setNotifications}
+											enabled={notificationsEnabled()}
+											onChange={setNotificationsEnabled}
 										/>
 										<ToggleComponent
 											name="Toggle alert"
-											enabled={toggleAlert()}
-											onChange={setToggleAlert}
+											enabled={toggleAlertEnabled()}
+											onChange={setToggleAlertEnabled}
 										/>
 									</Show>
 								</>
@@ -874,20 +788,14 @@ function MainGUI() {
 								title="Modules"
 								onClick={() => openSettingsCategory("Modules")}
 							/>
-							<SettingsCategoryButton
-								title="GUI"
-								onClick={() => openSettingsCategory("GUI")}
-							/>
+							<SettingsCategoryButton title="GUI" onClick={() => openSettingsCategory("GUI")} />
 							<SettingsCategoryButton
 								title="Notifications"
-								onClick={() =>
-									openSettingsCategory("Notifications")
-								}
+								onClick={() => openSettingsCategory("Notifications")}
 							/>
 							<div
+								class="vape-divider"
 								style={{
-									height: "1px",
-									"background-color": COLORS.divider,
 									margin: "8px 0",
 								}}
 							/>
@@ -901,7 +809,7 @@ function MainGUI() {
 							>
 								<span
 									style={{
-										color: COLORS.text,
+										color: "var(--vape-text)",
 										"font-size": "14px",
 										"font-family": "Arial, sans-serif",
 										flex: "1",
@@ -915,7 +823,7 @@ function MainGUI() {
 										height: "24px",
 										"border-radius": "4px",
 										border: "1px solid rgba(255,255,255,0.2)",
-										"background-color": COLORS.accent,
+										"background-color": "var(--vape-accent)",
 										cursor: "pointer",
 									}}
 									type="button"
@@ -937,7 +845,7 @@ function MainGUI() {
 							>
 								<span
 									style={{
-										color: COLORS.textDark,
+										color: "var(--vape-text-dark)",
 										"font-size": "14px",
 										"font-family": "Arial, sans-serif",
 										flex: "1",
@@ -946,17 +854,12 @@ function MainGUI() {
 									Rebind GUI
 								</span>
 								<button
+									class="vape-icon-btn"
 									style={{
 										width: "20px",
 										height: "21px",
-										"background-color":
-											"rgba(255,255,255,0.08)",
-										border: "none",
+										"background-color": "rgba(255,255,255,0.08)",
 										"border-radius": "4px",
-										cursor: "pointer",
-										display: "flex",
-										"align-items": "center",
-										"justify-content": "center",
 									}}
 									type="button"
 									title="Change keybind"
@@ -977,20 +880,18 @@ function MainGUI() {
 				</Show>
 			</div>
 
-			{/* Category overlay windows */}
 			<For each={categoryEntries}>
 				{(entry) => (
 					<Show when={isCategoryWindowVisible(entry.key)}>
-						<CategoryWindow
-							category={entry.key}
-							info={entry.info}
-						/>
+						<CategoryWindow category={entry.key} info={entry.info} />
 					</Show>
 				)}
 			</For>
 
-			{/* Search panel */}
+			<LegitWindow />
+
 			<div
+				class="vape-panel"
 				style={{
 					position: "fixed",
 					top: "13px",
@@ -998,25 +899,13 @@ function MainGUI() {
 					transform: "translateX(-50%)",
 					width: "220px",
 					"max-height": "437px",
-					"background-color": COLORS.mainDark,
+					"background-color": "var(--vape-main-dark)",
 					"border-radius": "5px",
-					"box-shadow":
-						"0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)",
+					"box-shadow": "0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)",
 					"z-index": "10002",
 					overflow: "hidden",
-					"backdrop-filter": "blur(10px)",
 				}}
 			>
-				<div
-					style={{
-						position: "absolute",
-						inset: "-48px -48px",
-						"backdrop-filter": "blur(24px)",
-						opacity: "0.3",
-						"pointer-events": "none",
-						"z-index": "-1",
-					}}
-				/>
 				<div
 					style={{
 						display: "flex",
@@ -1025,37 +914,39 @@ function MainGUI() {
 						padding: "0 8px",
 					}}
 				>
-					<button
-						style={{
-							width: "29px",
-							height: "16px",
-							background: "none",
-							border: "none",
-							cursor: "pointer",
-							padding: "0",
-						}}
-						type="button"
-						title="Legit mode"
-					>
-						<img
-							src={getResourceURL("legit")}
-							alt="Legit"
+					<Show when={showLegitMode()}>
+						<button
+							class="vape-icon-btn"
 							style={{
 								width: "29px",
 								height: "16px",
+								padding: "0",
+							}}
+							type="button"
+							title="Legit mode"
+							on:click={() => toggleLegitWindow()}
+						>
+							<img
+								src={getResourceURL("legit")}
+								alt="Legit"
+								style={{
+									width: "29px",
+									height: "16px",
+								}}
+							/>
+						</button>
+						<div
+							style={{
+								width: "2px",
+								height: "12px",
+								"background-color": "rgba(255,255,255,0.14)",
+								"margin-left": "6px",
+								"flex-shrink": "0",
 							}}
 						/>
-					</button>
-					<div
-						style={{
-							width: "2px",
-							height: "12px",
-							"background-color": "rgba(255,255,255,0.14)",
-							"margin-left": "6px",
-							"flex-shrink": "0",
-						}}
-					/>
+					</Show>
 					<input
+						id="search"
 						type="text"
 						value={searchText()}
 						on:input={(e) => setSearchText(e.currentTarget.value)}
@@ -1068,7 +959,7 @@ function MainGUI() {
 							background: "none",
 							border: "none",
 							outline: "none",
-							color: COLORS.text,
+							color: "var(--vape-text)",
 							"font-size": "12px",
 							"font-family": "Arial, sans-serif",
 							padding: "0 8px",
@@ -1076,12 +967,7 @@ function MainGUI() {
 					/>
 				</div>
 				<Show when={searchText() !== ""}>
-					<div
-						style={{
-							height: "1px",
-							"background-color": "rgba(255,255,255,0.072)",
-						}}
-					/>
+					<div class="vape-divider" />
 					<div
 						style={{
 							"max-height": "398px",
@@ -1090,9 +976,7 @@ function MainGUI() {
 					>
 						<For
 							each={ModuleManager.modules.filter((m) =>
-								m.name
-									.toLowerCase()
-									.includes(searchText().toLowerCase()),
+								m.name.toLowerCase().includes(searchText().toLowerCase()),
 							)}
 						>
 							{(mod) => <SearchResultItem mod={mod} />}
@@ -1112,7 +996,7 @@ function SearchResultItem(props: { mod: Mod }) {
 			style={{
 				width: "100%",
 				height: "32px",
-				background: hovered() ? COLORS.mainLight : "transparent",
+				background: hovered() ? "var(--vape-main-light)" : "transparent",
 				border: "none",
 				cursor: "pointer",
 				display: "flex",
@@ -1124,18 +1008,10 @@ function SearchResultItem(props: { mod: Mod }) {
 			on:pointerenter={() => setHovered(true)}
 			on:pointerleave={() => setHovered(false)}
 			on:click={() => props.mod.toggle()}
-			on:contextmenu={(e: PointerEvent) => {
-				e.preventDefault();
-				toggleCategoryWindow(
-					Category[props.mod.category]?.toLowerCase(),
-				);
-			}}
 		>
 			<span
 				style={{
-					color: props.mod.stateAccessor()
-						? COLORS.text
-						: COLORS.textDark,
+					color: props.mod.stateAccessor() ? "var(--vape-text)" : "var(--vape-text-dark)",
 					"font-size": "13px",
 					"font-family": "Arial, sans-serif",
 					flex: "1",
@@ -1148,7 +1024,7 @@ function SearchResultItem(props: { mod: Mod }) {
 			<Show when={props.mod.tagAccessor()}>
 				<span
 					style={{
-						color: COLORS.textDarker,
+						color: "var(--vape-text-darker)",
 						"font-size": "11px",
 						"margin-right": "8px",
 					}}
@@ -1162,8 +1038,8 @@ function SearchResultItem(props: { mod: Mod }) {
 					height: "8px",
 					"border-radius": "50%",
 					"background-color": props.mod.stateAccessor()
-						? COLORS.accent
-						: COLORS.textDarker,
+						? "var(--vape-accent)"
+						: "var(--vape-text-darker)",
 					transition: "background-color 0.16s linear",
 					"flex-shrink": "0",
 				}}
@@ -1182,19 +1058,19 @@ function CategoryButton(props: { category: string; info: CategoryInfo }) {
 		toggleCategoryWindow(props.category);
 	};
 
+	const iconFilter = () => {
+		if (expanded()) return "brightness(0) invert(0.53) sepia(1) saturate(500%) hue-rotate(149deg)";
+		if (hovered()) return "brightness(0.78)";
+		return "brightness(0.62)";
+	};
+
+	const iconSize = props.info.data.size;
+
 	return (
 		<button
+			class="vape-btn-row"
 			style={{
-				width: "100%",
-				height: "40px",
-				background: hovered() ? COLORS.mainLight : COLORS.main,
-				border: "none",
-				cursor: "pointer",
-				display: "flex",
-				"align-items": "center",
-				padding: "0 13px",
-				transition: "background-color 0.16s linear",
-				position: "relative",
+				background: hovered() || expanded() ? "var(--vape-main-light)" : "var(--vape-main)",
 			}}
 			on:pointerenter={() => setHovered(true)}
 			on:pointerleave={() => setHovered(false)}
@@ -1202,15 +1078,25 @@ function CategoryButton(props: { category: string; info: CategoryInfo }) {
 			on:contextmenu={handleContextMenu}
 			type="button"
 		>
-			<img src={props.info.iconURL} alt={props.category} />
+			<img
+				src={props.info.iconURL}
+				alt={props.category}
+				style={{
+					width: `${iconSize[0]}px`,
+					height: `${iconSize[1]}px`,
+					"margin-left": "13px",
+					filter: iconFilter(),
+					transition: "filter 0.16s linear",
+				}}
+			/>
 			<span
 				style={{
 					"margin-left": "12px",
 					color: expanded()
-						? COLORS.accent
+						? "var(--vape-accent)"
 						: hovered()
-							? COLORS.text
-							: COLORS.textDark,
+							? "var(--vape-text)"
+							: "var(--vape-text-dark)",
 					"font-size": "14px",
 					"font-family": "Arial, sans-serif",
 					flex: "1",
@@ -1226,6 +1112,7 @@ function CategoryButton(props: { category: string; info: CategoryInfo }) {
 				style={{
 					width: "4px",
 					height: "8px",
+					filter: "brightness(0) invert(0.47)",
 					transform: expanded() ? "translateX(6px)" : "translateX(0)",
 					transition: "transform 0.16s linear",
 				}}
@@ -1234,25 +1121,14 @@ function CategoryButton(props: { category: string; info: CategoryInfo }) {
 	);
 }
 
-function MiscItem(props: {
-	label: string;
-	subText?: string;
-	onClick?: () => void;
-}) {
+function MiscItem(props: { label: string; subText?: string; onClick?: () => void }) {
 	const [hovered, setHovered] = createSignal(false);
 
 	return (
 		<button
+			class="vape-btn-row"
 			style={{
-				width: "100%",
-				height: "40px",
-				background: hovered() ? COLORS.mainLight : COLORS.main,
-				border: "none",
-				cursor: "pointer",
-				display: "flex",
-				"align-items": "center",
-				padding: "0 13px",
-				transition: "background-color 0.16s linear",
+				background: hovered() ? "var(--vape-main-light)" : "var(--vape-main)",
 			}}
 			type="button"
 			on:pointerenter={() => setHovered(true)}
@@ -1261,7 +1137,7 @@ function MiscItem(props: {
 		>
 			<span
 				style={{
-					color: hovered() ? COLORS.text : COLORS.textDark,
+					color: hovered() ? "var(--vape-text)" : "var(--vape-text-dark)",
 					"font-size": "14px",
 					"font-family": "Arial, sans-serif",
 					"text-align": "left",
@@ -1274,7 +1150,7 @@ function MiscItem(props: {
 			<Show when={props.subText}>
 				<span
 					style={{
-						color: COLORS.textDarker,
+						color: "var(--vape-text-darker)",
 						"font-size": "11px",
 						"font-family": "Arial, sans-serif",
 					}}
@@ -1286,39 +1162,21 @@ function MiscItem(props: {
 	);
 }
 
-function ActionButton(props: {
-	label: string;
-	onClick?: () => void;
-	disabled?: boolean;
-}) {
+function ActionButton(props: { label: string; onClick?: () => void; disabled?: boolean }) {
 	const [hovered, setHovered] = createSignal(false);
 
 	return (
 		<div
+			class="vape-action-wrap"
 			style={{
-				display: "flex",
-				"justify-content": "center",
-				padding: "4px 10px",
 				opacity: props.disabled ? "0.4" : "1",
 				"pointer-events": props.disabled ? "none" : "auto",
 			}}
 		>
 			<button
+				class="vape-action-btn"
 				style={{
-					width: "200px",
-					height: "31px",
-					background: hovered()
-						? "rgba(255,255,255,0.0875)"
-						: "rgba(255,255,255,0.05)",
-					border: "none",
-					"border-radius": "4px",
-					cursor: "pointer",
-					display: "flex",
-					"align-items": "center",
-					"justify-content": "center",
-					"box-sizing": "border-box",
-					padding: "2px 10px",
-					transition: "background-color 0.16s linear",
+					background: hovered() ? "rgba(255,255,255,0.0875)" : "rgba(255,255,255,0.05)",
 				}}
 				type="button"
 				on:pointerenter={() => setHovered(true)}
@@ -1327,7 +1185,7 @@ function ActionButton(props: {
 			>
 				<span
 					style={{
-						color: COLORS.text,
+						color: "var(--vape-text)",
 						"font-size": "12px",
 						"font-family": "Arial, sans-serif",
 						"border-radius": "4px",
@@ -1343,25 +1201,14 @@ function ActionButton(props: {
 	);
 }
 
-function SettingsCategoryButton(props: {
-	title: string;
-	onClick: () => void;
-	subText?: string;
-}) {
+function SettingsCategoryButton(props: { title: string; onClick: () => void; subText?: string }) {
 	const [hovered, setHovered] = createSignal(false);
 
 	return (
 		<button
+			class="vape-btn-row"
 			style={{
-				width: "100%",
-				height: "40px",
-				background: hovered() ? COLORS.mainLight : "transparent",
-				border: "none",
-				cursor: "pointer",
-				display: "flex",
-				"align-items": "center",
-				padding: "0 12px",
-				transition: "background-color 0.16s linear",
+				background: hovered() ? "var(--vape-main-light)" : "transparent",
 			}}
 			type="button"
 			on:pointerenter={() => setHovered(true)}
@@ -1370,7 +1217,7 @@ function SettingsCategoryButton(props: {
 		>
 			<span
 				style={{
-					color: COLORS.text,
+					color: "var(--vape-text)",
 					"font-size": "14px",
 					"font-family": "Arial, sans-serif",
 					flex: "1",
@@ -1382,7 +1229,7 @@ function SettingsCategoryButton(props: {
 			<Show when={props.subText}>
 				<span
 					style={{
-						color: COLORS.textDarker,
+						color: "var(--vape-text-darker)",
 						"font-size": "11px",
 						"font-family": "Arial, sans-serif",
 						"margin-right": "8px",
@@ -1397,7 +1244,7 @@ function SettingsCategoryButton(props: {
 				style={{
 					width: "4px",
 					height: "8px",
-					filter: "brightness(0.55)",
+					filter: "brightness(0) invert(0.47)",
 				}}
 			/>
 		</button>

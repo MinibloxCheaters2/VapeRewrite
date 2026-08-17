@@ -9,9 +9,7 @@ import {
 import type Mod from "@/features/modules/api/Module";
 import ModuleManager, { P } from "@/features/modules/api/ModuleManager";
 
-export const MODULE_NOT_FOUND = new CommandErrorType(
-	(found) => `Module "${found}" not found`,
-);
+export const MODULE_NOT_FOUND = new CommandErrorType((found) => `Module "${found}" not found`);
 
 export default class ModuleArgumentType extends ArgumentType<Mod> {
 	listSuggestions(

@@ -6,8 +6,8 @@
  */
 
 import { Subscribe } from "@/event/Bus";
-import Refs from "@/utils/helpers/refs";
-import { c2s } from "@/utils/network/packetRefs";
+import PacketRefs from "@/utils/network/packetRefs";
+import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 
@@ -29,14 +29,14 @@ export default class Test extends Mod {
 	}
 
 	// would use SubscribeAsync but tick gets fired too often...
-	@Subscribe("gameTick")
+	@Subscribe("playerTick")
 	private onTick() {
 		if (this.#waitCount > 0) {
 			this.#waitCount--;
 			return;
 		}
 		for (let i = 0; i < this.#times; i++) {
-			Refs.ClientSocket.sendPacket(new (c2s("SPacketUseItem"))());
+			Miniblox.ClientSocket.sendPacket(new PacketRefs.s.SPacketUseItem());
 		}
 		this.#waitCount = this.#delay;
 	}

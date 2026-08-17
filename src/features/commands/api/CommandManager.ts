@@ -9,4 +9,3 @@ import "../impl/Toggle.ts";
 import "../impl/Panic.ts";
 import "../impl/Say.ts";
 import "../impl/Clips.ts";
-import "../impl/PositionalLocator.ts";

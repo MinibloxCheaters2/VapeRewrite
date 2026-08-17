@@ -1,7 +1,9 @@
 import "./meta.js?userscript-metadata";
-import "./exposedO";
-import "./interop";
-import "./hooks/index";
+import "./exposed";
+import "./hooks";
+import "./utils/refs";
+import "./utils/network/WasmTest";
+import "./hooks/init";
 import "./ui/app";
 import "./features/commands/api/CommandManager";
 import "./features/commands/Listener";

@@ -3,16 +3,14 @@
  * @module
  */
 import type { DumpKey } from "@/hooks/dump";
-import { MATCHED_DUMPS } from "@/hooks/replacement";
+import { MATCHED_DUMPS } from "@/hooks/gameScript";
 import initOrR from "../helpers/initOrR";
 import type { Mapping } from "../helpers/remapProxy";
 
 function ofDumps<K extends DumpKey>(...ks: K[]): Record<K, string> {
 	return Object.fromEntries(
-		ks
-			.map((k) => [MATCHED_DUMPS[k], k] as const)
-			.filter(([k]) => k !== undefined),
-	);
+		ks.map((k) => [MATCHED_DUMPS[k], k] as const).filter(([k]) => k !== undefined),
+	) as unknown as Record<K, string>;
 }
 
 export default new (class Mappings {
@@ -21,21 +19,39 @@ export default new (class Mappings {
 	#world?: Mapping;
 	#ClientEntityPlayer?: Mapping;
 	#ItemArmor?: Mapping;
+	#SkinManager: Mapping;
 	get playerController() {
-		return initOrR(this.#playerController, () => ofDumps("windowClick"));
+		return initOrR(this.#playerController, () =>
+			ofDumps("windowClick", "sendUseItem", "onPlayerRightClick"),
+		);
 	}
 	get playerControllerMP() {
 		return initOrR(this.#playerControllerMP, () => ofDumps("syncItem"));
 	}
 	get world() {
-		return initOrR(this.#world, () => ofDumps("entities"));
+		return initOrR(this.#world, () => ofDumps());
 	}
 	get ItemArmor() {
 		return initOrR(this.#ItemArmor, () => ofDumps("damageReduceAmount"));
 	}
+	get SkinManager() {
+		return initOrR(this.#SkinManager, () => ofDumps());
+	}
 	get ClientEntityPlayer() {
 		return initOrR(this.#ClientEntityPlayer, () =>
-			ofDumps("moveForward", "moveStrafe", "lastReportedYaw", "attack"),
+			ofDumps(
+				"moveForward",
+				"moveStrafe",
+				"lastReportedYaw",
+				"attack",
+				"getEyePos",
+				"getHorizontalFacing",
+				"getFlag",
+				"setFlag",
+				"updatePlayerMoveState",
+				"applyInput",
+				"onPlayerUpdate",
+			),
 		);
 	}
 })();

@@ -11,12 +11,8 @@ export default class FilterBypass extends Mod {
 	@Subscribe("sendPacket")
 	public editMessage(pkt: CancelableWrapper<C2SPacket>) {
 		if ("text" in pkt.data && !pkt.data.text.startsWith("/")) {
-			// "(www.roblox.com) <message here>" filter bypass method ahh
-			// (yes, that is for Roblox, it apparently was a private method, and I don't know if it got patched.)
-			pkt.data.text = pkt.data.text
-				.split(" ")
-				.map((w) => `${w.charAt(0)}\\${w.slice(1)}`)
-				.join(" ");
+			// https://unicode-explorer.com/c/202E
+			pkt.data.text = `\u{202E}${pkt.data.text.split("").reverse().join("")}`;
 		}
 	}
 }

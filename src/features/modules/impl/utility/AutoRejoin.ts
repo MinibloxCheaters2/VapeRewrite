@@ -1,18 +1,18 @@
 import { Subscribe } from "@wq2/event-bus";
-import type { S2CPacket } from "@wq2/miniblox-sdk";
 import type CancelableWrapper from "@/event/CancelableWrapper";
-import { s2c } from "@/utils";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
+import { isS2C } from "@/utils";
+import { S2CData } from "@/event/Events";
 
 export default class AutoRejoin extends Mod {
 	name = "AutoRejoin";
 	category = Category.UTILITY;
 	@Subscribe("receivePacket")
-	private lol({ data: pkt }: CancelableWrapper<S2CPacket>) {
-		if (pkt instanceof s2c("CPacketDisconnect")) {
-			Refs.game.connect(Refs.game.serverInfo.serverId);
+	private lol({ data: pkt }: CancelableWrapper<S2CData>) {
+		if (isS2C("CPacketDisconnect", pkt)) {
+			Miniblox.game.connect(Miniblox.game.serverInfo.serverId);
 		}
 	}
 }

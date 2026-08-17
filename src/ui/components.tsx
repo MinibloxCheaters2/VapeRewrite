@@ -2,19 +2,6 @@ import { createSignal, For, Show } from "solid-js";
 import { getName, type ModeLike } from "@/features/config/Settings";
 import getResourceURL from "@/utils/helpers/cachedResourceURL";
 
-const COLORS = {
-	main: "rgb(26, 25, 26)",
-	mainLight: "rgb(30, 29, 30)",
-	mainDark: "rgb(24, 23, 24)",
-	text: "rgb(200, 200, 200)",
-	textDark: "rgb(150, 150, 150)",
-	textDarker: "rgb(100, 100, 100)",
-	accent: "rgb(5, 134, 105)",
-	hover: "rgb(30, 29, 30)",
-	divider: "rgba(255, 255, 255, 0.072)",
-	dividerDark: "rgba(48, 48, 48, 0.52)",
-};
-
 // Toggle component
 export function ToggleComponent(props: {
 	name: string;
@@ -26,53 +13,25 @@ export function ToggleComponent(props: {
 
 	return (
 		<div
+			class="vape-row"
 			style={{
-				display: "flex",
-				"align-items": "center",
-				height: "40px",
-				padding: "0 12px",
-				"background-color": hovered()
-					? COLORS.mainLight
-					: COLORS.mainDark,
-				cursor: "pointer",
-				transition: "background-color 0.16s linear",
+				"--row-bg": hovered() ? "var(--vape-main-light)" : "var(--vape-main-dark)",
 			}}
 			on:pointerenter={() => setHovered(true)}
 			on:pointerleave={() => setHovered(false)}
 			on:click={() => props.onChange(!props.enabled)}
 		>
-			<span
-				style={{
-					color: COLORS.textDark,
-					"font-size": "14px",
-					flex: "1",
-					"font-family": "Arial, sans-serif",
-				}}
-			>
-				{props.name}
-			</span>
+			<span class="vape-label">{props.name}</span>
 			<div
+				class="vape-toggle-track"
 				style={{
-					width: "32px",
-					height: "18px",
-					"background-color": props.enabled
-						? COLORS.accent
-						: "rgba(255, 255, 255, 0.08)",
-					"border-radius": "9px",
-					position: "relative",
-					transition: "background-color 0.16s linear",
+					"--toggle-bg": props.enabled ? "var(--vape-accent)" : "rgba(255, 255, 255, 0.08)",
 				}}
 			>
 				<div
+					class="vape-toggle-knob"
 					style={{
-						width: "14px",
-						height: "14px",
-						"background-color": COLORS.text,
-						"border-radius": "50%",
-						position: "absolute",
-						top: "2px",
-						left: props.enabled ? "16px" : "2px",
-						transition: "left 0.16s linear",
+						"--toggle-knob-left": props.enabled ? "16px" : "2px",
 					}}
 				/>
 			</div>
@@ -94,6 +53,7 @@ export function SliderComponent(props: {
 	const [dragging, setDragging] = createSignal(false);
 	const [hovered, setHovered] = createSignal(false);
 
+	// oxlint-disable-next-line no-unassigned-vars
 	let sliderRef: HTMLDivElement | undefined;
 
 	const handlePointerDown = (e: PointerEvent) => {
@@ -114,10 +74,7 @@ export function SliderComponent(props: {
 	const updateValue = (e: PointerEvent) => {
 		if (!sliderRef) return;
 		const rect = sliderRef.getBoundingClientRect();
-		const percent = Math.max(
-			0,
-			Math.min(1, (e.clientX - rect.left) / rect.width),
-		);
+		const percent = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
 		const newValue = props.min + percent * (props.max - props.min);
 		props.onChange(Math.round(newValue * 100) / 100);
 	};
@@ -125,87 +82,27 @@ export function SliderComponent(props: {
 	document.addEventListener("pointermove", handlePointerMove);
 	document.addEventListener("pointerup", handlePointerUp);
 
-	const percentage = () =>
-		((props.value - props.min) / (props.max - props.min)) * 100;
+	const percentage = () => ((props.value - props.min) / (props.max - props.min)) * 100;
 
 	return (
 		<div
-			style={{
-				height: "50px",
-				padding: "0 12px",
-				"background-color": COLORS.mainDark,
-			}}
+			class="vape-setting-row"
 			on:pointerenter={() => setHovered(true)}
 			on:pointerleave={() => setHovered(false)}
 		>
-			<div
-				style={{
-					display: "flex",
-					"justify-content": "space-between",
-					"align-items": "center",
-					height: "30px",
-				}}
-			>
-				<span
-					style={{
-						color: COLORS.textDark,
-						"font-size": "11px",
-						"font-family": "Arial, sans-serif",
-					}}
-				>
-					{props.name}
-				</span>
-				{/*allows the value to go out of bounds if the user really needs a specific value. this is a cool feature I wish more clients had.*/}
+			<div class="vape-slider-row">
+				<span class="vape-label-sm">{props.name}</span>
 				<input
 					type="number"
-					style={{
-						color: COLORS.textDark,
-						"background-color": "transparent",
-						"font-size": "11px",
-						"font-family": "Arial, sans-serif",
-						width: "45%",
-						"text-align": "right",
-						"margin-top": "2px",
-						border: "none",
-					}}
+					class="vape-slider-input"
 					value={props.value}
 					alt={props.tooltip}
 					onChange={(e) => props.onChange(e.target.valueAsNumber)}
 				/>
-				<Show when={props.unit}>
-					{(unit) => (
-						<span
-							style={{
-								color: COLORS.textDark,
-								"font-size": "11px",
-								"font-family": "Arial, sans-serif",
-							}}
-						>
-							{unit()}
-						</span>
-					)}
-				</Show>
+				<Show when={props.unit}>{(unit) => <span class="vape-label-sm">{unit()}</span>}</Show>
 			</div>
-			<div
-				ref={sliderRef}
-				style={{
-					position: "relative",
-					height: "2px",
-					"background-color": "rgba(255, 255, 255, 0.1)",
-					cursor: "pointer",
-				}}
-				on:pointerdown={handlePointerDown}
-			>
-				<div
-					style={{
-						position: "absolute",
-						left: "0",
-						top: "0",
-						width: `${Math.max(4, percentage())}%`,
-						height: "100%",
-						"background-color": COLORS.accent,
-					}}
-				>
+			<div ref={sliderRef} class="vape-slider-wrap" on:pointerdown={handlePointerDown}>
+				<div class="vape-slider-fill" style={{ width: `${Math.max(4, percentage())}%` }}>
 					<div
 						style={{
 							position: "absolute",
@@ -214,22 +111,16 @@ export function SliderComponent(props: {
 							transform: "translateY(-50%)",
 							width: "24px",
 							height: "4px",
-							"background-color": COLORS.mainDark,
+							"background-color": "var(--vape-main-dark)",
 							display: "flex",
 							"align-items": "center",
 							"justify-content": "center",
 						}}
 					>
 						<div
+							class="vape-slider-thumb"
 							style={{
-								width:
-									hovered() || dragging() ? "16px" : "14px",
-								height:
-									hovered() || dragging() ? "16px" : "14px",
-								"background-color": COLORS.text,
-								"border-radius": "50%",
-								transition:
-									"width 0.16s linear, height 0.16s linear",
+								"--thumb-size": hovered() || dragging() ? "16px" : "14px",
 							}}
 						/>
 					</div>
@@ -253,50 +144,24 @@ export function DropdownComponent(props: {
 
 	const toggleExpanded = () => {
 		setExpanded(!expanded());
-		// Notify parent to update height
 		if (props.onExpandChange) {
 			requestAnimationFrame(() => props.onExpandChange?.());
 		}
 	};
 
 	return (
-		<div style={{ "background-color": COLORS.mainDark }}>
+		<div style={{ "background-color": "var(--vape-main-dark)" }}>
 			<div
+				class="vape-row"
 				style={{
-					display: "flex",
-					"align-items": "center",
-					height: "40px",
-					padding: "0 12px",
-					"background-color": hovered()
-						? COLORS.mainLight
-						: COLORS.mainDark,
-					cursor: "pointer",
-					transition: "background-color 0.16s linear",
+					"--row-bg": hovered() ? "var(--vape-main-light)" : "var(--vape-main-dark)",
 				}}
 				on:pointerenter={() => setHovered(true)}
 				on:pointerleave={() => setHovered(false)}
 				on:click={toggleExpanded}
 			>
-				<span
-					style={{
-						color: COLORS.textDark,
-						"font-size": "14px",
-						flex: "1",
-						"font-family": "Arial, sans-serif",
-					}}
-				>
-					{props.name}
-				</span>
-				<span
-					style={{
-						color: COLORS.textDarker,
-						"font-size": "14px",
-						"margin-right": "8px",
-						"font-family": "Arial, sans-serif",
-					}}
-				>
-					{getName(props.value)}
-				</span>
+				<span class="vape-label">{props.name}</span>
+				<span class="vape-value">{getName(props.value)}</span>
 				<img
 					src={getResourceURL("contract")}
 					alt=""
@@ -304,61 +169,43 @@ export function DropdownComponent(props: {
 						width: "9px",
 						height: "4px",
 						filter: "brightness(0.55)",
-						transform: expanded()
-							? "rotate(0deg)"
-							: "rotate(180deg)",
+						transform: expanded() ? "rotate(0deg)" : "rotate(180deg)",
 						transition: "transform 0.16s linear",
 					}}
 				/>
 			</div>
 			<Show when={expanded()}>
-				<div style={{ "background-color": "rgb(22, 21, 22)" }}>
+				<div class="vape-dropdown-list">
 					<For each={props.options}>
 						{(option) => (
 							<div
+								class="vape-dropdown-item"
 								style={{
-									height: "32px",
-									padding: "0 24px",
-									display: "flex",
-									"align-items": "center",
-									cursor: "pointer",
-									"background-color":
-										option === props.value
-											? "rgba(255, 255, 255, 0.05)"
-											: "transparent",
-									transition: "background-color 0.16s linear",
+									"--item-bg": option === props.value ? "rgba(255, 255, 255, 0.05)" : "transparent",
 								}}
 								on:click={() => {
 									props.onChange(option);
 									setExpanded(false);
-									// Notify parent to update height after closing
 									if (props.onExpandChange) {
-										requestAnimationFrame(() =>
-											props.onExpandChange?.(),
-										);
+										requestAnimationFrame(() => props.onExpandChange?.());
 									}
 								}}
 								on:pointerenter={(e) => {
 									if (option !== props.value) {
-										e.currentTarget.style.backgroundColor =
-											"rgba(255, 255, 255, 0.03)";
+										e.currentTarget.style.backgroundColor = "rgba(255, 255, 255, 0.03)";
 									}
 								}}
 								on:pointerleave={(e) => {
 									if (option !== props.value) {
-										e.currentTarget.style.backgroundColor =
-											"transparent";
+										e.currentTarget.style.backgroundColor = "transparent";
 									}
 								}}
 							>
 								<span
+									class="vape-dropdown-text"
 									style={{
-										color:
-											option === props.value
-												? COLORS.text
-												: COLORS.textDark,
-										"font-size": "13px",
-										"font-family": "Arial, sans-serif",
+										"--item-color":
+											option === props.value ? "var(--vape-text)" : "var(--vape-text-dark)",
 									}}
 								>
 									{getName(option)}
@@ -383,44 +230,17 @@ export function TextBoxComponent(props: {
 	const [focused, setFocused] = createSignal(false);
 
 	return (
-		<div
-			style={{
-				height: "50px",
-				padding: "0 12px",
-				"background-color": COLORS.mainDark,
-				display: "flex",
-				"flex-direction": "column",
-				"justify-content": "center",
-			}}
-		>
-			<span
-				style={{
-					color: COLORS.textDark,
-					"font-size": "11px",
-					"margin-bottom": "6px",
-					"font-family": "Arial, sans-serif",
-				}}
-			>
+		<div class="vape-setting-col">
+			<span class="vape-label-sm" style={{ "margin-bottom": "6px" }}>
 				{props.name}
 			</span>
 			<input
 				type="text"
+				class="vape-text-input"
 				value={props.value}
 				placeholder={props.placeholder}
 				style={{
-					width: "100%",
-					height: "24px",
-					padding: "0 8px",
-					"background-color": focused()
-						? COLORS.mainLight
-						: "rgba(255, 255, 255, 0.05)",
-					border: "none",
-					"border-radius": "4px",
-					color: COLORS.text,
-					"font-size": "13px",
-					"font-family": "Arial, sans-serif",
-					outline: "none",
-					transition: "background-color 0.16s linear",
+					"--input-bg": focused() ? "var(--vape-main-light)" : "rgba(255, 255, 255, 0.05)",
 				}}
 				on:input={(e) => props.onChange(e.currentTarget.value)}
 				on:focus={() => setFocused(true)}
@@ -445,8 +265,11 @@ export function ColorSliderComponent(props: {
 	const [draggingSV, setDraggingSV] = createSignal(false);
 	const [draggingOpacity, setDraggingOpacity] = createSignal(false);
 
+	// oxlint-disable-next-line no-unassigned-vars
 	let hueSliderRef: HTMLDivElement | undefined;
+	// oxlint-disable-next-line no-unassigned-vars
 	let svPickerRef: HTMLDivElement | undefined;
+	// oxlint-disable-next-line no-unassigned-vars
 	let opacitySliderRef: HTMLDivElement | undefined;
 
 	const color = () => {
@@ -516,34 +339,22 @@ export function ColorSliderComponent(props: {
 	const updateHue = (e: PointerEvent) => {
 		if (!hueSliderRef) return;
 		const rect = hueSliderRef.getBoundingClientRect();
-		const percent = Math.max(
-			0,
-			Math.min(1, (e.clientX - rect.left) / rect.width),
-		);
+		const percent = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
 		props.onChange(percent, props.sat, props.value, props.opacity);
 	};
 
 	const updateSV = (e: PointerEvent) => {
 		if (!svPickerRef) return;
 		const rect = svPickerRef.getBoundingClientRect();
-		const s = Math.max(
-			0,
-			Math.min(1, (e.clientX - rect.left) / rect.width),
-		);
-		const v = Math.max(
-			0,
-			Math.min(1, 1 - (e.clientY - rect.top) / rect.height),
-		);
+		const s = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+		const v = Math.max(0, Math.min(1, 1 - (e.clientY - rect.top) / rect.height));
 		props.onChange(props.hue, s, v, props.opacity);
 	};
 
 	const updateOpacity = (e: PointerEvent) => {
 		if (!opacitySliderRef) return;
 		const rect = opacitySliderRef.getBoundingClientRect();
-		const percent = Math.max(
-			0,
-			Math.min(1, (e.clientX - rect.left) / rect.width),
-		);
+		const percent = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
 		props.onChange(props.hue, props.sat, props.value, percent);
 	};
 
@@ -563,42 +374,20 @@ export function ColorSliderComponent(props: {
 	document.addEventListener("pointerup", handlePointerUp);
 
 	return (
-		<div style={{ "background-color": COLORS.mainDark }}>
-			<div
-				style={{
-					display: "flex",
-					"align-items": "center",
-					height: "50px",
-					padding: "0 12px",
-					cursor: "pointer",
-				}}
-				on:click={() => setExpanded(!expanded())}
-			>
-				<span
-					style={{
-						color: COLORS.textDark,
-						"font-size": "11px",
-						"font-family": "Arial, sans-serif",
-					}}
-				>
-					{props.name}
-				</span>
+		<div style={{ "background-color": "var(--vape-main-dark)" }}>
+			<div class="vape-color-header" on:click={() => setExpanded(!expanded())}>
+				<span class="vape-label-sm">{props.name}</span>
 				<div style={{ flex: "1" }} />
 				<div
+					class="vape-color-swatch"
 					style={{
-						width: "24px",
-						height: "24px",
-						"background-color": color(),
-						opacity: props.opacity,
-						"border-radius": "4px",
-						border: "1px solid rgba(255, 255, 255, 0.2)",
-						cursor: "pointer",
+						"--swatch-color": color(),
+						"--swatch-opacity": props.opacity,
 					}}
 				/>
 			</div>
 			<Show when={expanded()}>
 				<div style={{ padding: "12px" }}>
-					{/* Saturation/Value Picker */}
 					<div
 						ref={svPickerRef}
 						style={{
@@ -615,7 +404,6 @@ export function ColorSliderComponent(props: {
 							updateSV(e);
 						}}
 					>
-						{/* Picker indicator */}
 						<div
 							style={{
 								position: "absolute",
@@ -632,19 +420,8 @@ export function ColorSliderComponent(props: {
 						/>
 					</div>
 
-					{/* Hue Slider */}
 					<div style={{ "margin-bottom": "8px" }}>
-						<span
-							style={{
-								color: COLORS.textDark,
-								"font-size": "10px",
-								"font-family": "Arial, sans-serif",
-								display: "block",
-								"margin-bottom": "4px",
-							}}
-						>
-							Hue
-						</span>
+						<span class="vape-section-label">Hue</span>
 						<div
 							ref={hueSliderRef}
 							style={{
@@ -678,19 +455,8 @@ export function ColorSliderComponent(props: {
 						</div>
 					</div>
 
-					{/* Opacity Slider */}
 					<div>
-						<span
-							style={{
-								color: COLORS.textDark,
-								"font-size": "10px",
-								"font-family": "Arial, sans-serif",
-								display: "block",
-								"margin-bottom": "4px",
-							}}
-						>
-							Opacity
-						</span>
+						<span class="vape-section-label">Opacity</span>
 						<div
 							ref={opacitySliderRef}
 							style={{

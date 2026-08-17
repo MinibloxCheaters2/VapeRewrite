@@ -1,7 +1,21 @@
-/* global css */
-/* Note: might conflict with existing styles if not in shadow DOM */
+/* this is put inside the shadow root */
 
-/* New ClickGUI Styles */
+:host {
+	--vape-main: rgb(26, 25, 26);
+	--vape-main-light: rgb(30, 29, 30);
+	--vape-main-dark: rgb(24, 23, 24);
+	--vape-text: rgb(200, 200, 200);
+	--vape-text-dark: rgb(150, 150, 150);
+	--vape-text-darker: rgb(100, 100, 100);
+	--vape-accent: rgb(5, 134, 105);
+	--vape-divider: rgba(255, 255, 255, 0.072);
+	--vape-divider-dark: rgba(48, 48, 48, 0.52);
+	--vape-radius: 5px;
+	--vape-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
+	--vape-transition: background-color 0.16s linear;
+	--vape-font: Arial, sans-serif;
+}
+
 #new-clickgui-container,
 #main-gui-container,
 #textgui-container,
@@ -41,10 +55,10 @@
 
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
-	-webkit-appearance: none; /* removes default light style */
+	-webkit-appearance: none;
 	margin: 0;
-	background: transparent; /* dark background */
-	color: #ccc; /* lighter arrow color */
+	background: transparent;
+	color: #ccc;
 	width: 16px;
 	height: 16px;
 	border-left: 1px solid #555;
@@ -53,4 +67,493 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="number"]::-webkit-inner-spin-button:hover,
 input[type="number"]::-webkit-outer-spin-button:hover {
 	background: transparent;
+}
+
+@keyframes ntSlideIn {
+	from {
+		transform: translateX(100%);
+	}
+	to {
+		transform: translateX(0);
+	}
+}
+
+@keyframes ntSlideOut {
+	from {
+		transform: translateX(0);
+	}
+	to {
+		transform: translateX(100%);
+	}
+}
+
+@keyframes ntProgress {
+	from {
+		transform: scaleX(1);
+	}
+	to {
+		transform: scaleX(0);
+	}
+}
+
+.vape-panel {
+	border-radius: var(--vape-radius);
+	box-shadow: var(--vape-shadow);
+	overflow: hidden;
+	user-select: none;
+	background-color: var(--vape-main);
+	pointer-events: auto;
+}
+
+.vape-header {
+	display: flex;
+	align-items: center;
+	height: 40px;
+	padding: 0 12px;
+}
+
+.vape-row {
+	display: flex;
+	align-items: center;
+	height: 40px;
+	padding: 0 12px;
+	cursor: pointer;
+	transition: var(--vape-transition);
+	background-color: var(--row-bg, var(--vape-main-dark));
+}
+
+.vape-close-btn {
+	width: 24px;
+	height: 24px;
+	background: none;
+	border: none;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	opacity: 0.7;
+	transition: opacity 0.16s linear;
+}
+
+.vape-icon-btn {
+	width: 25px;
+	height: 40px;
+	background: none;
+	border: none;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	opacity: 0.7;
+	transition: opacity 0.16s linear;
+}
+
+.vape-divider {
+	height: 1px;
+	background-color: var(--vape-divider);
+}
+
+.vape-btn-none {
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 0;
+	display: flex;
+	align-items: center;
+}
+
+.vape-btn-row {
+	width: 100%;
+	height: 40px;
+	border: none;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	transition: var(--vape-transition);
+	position: relative;
+	padding-right: 20px;
+}
+
+.vape-section-pad {
+	padding: 4px 0;
+}
+
+.vape-bottom-bar {
+	position: relative;
+	height: 36px;
+	background-color: var(--vape-main);
+}
+
+.vape-action-wrap {
+	display: flex;
+	justify-content: center;
+	padding: 4px 10px;
+}
+
+.vape-action-btn {
+	width: 200px;
+	height: 31px;
+	background-color: rgba(255, 255, 255, 0.05);
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	padding: 2px 10px;
+	transition: var(--vape-transition);
+}
+
+.vape-action-btn:hover {
+	background-color: rgba(255, 255, 255, 0.0875);
+}
+
+.vape-slider-wrap {
+	position: relative;
+	height: 2px;
+	background-color: rgba(255, 255, 255, 0.1);
+	cursor: pointer;
+}
+
+.vape-slider-fill {
+	position: absolute;
+	left: 0;
+	top: 0;
+	height: 100%;
+	background-color: var(--vape-accent);
+}
+
+.vape-slider-thumb {
+	border-radius: 50%;
+	background-color: var(--vape-text);
+	width: var(--thumb-size, 14px);
+	height: var(--thumb-size, 14px);
+	transition:
+		width 0.16s linear,
+		height 0.16s linear;
+}
+
+.vape-chip {
+	padding: 4px 8px;
+	cursor: pointer;
+	background-color: rgba(255, 255, 255, 0.08);
+	border-radius: 4px;
+	transition: var(--vape-transition);
+}
+
+.vape-toggle-track {
+	width: 32px;
+	height: 18px;
+	border-radius: 9px;
+	position: relative;
+	transition: background-color 0.16s linear;
+	background-color: var(--toggle-bg, rgba(255, 255, 255, 0.08));
+}
+
+.vape-toggle-knob {
+	width: 14px;
+	height: 14px;
+	background-color: var(--vape-text);
+	border-radius: 50%;
+	position: absolute;
+	top: 2px;
+	transition: left 0.16s linear;
+	left: var(--toggle-knob-left, 2px);
+}
+
+.vape-overlay-bg {
+	position: fixed;
+	inset: 0;
+	backdrop-filter: blur(8px);
+	background-color: rgba(0, 0, 0, 0.3);
+	pointer-events: none;
+}
+
+.vape-hud-bar {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	padding: 8px;
+	overflow: visible;
+}
+
+.vape-flex-1 {
+	flex: 1;
+}
+
+.vape-flex-shrink-0 {
+	flex-shrink: 0;
+}
+
+.vape-text {
+	font-family: var(--vape-font);
+}
+
+.vape-text-ellipsis {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.vape-label {
+	color: var(--vape-text-dark);
+	font-size: 14px;
+	flex: 1;
+	font-family: var(--vape-font);
+}
+
+.vape-value {
+	color: var(--vape-text-darker);
+	font-size: 14px;
+	margin-right: 8px;
+	font-family: var(--vape-font);
+}
+
+.vape-label-sm {
+	color: var(--vape-text-dark);
+	font-size: 11px;
+	font-family: var(--vape-font);
+}
+
+.vape-section-label {
+	color: var(--vape-text-dark);
+	font-size: 10px;
+	font-family: var(--vape-font);
+	display: block;
+	margin-bottom: 4px;
+}
+
+.vape-dropdown-text {
+	font-size: 13px;
+	font-family: var(--vape-font);
+	color: var(--item-color, var(--vape-text-dark));
+}
+
+.vape-setting-row {
+	height: 50px;
+	padding: 0 12px;
+	background-color: var(--vape-main-dark);
+}
+
+.vape-setting-col {
+	height: 50px;
+	padding: 0 12px;
+	background-color: var(--vape-main-dark);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.vape-slider-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	height: 30px;
+}
+
+.vape-slider-input {
+	color: var(--vape-text-dark);
+	background-color: transparent;
+	font-size: 11px;
+	font-family: var(--vape-font);
+	width: 45%;
+	text-align: right;
+	margin-top: 2px;
+	border: none;
+}
+
+.vape-text-input {
+	width: 100%;
+	height: 24px;
+	padding: 0 8px;
+	border: none;
+	border-radius: 4px;
+	background-color: var(--input-bg, rgba(255, 255, 255, 0.05));
+	color: var(--vape-text);
+	font-size: 13px;
+	font-family: var(--vape-font);
+	outline: none;
+	transition: background-color 0.16s linear;
+}
+
+.vape-dropdown-list {
+	background-color: rgb(22, 21, 22);
+}
+
+.vape-dropdown-item {
+	height: 32px;
+	padding: 0 24px;
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	transition: background-color 0.16s linear;
+	background-color: var(--item-bg, transparent);
+}
+
+.vape-color-header {
+	display: flex;
+	align-items: center;
+	height: 50px;
+	padding: 0 12px;
+	cursor: pointer;
+}
+
+.vape-color-swatch {
+	width: 24px;
+	height: 24px;
+	background-color: var(--swatch-color);
+	opacity: var(--swatch-opacity, 1);
+	border-radius: 4px;
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	cursor: pointer;
+}
+
+.vape-hud-text {
+	font-family: var(--hud-font, var(--vape-font));
+	font-weight: 600;
+	text-shadow: var(--hud-shadow, 2px 2px 4px rgba(0, 0, 0, 0.8));
+	font-size: var(--hud-font-size, 14px);
+	color: var(--hud-color, white);
+}
+
+.vape-hud-text-sm {
+	font-size: calc(var(--hud-font-size, 14px) - 2px);
+}
+
+.vape-hud-dim {
+	opacity: 0.8;
+}
+
+.vape-hud-stack {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.vape-hud-info-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 4px;
+}
+
+.vape-hud-panel {
+	background-color: rgba(0, 0, 0, 0.5);
+	border-radius: 6px;
+	padding: 8px 12px;
+	min-width: 160px;
+}
+
+.vape-key {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: var(--key-width, 40px);
+	height: var(--key-height, 40px);
+	background-color: var(--hud-bg, transparent);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	border-radius: 4px;
+	font-family: var(--hud-font, var(--vape-font));
+	font-size: var(--hud-font-size, 14px);
+	color: var(--hud-color, white);
+	font-weight: 600;
+	text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+	transition: background-color 0.05s ease;
+}
+
+.vape-key-row {
+	display: flex;
+	gap: 4px;
+}
+
+.vape-key-row-center {
+	display: flex;
+	gap: 4px;
+	justify-content: center;
+}
+
+.vape-health-bar-track {
+	flex: 1;
+	height: 6px;
+	background-color: rgba(255, 255, 255, 0.2);
+	border-radius: 3px;
+	overflow: hidden;
+}
+
+.vape-health-bar-fill {
+	width: var(--health-pct, 0%);
+	background-color: var(--health-color, #4caf50);
+	height: 100%;
+	border-radius: 3px;
+	transition: width 0.2s ease;
+}
+
+.vape-target-hud {
+	position: relative;
+	overflow: hidden;
+	box-sizing: border-box;
+	border-radius: 4px;
+	user-select: none;
+}
+
+.vape-target-avatar {
+	position: absolute;
+	left: 19px;
+	top: 17px;
+	width: 26px;
+	height: 27px;
+	background-color: rgba(0, 0, 0, 0.3);
+	border-radius: 3px;
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.vape-target-name {
+	position: absolute;
+	left: 54px;
+	top: 20px;
+	width: 145px;
+	height: 20px;
+	line-height: 20px;
+	font-size: 15px;
+	font-weight: 700;
+	color: white;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.vape-target-health-bkg {
+	position: absolute;
+	left: 20px;
+	top: 56px;
+	width: 200px;
+	height: 9px;
+	background-color: rgba(0, 0, 0, 0.4);
+	border-radius: 2px;
+	overflow: hidden;
+}
+
+.vape-target-health-fill {
+	position: absolute;
+	left: 0;
+	top: 0;
+	height: 100%;
+	border-radius: 2px;
+	transition:
+		width 0.3s ease,
+		background-color 0.3s ease;
+}
+
+.vape-target-health-extra {
+	position: absolute;
+	right: 0;
+	top: 0;
+	height: 100%;
+	background-color: #ffa500;
+	border-radius: 2px;
+	transition: width 0.3s ease;
 }

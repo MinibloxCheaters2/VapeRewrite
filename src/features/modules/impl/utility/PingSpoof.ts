@@ -1,6 +1,6 @@
 import type { C2SPacket } from "@wq2/miniblox-sdk";
 import { Subscribe } from "@/event/Bus";
-import { Action, c2s, type PacketOutcome } from "@/utils";
+import { Action, isC2S, type PacketOutcome } from "@/utils";
 import packetQueueManager from "@/utils/network/packetQueueManager";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
@@ -30,11 +30,9 @@ export default class PingSpoof extends Mod {
 	@Subscribe("queueC2SPacket")
 	public cat(o: PacketOutcome<C2SPacket>) {
 		if (
-			o.packet instanceof c2s("SPacketPing") &&
+			isC2S("SPacketPing", o.packet) &&
 			(this.#infinite ||
-				packetQueueManager.laggingFor(
-					(a) => a.packet instanceof c2s("SPacketPing"),
-				) >= this.#delay)
+				packetQueueManager.laggingFor((a) => isC2S("SPacketPing", a.packet)) >= this.#delay)
 		) {
 			o.action = Action.QUEUE;
 		} else {

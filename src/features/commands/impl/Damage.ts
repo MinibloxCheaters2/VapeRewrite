@@ -1,5 +1,5 @@
 import { argument, IntegerArgumentType, literal } from "@wq2/brigadier-ts";
-import Refs from "@/utils/helpers/refs";
+import Miniblox from "@/utils/refs/miniblox";
 import dispatcher from "../api/CommandDispatcher";
 
 dispatcher.register(
@@ -7,11 +7,10 @@ dispatcher.register(
 		argument("amount", new IntegerArgumentType()).executes(async (e) => {
 			const amount = e.get<number>("amount");
 			for (let i = 1; i < amount; i++) {
-				Refs.game.controller.objectMouseOver.hitVec =
-					Refs.player.pos.clone();
-				Refs.playerController.attackEntity(Refs.player);
+				Miniblox.game.controller.objectMouseOver.hitVec = Miniblox.player.pos.clone();
+				Miniblox.playerController.attackEntity(Miniblox.player);
 			}
-			Refs.chat.addChat({
+			Miniblox.chat.addChat({
 				text: `Dealt ${amount} damage!`,
 				color: "blue",
 			});

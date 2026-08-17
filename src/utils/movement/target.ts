@@ -1,20 +1,16 @@
 import type { Entity, EntityLivingBase } from "@wq2/miniblox-sdk";
-import Refs from "../helpers/refs";
+import { teamsByServerEnabled } from "@/ui/globalSettings";
+import Miniblox from "../refs/miniblox";
 
 export function getTeam(entity: Entity) {
-	const entry = Refs.game.playerList.playerDataMap.get(entity.id);
+	const entry = Miniblox.game.playerList.playerDataMap.get(entity.id);
 	if (!entry) return;
 	return entry.color !== "white" ? entry.color : undefined;
 }
 
-export function findTargets(
-	range = 6,
-	_angle = 360,
-	checkWalls = false,
-): EntityLivingBase[] {
-	const { player, EntityLivingBase, world } = Refs;
-	if (world === undefined)
-		throw new Error("findTargets called while world is null");
+export function findTargets(range = 6, _angle = 360, checkWalls = false): EntityLivingBase[] {
+	const { player, EntityLivingBase, world } = Miniblox;
+	if (world === undefined) throw new Error("findTargets called while world is null");
 	const localTeam = getTeam(player);
 
 	const sqRange = range * range;
@@ -26,8 +22,10 @@ export function findTargets(
 		if (!base) return false;
 		const distCheck = player.getDistanceSqToEntity(e) < sqRange;
 		if (!distCheck) return false;
-		const teamCheck = localTeam && localTeam === getTeam(e);
-		if (teamCheck) return false;
+		if (teamsByServerEnabled()) {
+			const teamCheck = localTeam && localTeam === getTeam(e);
+			if (teamCheck) return false;
+		}
 		const wallCheck = checkWalls && !player.canEntityBeSeen(e);
 		if (wallCheck) return false;
 		return true;

@@ -11,7 +11,10 @@ function minifyPlugin(opts?: Opts): Plugin {
 			renderChunk: {
 				order: "pre",
 				handler(code, chunk) {
-					const result = minifySync(chunk.fileName, code, opts);
+					const result = minifySync(chunk.fileName, code, {
+						sourcemap: true,
+						...opts,
+					});
 					return { code: result.code, map: result.map };
 				},
 			}

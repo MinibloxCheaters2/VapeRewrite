@@ -2,11 +2,12 @@ import type { EntityLivingBase } from "@wq2/miniblox-sdk";
 import { Subscribe } from "@/event/Bus";
 import RotationManager, { RotationPlan } from "@/utils/aiming/rotate";
 import Rotation from "@/utils/aiming/rotation";
-import Refs from "@/utils/helpers/refs";
 import deg2rad from "@/utils/math/radians";
 import { SETTING } from "@/utils/movement/MovementCorrection";
+import { stampTarget } from "@/utils/movement/TargetTracker";
 import { findTargets } from "@/utils/movement/target";
 import PacketRefs from "@/utils/network/packetRefs";
+import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 
@@ -38,10 +39,7 @@ export default class KillAura extends Mod {
 	private angleSetting = this.createSliderSetting("Angle", 360, 1, 360, 1);
 	private autoBlockSetting = this.createToggleSetting("Auto Block", true);
 	private wallCheckSetting = this.createToggleSetting("Wall Check", false);
-	private movementCorrectionSetting = this.createDropdownSetting(
-		"Movement Correction",
-		SETTING,
-	);
+	private movementCorrectionSetting = this.createDropdownSetting("Movement Correction", SETTING);
 
 	get movementCorrection() {
 		return this.movementCorrectionSetting.value();
@@ -64,23 +62,39 @@ export default class KillAura extends Mod {
 	}
 
 	block() {
-		if (this.autoBlock) {
-			if (!this.blocking) {
-				const { ClientSocket, playerControllerMP } = Refs;
-				// auto-remapping proxy!
-				playerControllerMP.syncItem();
-				ClientSocket.sendPacket(new PacketRefs.s.SPacketUseItem());
-				this.blocking = true;
-			}
-		} else this.blocking = false;
+		if (!this.autoBlock) {
+			this.blocking = false;
+			return;
+		}
+		if (this.blocking) return;
+		const { ClientSocket, playerControllerMP, player, world, playerController } = Miniblox;
+		// auto-remapping proxy!
+		playerControllerMP.syncItem();
+		const { SPacketUseItem } = PacketRefs.s;
+		if (SPacketUseItem) {
+			ClientSocket.sendPacket(
+				new PacketRefs.s.SPacketUseItem({
+					initialPress: true,
+					button: "right",
+					hand: 0, // MAIN_HAND
+				}),
+			);
+		} else {
+			playerController.sendUseItem(player, world, player.getHeldItem());
+		}
+		this.blocking = true;
 	}
 
 	unblock() {
-		if (this.blocking) {
-			const { ClientSocket, BlockPos, EnumFacing, playerControllerMP } =
-				Refs;
-			// auto-remapping proxy again lol
-			playerControllerMP.syncItem();
+		if (!this.blocking) return;
+		const { ClientSocket, BlockPos, EnumFacing, player, playerControllerMP, playerController } =
+			Miniblox;
+		// auto-remapping proxy again lol
+		playerControllerMP.syncItem();
+		const { SPacketPlayerAction } = PacketRefs.s;
+		if (!SPacketPlayerAction) {
+			playerController.onStoppedUsingItem(player);
+		} else {
 			ClientSocket.sendPacket(
 				new PacketRefs.s.SPacketPlayerAction({
 					position: BlockPos.ORIGIN.toProto(),
@@ -88,72 +102,73 @@ export default class KillAura extends Mod {
 					action: 5, // PBAction.RELEASE_USE_ITEM
 				}),
 			);
-			this.blocking = false;
 		}
+		this.blocking = false;
 	}
 
 	sendAttack(e: EntityLivingBase, first: boolean) {
-		const { ClientSocket, player } = Refs;
+		const { ClientSocket, player } = Miniblox;
 		const box = e.getEntityBoundingBox();
 		const hitVec = player.getEyePos().clone().clamp(box.min, box.max);
 
-		const aimPos = player.pos.clone().sub(e.pos);
-		const newYaw = wrapAngleTo180_radians(
-			Math.atan2(aimPos.x, aimPos.z) - player.lastReportedYaw,
-		);
-		const checkYaw = wrapAngleTo180_radians(
-			Math.atan2(aimPos.x, aimPos.z) - player.yaw,
-		);
+		stampTarget(e);
 
-		if (
-			first &&
-			Math.abs(checkYaw) > MAX_OFFSET_RAD &&
-			Math.abs(checkYaw) < deg2rad(this.angle)
-		) {
+		const aimPos = player.pos.clone().sub(e.pos);
+		const newYaw = wrapAngleTo180_radians(Math.atan2(aimPos.x, aimPos.z) - player.lastReportedYaw);
+		const checkYaw = wrapAngleTo180_radians(Math.atan2(aimPos.x, aimPos.z) - player.yaw);
+
+		if (first && Math.abs(checkYaw) > MAX_OFFSET_RAD && Math.abs(checkYaw) < deg2rad(this.angle)) {
 			RotationManager.scheduleRotation(
 				new RotationPlan(
-					new Rotation(
-						player.lastReportedYaw + newYaw,
-						RotationManager.activeRotation.pitch,
-					),
+					new Rotation(player.lastReportedYaw + newYaw, RotationManager.activeRotation.pitch),
 					this.movementCorrection.value,
+					1,
 				),
 			);
 		}
 
-		// we don't send the attack packet silently,
-		// so the Criticals module will automatically send the packets BEFORE this one sends!
-		ClientSocket.sendPacket(
-			new PacketRefs.s.SPacketUseEntity({
-				id: e.id,
-				action: 1,
-				hitVec: {
-					x: hitVec.x,
-					y: hitVec.y,
-					z: hitVec.z,
-				},
-				//@ts-expect-error: it's new
-				yaw: RotationManager.activeRotation.yaw,
-				pitch: RotationManager.activeRotation.pitch,
-				sequence: player.inputSequenceNumber,
-			}),
-		);
-		player.attack(e);
+		const { SPacketUseEntity } = PacketRefs.s;
+		if (SPacketUseEntity === undefined) {
+			// in case you haven't attacked yet
+			const [oldYaw, oldPitch] = [player.yaw, player.pitch];
+			const oldHitVec = Miniblox.playerController.objectMouseOver.hitVec;
+			player.yaw = RotationManager.activeRotation.yaw;
+			player.pitch = RotationManager.activeRotation.pitch;
+			Miniblox.playerController.objectMouseOver.hitVec = hitVec;
+			Miniblox.playerController.attackEntity(e);
+			Miniblox.playerController.objectMouseOver.hitVec = oldHitVec;
+			player.yaw = oldYaw;
+			player.pitch = oldPitch;
+		} else {
+			ClientSocket.sendPacket(
+				new SPacketUseEntity({
+					id: e.id,
+					action: 1,
+					hitVec: {
+						x: hitVec.x,
+						y: hitVec.y,
+						z: hitVec.z,
+					},
+					//@ts-expect-error: it's new
+					yaw: RotationManager.activeRotation.yaw,
+					pitch: RotationManager.activeRotation.pitch,
+					sequence: player.inputSequenceNumber,
+				}),
+			);
+			player.attack(e);
+		}
 	}
 
-	@Subscribe("gameTick")
+	@Subscribe("playerTick")
 	onTick() {
 		// ghetto ahh method
 		let first = true;
-		for (const target of findTargets(
-			this.range,
-			this.angle,
-			this.wallCheck,
-		)) {
-			this.block();
+		const targets = findTargets(this.range, this.angle, this.wallCheck);
+		this.block();
+		for (const target of targets) {
 			this.sendAttack(target, first);
 			first = false;
-			this.unblock();
 		}
+		this.unblock();
 	}
 }

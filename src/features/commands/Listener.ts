@@ -6,11 +6,11 @@
 import type { C2SPacket } from "@wq2/miniblox-sdk";
 import Bus from "@/Bus";
 import { COMMAND_PREFIX } from "@/Client";
-import { Subscribe } from "@/event/Bus";
+import { Priority, Subscribe } from "@/event/Bus";
 import type CancelableWrapper from "@/event/CancelableWrapper";
-import Refs from "@/utils/helpers/refs";
+import { isC2S } from "@/utils";
 import logger from "@/utils/logging/loggers";
-import { c2s, s2c } from "@/utils/network/packetRefs";
+import Miniblox from "@/utils/refs/miniblox";
 import dispatcher from "./api/CommandDispatcher";
 
 export default new (class CommandListener {
@@ -19,24 +19,18 @@ export default new (class CommandListener {
 	}
 
 	static isCommand(msg: string): boolean {
-		return (
-			msg.startsWith(COMMAND_PREFIX) &&
-			!msg.startsWith(COMMAND_PREFIX.repeat(2))
-		);
+		return msg.startsWith(COMMAND_PREFIX) && !msg.startsWith(COMMAND_PREFIX.repeat(2));
 	}
 
-	@Subscribe("sendPacket")
+	@Subscribe("sendPacket", Priority.HIGHEST)
 	async intercept(wrap: CancelableWrapper<C2SPacket>) {
 		const { data: packet } = wrap;
-		if (
-			packet instanceof c2s("SPacketMessage") &&
-			CommandListener.isCommand(packet.text)
-		) {
+		if (isC2S("SPacketMessage", packet) && CommandListener.isCommand(packet.text)) {
 			wrap.cancel();
 			const removedPrefix = packet.text.slice(COMMAND_PREFIX.length);
 			const r = await dispatcher.parse(removedPrefix, null);
 			if (r.getErrors().size > 0) {
-				Refs.chat.addChat({
+				Miniblox.chat.addChat({
 					text: `ERROR WHEN PARSING "${removedPrefix}": ${Array.from(r.getErrors().values()).join()}`,
 					color: "red",
 				});
@@ -45,20 +39,14 @@ export default new (class CommandListener {
 			try {
 				await dispatcher.execute(r, null);
 			} catch (e) {
-				Refs.chat.addChat({
+				Miniblox.chat.addChat({
 					text: `ERROR WHEN EXECUTING "${removedPrefix}": ${e} (this may exclude some useful information, check developer console for more info)`,
 					color: "red",
 				});
-				logger.error(
-					`ERROR WHEN EXECUTING COMMAND "${removedPrefix}":`,
-					e,
-				);
+				logger.error(`ERROR WHEN EXECUTING COMMAND "${removedPrefix}":`, e);
 			}
 		}
-		if (
-			packet instanceof c2s("SPacketTabComplete") &&
-			CommandListener.isCommand(packet.message)
-		) {
+		if (isC2S("SPacketTabComplete", packet) && CommandListener.isCommand(packet.message)) {
 			wrap.cancel();
 			const removedPrefix = packet.message.slice(COMMAND_PREFIX.length);
 			const r = await dispatcher.parse(removedPrefix, null);
@@ -68,15 +56,9 @@ export default new (class CommandListener {
 
 				const suggestionText = s.getText();
 
-				return words.length <= 1
-					? `${COMMAND_PREFIX}${suggestionText}`
-					: suggestionText;
+				return words.length <= 1 ? `${COMMAND_PREFIX}${suggestionText}` : suggestionText;
 			});
-			Refs.chat.autoCompleteReceived(
-				new (s2c("CPacketTabComplete"))({
-					matches: applied,
-				}),
-			);
+			Miniblox.chat.autoCompleteReceived({ matches: applied });
 		}
 	}
 })();

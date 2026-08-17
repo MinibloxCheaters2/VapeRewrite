@@ -6,8 +6,8 @@
 import Bus from "@/Bus";
 import { Subscribe } from "@/event/Bus";
 import { Logger } from "../logging/Logger";
-import { c2s, s2c } from "../network/packetRefs";
-import Refs from "./refs";
+import { isC2S, isS2C } from "../network/PacketUtil";
+import Miniblox from "../refs/miniblox";
 
 export enum DetectedAC {
 	/** Not detected yet. */
@@ -41,13 +41,11 @@ export default new (class AntiCheatDetector {
 		Bus.onceB("sendPacket", ({ data }) => {
 			if (
 				this.#firstInput === -1 &&
-				data instanceof c2s("SPacketPlayerInput") &&
+				isC2S("SPacketPlayerInput", data) &&
 				!(
-					(
-						Refs.player.abilities.isFlying ||
-						Refs.player.mode.isSpectator()
-					) /* ||
-					Refs.player.mode.isCreative()*/
+					Miniblox.player.abilities.isFlying ||
+					Miniblox.player.mode.isSpectator() ||
+					Miniblox.player.mode.isCreative()
 				)
 			) {
 				LOGGER.info("Captured 1st input");
@@ -58,21 +56,15 @@ export default new (class AntiCheatDetector {
 		});
 		Bus.onceB("receivePacket", ({ data }) => {
 			if (this.verdict === DetectedAC.UNKNOWN) {
-				if (data instanceof s2c("CPacketPlayerReconciliation")) {
-					LOGGER.info(
-						"New AC-only packet detected, verdict is new AC",
-					);
+				if (isS2C("CPacketPlayerReconciliation", data)) {
 					// only the new ac sends this
 					this.verdict = DetectedAC.NEW;
 					return true;
 				} else if (
-					this.#firstInput !== -1 &&
-					Date.now() - this.#firstInput >= 0.5e3
+					Miniblox.player.serverUsesInputMovement() ||
+					(this.#firstInput !== -1 && Date.now() - this.#firstInput >= 0.5e3)
 				) {
-					LOGGER.info(
-						"No reconciliation packet for 0.5 seconds, assuming old AC.",
-					);
-					this.verdict = DetectedAC.OLD; // assume old AC if we don't get a reconciliation packet after 0.5 seconds
+					this.verdict = DetectedAC.OLD;
 					return true;
 				}
 			} else {

@@ -37,12 +37,10 @@ export const ENTRIES = [
 	MovementCorrection.Silent,
 	MovementCorrection.Strict,
 ] as const;
-export const SETTING: (Tagged & { value: MovementCorrection })[] = ENTRIES.map(
-	(x) => ({
-		tag: MovementCorrection[x],
-		value: x,
-	}),
-);
+export const SETTING: (Tagged & { value: MovementCorrection })[] = ENTRIES.map((x) => ({
+	tag: MovementCorrection[x],
+	value: x,
+}));
 
 export function getEffectiveMode(c: MovementCorrection): MovementCorrection {
 	if (c === MovementCorrection.Auto) {
@@ -59,17 +57,12 @@ export function getEffectiveMode(c: MovementCorrection): MovementCorrection {
 
 export function doMovementCorrection(c: MovementCorrection): boolean {
 	const mode = getEffectiveMode(c);
-	return (
-		mode === MovementCorrection.Silent || mode === MovementCorrection.Strict
-	);
+	return mode === MovementCorrection.Silent || mode === MovementCorrection.Strict;
 }
 function calculateImpulse(a: boolean, b: boolean, invert = false) {
 	return (a ? (invert ? -1 : 1) : 0) + (b ? (invert ? 1 : -1) : 0);
 }
-export function doSilentMovementCorrection(
-	input: SPacketPlayerInput,
-	oY: number,
-) {
+export function doSilentMovementCorrection(input: SPacketPlayerInput, oY: number) {
 	const rotation = RotationManager.currentPlan;
 	if (!rotation) return;
 

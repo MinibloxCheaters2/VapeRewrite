@@ -48,8 +48,7 @@ export interface SubmoduleSetting extends BaseSetting<string> {
 	submodules: SubmoduleItem[];
 }
 
-export interface DropdownSetting<V extends ModeLike = string>
-	extends BaseSetting<V> {
+export interface DropdownSetting<V extends ModeLike = string> extends BaseSetting<V> {
 	type: "dropdown";
 	value: Accessor<V>;
 	setValue: (value: V) => void;

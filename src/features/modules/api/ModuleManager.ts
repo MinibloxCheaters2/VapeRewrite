@@ -1,18 +1,22 @@
 import Blink from "../impl/blatant/Blink.js";
-import FakeLag from "../impl/blatant/FakeLag.js";
+import FakeLag from "../impl/utility/FakeLag.js";
 import Fly from "../impl/blatant/fly/index.js";
 import KillAura from "../impl/blatant/KillAura.js";
+import MaceKill from "../impl/blatant/MaceKill.js";
 import NoSlow from "../impl/blatant/NoSlow.js";
 import Phase from "../impl/blatant/Phase.js";
 import Scaffold from "../impl/blatant/Scaffold.js";
+import Speed from "../impl/blatant/speed/index.js";
 import Spider from "../impl/blatant/Spider.js";
 import TargetStrafe from "../impl/blatant/TargetStrafe.js";
 import TickBase from "../impl/blatant/TickBase.js";
 import AutoClicker from "../impl/combat/AutoClicker.js";
 import Criticals from "../impl/combat/Criticals.js";
+import NoRecoil from "../impl/combat/NoRecoil.js";
 import Velocity from "../impl/combat/Velocity.js";
 import WTap from "../impl/combat/WTap.js";
 import AutoArmor from "../impl/inventory/AutoArmor.js";
+import InventoryManager from "../impl/inventory/InventoryManager.js";
 import Breaker from "../impl/minigames/Breaker.js";
 import ChestAura from "../impl/minigames/ChestAura.js";
 import ChestStealer from "../impl/minigames/ChestStealer.js";
@@ -23,17 +27,19 @@ import AutoRejoin from "../impl/utility/AutoRejoin.js";
 import AutoRespawn from "../impl/utility/AutoRespawn.js";
 import AutoSword from "../impl/utility/AutoSword.js";
 import FilterBypass from "../impl/utility/FilterBypass.js";
+import NoFlash from "../impl/utility/NoFlashbang.js";
 import PacketLogger from "../impl/utility/PacketLogger.js";
 import Paranoia from "../impl/utility/Paranoia.js";
 import PingSpoof from "../impl/utility/PingSpoof.js";
 import RejoinOnMute from "../impl/utility/RejoinOnMute.js";
-import ServerCrasher from "../impl/utility/ServerCrasher.js";
 import Sprint from "../impl/utility/Sprint.js";
 import Test from "../impl/utility/Test.js";
 import NoFall from "../impl/world/NoFall.js";
 import Timer from "../impl/world/Timer.js";
 import type Category from "./Category.js";
 import type Mod from "./Module.js";
+import AdBypass from "../impl/utility/AdBypass.js";
+import AntiSpamBypass from "../impl/utility/AntiSpamBypass.js";
 
 /** some basic predicates for finding modules */
 export const P = {
@@ -45,11 +51,9 @@ export const P = {
 	 */
 	byName: (name: string) => (module: Mod) => module.name === name,
 	/** filters to find a specific module in the same state (mod.enabled === enabled) */
-	byEnabled: (enabled: boolean) => (module: Mod) =>
-		module.enabled === enabled,
+	byEnabled: (enabled: boolean) => (module: Mod) => module.enabled === enabled,
 	/** filters to find a specific module by its category */
-	byCategory: (category: Category) => (module: Mod) =>
-		module.category === category,
+	byCategory: (category: Category) => (module: Mod) => module.category === category,
 };
 
 export default class ModuleManager {
@@ -73,7 +77,6 @@ export default class ModuleManager {
 		this.scaffold,
 		new FilterBypass(),
 		new Fly(),
-		new ServerCrasher(),
 		new KillAura(),
 		new Velocity(),
 		new NoFall(),
@@ -96,10 +99,17 @@ export default class ModuleManager {
 		new AutoClicker(),
 		new Breaker(),
 		new AutoArmor(),
+		new InventoryManager(),
 		new PacketLogger(),
 		new AutoRejoin(),
 		new MurderMystery(),
 		new Paranoia(),
+		new MaceKill(),
+		new NoRecoil(),
+		new NoFlash(),
+		new Speed(),
+		AdBypass.INSTANCE,
+		new AntiSpamBypass(),
 	] as const;
 
 	/** Each module's name */

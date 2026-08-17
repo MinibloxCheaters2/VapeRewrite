@@ -69,7 +69,5 @@ export default defineConfig({
 		minify: false,
 		sourcemap: "inline",
 	},
-	resolve: {
-		tsconfigFilename: "./tsconfig.json",
-	},
+	tsconfig: "./tsconfig.json",
 });

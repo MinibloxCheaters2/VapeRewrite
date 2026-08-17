@@ -2,8 +2,10 @@
  * contains a cache to packet references.
  * @module
  */
-import type { CPACKET_MAP, SPACKET_MAP } from "@wq2/miniblox-sdk";
-import Interop from "../../exposedO";
+import type { CPACKET_MAP, Message, SPACKET_MAP } from "@wq2/miniblox-sdk";
+import { discoveredPackets } from "@/hooks/PacketHook";
+import Miniblox from "../refs/miniblox";
+import { packets as dummyPackets } from "./WasmTest";
 
 export type CPacketMap = typeof CPACKET_MAP;
 export type SPacketMap = typeof SPACKET_MAP;
@@ -30,65 +32,105 @@ function makeProxyRef<T extends CPacketMap | SPacketMap, V = T[keyof T]>(
 	});
 }
 
-function getC2SUncached<
-	K extends SPacketName,
-	V extends SPacketMap[K] = SPacketMap[K],
->(ref: K): V {
-	if (typeof ref === "symbol") {
-		throw "can't get a c2s packet with a name that is a symbol instead of a string.";
+function extractS2CPacketsFromCombined(pktClass: unknown) {
+	try {
+		const fields = (
+			pktClass as {
+				fields?: Iterable<{
+					name?: string;
+					T?: {
+						fields?: Iterable<{
+							name?: string;
+							oneof?: string;
+							T?: unknown;
+						}>;
+					};
+					oneof?: string;
+				}>;
+			}
+		).fields;
+		if (!fields) return;
+		for (const field of fields) {
+			if (field.name === "packets" && field.T?.fields) {
+				for (const sub of field.T.fields) {
+					if (sub.oneof === "packet" && sub.T && sub.name) {
+						discoveredPackets.set(sub.name, sub.T as Message<object>);
+					}
+				}
+				break;
+			}
+		}
+	} catch {
+		/* noop */
 	}
-	return Interop.run((evl) => {
-		const pkt = evl<V>(ref);
-		PacketRefs.s[ref] = pkt;
-		return pkt;
-	});
 }
 
-function getS2CUncached<
-	K extends keyof CPacketMap,
-	V extends CPacketMap[K] = CPacketMap[K],
->(ref: K): V {
+function findPacketByName(ref: string) {
+	const fromSdk = Miniblox.packets?.find((x) => "typeName" in x && x.typeName === ref);
+	const fromDiscovered = discoveredPackets.get(ref);
+	const fromDummy = dummyPackets.get(ref);
+
+	const result = fromSdk ?? fromDiscovered ?? fromDummy;
+
+	if (result && (fromSdk || fromDiscovered)) {
+		dummyPackets.delete(ref);
+	}
+
+	if (result && ref === "ClientBoundCombined") {
+		extractS2CPacketsFromCombined(result);
+	}
+
+	return result;
+}
+
+function getC2SUncached<K extends SPacketName, V extends SPacketMap[K] = SPacketMap[K]>(ref: K): V {
 	if (typeof ref === "symbol") {
 		throw "can't get a c2s packet with a name that is a symbol instead of a string.";
 	}
-	return Interop.run((evl) => {
-		const pkt = evl<V>(ref);
-		PacketRefs.c[ref] = pkt;
-		return pkt;
-	});
+	const result = findPacketByName(ref as string);
+	return result as V;
+}
+
+function getS2CUncached<K extends keyof CPacketMap, V extends CPacketMap[K] = CPacketMap[K]>(
+	ref: K,
+): V {
+	if (typeof ref === "symbol") {
+		throw "can't get a s2c packet with a name that is a symbol instead of a string.";
+	}
+	const result = findPacketByName(ref as string);
+	if (!result) throw `failed to find packet named ${ref}`;
+	return result as V;
 }
 
 /**
  * note: use `PacketRefs.c` instead when trying to do `new {packet}`, it's way cleaner since instead of:
  * ```ts
- * const pkt = new (c2s("SPacketSomething"));
+ * const pkt = new (s2c("CPacketSomething"));
  * ```
  * you can do
  * ```ts
  * const pkt = new PacketRefs.s.SPacketSomething;
  * ```
  */
-export function c2s<
-	K extends keyof SPacketMap,
-	V extends SPacketMap[K] = SPacketMap[K],
->(ref: K): V {
+export function c2s<K extends keyof SPacketMap, V extends SPacketMap[K] = SPacketMap[K]>(
+	ref: K,
+): V {
 	return PacketRefs.s[ref] as V;
 }
 
 /**
  * note: use `PacketRefs.s` instead when trying to do `new {packet}`, it's way cleaner since instead of:
  * ```ts
- * const pkt = new (s2c("CPacketSomething"));
+ * const pkt = new (c2s("SPacketSomething"));
  * ```
  * you can do
  * ```ts
  * const pkt = new PacketRefs.c.CPacketSomething;
  * ```
  */
-export function s2c<
-	K extends keyof CPacketMap,
-	V extends CPacketMap[K] = CPacketMap[K],
->(ref: K): V {
+export function s2c<K extends keyof CPacketMap, V extends CPacketMap[K] = CPacketMap[K]>(
+	ref: K,
+): V {
 	return PacketRefs.c[ref] as V;
 }
 

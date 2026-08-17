@@ -19,36 +19,46 @@ export interface CategoryData {
 
 	/** title case version of the category's name */
 	name: string;
+
+	/** icon dimensions [width, height] */
+	size: [number, number];
 }
 
 const categoryDataSet: Record<Category, CategoryData> = {
 	[Category.COMBAT]: {
 		icon: "combat",
 		name: "Combat",
+		size: [13, 14],
 	},
 	[Category.BLATANT]: {
 		icon: "blatant",
 		name: "Blatant",
+		size: [14, 14],
 	},
 	[Category.RENDER]: {
 		icon: "render",
 		name: "Render",
+		size: [15, 14],
 	},
 	[Category.WORLD]: {
 		icon: "world",
 		name: "World",
+		size: [14, 14],
 	},
 	[Category.MINIGAMES]: {
 		icon: "minigames",
 		name: "Minigames",
+		size: [19, 12],
 	},
 	[Category.INVENTORY]: {
 		icon: "inventory",
 		name: "Inventory",
+		size: [15, 14],
 	},
 	[Category.UTILITY]: {
 		icon: "utility",
 		name: "Utility",
+		size: [15, 14],
 	},
 } as const;
 
@@ -66,11 +76,10 @@ export class CategoryInfo {
 	}
 }
 
-export const categoryInfoSet: Record<Category, CategoryInfo> =
-	Object.fromEntries(
-		Object.entries(categoryDataSet).map(([k, v]) => {
-			//@ts-expect-error: Numerical TypeScript enums have aliases for their names, it produces `Enum[Enum["KEY"] = 0] = "KEY";`
-			const c = Category[k];
-			return [c, new CategoryInfo(v)];
-		}),
-	);
+export const categoryInfoSet: Record<Category, CategoryInfo> = Object.fromEntries(
+	Object.entries(categoryDataSet).map(([k, v]) => {
+		//@ts-expect-error: Numerical TypeScript enums have aliases for their names, it produces `Enum[Enum["KEY"] = 0] = "KEY";`
+		const c = Category[k];
+		return [c, new CategoryInfo(v)];
+	}),
+);

@@ -1,47 +1,64 @@
+// https://raw.githubusercontent.com/MinibloxCheaters2/miniblox-bundle-tracker/51363b8a83adc8e50812de426c2067761a0d071d/bundle-remapped.js
 const DUMP_REGEXES = {
+	// PlayerMovement#applyInput
 	moveForward: /this\.([a-zA-Z]+)=\([a-zA-Z]+\.(up|down)/m,
-	moveStrafe: /this\.([a-zA-Z]+)=\([a-zA-Z]+\.right/m,
+	moveStrafe: /this\.([a-zA-Z]+)=\+!!\w\.right\s*\+\s*\(\w\.left\s*\?\s*-1\s*:\s*0\)/m,
 	// PathNavigateGround#isPositionClear
-	iterator: /of\s*BlockPos\.([a-zA-Z]+)\(/,
+	iterator: /of\s*\w+\.([a-zA-Z]+)\(new/,
 	// EntityBoat#update
-	normalizeAngle: /([a-zA-Z]+)\(([a-zA-Z]+)\s*-\s*this.yaw\)/,
+	// normalizeAngle: /(\w+)\(this\.boatYaw\s*-\s*this.yaw\)/, // useless
+	// PlayerMovement#updatePlayerMoveState
+	applyInput: /this\.(\w+)\(this\.currentInput\)/,
+	// PlayerController#rightClickMouse
+	sendUseItem: /\w\s*&&\s*this\.(\w+)\(\w,\s*.\.world,\s*\w,\s*\w,\s*\w\)/,
+	// false flags from some random method.
+	// getMoveDirection: /([a-zA-Z]+)\(\w\)[\s\S]*?>=\s*1e-4[\s\S]*?Math\.cos\(this\.yaw\)/,
+	updatePlayerMoveState: /this\.([a-zA-Z]*)\(\),\n*\s*this\.isUsingItem\(\)\s*&&/,
+	getEyePos:
+		/(\w+)\(\)\s*{\n*\s*let\s+\w\s*=\s*this\.pos\.clone\(\);\n*\s*return\s+\w.y\s*\+=\s*this\.getEyeHeight/,
+	// BlockFenceGate#getStateForPlacement
+	getHorizontalFacing: /return\s+this\.defaultState\.withState\(`facing`,\s*\w\.(\w+)\(\)\)/,
+	// PlayerController#rightClickMouse
+	onPlayerRightClick:
+		/this\.(\w+)\(\s*\w+,\s*[^.]+\.world,\s*\w,\s*\w+,\s*\w\.side,\s*\w\.hitVec,?\s*,\s*\w\)/,
 	// PlayerMovement#checkHeadInBlock
-	position: /BlockPos\.fromVector\(controls\.([a-zA-Z]+)\)/,
-	keyPressedPlayer:
-		/function\s+([a-zA-Z]*)\(([a-zA-Z]*)\)\s*\{\n*\s*return\s+keyPressed/m,
-	// World#getLivingEntityCount
-	entities:
-		/this\.([a-zA-Z]*)\.values\(\)\)\s*[a-zA-Z]* instanceof EntityLiving/m,
+	// position:
+	// 	/null;\s*\n*\s*let\s*\w\s*=\s*\w+\.fromVector\(\w+\.([a-zA-Z]+)\)/g,
 	// PlayerControllerMP#updateMouseOver
-	isInvisible: /\.mode\.isSpectator\(\)\s*\|\|\s*[a-zA-Z]*\.([a-zA-Z]*)\(\)/m,
+	isInvisible: /this\.capeMesh\s*&&\s*this\.entity\.([a-zA-Z]+)\(\)/m,
+	// EntityItem#update
+	pushOutOfBlocks: /this\.noPhysics\s*=\s*this\.(\w+)\(this/,
 	// attackTargetEntityWithCurrentItem, in PlayerController#attackEntity
-	attack: /player\.inputSequenceNumber\}\)\),player\.([a-zA-Z]*)/,
+	attack: /\w+\.(\w+)\(e\),\n*\s*\w+\.hit\(\)/,
 	lastReportedYaw: /this\.([a-zA-Z]*)=this\.yaw,this\.last/m,
 	windowClick: /([a-zA-Z]*)\(this\.inventorySlots\.windowId/m,
-	damageReduceAmount:
-		/ItemArmor\s*&&\s*\([a-zA-Z]+\s*\+=\s*[a-zA-Z]*\.item\.([a-zA-Z]*)/,
-	playerController: /const ([a-zA-Z]*)\s*=\s*new\s+PlayerController,/,
-	boxGeometry: /\s*=\s*new\s+Mesh\s*\(new ([a-zA-Z]*)\(1/m,
+	damageReduceAmount: /\w\.item\.(\w+)\s*\|\|\s*0/,
 	// playerControllerMP
-	syncItem: /([a-zA-Z]*)\(\),\n*\s*ClientSocket\.sendPacket/m,
+	syncItem: /([a-zA-Z]*)\(\),\n*\s*\w+\.sendPacket\(new\s*/m,
 	// GLTF manager
-	gltfManager: /([a-zA-Z]*)("|'|`),\s*new GLTFManager/,
-	AxisAlignedBoundingBox: /this\.boundingBox\s*=\s*new\s+([a-zA-Z]*)/m,
-	loadModels: /loadTextures\(\),*\n*\s*this\.[a-zA-Z]*\.([a-zA-Z]*)\(\)/m,
+	gltfManager: /await \w+\.(\w+)\.getModel/,
+	// AABB is in a separate module now, we can just scan for fields or code and find it ourselves.
 	// Shader Manager
-	addShaderToMaterialWorld: /ShaderManager\.([a-zA-Z]*)\(this\.materialWorld/,
-	materialTransparentWorld:
-		/this\.([a-zA-Z]*)\s*=\s*this\.materialTransparent\.clone\(/,
-	// Shader Manager
-	potionAmplifiers:
-		/PotionHelper\.([a-zA-Z]+)\.set\(Potions\.([a-zA-Z]+)\.getId\(\),\s*"5"\)/,
+	addShaderToMaterialWorld:
+		/static\s+(\w+)\(\w\)\s*\{\s*t\.userData\s*=\s*\{\s*time:\s*{\s*value:\s*2/,
+	materialTransparentWorld: /this\.([a-zA-Z]*)\s*=\s*this\.materialTransparent\.clone\(/,
+	potionAmplifiers: /\w+\.([a-zA-Z]+)\.set\(\w+\.([a-zA-Z]+)\.getId\(\),\s*`5`\)/,
 	getFlag:
 		/([a-zA-Z]+)\(([a-zA-Z]+)\)\s*{\s*\n*return\s*\(this\.dataWatcher\.getWatchableObjectByte\(0\)&1<<([a-zA-Z]+)\)!=0}/,
-	setFlag:
-		/setSprinting\(\w+\)\s*\{\n*\s*this\.([a-zA-Z]+)\([0-9]+,\s*([a-zA-Z]+)\)/,
+	setFlag: /setSprinting\(\w+\)\s*\{\n*\s*this\.([a-zA-Z]+)\([0-9]+,\s*([a-zA-Z]+)\)/,
 	//EntityManager#shouldRenderEntity
 	isInvisibleToPlayer:
-		/![a-zA-Z]+\.world\.isBlockLoaded\(_blockPos\)\)\s*\|\|!\w+&&\n*\s*[a-zA-Z]+\.([a-zA-Z]*)\(player\)/m,
+		/!\w+\.world\.isBlockLoaded\(\w+\)\)\s*\|\|\s*!\w+\s*&&\s*\w+\.(\w+)\(\w+\)/m,
+
+	// all of these 3 are from EntityZombie#update
+	isConverting: /if\s*\(this\.world\.isServer\s*&&\s*this\.(\w+)\(\)\)\s*{\s*/,
+	getConversionTimeBoost: /this\.(\w+)\(\);\s*\(?this\.conversionTime\s*/m,
+	convertToVillager: /this\.conversionTime\s*<=\s*0\s*&&\s*this\.(\w+)\(\)/,
+	// EntityAgeable#setGrowingAge and EntityAgeable#onLivingUpdate
+	setScaleForAge: /this\.(\w+)\(this\.isChild\(\)\)/,
+
+	// SkinManager#loadMob
+	createAtlasMat: /\.image\.width\s*\/\s*64\s*};\s*\w+\.(\w+)\(\w\),\s*\(?/m,
 } as const;
 
 export type DumpKey = keyof typeof DUMP_REGEXES;

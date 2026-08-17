@@ -1,45 +1,27 @@
-import { type S2CPacket, SlotActionType } from "@wq2/miniblox-sdk";
+import { SlotActionType } from "@wq2/miniblox-sdk";
 import { Subscribe } from "@/event/Bus";
 import type CancelableWrapper from "@/event/CancelableWrapper";
-import Refs from "@/utils/helpers/refs";
-import { s2c } from "@/utils/network/packetRefs";
+import { isS2C } from "@/utils";
+import Miniblox from "@/utils/refs/miniblox";
 import { getRandomArbitrary } from "@/utils/time/random";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
+import { S2CData } from "@/event/Events";
 
 export default class ChestStealer extends Mod {
 	public name = "ChestStealer";
 	public category = Category.MINIGAMES;
 
-	private delaySetting = this.createSliderSetting(
-		"Delay (ms)",
-		100,
-		0,
-		500,
-		10,
-	);
-	private randomDelayToggleSetting = this.createToggleSetting(
-		"Random Delay",
-		false,
-	);
-	private maxRandomDelaySetting = this.createSliderSetting(
-		"Max Random (ms)",
-		150,
-		0,
-		500,
-		10,
-		() => this.randomDelayToggleSetting.value(),
+	private delaySetting = this.createSliderSetting("Delay (ms)", 100, 0, 500, 10);
+	private randomDelayToggleSetting = this.createToggleSetting("Random Delay", false);
+	private maxRandomDelaySetting = this.createSliderSetting("Max Random (ms)", 150, 0, 500, 10, () =>
+		this.randomDelayToggleSetting.value(),
 	);
 	private autoCloseSetting = this.createToggleSetting("Auto Close", true);
-	private closeEmptySetting = this.createToggleSetting(
-		"Close When Empty",
-		true,
-		() => this.autoCloseSetting.value(),
+	private closeEmptySetting = this.createToggleSetting("Close When Empty", true, () =>
+		this.autoCloseSetting.value(),
 	);
-	private blacklistSetting = this.createTextBoxSetting(
-		"Blacklist Items (comma separated)",
-		"",
-	);
+	private blacklistSetting = this.createTextBoxSetting("Blacklist Items (comma separated)", "");
 	private notifySetting = this.createToggleSetting("Notify", true);
 
 	private lastClickTime = 0;
@@ -88,9 +70,7 @@ export default class ChestStealer extends Mod {
 
 	private isBlacklisted(itemName: string): boolean {
 		const name = itemName.toLowerCase();
-		return this.blacklist.some(
-			(item) => name.includes(item) || item.includes(name),
-		);
+		return this.blacklist.some((item) => name.includes(item) || item.includes(name));
 	}
 
 	protected onEnable(): void {
@@ -107,44 +87,44 @@ export default class ChestStealer extends Mod {
 	}
 
 	private closeContainer(): void {
-		const { player } = Refs;
+		const { player } = Miniblox;
 		if (!player) return;
 
 		player.closeScreen?.();
 	}
 
 	private clickSlot(slotId: number): void {
-		const { playerController } = Refs;
+		const { playerController } = Miniblox;
 		if (!playerController || this.currentWindowId === null) return;
 
 		playerController.windowClick(
 			this.currentWindowId,
 			slotId,
-			0,
+			1,
 			SlotActionType.PICKUP_RIGHT,
-			Refs.player,
+			Miniblox.player,
 		);
 	}
 
 	@Subscribe("receivePacket")
-	private onPacket({ data: packet }: CancelableWrapper<S2CPacket>) {
-		if (packet instanceof s2c("CPacketOpenWindow")) {
+	private onPacket({ data: packet }: CancelableWrapper<S2CData>) {
+		if (isS2C("CPacketOpenWindow", packet)) {
 			this.currentWindowId = packet.windowId;
 			this.lastClickTime = Date.now();
 			this.stolenItems = 0;
 
 			if (this.notify) {
-				Refs.chat.addChat({
+				Miniblox.chat.addChat({
 					text: "[ChestStealer] Opened chest",
 					color: "green",
 				});
 			}
 		}
 
-		if (packet instanceof s2c("CPacketCloseWindow")) {
+		if (isS2C("CPacketCloseWindow", packet)) {
 			if (this.currentWindowId === packet.windowId) {
 				if (this.notify && this.stolenItems > 0) {
-					Refs.chat.addChat({
+					Miniblox.chat.addChat({
 						text: `[ChestStealer] Stole ${this.stolenItems} items`,
 						color: "yellow",
 					});
@@ -154,10 +134,11 @@ export default class ChestStealer extends Mod {
 		}
 	}
 
-	@Subscribe("gameTick")
-	public onTick() {
-		const { playerController, player } = Refs;
-		if (!playerController || this.currentWindowId === null) {
+	@Subscribe("playerTick")
+	private onTick() {
+		const { playerController, player } = Miniblox;
+		if (!playerController) {
+			this.currentWindowId = null;
 			return;
 		}
 
