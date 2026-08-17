@@ -1,4 +1,3 @@
-import type { S2CPacket } from "@wq2/miniblox-sdk";
 import { Subscribe } from "@/event/Bus";
 import type CancelableWrapper from "@/event/CancelableWrapper";
 import { isS2C } from "@/utils";

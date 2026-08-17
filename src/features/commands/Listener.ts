@@ -10,7 +10,6 @@ import { Priority, Subscribe } from "@/event/Bus";
 import type CancelableWrapper from "@/event/CancelableWrapper";
 import { isC2S } from "@/utils";
 import logger from "@/utils/logging/loggers";
-import PacketRefs from "@/utils/network/packetRefs";
 import Miniblox from "@/utils/refs/miniblox";
 import dispatcher from "./api/CommandDispatcher";
 
