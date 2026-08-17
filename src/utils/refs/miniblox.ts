@@ -5,7 +5,7 @@ import {
 	ClientEntityPlayer,
 	ClientSocket,
 	ClientWorld,
-	Controls,
+	PointerLockControls,
 	Enchantments,
 	EntityLivingBase,
 	EnumFacing,
@@ -85,7 +85,7 @@ let _ItemArmor: typeof ItemArmor | undefined;
 let _ItemStack: typeof ItemStack | undefined;
 let _ItemBow: typeof ItemBow | undefined;
 let _ItemBlock: typeof ItemBlock | undefined;
-let _controls: Controls | undefined;
+let _controls: PointerLockControls | undefined;
 let _textureManager: TextureManager | undefined;
 let _skinManager: SkinManager | undefined;
 

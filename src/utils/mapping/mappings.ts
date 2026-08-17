@@ -49,6 +49,7 @@ export default new (class Mappings {
 				"getFlag",
 				"setFlag",
 				"updatePlayerMoveState",
+				"applyInput",
 				"onPlayerUpdate",
 			),
 		);

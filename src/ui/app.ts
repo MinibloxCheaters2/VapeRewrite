@@ -15,24 +15,27 @@ import { initProfilesPanel } from "./ProfilesPanel";
 import { initSettingsPanel } from "./SettingsPanel";
 import shadowWrapper from "./shadowWrapper";
 import { initTargetsPanel } from "./TargetsPanel";
+import { waitForReact } from "@/utils/helpers/waitForReact";
 
-// Initialize HUD system
-initHudSystem();
+waitForReact().then(() => {
+	// Initialize HUD system
+	initHudSystem();
 
-// Apply persisted config + binds now that modules are registered
-loadBinds();
-initConfig();
+	// Apply persisted config + binds now that modules are registered
+	loadBinds();
+	initConfig();
 
-// Initialize GUIs
-initMainGUI();
-initNewClickGUI();
-initHudGUI();
-initNotifications();
-initSettingsPanel();
-initProfilesPanel();
-initFriendsPanel();
-initTargetsPanel();
-initMusicPlayer();
-const css = document.createElement("style");
-css.innerText = globalCss;
-shadowWrapper.root.appendChild(css);
+	// Initialize GUIs
+	initMainGUI();
+	initNewClickGUI();
+	initHudGUI();
+	initNotifications();
+	initSettingsPanel();
+	initProfilesPanel();
+	initFriendsPanel();
+	initTargetsPanel();
+	initMusicPlayer();
+	const css = document.createElement("style");
+	css.innerText = globalCss;
+	shadowWrapper.root.appendChild(css);
+});

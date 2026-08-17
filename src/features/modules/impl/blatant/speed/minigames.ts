@@ -13,15 +13,18 @@ export default class Minigames extends SubModule<Speed> {
 		const { player } = Miniblox;
 		if (!player.isSprinting() || !player.onGround) return;
 		player.motion.x -= Math.sin(player.yaw) * 0.2;
+		player.motion.y = 0;
 		player.motion.z -= Math.cos(player.yaw) * 0.2;
 		this.#spoofJump = true;
 	}
 
 	@Subscribe("sendPacket", Priority.HIGHEST)
-	private onSendPacket({ data: pkt }: CancelableWrapper<C2SPacket>) {
+	private onSendPacket(wrap: CancelableWrapper<C2SPacket>) {
 		if (!this.#spoofJump) return;
-		if (isC2S("SPacketPlayerInput", pkt)) {
-			pkt.jump = true;
+		if (isC2S("SPacketPlayerInput", wrap.data) && wrap.data.onGround) {
+			wrap.data = wrap.data.clone();
+			wrap.data.jump = true;
+			wrap.data.onGround = false;
 			this.#spoofJump = false;
 		}
 	}
