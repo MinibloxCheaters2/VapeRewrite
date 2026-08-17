@@ -16,7 +16,7 @@ function hookRenderPlayer(mesh: RenderPlayer) {
 			const ts: RenderPlayer = thisArg;
 			if (ts.entity.id !== player.id) return Reflect.apply(target, ts, argArray);
 			const plan = RotationManager.currentPlan;
-			
+
 			const movementCorrection = getEffectiveMode(plan?.movementCorrection);
 			if (
 				movementCorrection === MovementCorrection.Silent ||
