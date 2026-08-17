@@ -13,9 +13,6 @@ interface TargetInfo {
 	absorption: number;
 }
 
-/** Fallback range (squared distance) when no recently-attacked target exists. */
-const FALLBACK_RANGE = 12;
-
 function hsvToRgb(h: number, s: number, v: number, o = 1): string {
 	const i = Math.floor(h * 6);
 	const f = h * 6 - i;

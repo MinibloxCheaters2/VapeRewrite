@@ -16,9 +16,9 @@ export default function hook() {
 	player.applyInput = new Proxy(origApplyInput, {
 		apply(target, thisArg, argArray) {
 			const ts = thisArg as PlayerMovement;
-			const [oldYaw, oldPitch, oldJumping] = [ts.yaw, ts.pitch, ts.jumping];
+			//const [oldYaw, oldPitch, oldJumping] = [ts.yaw, ts.pitch, ts.jumping];
 			const ret = Reflect.apply(target, ts, argArray);
-			const [e, t] = argArray as [SPacketPlayerInput, boolean];
+			const [e, _] = argArray as [SPacketPlayerInput, boolean];
 			const plan = RotationManager.currentPlan;
 			if (!plan) return;
 			const movementCorrection = getEffectiveMode(plan.movementCorrection);
@@ -29,8 +29,8 @@ export default function hook() {
 			) {
 				[ts.yaw, ts.pitch] = [plan.target.yaw, plan.target.pitch];
 			}
-			ts.moveStrafe = +!!e.right + (e.left ? -1 : 0),
-	        ts.moveForward = (e.up ? -1 : 0) + +!!e.down;
+			ts.moveStrafe = +!!e.right + (e.left ? -1 : 0);
+			ts.moveForward = (e.up ? -1 : 0) + +!!e.down;
 			return ret;
 		},
 	});
