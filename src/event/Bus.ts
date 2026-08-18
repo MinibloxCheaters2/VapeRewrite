@@ -9,8 +9,9 @@ export enum Priority {
 	READ_FINAL_STATE = -3,
 }
 
-import EventBus, { Subscribe as origSubscribe } from "@wq2/event-bus";
+import EventBus from "@wq2/event-bus";
 import type ClientEvents from "./Events";
+import Bus from "@/Bus";
 export default EventBus;
 // export type { EventDict } from "@wq2/event-bus";
 
@@ -18,7 +19,7 @@ export function Subscribe<K extends keyof ClientEvents>(
 	event: K,
 	priority: number = Priority.NORMAL,
 ) {
-	return origSubscribe<ClientEvents, K>(event, priority);
+	return Bus.Subscribe(event, priority);
 }
 
 /**

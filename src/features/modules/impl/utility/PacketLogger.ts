@@ -1,4 +1,3 @@
-import { Subscribe } from "@wq2/event-bus";
 import type { AnyPacket, C2SPacket, S2CPacket } from "@wq2/miniblox-sdk";
 import type CancelableWrapper from "@/event/CancelableWrapper";
 import { isC2S, isS2C } from "@/utils";
@@ -6,10 +5,11 @@ import Miniblox from "@/utils/refs/miniblox";
 import Category from "../../api/Category";
 import Mod from "../../api/Module";
 import { S2CData } from "@/event/Events";
+import { Subscribe } from "@/event/Bus";
 
 class Log<T extends AnyPacket> {
 	constructor(
-		public packet: T,
+		public packet: T extends S2CPacket ? S2CData<T> : T,
 		public timestamp: number,
 	) {}
 }
