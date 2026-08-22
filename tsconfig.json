@@ -8,10 +8,6 @@
 		"jsx": "preserve",
 		"jsxImportSource": "solid-js",
 		"skipLibCheck": true,
-		"lib": ["DOM", "DOM.Iterable", "ESNext"],
-		"paths": {
-			"@/*": ["./src/*"],
-		},
-	},
-	"include": ["src/**/*"],
+		"lib": ["DOM", "DOM.Iterable", "ESNext"]
+	}
 }

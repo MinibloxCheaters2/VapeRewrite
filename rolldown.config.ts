@@ -1,10 +1,11 @@
 import { readPackageUp } from "read-package-up";
-import { defineConfig } from "rolldown";
+import { defineConfig, RolldownOptions, RolldownPlugin } from "rolldown";
 import userscript from "rolldown-plugin-userscript";
 import swc from "@wq2/rolldown-plugin-swc";
 import solid from "@wq2/rolldown-plugin-solid-oxc";
 import { withFilter } from "rolldown/filter";
 import minify from "./minifyPlugin";
+import thing from "./thingPlugin";
 
 const { packageJson } = (await readPackageUp())!;
 
@@ -16,58 +17,74 @@ export const REAL_CLIENT_NAME =
 		? ("Baby Oil Rewrite" as const)
 		: ("Vape Rewrite" as const);
 
-export default defineConfig({
-	input: "src/index.ts",
-	platform: "browser",
-	moduleTypes: {
-		".css": "text",
-	},
-	plugins: [
-		// Babel, ESBuild, and SWC supports 2023-11 decorators
-		// ESBuild is written in Go (garbage collector) and Babel is written in JS (not native),
-		// I chose SWC.
-		withFilter(
-			swc({
-				jsc: {
-					parser: { decorators: true, syntax: "typescript" },
-					transform: { decoratorVersion: "2023-11" },
+/**
+ * Required structure:
+ * - entrypoint in `packages/name/src/index.ts`
+ * - tsconfig in `packages/name/tsconfig.json`
+ */
+function defineGame(name: string, plugins?: RolldownPlugin[], opts?: RolldownOptions): RolldownOptions {
+	return {
+		input: `packages/${name}/src/index.ts`,
+		platform: "browser",
+		moduleTypes: {
+			".css": "text",
+		},
+		plugins: [
+			// Babel, ESBuild, and SWC supports 2023-11 decorators
+			// ESBuild is written in Go (garbage collector) and Babel is written in JS (not native),
+			// I chose SWC.
+			withFilter(
+				swc({
+					jsc: {
+						parser: { decorators: true, syntax: "typescript" },
+						transform: { decoratorVersion: "2023-11" },
+					},
+				}),
+				// Only run this transform if the file contains a decorator (and if it's a JS or TS file).
+				{
+					transform: {
+						code: ["@Subscribe", "@Bus.Subscribe"],
+						moduleType: ["js", "ts", "jsx", "tsx"],
+					},
 				},
+			),
+			withFilter(solid(), {
+				transform: { moduleType: ["jsx", "tsx"] },
 			}),
-			// Only run this transform if the file contains a decorator (and if it's a JS or TS file).
-			{
-				transform: {
-					code: "@Subscribe",
-					moduleType: ["js", "ts", "jsx", "tsx"],
-				},
-			},
-		),
-		withFilter(solid(), {
-			transform: { moduleType: ["jsx", "tsx"] },
-		}),
-		// this MUST be before UserScript, so the comments from it won't be removed.
-		process.env.NODE_ENV === "production" ? minify() : undefined,
-		userscript((meta: string) => {
+			plugins,
+			// this MUST be before UserScript, so the comments from it won't be removed.
+			process.env.NODE_ENV === "production" ? minify() : undefined,
+			userscript((meta: string) => {
 			const newMeta = meta
 				.replace(
 					"process.env.AUTHOR",
 					packageJson.author?.name ?? "Unspecified",
 				)
 				.replace("process.env.VERSION", packageJson.version)
-				.replace("process.env.NAME", REAL_CLIENT_NAME);
+				.replace("process.env.NAME", REAL_CLIENT_NAME)
+				.replace("process.env.GAME", name);
 			return newMeta;
 		}),
-	],
-	transform: {
-		assumptions: {
-			setPublicClassFields: true,
-			noDocumentAll: true,
+		],
+		transform: {
+			assumptions: {
+				setPublicClassFields: true,
+				noDocumentAll: true,
+			},
 		},
-	},
-	output: {
-		format: "iife",
-		file: `dist/vape-rewrite.user.js`,
-		minify: false,
-		sourcemap: "inline",
-	},
-	tsconfig: "./tsconfig.json",
-});
+
+		output: {
+			format: "iife",
+			file: `dist/${name}.user.js`,
+			minify: false,
+			sourcemap: "inline",
+		},
+		tsconfig: `packages/${name}/tsconfig.json`,
+		...opts
+	};
+}
+
+export default defineConfig([
+	defineGame("miniblox"),
+	defineGame("waybackhq", [thing()]),
+]);

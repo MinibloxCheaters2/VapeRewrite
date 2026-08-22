@@ -1,0 +1,44 @@
+import type { C2SPacket } from "@wq2/miniblox-sdk";
+
+import Category from "@vape/core/features/modules/api/Category";
+import Mod from "@vape/core/features/modules/api/Module";
+
+import { Subscribe } from "@/event/Bus";
+import { Action, isC2S, type PacketOutcome } from "@/utils";
+import packetQueueManager from "@/utils/network/packetQueueManager";
+
+export default class PingSpoof extends Mod {
+	name = "PingSpoof";
+	category = Category.UTILITY; // this isn't really blatant
+
+	#infiniteSetting = this.createToggleSetting("Infinite", false);
+	#delaySetting = this.createSliderSetting(
+		"Milliseconds",
+		5e3,
+		1,
+		10e3,
+		undefined,
+		() => !this.#infiniteSetting.value(),
+	);
+
+	get #infinite() {
+		return this.#infiniteSetting.value();
+	}
+
+	get #delay() {
+		return this.#delaySetting.value();
+	}
+
+	@Subscribe("queueC2SPacket")
+	public cat(o: PacketOutcome<C2SPacket>) {
+		if (
+			isC2S("SPacketPing", o.packet) &&
+			(this.#infinite ||
+				packetQueueManager.laggingFor((a) => isC2S("SPacketPing", a.packet)) >= this.#delay)
+		) {
+			o.action = Action.QUEUE;
+		} else {
+			o.action = Action.PASS;
+		}
+	}
+}

@@ -1,0 +1,17 @@
+{
+	"name": "@vape/miniblox",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"main": "./src/index.ts",
+	"types": "./src/index.ts",
+	"dependencies": {
+		"@vape/core": "workspace:*",
+		"@types/three": "^0.184.1",
+		"@wq2/packet-gen-wasm": "^0.0.2"
+	},
+	"devDependencies": {
+		"@wq2/miniblox-sdk": "3.46.200-0.0.0",
+		"@types/three": "0.170.0"
+	}
+}

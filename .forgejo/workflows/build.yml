@@ -25,4 +25,4 @@ jobs:
       - name: Upload artifacts
         uses: forgejo/upload-artifact@v5
         with:
-          path: dist/vape-rewrite.user.js
+          path: dist/*.user.js

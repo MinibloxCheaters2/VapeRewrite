@@ -1,0 +1,238 @@
+import type Mod from "../modules/api/Module";
+import type { AnySetting, BaseSetting } from "./Settings";
+
+import { MAIN_LOGGER as logger } from "../../utils/logging/loggers";
+import { siteKey } from "../../utils/siteKey";
+import ModuleManager, { P } from "../modules/api/ModuleManager";
+
+function iterSubSettings(mod: Mod, fn: (s: AnySetting) => void) {
+	for (const s of mod.settings) {
+		fn(s);
+		if (s.type === "submodule") {
+			for (const sub of s.submodules) {
+				for (const ss of sub.settings) {
+					fn(ss);
+				}
+			}
+		}
+	}
+}
+
+export interface SerializedSetting<V> {
+	name: string;
+	type: string;
+	value: V;
+}
+
+function serializeBaseSetting<V>(set: BaseSetting<V>): SerializedSetting<V> {
+	return {
+		name: set.name,
+		type: set.type,
+		value: set.value(),
+	};
+}
+
+export class ModuleConfig {
+	constructor(
+		public enabled: boolean,
+		public settings: SerializedSetting<unknown>[],
+	) {}
+	static from(mod: Mod): ModuleConfig {
+		const settings: SerializedSetting<unknown>[] = [];
+		iterSubSettings(mod, (s) => settings.push(serializeBaseSetting(s)));
+		return new ModuleConfig(mod.enabled, settings);
+	}
+}
+
+function serializeModules(): Record<string, ModuleConfig> {
+	return Object.fromEntries(ModuleManager.modules.map((x) => [x.name, ModuleConfig.from(x)]));
+}
+
+export class Config {
+	public constructor(
+		/** a map of module name -> module config */
+		public modules: Record<string, ModuleConfig>,
+	) {}
+
+	public serialize(): string {
+		return JSON.stringify(this.modules);
+	}
+
+	public static deserialize(_name: string, json: string): Config {
+		const data: Record</* module name*/ string, ModuleConfig> = JSON.parse(json);
+		return new Config(data);
+	}
+}
+
+export class NamedConfig extends Config {
+	public constructor(
+		/** the name of the config */
+		public name: string,
+		/** a map of module name -> module config */
+		public modules: Record<string, ModuleConfig>,
+	) {
+		super(modules);
+	}
+
+	public static deserialize(name: string, json: string): NamedConfig {
+		const data: Record</* module name*/ string, ModuleConfig> = JSON.parse(json);
+		return new NamedConfig(name, data);
+	}
+}
+
+const CONFIG_KEY_PREFIX = siteKey("vapeConfig");
+
+export function configKey(n: string): string {
+	return `${CONFIG_KEY_PREFIX}${n}`;
+}
+
+export function isConfigKey(n: string): boolean {
+	return n.startsWith(CONFIG_KEY_PREFIX);
+}
+
+/** Storage key for the name of the config that was loaded last, so it can be restored on script run. */
+const LAST_CONFIG_KEY = siteKey("vapeLastConfig");
+
+/**
+ * Lazily builds the initial {@link loadedConfig} from storage so that a stored
+ * "default" config (or the config loaded on the previous run) is picked up
+ * instead of always starting from an empty config.
+ */
+function getInitialConfig(): NamedConfig {
+	const last = GM_getValue<string>(LAST_CONFIG_KEY, "default");
+	for (const name of [last, "default"]) {
+		const raw = GM_getValue<string>(configKey(name), "");
+		if (raw) {
+			try {
+				return NamedConfig.deserialize(name, raw);
+			} catch {
+				logger.error(`Failed to parse config "${name}", falling back to empty config`);
+			}
+		}
+	}
+	return new NamedConfig("default", {});
+}
+
+export let loadedConfig = getInitialConfig();
+
+/** Saves this config to a config named {@link name} */
+export function saveConfig(name: string) {
+	GM_setValue(configKey(name), loadedConfig.serialize());
+}
+
+/** Loads a config named {@link name}, or the current config's name if not specified. */
+export function loadConfig(name: string = loadedConfig.name) {
+	const cfg = GM_getValue(configKey(name), loadedConfig.serialize());
+	loadedConfig = NamedConfig.deserialize(name, cfg);
+	GM_setValue(LAST_CONFIG_KEY, name);
+
+	for (const [name, config] of Object.entries(loadedConfig.modules)) {
+		const mod = ModuleManager.findModule(P.byName(name));
+		if (mod === undefined) {
+			logger.warn("Module not found while loading config:", name);
+			continue;
+		}
+		mod.enabled = config.enabled;
+		// catgpt optimization gg
+		const lookup = new Map(config.settings.map((s) => [s.name, s.value]));
+
+		iterSubSettings(mod, (setting) => {
+			if (lookup.has(setting.name)) {
+				(setting.setValue as (value: unknown) => void)(lookup.get(setting.name));
+			}
+		});
+	}
+}
+
+/** exports the currently loaded config to the clipboard */
+export function exportConfig(): void {
+	navigator.clipboard.writeText(loadedConfig.serialize());
+}
+
+/** imports a config from the clipboard and overwrites the current config data with it */
+export async function importConfig(): Promise<void> {
+	const cfg = await navigator.clipboard.readText();
+	if (!cfg) return; // this should never be `undefined`..? but original vape does this, so...
+	GM_setValue(configKey(loadedConfig.name), cfg); // set
+	loadConfig(); // reload
+}
+
+export function listConfigs(): string[] {
+	return [
+		...new Set(
+			GM_listValues()
+				.filter(isConfigKey)
+				.map((a) => a.slice(CONFIG_KEY_PREFIX.length))
+				.filter((name) => name.length > 0),
+		),
+	];
+}
+
+/**
+ * Restores the config that was loaded on the previous run (or a stored
+ * "default") and applies it to the registered modules. Call once after all
+ * modules have been registered.
+ */
+export function initConfig() {
+	loadConfig(loadedConfig.name);
+	// The startup load applies values through the setters, which would otherwise
+	// schedule a save-back. Let it settle first, then re-enable persistence so
+	// the (unchanged) config isn't rewritten on every script run.
+	isStartupLoad = false;
+}
+
+let isStartupLoad = true;
+
+let saveTimeout: ReturnType<typeof setTimeout> | undefined;
+
+function scheduleSave() {
+	if (isStartupLoad) return;
+	if (saveTimeout !== undefined) clearTimeout(saveTimeout);
+	saveTimeout = setTimeout(() => {
+		saveTimeout = undefined;
+		saveConfig(loadedConfig.name);
+	}, 500);
+}
+
+/** Updates the loadedConfig to reflect the current state of modules and settings */
+export function updateLoadedConfig(moduleName?: string, settingName?: string) {
+	if (!moduleName) {
+		// Full update
+		loadedConfig.modules = serializeModules();
+		scheduleSave();
+		return;
+	}
+
+	const mod = ModuleManager.findModule(P.byName(moduleName));
+	if (!mod) return;
+
+	if (!settingName) {
+		// Update entire module
+		loadedConfig.modules[moduleName] = ModuleConfig.from(mod);
+		scheduleSave();
+		return;
+	}
+
+	// Update specific setting
+	let setting: AnySetting | undefined;
+	iterSubSettings(mod, (s) => {
+		if (s.name === settingName) setting = s;
+	});
+	if (!setting) return;
+
+	const serialized = serializeBaseSetting<unknown>(setting);
+	let moduleConfig = loadedConfig.modules[moduleName];
+	if (!moduleConfig) {
+		// Starting from an empty/missing config: create the module entry so the
+		// first change to any of its settings is persisted instead of dropped.
+		moduleConfig = ModuleConfig.from(mod);
+		loadedConfig.modules[moduleName] = moduleConfig;
+	}
+	const index = moduleConfig.settings.findIndex((s) => s.name === settingName);
+	if (index !== -1) {
+		moduleConfig.settings[index] = serialized;
+	} else {
+		moduleConfig.settings.push(serialized);
+	}
+	scheduleSave();
+}

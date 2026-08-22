@@ -4,8 +4,8 @@
 		"prefix": "mod",
 		"include": ["src/features/modules/impl/*/*.ts"],
 		"body": [
-			"import Category from \"../../api/Category\"",
-			"import Mod from \"../../api/Module\"",
+			"import Category from \"@vape/core/features/modules/api/Category.ts\"",
+			"import Mod from \"@vape/core/features/modules/api/Category.ts\"",
 			"\t",
 			"export default class $TM_FILENAME_BASE extends Mod {",
 			"\tname = \"$TM_FILENAME_BASE\";",

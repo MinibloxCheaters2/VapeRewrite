@@ -71,7 +71,7 @@ See [here](https://github.com/MinibloxCheaters2/miniblox-sdk/blob/main/CONTRIBUT
 │   │       │   ├── combat/	#       Combat modules (AutoClicker, Criticals, Velocity, WTap, etc.)
 │   │       │   ├── inventory/	#       Inventory modules (AutoArmor, InventoryManager)
 │   │       │   ├── minigames/	#       Minigames modules (Breaker, ChestAura, MurderMystery, etc.)
-│   │       │   ├── render/	#       Render modules (Chams, HudManager)
+│   │       │   ├── render/	#       Render modules (Chams)
 │   │       │   ├── utility/	#       Utility modules (AntiBan, Sprint, PingSpoof, etc.)
 │   │       │   └── world/	#       World modules (NoFall, Timer, LiquidWalk)
 │   │       └── legit/		#     Legit mode state machine

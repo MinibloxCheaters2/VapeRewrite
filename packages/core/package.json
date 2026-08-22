@@ -1,0 +1,13 @@
+{
+	"name": "@vape/core",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"main": "./src/index.ts",
+	"types": "./src/index.ts",
+	"dependencies": {
+		"@wq2/brigadier-ts": "^1.0.8",
+		"@wq2/event-bus": "^0.1.0",
+		"solid-js": "^1.9.5"
+	}
+}

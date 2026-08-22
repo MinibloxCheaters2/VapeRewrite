@@ -1,0 +1,211 @@
+import type { BaseSetting, SubmoduleSetting } from "../../config/Settings";
+import type SubModule from "../../config/SubModule";
+import type { Category } from "./Category";
+
+import { createSignal } from "solid-js";
+
+import Bus from "@/Bus";
+
+// why tf does @/... not work for this, but it works for @/Bus???
+import { toggleAlertEnabled } from "../../../ui/globalSettings";
+import { showNotification } from "../../../ui/notifications";
+import { addBind, removeBind, setBind } from "../../binds/handler";
+import { saveBinds } from "../../binds/storage";
+import { updateLoadedConfig } from "../../config/configs";
+import Configurable from "../../config/Configurable";
+
+const NO_BIND = "";
+
+const TOGGLE_CALLBACK = (m: Mod) => () => m.toggle();
+
+export default abstract class Mod extends Configurable {
+	/** The name of this module. */
+	public abstract name: string;
+	/** What category this module is in */
+	public abstract category: Category;
+
+	/** Is the module enabled / on? */
+	private stateSignal = createSignal(false, {
+		name: "Module state signal",
+	});
+
+	/** Some text to show after the module, i.e. the mode, this CAN BE UNDEFINED. */
+	private tagSignal = createSignal<string | undefined>();
+
+	/** What is this module bound to? */
+	private bindSignal = createSignal(NO_BIND, {
+		name: "Module bind signal",
+	});
+
+	#keyID?: string;
+
+	protected override getModName(): string | undefined {
+		return this.name;
+	}
+
+	get KEY_ID() {
+		this.#keyID ??= `mod${this.name}`;
+		return this.#keyID;
+	}
+
+	get bindAccessor() {
+		return this.bindSignal[0];
+	}
+
+	get tagAccessor() {
+		return this.tagSignal[0];
+	}
+
+	get bind() {
+		return this.bindSignal[0]();
+	}
+
+	get tag() {
+		return this.tagSignal[0]();
+	}
+
+	set tag(value: string | undefined) {
+		this.tagSignal[1](value);
+	}
+
+	#updateBind(orig: string, newBind: string) {
+		if (newBind === NO_BIND) {
+			removeBind(orig, this.KEY_ID);
+		} else {
+			if (orig === NO_BIND) {
+				addBind(newBind, this.KEY_ID, TOGGLE_CALLBACK(this));
+			} else {
+				setBind(orig, newBind, this.KEY_ID);
+			}
+		}
+	}
+
+	set bind(value: string) {
+		this.#updateBind(this.bindSignal[0](), value);
+
+		this.bindSignal[1](value);
+		saveBinds();
+	}
+
+	get stateAccessor() {
+		return this.stateSignal[0];
+	}
+
+	private tagBy<S extends BaseSetting<V>, V>(setting: S): S {
+		this.tag = setting.name;
+		this.tagSignal[1](setting.name);
+		return setting;
+	}
+
+	#registeredSubModules = new Set<SubModule<any>>();
+
+	/**
+	 * Do NOT override this, override {@link onEnable} instead
+	 * This registers the module and calls {@link onEnable}.
+	 */
+	private onEnableInternal(): void {
+		Bus.registerSubscriber(this);
+		this.#registerActiveSubModules();
+		this.onEnable();
+	}
+
+	/**
+	 * Do NOT override this, override {@link onEnable} instead.
+	 * This deregisters the module and calls {@link onDisable}.
+	 */
+	private onDisableInternal(): void {
+		this.#unregisterAllSubModules();
+		Bus.unregisterSubscriber(this);
+		this.onDisable();
+	}
+
+	#registerActiveSubModules(): void {
+		for (const [groupName, submodules] of this.submoduleGroups) {
+			const setting = this.settings.find(
+				(s): s is SubmoduleSetting => s.type === "submodule" && s.name === groupName,
+			);
+			if (!setting) continue;
+			const activeName = setting.value();
+			const sm = submodules.find((s) => s.name === activeName);
+			if (sm && !this.#registeredSubModules.has(sm)) {
+				Bus.registerSubscriber(sm);
+				sm.onEnable();
+				this.#registeredSubModules.add(sm);
+			}
+		}
+	}
+
+	#unregisterAllSubModules(): void {
+		for (const sm of this.#registeredSubModules) {
+			Bus.unregisterSubscriber(sm);
+			sm.onDisable();
+		}
+		this.#registeredSubModules.clear();
+	}
+
+	protected override onSubmoduleChange(
+		groupName: string,
+		oldValue: string,
+		newValue: string,
+	): void {
+		const submodules = this.submoduleGroups.get(groupName);
+		if (!submodules) return;
+
+		const oldSM = submodules.find((sm) => sm.name === oldValue);
+		const newSM = submodules.find((sm) => sm.name === newValue);
+
+		if (oldSM && this.#registeredSubModules.has(oldSM)) {
+			Bus.unregisterSubscriber(oldSM);
+			oldSM.onDisable();
+			this.#registeredSubModules.delete(oldSM);
+		}
+
+		if (newSM && this.enabled) {
+			Bus.registerSubscriber(newSM);
+			newSM.onEnable();
+			this.#registeredSubModules.add(newSM);
+		}
+	}
+
+	/** Called when the module is enabled. */
+	protected onEnable(): void {}
+
+	/** Called when the module is disabled. */
+	protected onDisable(): void {}
+
+	/** Toggles this module without sending a notification. */
+	public toggleSilently(): void {
+		this.enabled = !this.enabled;
+	}
+
+	/** Toggles this module and sends a notification. */
+	public toggle(): void {
+		this.toggleSilently();
+		if (toggleAlertEnabled()) {
+			showNotification(this.name, this.enabled ? "Enabled" : "Disabled", "info", 2000);
+		}
+	}
+
+	private set state(value: boolean) {
+		this.stateSignal[1](value);
+	}
+
+	private get state(): boolean {
+		return this.stateSignal[0]();
+	}
+
+	set enabled(value: boolean) {
+		if (this.state === value) return;
+		this.state = value;
+		if (value) {
+			this.onEnableInternal();
+		} else {
+			this.onDisableInternal();
+		}
+		updateLoadedConfig(this.name);
+	}
+
+	get enabled(): boolean {
+		return this.state;
+	}
+}
