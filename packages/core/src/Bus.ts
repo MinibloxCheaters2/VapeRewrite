@@ -1,23 +1,24 @@
 import type EventBus from "@wq2/event-bus";
+import { EventDict } from "@wq2/event-bus";
 
 /**
  * The actual EventBus instance, set by the game-specific package at startup.
  * Core code accesses the bus through the default proxy export.
  */
-let busInstance: EventBus<any> | undefined;
+let busInstance: EventBus<EventDict> | undefined;
 
 /**
  * Set the global bus instance. Must be called once by the entry point
  * (e.g. packages/miniblox/src/Bus.ts) before any core code runs.
  */
-export function setBusInstance(bus: EventBus<any>): void {
+export function setBusInstance(bus: EventBus<EventDict>): void {
 	busInstance = bus;
 }
 
 /**
  * Get the current bus instance. Throws if not yet initialised.
  */
-export function getBusInstance(): EventBus<any> {
+export function getBusInstance(): EventBus<EventDict> {
 	if (!busInstance) {
 		throw new Error(
 			"Bus instance not initialised. Call setBusInstance() in the game entry point first.",

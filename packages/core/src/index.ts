@@ -1,5 +1,5 @@
 // ── Bus ──────────────────────────────────────────────────────────────
-export { default as Bus, setBusInstance, getBusInstance } from "./Bus";
+export { setBusInstance, getBusInstance } from "./Bus";
 
 // ── Client ───────────────────────────────────────────────────────────
 export { COMMAND_PREFIX, INJECT_DATE, REAL_CLIENT_NAME, clientName } from "./Client";
