@@ -3,5 +3,5 @@
  * @module
  */
 import "./hookTick";
-import "./sessionHook";
+// import "./sessionHook"; // unused
 import "./packetHook";

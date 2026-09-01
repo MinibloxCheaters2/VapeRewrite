@@ -1,0 +1,12 @@
+{
+	"extends": "../../tsconfig.json",
+	"compilerOptions": {
+		"paths": {
+			"@/*": ["./*"],
+			"@vape/core/*": ["../../core/src/*"],
+			"@vape/core": ["../../core/src"]
+		},
+		"baseUrl": "./src/"
+	},
+	"include": ["src/**/*"]
+}

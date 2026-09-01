@@ -1,20 +1,23 @@
-import type { DecodedVelocity, TeleportTarget } from "@wq2/waybackhq-types/src/net/session";
-
-import CancelableWrapper from "@vape/core/event/CancelableWrapper";
-
+import type { Session } from "@wq2/waybackhq-types/src/net/session";
 import Bus from "@/Bus";
 
-import Refs, { ready } from "./game";
-import { mcUI, ready as mUIReady } from "./minecraftUI";
+import { ready as gameReady } from "./game";
+
+const sessionPromise = import("@wq2/waybackhq-types/src/net/session");
+export let session: typeof Session;
+export const ready = sessionPromise.then(({ Session }) => {
+	session = Session;
+});
 
 export async function hookNewSession() {
-	await mUIReady;
-	mcUI.prototype.newSession = new Proxy(mcUI.prototype.newSession, {
+	await ready;
+	// note: unused
+	session.prototype.join = new Proxy(session.prototype.join, {
 		apply(target, thisArg, argArray) {
-			Bus.emit("connect");
+			// Bus.emit("connect");
 			return Reflect.apply(target, thisArg, argArray);
 		},
 	});
 }
 
-ready.then(hookNewSession);
+gameReady.then(hookNewSession);

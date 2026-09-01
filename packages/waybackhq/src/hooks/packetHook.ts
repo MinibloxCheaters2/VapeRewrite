@@ -14,25 +14,31 @@ export type PacketName = keyof Packet;
 export type PacketID = Packet[PacketName];
 export type AnyPacket = [PacketID, ...unknown[]];
 
-export default async function hookConnection() {
+export async function hookSendPacket() {
 	const connection = await connectionPromise;
 	// sendFast is just an alias to sendReliable, I don't need to hook that.
 	connection.prototype.sendReliable = new Proxy(connection.prototype.sendReliable, {
 		apply(target, thisArg: Connection, argArray: [AnyPacket]) {
+			function callOrig(data = [wrap.data]) {
+				Reflect.apply(target, thisArg, data);
+			}
+			if (!thisArg.connected) return callOrig(argArray);
 			const wrap = new CancelableWrapper(argArray[0]);
 			Bus.emit("sendPacket", wrap);
 			if (wrap.canceled) return;
-			return Reflect.apply(target, thisArg, wrap.data);
+			return callOrig();
 		},
 	});
+}
+
+export async function hookReceivePacket() {
+	const connection = await connectionPromise;
 	connection.prototype.handleMessage = new Proxy(connection.prototype.handleMessage, {
 		apply(target, thisArg: Connection, argArray: [string]) {
-			console.log(argArray);
 			let packet: AnyPacket;
 			try {
 				packet = JSON.parse(argArray[0]);
 			} catch (error) {
-				void error;
 				return;
 			}
 			if (!Array.isArray(packet)) {
@@ -41,9 +47,13 @@ export default async function hookConnection() {
 			const wrap = new CancelableWrapper(packet);
 			Bus.emit("receivePacket", wrap);
 			if (wrap.canceled) return;
-			return Reflect.apply(target, thisArg, wrap.data);
+			return Reflect.apply(target, thisArg, [JSON.stringify(wrap.data)]);
 		},
 	});
+}
+
+export default async function hookConnection() {
+	await Promise.all([hookSendPacket(), hookReceivePacket()]);
 }
 
 hookConnection();
