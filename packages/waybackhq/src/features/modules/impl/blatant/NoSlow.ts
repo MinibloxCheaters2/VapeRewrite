@@ -1,4 +1,4 @@
-import type { MovementInput } from "@wq2/waybackhq-types/src/client/clientplayer";
+import type { ClientPlayer } from "@wq2/waybackhq-types/src/client/clientplayer";
 
 import Category from "@vape/core/features/modules/api/Category";
 import Mod from "@vape/core/features/modules/api/Module";
@@ -9,19 +9,18 @@ import Refs from "@/hooks/game";
 export default class NoSlow extends Mod {
 	public name = "NoSlow";
 	public category = Category.BLATANT;
-	#orig: MovementInput["update"];
+	#origOnLivingUpdate: ClientPlayer["onLivingUpdate"];
 	#hook() {
-		this.#orig = Refs.player.movementInput.update;
-		Refs.player.movementInput.update = new Proxy(this.#orig, {
-			apply(target, thisArg: MovementInput, argArray) {
+		this.#origOnLivingUpdate = Refs.player.onLivingUpdate;
+		Refs.player.onLivingUpdate = new Proxy(this.#origOnLivingUpdate, {
+			apply(target, thisArg: ClientPlayer, argArray: []) {
+				const { itemInUse } = Refs.player;
+				Refs.player.itemInUse = null;
 				const r = Reflect.apply(target, thisArg, argArray);
-				if (Refs.player.isUsingItem()) {
-					thisArg.moveStrafe *= 5;
-					thisArg.moveForward *= 5;
-				}
+				Refs.player.itemInUse = itemInUse;
 				return r;
-			},
-		});
+			}
+		})
 	}
 	@Bus.Subscribe("join")
 	private onJoin(): void {
