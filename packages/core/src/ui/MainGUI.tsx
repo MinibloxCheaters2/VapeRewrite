@@ -200,7 +200,7 @@ function MainGUI() {
 
 		const tick = () => {
 			const hue = (Date.now() * 0.001 * 0.2 * speed) % 1;
-			shadowWrapper.host.style.setProperty("--vape-accent", hsvToRgbString(hue, 0.9, 1));
+			shadowWrapper.wrapper.style.setProperty("--vape-accent", hsvToRgbString(hue, 0.9, 1));
 			guiRainbowTimer = setTimeout(tick, interval);
 		};
 		guiRainbowTimer = setTimeout(tick, interval);
