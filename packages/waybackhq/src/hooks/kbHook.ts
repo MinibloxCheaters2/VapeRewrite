@@ -1,6 +1,6 @@
 import bus from "@/Bus";
 import { ready, session } from "@/utils/wrappers/session";
-import { mod, ready as elReady } from "@/utils/wrappers/entityliving";
+import { mod } from "@/utils/wrappers/entityliving";
 import { DecodedVelocity, Session } from "@wq2/waybackhq-types/src/net/session";
 import { CancelableWrapper } from "@vape/core/index";
 import { EntityLivingBase } from "@wq2/waybackhq-types/src/entity/entityliving";
@@ -15,10 +15,17 @@ export default function hook() {
 	origKnockBack = mod.EntityLivingBase.prototype.knockBack;
 	session.prototype.applyVelocity = new Proxy(origApplyVelocity, {
 		apply(target, thisArg: Session, argArray: [velocity: DecodedVelocity]) {
-			const v = new CancelableWrapper(argArray[0]);
+			const [vel] = argArray;
+			const { x, y, z, id } = vel;
+			const v = new CancelableWrapper({
+				x,
+				y,
+				z,
+				entityID: id
+			});
 			bus.emit("velocity", v);
 			if (v.canceled) return;
-			argArray[0] = v.data;
+			[vel.x, vel.y, vel.z] = [v.data.x, v.data.y, v.data.z];
 			return Reflect.apply(target, thisArg, argArray);
 		}
 	});
@@ -30,7 +37,8 @@ export default function hook() {
 			const v = new CancelableWrapper({
 				x: dx,
 				y: thisArg.world.knockback || 0.36,
-				z: dz
+				z: dz,
+				entityID: thisArg.entityId
 			});
 			bus.emit("velocity", v);
 			if (v.canceled) return;

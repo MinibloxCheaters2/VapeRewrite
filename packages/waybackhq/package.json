@@ -10,6 +10,6 @@
 		"@wq2/waybackhq-types": "C:/Users/fefwf/Documents/projects/waybackhq-types"
 	},
 	"devDependencies": {
-		"@types/three": "0.170.0"
+		"@types/three": "0.160.0"
 	}
 }

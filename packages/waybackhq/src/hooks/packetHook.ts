@@ -12,7 +12,7 @@ const connectionPromise = import("@wq2/waybackhq-types/src/net/connection").then
 export type Packet = typeof PACKET;
 export type PacketName = keyof Packet;
 export type PacketID = Packet[PacketName];
-export type AnyPacket = [PacketID, ...unknown[]];
+export type AnyPacket = [ID: PacketID, ...unknown[]];
 
 export async function hookSendPacket() {
 	const connection = await connectionPromise;
