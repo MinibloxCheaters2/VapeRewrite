@@ -1,8 +1,7 @@
-import type { ClientPlayer } from "@wq2/waybackhq-types/src/client/clientplayer";
+import type { MovementInput } from "@wq2/waybackhq-types/src/client/clientplayer";
 
 import Category from "@vape/core/features/modules/api/Category";
 import Mod from "@vape/core/features/modules/api/Module";
-import { EntityLivingBase } from "@wq2/waybackhq-types/src/entity/entityliving";
 
 import Bus from "@/Bus";
 import Refs from "@/hooks/game";
@@ -10,21 +9,15 @@ import Refs from "@/hooks/game";
 export default class NoSlow extends Mod {
 	public name = "NoSlow";
 	public category = Category.BLATANT;
-	#origOnLivingUpdate: EntityLivingBase["onLivingUpdate"];
+	#orig: MovementInput["update"];
 	#hook() {
-		this.#origOnLivingUpdate = Refs.player.onLivingUpdate;
-		Refs.player.onLivingUpdate = new Proxy(this.#origOnLivingUpdate, {
-			apply(target, thisArg, argArray) {
-				const ts = thisArg as ClientPlayer;
-				const origSprintToggleTimer = ts.sprintToggleTimer;
-				const usingItem = ts.isUsingItem();
-				if (usingItem) {
-					ts.movementInput.moveStrafe *= 1.2;
-					ts.movementInput.moveForward *= 1.2;
-				}
+		this.#orig = Refs.player.movementInput.update;
+		Refs.player.movementInput.update = new Proxy(this.#orig, {
+			apply(target, thisArg: MovementInput, argArray) {
 				const r = Reflect.apply(target, thisArg, argArray);
-				if (usingItem) {
-					ts.sprintToggleTimer = origSprintToggleTimer;
+				if (Refs.player.isUsingItem()) {
+					thisArg.moveStrafe *= 5;
+					thisArg.moveForward *= 5;
 				}
 				return r;
 			},
