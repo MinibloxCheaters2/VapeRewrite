@@ -1,23 +1,22 @@
-import { ClientPlayer as CPlr } from "@wq2/waybackhq-types/src/client/clientplayer";
-import { EntityLivingBase } from "@wq2/waybackhq-types/src/entity/entityliving";
+import { type EntityLivingBase as ELB } from "@wq2/waybackhq-types/src/entity/entityliving";
+import { mod as cplr } from "../wrappers/clientplayer";
 
 import Refs from "@/hooks/game";
 
 import canPlayerSeeEntity from "./wallCheck";
+import { mod as elM } from "../wrappers/entityliving";
 
-let ClientPlayer: typeof CPlr;
-import("@wq2/waybackhq-types/src/client/clientplayer").then((mod) => {
-	ClientPlayer = mod.ClientPlayer;
-});
-
-export function findTargets(range = 6, _angle = 360, checkWalls = false): EntityLivingBase[] {
+export function findTargets(range = 6, _angle = 360, checkWalls = false): ELB[] {
 	const { localPlayer: player, world } = Refs.game;
 	if (world === undefined) throw new Error("findTargets called while world is null");
 
 	const sqRange = range * range;
 	const { entities } = world;
+	const { ClientPlayer } = cplr;
+	const { EntityLivingBase } = elM;
 
 	const targets = entities.filter((e) => {
+		if (!(e instanceof EntityLivingBase) || !e.isEntityAlive()) return false;
 		const base = !(e instanceof ClientPlayer) || !e.isLocal;
 		if (!base) return false;
 		const distCheck = player.getDistanceSqToEntity(e) < sqRange;
@@ -27,5 +26,5 @@ export function findTargets(range = 6, _angle = 360, checkWalls = false): Entity
 		return true;
 	});
 
-	return targets as EntityLivingBase[];
+	return targets as ELB[];
 }

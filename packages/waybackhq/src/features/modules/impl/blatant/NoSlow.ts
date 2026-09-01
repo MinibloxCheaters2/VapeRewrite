@@ -20,7 +20,7 @@ export default class NoSlow extends Mod {
 				Refs.player.itemInUse = itemInUse;
 				return r;
 			}
-		})
+		});
 	}
 	@Bus.Subscribe("join")
 	private onJoin(): void {
