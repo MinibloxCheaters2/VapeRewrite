@@ -28,7 +28,7 @@ export default class NoFall extends Mod {
 			case "AntiCheat":
 				{
 					if (!Refs.player.onGround && Refs.player.fallDistance >= MAX_FALL_DISTANCE) {
-						const { localPlayer: player, world } = Refs.game;
+						const { localPlayer: player, world, session } = Refs.game;
 						if (Refs.player.onGround) {
 							return;
 						}
@@ -38,9 +38,9 @@ export default class NoFall extends Mod {
 						// 	Math.floor(player.posZ),
 						// );
 						// if (block.material === "air") return;
-						Refs.session.movementSequence -= 2;
-						Refs.session.sendMove();
-						Refs.session.movementSequence += 1;
+						session.movementSequence -= 2;
+						session.sendMove();
+						session.movementSequence += 1;
 						Bus.once("teleport", () => {
 							Refs.player.fallDistance = 0;
 							Refs.player.onGround = true;

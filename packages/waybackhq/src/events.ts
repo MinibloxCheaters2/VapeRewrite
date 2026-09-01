@@ -9,7 +9,11 @@ type ClientEvents = {
 	gameTick: void;
 	playerTick: Cancelable;
 	teleport: CancelableWrapper<TeleportTarget>;
-	velocity: CancelableWrapper<DecodedVelocity>;
+	velocity: CancelableWrapper<{
+		x: number,
+		y: number,
+		z: number
+	}>;
 	sendPacket: CancelableWrapper<AnyPacket>;
 	receivePacket: CancelableWrapper<AnyPacket>;
 	// connect: void; // requires session hook, and unused.

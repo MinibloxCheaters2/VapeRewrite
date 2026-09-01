@@ -12,6 +12,7 @@ import WTap from "./features/modules/impl/combat/WTap";
 import Test from "./features/modules/impl/utility/Test";
 import NoFall from "./features/modules/impl/world/NoFall";
 import Timer from "./features/modules/impl/world/Timer";
+import KeepSprint from "./features/modules/impl/combat/KeepSprint";
 
 type Named = {};
 
@@ -30,6 +31,7 @@ const mm = new ModuleManager<Named>({
 		new WTap(),
 		new NoFall(),
 		new Test(),
+		new KeepSprint()
 	],
 });
 
