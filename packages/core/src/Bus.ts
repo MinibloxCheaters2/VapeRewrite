@@ -1,4 +1,5 @@
 import type EventBus from "@wq2/event-bus";
+
 import { EventDict } from "@wq2/event-bus";
 
 /**

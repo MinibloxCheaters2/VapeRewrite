@@ -13,8 +13,8 @@ const mm = new ModuleManager<Named>({
 		new Speed(),
 		new Fly(),
 		new Phase(),
-		new FilterBypass()
-//		new Timer(),
+		new FilterBypass(),
+		//		new Timer(),
 	],
 });
 

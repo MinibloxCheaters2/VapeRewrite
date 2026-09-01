@@ -63,13 +63,7 @@ export default class KillAura extends Mod {
 		if (this.swing !== "none") swing(this.swing);
 		const { game: g, player, session } = Refs;
 		player.attackTargetEntityWithCurrentItem(e);
-		if (g.netRole === "client") session.sendActions(
-			1,
-			e.entityId,
-			true,
-			true,
-			0,
-		);
+		if (g.netRole === "client") session.sendActions(1, e.entityId, true, true, 0);
 	}
 
 	@Bus.Subscribe("playerTick")

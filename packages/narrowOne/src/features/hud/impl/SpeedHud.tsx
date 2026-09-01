@@ -1,8 +1,6 @@
 import HudElement from "@vape/core/features/hud/api/JSXHudElement";
 import { createSignal } from "solid-js";
 
-import Refs from "@/hooks/game";
-
 export default class SpeedHud extends HudElement {
 	public name = "Speed";
 
@@ -26,6 +24,7 @@ export default class SpeedHud extends HudElement {
 	public onAdd(): void {
 		const update = () => {
 			try {
+				throw "TODO";
 				const { localPlayer: player } = Refs.game;
 				if (!player) return;
 				const now = performance.now();

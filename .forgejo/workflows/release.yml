@@ -92,7 +92,7 @@ jobs:
 
       - name: Upload Userscripts
         run: |
-          for FILE in dist/*.user.js; do
+          for FILE in dist/**/*.user.js; do
             if [ -f "$FILE" ]; then
               echo "Uploading $FILE..."
               curl -X POST \

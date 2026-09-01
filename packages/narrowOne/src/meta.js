@@ -1,5 +1,5 @@
 /* oxlint-disable unicorn/no-empty-file */
 // ==UserScript==
-// @match       https://*.waybackhq.com/*
+// @match       https://*.narrow.one/*
 // @run-at      document-idle
 // ==/UserScript==

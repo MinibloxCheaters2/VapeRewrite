@@ -1,7 +1,8 @@
-import Bus from "@/Bus";
 import Category from "@vape/core/features/modules/api/Category";
 import Mod from "@vape/core/features/modules/api/Module";
 import { SliderSetting } from "@vape/core/index";
+
+import Bus from "@/Bus";
 
 export default class Fly extends Mod {
 	public name = "Fly";
@@ -14,8 +15,7 @@ export default class Fly extends Mod {
 		// TODO
 	}
 
-	onDisable(): void {
-	}
+	onDisable(): void {}
 
 	getTag(): string {
 		return `Normal ${this.speedSetting.value().toFixed(2)}`;

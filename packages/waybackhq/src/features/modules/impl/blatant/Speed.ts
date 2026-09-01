@@ -17,6 +17,7 @@ export default class Speed extends Mod {
 		6.0,
 		0.01,
 	);
+	private readonly jump = this.createToggleSetting("Jump");
 
 	@Bus.Subscribe("playerTick")
 	onTick(): void {
@@ -26,6 +27,7 @@ export default class Speed extends Mod {
 		const dir = getMoveDir(this.speedSetting.value());
 		const [x, z] = dir;
 
+		if (localPlayer.onGround && this.jump.value()) localPlayer.jump();
 		localPlayer.motionX = x;
 		localPlayer.motionZ = z;
 	}

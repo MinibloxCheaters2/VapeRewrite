@@ -12,7 +12,7 @@ type ClientEvents = {
 	velocity: CancelableWrapper<DecodedVelocity>;
 	sendPacket: CancelableWrapper<AnyPacket>;
 	receivePacket: CancelableWrapper<AnyPacket>;
-	connect: void;
+	// connect: void; // requires session hook, and unused.
 	join: void;
 };
 

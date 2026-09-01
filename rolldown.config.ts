@@ -75,7 +75,8 @@ function defineGame(name: string, plugins?: RolldownPlugin[], opts?: RolldownOpt
 
 		output: {
 			format: "iife",
-			file: `dist/${name}.user.js`,
+			dir: `dist/${name}/`,
+			entryFileNames: `${name}.user.js`,
 			minify: false,
 			sourcemap: "inline",
 		},
@@ -87,4 +88,6 @@ function defineGame(name: string, plugins?: RolldownPlugin[], opts?: RolldownOpt
 export default defineConfig([
 	defineGame("miniblox"),
 	defineGame("waybackhq", [thing()]),
+	defineGame("narrowOne"),
+	defineGame("voxiom")
 ]);

@@ -3,7 +3,6 @@ import Category from "@vape/core/features/modules/api/Category";
 import Mod from "@vape/core/features/modules/api/Module";
 
 import Bus from "@/Bus";
-import Refs from "@/hooks/game";
 import { getMoveDir } from "@/utils/movement";
 
 export default class Speed extends Mod {
@@ -20,22 +19,22 @@ export default class Speed extends Mod {
 
 	@Bus.Subscribe("playerTick")
 	onTick(): void {
-		const {
-			game: { localPlayer },
-		} = Refs;
+		// const {
+		// 	game: { localPlayer },
+		// } = Refs;
 		const dir = getMoveDir(this.speedSetting.value());
 		const [x, z] = dir;
 
-		localPlayer.motionX = x;
-		localPlayer.motionZ = z;
+		// localPlayer.motionX = x;
+		// localPlayer.motionZ = z;
 	}
 
 	onDisable(): void {
-		const {
-			game: { localPlayer },
-		} = Refs;
-		localPlayer.motionX = Math.max(Math.min(localPlayer.motionX, 0.3), -0.3);
-		localPlayer.motionZ = Math.max(Math.min(localPlayer.motionZ, 0.3), -0.3);
+		// const {
+		// 	game: { localPlayer },
+		// } = Refs;
+		// localPlayer.motionX = Math.max(Math.min(localPlayer.motionX, 0.3), -0.3);
+		// localPlayer.motionZ = Math.max(Math.min(localPlayer.motionZ, 0.3), -0.3);
 	}
 
 	getTag(): string {
