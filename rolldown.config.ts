@@ -5,6 +5,7 @@ import swc from "@wq2/rolldown-plugin-swc";
 import solid from "@wq2/rolldown-plugin-solid-oxc";
 import { withFilter } from "rolldown/filter";
 import minify from "./minifyPlugin";
+import minifyCSS from "./cssMinifyPlugin";
 import thing from "./thingPlugin";
 
 const { packageJson } = (await readPackageUp())!;
@@ -48,6 +49,7 @@ function defineGame(name: string, plugins?: RolldownPlugin[], opts?: RolldownOpt
 					},
 				},
 			),
+			minifyCSS(),
 			withFilter(solid(), {
 				transform: { moduleType: ["jsx", "tsx"] },
 			}),
