@@ -1,7 +1,8 @@
+import type { ClientPlayer } from "@wq2/waybackhq-types/src/client/clientplayer";
+
 import Cancelable from "@vape/core/event/Cancelable";
 import logger from "@vape/core/utils/logging/loggers";
 import { Entity } from "@wq2/waybackhq-types/src/entity/entity";
-import type { ClientPlayer } from "@wq2/waybackhq-types/src/client/clientplayer";
 import { Game } from "@wq2/waybackhq-types/src/game";
 
 import Bus from "@/Bus";
