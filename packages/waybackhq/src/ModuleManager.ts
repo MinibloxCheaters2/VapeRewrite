@@ -10,6 +10,7 @@ import AutoClicker from "./features/modules/impl/combat/AutoClicker";
 import KeepSprint from "./features/modules/impl/combat/KeepSprint";
 import Velocity from "./features/modules/impl/combat/Velocity";
 import WTap from "./features/modules/impl/combat/WTap";
+import InventoryMove from "./features/modules/impl/utility/InventoryMove";
 import Test from "./features/modules/impl/utility/Test";
 import NoFall from "./features/modules/impl/world/NoFall";
 import Timer from "./features/modules/impl/world/Timer";
@@ -32,6 +33,7 @@ const mm = new ModuleManager<Named>({
 		new NoFall(),
 		new Test(),
 		new KeepSprint(),
+		new InventoryMove(),
 	],
 });
 
