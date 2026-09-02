@@ -76,7 +76,7 @@ export default class KillAura extends Mod {
 		RotationManager.scheduleRotation(
 			new RotationPlan(rot, this.movementCorrection.value().value, 2),
 		);
-		if (g.netRole === "client") session.sendActions(1, e.entityId, true, true, 0);
+		if (g.netRole === "client") session.sendActions(1, e.entityId, false, false, 0);
 	}
 
 	@Bus.Subscribe("playerTick")
