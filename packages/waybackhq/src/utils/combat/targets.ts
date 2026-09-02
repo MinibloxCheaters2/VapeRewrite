@@ -1,10 +1,10 @@
 import { type EntityLivingBase as ELB } from "@wq2/waybackhq-types/src/entity/entityliving";
-import { mod as cplr } from "../wrappers/clientplayer";
 
 import Refs from "@/hooks/game";
 
-import canPlayerSeeEntity from "./wallCheck";
+import { mod as cplr } from "../wrappers/clientplayer";
 import { mod as elM } from "../wrappers/entityliving";
+import canPlayerSeeEntity from "./wallCheck";
 
 export function findTargets(range = 6, _angle = 360, checkWalls = false): ELB[] {
 	const { localPlayer: player, world } = Refs.game;

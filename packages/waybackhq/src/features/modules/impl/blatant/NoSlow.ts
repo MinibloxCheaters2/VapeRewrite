@@ -19,7 +19,7 @@ export default class NoSlow extends Mod {
 				const r = Reflect.apply(target, thisArg, argArray);
 				Refs.player.itemInUse = itemInUse;
 				return r;
-			}
+			},
 		});
 	}
 	@Bus.Subscribe("join")

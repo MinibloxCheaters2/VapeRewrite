@@ -1,5 +1,6 @@
-import { ready as gameReady } from "./game";
 import { ready as sessionReady, session } from "@/utils/wrappers/session";
+
+import { ready as gameReady } from "./game";
 
 export async function hookNewSession() {
 	await sessionReady;

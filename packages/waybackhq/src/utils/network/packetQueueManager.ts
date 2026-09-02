@@ -2,13 +2,15 @@
 
 import type { Material, Mesh } from "three";
 
+import { CancelableWrapper, Priority } from "@vape/core/index";
+
+import Refs from "@/hooks/game";
+import { AnyPacket } from "@/hooks/packetHook";
+import { mod as protocol } from "@/utils/wrappers/protocol";
+import { mod as THREE } from "@/utils/wrappers/three";
+
 import Bus from "../../Bus";
 import Rotation, { type IRotation } from "../aiming/rotation";
-import { AnyPacket } from "@/hooks/packetHook";
-import { CancelableWrapper, Priority } from "@vape/core/index";
-import Refs from "@/hooks/game";
-import { mod as THREE } from "@/utils/wrappers/three";
-import { mod as protocol } from "@/utils/wrappers/protocol";
 
 export class PacketRecord<T> {
 	constructor(
@@ -89,11 +91,15 @@ export default new (class PacketQueueManager {
 
 	#preProcessing(pkt: AnyPacket): PreAction {
 		switch (pkt[0]) {
-			case protocol.PACKET.CHAT: return PreAction.PASS;
-			case protocol.PACKET.RESPAWN: return PreAction.FLUSH;
-			case protocol.PACKET.DISCONNECT: return PreAction.FLUSH;
-			default: return PreAction.GO;
-		};
+			case protocol.PACKET.CHAT:
+				return PreAction.PASS;
+			case protocol.PACKET.RESPAWN:
+				return PreAction.FLUSH;
+			case protocol.PACKET.DISCONNECT:
+				return PreAction.FLUSH;
+			default:
+				return PreAction.GO;
+		}
 	}
 
 	@Bus.Subscribe("sendPacket", Priority.FINAL_DECISION)

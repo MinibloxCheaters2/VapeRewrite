@@ -2,11 +2,9 @@ import type { Tagged } from "@vape/core/features/config/Settings";
 import type { SPacketPlayerInput } from "@wq2/miniblox-sdk";
 
 import RotationManager from "../aiming/rotate";
-import AntiCheatDetector, { DetectedAC } from "../helpers/AntiCheatDetector";
 
 /**
  * Corrects your movement.
- * The recommended mode is Auto, which uses the AntiCheatDetector helper to determine what movement fix mode to use.
  */
 enum MovementCorrection {
 	/**
@@ -37,34 +35,37 @@ export const SETTING: (Tagged & { value: MovementCorrection })[] = ENTRIES.map((
 export function doMovementCorrection(c: MovementCorrection): boolean {
 	return c === MovementCorrection.Silent || c === MovementCorrection.Strict;
 }
-// TODO: bother to adapt this to WaybackHQ
-function calculateImpulse(a: boolean, b: boolean, invert = false) {
-	return (a ? (invert ? -1 : 1) : 0) + (b ? (invert ? 1 : -1) : 0);
+
+function calculateImpulse(a: boolean, b: boolean) {
+	return (a ? 1 : 0) - (b ? 1 : 0);
 }
-export function doSilentMovementCorrection(input: SPacketPlayerInput, oY: number) {
-	const rotation = RotationManager.currentPlan;
-	if (!rotation) return;
 
-	const z = calculateImpulse(input.up, input.down, true);
-	const x = calculateImpulse(input.left, input.right, true);
+interface Input {
+	forward: boolean;
+	back: boolean;
+	left: boolean;
+	right: boolean;
+}
 
-	const deltaYaw = oY - rotation.target.yaw;
+export function doSilentMovementCorrection(input: Input, movementYaw: number, viewYaw: number) {
+	if (viewYaw == null) return;
+	const z = calculateImpulse(input.forward, input.back);
+	const x = calculateImpulse(input.left, input.right);
+	if (z === 0 && x === 0) return;
 
-	const newX = x * Math.cos(deltaYaw) - z * Math.sin(deltaYaw);
-	const newZ = z * Math.cos(deltaYaw) + x * Math.sin(deltaYaw);
+	const deltaYaw = ((viewYaw - movementYaw) * Math.PI) / 180;
+	const cos = Math.cos(deltaYaw);
+	const sin = Math.sin(deltaYaw);
 
+	const newX = x * cos - z * sin;
+	const newZ = z * cos + x * sin;
 	const movementSideways = Math.round(newX);
 	const movementForward = Math.round(newZ);
 
-	const forward = movementForward > 0;
-	const backward = movementForward < 0;
-	const left = movementSideways > 0;
-	const right = movementSideways < 0;
-
-	input.left = left;
-	input.right = right;
-	input.up = forward;
-	input.down = backward;
+	input.forward = movementForward > 0;
+	input.back = movementForward < 0;
+	input.left = movementSideways > 0;
+	input.right = movementSideways < 0;
 }
 
 export default MovementCorrection;

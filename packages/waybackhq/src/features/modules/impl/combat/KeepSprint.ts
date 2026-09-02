@@ -1,9 +1,9 @@
 import { Category } from "@vape/core/features/modules/api/Category";
 import Mod from "@vape/core/features/modules/api/Module";
-
-import Refs from "@/hooks/game";
 import { EntityPlayer } from "@wq2/waybackhq-types/src/entity/player";
+
 import Bus from "@/Bus";
+import Refs from "@/hooks/game";
 
 let origAttack: EntityPlayer["attackTargetEntityWithCurrentItem"];
 

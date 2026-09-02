@@ -34,11 +34,10 @@ interface WebpackRequire {
 	p?: string;
 }
 
-
 type WebpackChunk = [
-  chunkIds: Array<ModuleID>,
-  modules: Record<ModuleID, Function>,
-  runtime?: (require: WebpackRequire) => void
+	chunkIds: Array<ModuleID>,
+	modules: Record<ModuleID, Function>,
+	runtime?: (require: WebpackRequire) => void,
 ];
 
 type WebpackModule = (
@@ -48,11 +47,13 @@ type WebpackModule = (
 ) => void;
 
 type WebpackChunkArray = Omit<Array<WebpackChunk>, "push"> & {
-	push(chunk: [
-		ids: ModuleID[],
-		modules: Record<number, (require: WebpackRequire) => void>,
-		fn: (require: WebpackRequire) => void,
-	]): void;
+	push(
+		chunk: [
+			ids: ModuleID[],
+			modules: Record<number, (require: WebpackRequire) => void>,
+			fn: (require: WebpackRequire) => void,
+		],
+	): void;
 };
 
 export const webpackChunk = (
@@ -66,9 +67,13 @@ export let webpackRequire: WebpackRequire;
 
 const n = `__capture_${crypto.randomUUID()}`;
 
-webpackChunk.push([[n], {}, (req) => {
-	webpackRequire = req;
-	expose("require", () => webpackRequire);
-}]);
-const i = webpackChunk.findIndex(x => x[0].includes(n));
+webpackChunk.push([
+	[n],
+	{},
+	(req) => {
+		webpackRequire = req;
+		expose("require", () => webpackRequire);
+	},
+]);
+const i = webpackChunk.findIndex((x) => x[0].includes(n));
 if (i !== -1) webpackChunk.splice(i, 1);

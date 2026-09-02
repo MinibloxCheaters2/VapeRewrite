@@ -7,12 +7,12 @@ import NoSlow from "./features/modules/impl/blatant/NoSlow";
 import Phase from "./features/modules/impl/blatant/Phase";
 import Speed from "./features/modules/impl/blatant/Speed";
 import AutoClicker from "./features/modules/impl/combat/AutoClicker";
+import KeepSprint from "./features/modules/impl/combat/KeepSprint";
 import Velocity from "./features/modules/impl/combat/Velocity";
 import WTap from "./features/modules/impl/combat/WTap";
 import Test from "./features/modules/impl/utility/Test";
 import NoFall from "./features/modules/impl/world/NoFall";
 import Timer from "./features/modules/impl/world/Timer";
-import KeepSprint from "./features/modules/impl/combat/KeepSprint";
 
 type Named = {};
 
@@ -31,7 +31,7 @@ const mm = new ModuleManager<Named>({
 		new WTap(),
 		new NoFall(),
 		new Test(),
-		new KeepSprint()
+		new KeepSprint(),
 	],
 });
 

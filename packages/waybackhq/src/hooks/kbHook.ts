@@ -1,10 +1,12 @@
-import bus from "@/Bus";
-import { ready, session } from "@/utils/wrappers/session";
-import { mod } from "@/utils/wrappers/entityliving";
-import { DecodedVelocity, Session } from "@wq2/waybackhq-types/src/net/session";
 import { CancelableWrapper } from "@vape/core/index";
-import { EntityLivingBase } from "@wq2/waybackhq-types/src/entity/entityliving";
 import { Entity } from "@wq2/waybackhq-types/src/entity/entity";
+import { EntityLivingBase } from "@wq2/waybackhq-types/src/entity/entityliving";
+import { DecodedVelocity, Session } from "@wq2/waybackhq-types/src/net/session";
+
+import bus from "@/Bus";
+import { mod } from "@/utils/wrappers/entityliving";
+import { ready, session } from "@/utils/wrappers/session";
+
 import Refs from "./game";
 
 let origApplyVelocity: Session["applyVelocity"];
@@ -21,31 +23,35 @@ export default function hook() {
 				x,
 				y,
 				z,
-				entityID: id
+				entityID: id,
 			});
 			bus.emit("velocity", v);
 			if (v.canceled) return;
 			[vel.x, vel.y, vel.z] = [v.data.x, v.data.y, v.data.z];
 			return Reflect.apply(target, thisArg, argArray);
-		}
+		},
 	});
 	mod.EntityLivingBase.prototype.knockBack = new Proxy(origKnockBack, {
-		apply(target, thisArg: EntityLivingBase, argArray: [Entity, dmg: number, x: number, z: number]) {
+		apply(
+			target,
+			thisArg: EntityLivingBase,
+			argArray: [Entity, dmg: number, x: number, z: number],
+		) {
 			if (thisArg.entityId !== Refs.player.entityId)
 				return Reflect.apply(target, thisArg, argArray);
-			const [,, dx, dz] = argArray;
+			const [, , dx, dz] = argArray;
 			const v = new CancelableWrapper({
 				x: dx,
 				y: thisArg.world.knockback || 0.36,
 				z: dz,
-				entityID: thisArg.entityId
+				entityID: thisArg.entityId,
 			});
 			bus.emit("velocity", v);
 			if (v.canceled) return;
 			argArray[2] = v.data.x;
 			argArray[3] = v.data.z;
 			return Reflect.apply(target, thisArg, argArray);
-		}
+		},
 	});
 }
 ready.then(hook);

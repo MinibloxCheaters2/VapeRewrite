@@ -10,10 +10,10 @@ type ClientEvents = {
 	playerTick: Cancelable;
 	teleport: CancelableWrapper<TeleportTarget>;
 	velocity: CancelableWrapper<{
-		entityID: number,
-		x: number,
-		y: number,
-		z: number
+		entityID: number;
+		x: number;
+		y: number;
+		z: number;
 	}>;
 	sendPacket: CancelableWrapper<AnyPacket>;
 	receivePacket: CancelableWrapper<AnyPacket>;

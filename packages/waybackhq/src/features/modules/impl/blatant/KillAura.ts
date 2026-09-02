@@ -1,11 +1,15 @@
 import Category from "@vape/core/features/modules/api/Category";
 import Mod from "@vape/core/features/modules/api/Module";
+import { SimpleVec3 } from "@vape/core/utils/math/vec";
 import { EntityLivingBase } from "@wq2/waybackhq-types/src/entity/entityliving";
 
 import Bus from "@/Bus";
 import Refs from "@/hooks/game";
+import { lookAtEntity } from "@/utils/aiming/lookAt";
+import RotationManager, { RotationPlan } from "@/utils/aiming/rotate";
 import swing from "@/utils/combat/swing";
 import { findTargets } from "@/utils/combat/targets";
+import { SETTING } from "@/utils/movement/MovementCorrection";
 
 export default class KillAura extends Mod {
 	public name = "KillAura";
@@ -19,6 +23,7 @@ export default class KillAura extends Mod {
 	private autoBlockSetting = this.createToggleSetting("Auto Block", true);
 	private wallCheckSetting = this.createToggleSetting("Wall Check", false);
 	private swingSetting = this.createDropdownSetting("Swing", ["none", "client", "server", "both"]);
+	private movementCorrection = this.createDropdownSetting("MovementCorrection", SETTING);
 
 	get swing() {
 		return this.swingSetting.value();
@@ -63,6 +68,14 @@ export default class KillAura extends Mod {
 		if (this.swing !== "none") swing(this.swing);
 		const { game: g, player, session } = Refs;
 		player.attackTargetEntityWithCurrentItem(e);
+		const rot = lookAtEntity(
+			new SimpleVec3(player.posX, player.posY, player.posZ),
+			player.getEyeHeight(),
+			e,
+		);
+		RotationManager.scheduleRotation(
+			new RotationPlan(rot, this.movementCorrection.value().value, 1),
+		);
 		if (g.netRole === "client") session.sendActions(1, e.entityId, true, true, 0);
 	}
 
