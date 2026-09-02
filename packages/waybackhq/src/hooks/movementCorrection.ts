@@ -44,6 +44,9 @@ export function hook() {
 			const plan = planFor(player);
 			if (!plan || argArray[0] === false) return r;
 			player.rotationYawHead = plan.target.yaw;
+			const prevBody = player.renderYawOffset;
+			player.renderYawOffset = plan.target.yaw;
+			player.prevRenderYawOffset = prevBody;
 			return r;
 		},
 	});
@@ -52,11 +55,14 @@ export function hook() {
 		apply(target, thisArg: Entity, args) {
 			const plan = planFor(thisArg);
 			if (!plan) return Reflect.apply(target, thisArg, args);
+			const {
+				target: { yaw },
+			} = plan;
 			const correct = doMovementCorrection(plan.movementCorrection);
 			const old = thisArg.rotationYaw;
-			if (correct) thisArg.rotationYaw = plan.target.yaw;
+			if (correct) thisArg.rotationYaw = yaw;
 			const r = Reflect.apply(target, thisArg, args);
-			if ("rotationYawHead" in thisArg) thisArg.rotationYawHead = plan.target.yaw;
+			if ("rotationYawHead" in thisArg) thisArg.rotationYawHead = yaw;
 			if (correct) thisArg.rotationYaw = old;
 			return r;
 		},

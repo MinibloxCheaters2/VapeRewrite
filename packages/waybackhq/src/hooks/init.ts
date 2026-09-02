@@ -7,3 +7,4 @@ import "./hookTick";
 import "./packetHook";
 import "./kbHook";
 import "./movementCorrection";
+import "./pitchHook";

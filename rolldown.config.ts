@@ -57,16 +57,16 @@ function defineGame(name: string, plugins?: RolldownPlugin[], opts?: RolldownOpt
 			// this MUST be before UserScript, so the comments from it won't be removed.
 			process.env.NODE_ENV === "production" ? minify() : undefined,
 			userscript((meta: string) => {
-			const newMeta = meta
-				.replace(
-					"process.env.AUTHOR",
-					packageJson.author?.name ?? "Unspecified",
-				)
-				.replace("process.env.VERSION", packageJson.version)
-				.replace("process.env.NAME", REAL_CLIENT_NAME)
-				.replace("process.env.GAME", name);
-			return newMeta;
-		}),
+				const newMeta = meta
+					.replace(
+						"process.env.AUTHOR",
+						packageJson.author?.name ?? "Unspecified",
+					)
+					.replace("process.env.VERSION", packageJson.version)
+					.replace("process.env.NAME", REAL_CLIENT_NAME)
+					.replace("process.env.GAME", name);
+				return newMeta;
+			}),
 		],
 		transform: {
 			assumptions: {

@@ -74,7 +74,7 @@ export default class KillAura extends Mod {
 			e,
 		);
 		RotationManager.scheduleRotation(
-			new RotationPlan(rot, this.movementCorrection.value().value, 1),
+			new RotationPlan(rot, this.movementCorrection.value().value, 2),
 		);
 		if (g.netRole === "client") session.sendActions(1, e.entityId, true, true, 0);
 	}

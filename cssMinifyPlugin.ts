@@ -10,7 +10,7 @@ import { withFilter } from "rolldown/filter";
 function plugin<C extends CustomAtRules>(opts?: TransformOptions<C>): Plugin {
 	return withFilter(
 		{
-			name: "oxc-minify",
+			name: "css-minify",
 			transform: {
 				filter: { id: "**/*.css" },
 				handler(code, id) {
