@@ -19,7 +19,13 @@ export function findTargets(range = 6, _angle = 360, checkWalls = false): ELB[] 
 		if (!(e instanceof EntityLivingBase) || !e.isEntityAlive()) return false;
 		const base = !(e instanceof ClientPlayer) || !e.isLocal;
 		if (!base) return false;
-		const distCheck = player.getDistanceSqToEntity(e) < sqRange;
+		const distance = player.getDistanceSqToEntity(e);
+		// const d = Math.sqrt(distance);
+		// debugging max attack distance
+		// if (d > 3 && d < range) {
+		// 	Refs.game.chat.receive(`[Vape Rewrite] dist = ${d}`);
+		// }
+		const distCheck = distance < sqRange;
 		if (!distCheck) return false;
 		const wallCheck = checkWalls && !canPlayerSeeEntity(e);
 		if (wallCheck) return false;
