@@ -1,5 +1,6 @@
 import { ModuleManager, setModuleManager } from "@vape/core/features/modules/api/ModuleManager";
 
+import Derp from "./features/modules/impl/blatant/Derp";
 import Fly from "./features/modules/impl/blatant/fly";
 import InfiniteAura from "./features/modules/impl/blatant/InfiniteAura";
 import KillAura from "./features/modules/impl/blatant/KillAura";
@@ -34,6 +35,7 @@ const mm = new ModuleManager<Named>({
 		new Test(),
 		new KeepSprint(),
 		new InventoryMove(),
+		new Derp(),
 	],
 });
 
