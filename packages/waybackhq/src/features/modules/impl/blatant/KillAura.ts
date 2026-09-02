@@ -18,7 +18,8 @@ export default class KillAura extends Mod {
 	private blocking = false;
 
 	// Settings
-	private rangeSetting = this.createSliderSetting("Range", 3.406, 3, 10, 0.5);
+	private rangeSetting = this.createSliderSetting("Range", 3.40441, 3, 10, 0.5);
+	// raw max: 3.404415839024182
 	private angleSetting = this.createSliderSetting("Angle", 360, 1, 360, 1);
 	private autoBlockSetting = this.createToggleSetting("Auto Block", true);
 	private wallCheckSetting = this.createToggleSetting("Wall Check", false);
