@@ -14,16 +14,20 @@ export default class Derp extends Mod {
 	public name = "Derp";
 	public category = Category.BLATANT;
 	private movementCorrection = this.createDropdownSetting("MovementCorrection", SETTING);
+	#yawOffset = 5;
+	#pitchOffset = 5;
 
 	@Bus.Subscribe("playerTick")
 	onTick() {
 		const current = RotationManager.activeRotation;
 		RotationManager.scheduleRotation(
 			new RotationPlan(
-				new Rotation(current.yaw + 5, (current.pitch + 2) % 90),
+				new Rotation(current.yaw + this.#yawOffset, (current.pitch + this.#pitchOffset) % 90),
 				this.movementCorrection.value().value,
 				1,
 			),
 		);
+		this.#yawOffset += 5;
+		this.#pitchOffset += 5;
 	}
 }
