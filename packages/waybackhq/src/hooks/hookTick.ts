@@ -1,14 +1,17 @@
 import Cancelable from "@vape/core/event/Cancelable";
 import logger from "@vape/core/utils/logging/loggers";
 import { Entity } from "@wq2/waybackhq-types/src/entity/entity";
+import type { ClientPlayer } from "@wq2/waybackhq-types/src/client/clientplayer";
 import { Game } from "@wq2/waybackhq-types/src/game";
 
 import Bus from "@/Bus";
+import { mod as CPlr, ready as cplrReady } from "@/utils/wrappers/clientplayer";
 
 import Refs, { ready } from "./game";
 
 let origGameTick: Game["runTick"];
 let origOnUpdate: Entity["onUpdate"];
+let origLivingUpdate: ClientPlayer["onLivingUpdate"];
 
 interface RevokableProxy<T> {
 	proxy: T;
@@ -75,8 +78,26 @@ export function hookPlayerTick() {
 	});
 }
 
+export function hookLivingUpdate() {
+	cplrReady.then(() => {
+		const { ClientPlayer } = CPlr;
+		origLivingUpdate = ClientPlayer.prototype.onLivingUpdate;
+		ClientPlayer.prototype.onLivingUpdate = new Proxy(origLivingUpdate, {
+			apply(target, thisArg: ClientPlayer, argArray: []) {
+				const c = new Cancelable();
+				Bus.emit("livingUpdate", c);
+				if (c.canceled) return;
+				const r = Reflect.apply(target, thisArg, argArray);
+				Bus.emit("afterLivingUpdate");
+				return r;
+			},
+		});
+	});
+}
+
 ready.then(() => {
 	hookPlayerCreate();
 	hookGameTick();
 	hookPlayerTick();
+	hookLivingUpdate();
 });

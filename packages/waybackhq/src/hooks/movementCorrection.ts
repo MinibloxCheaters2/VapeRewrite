@@ -1,12 +1,13 @@
-import type { ClientPlayer } from "@wq2/waybackhq-types/src/client/clientplayer";
 import type { Entity } from "@wq2/waybackhq-types/src/entity/entity";
 
+import { Priority } from "@vape/core/event/Bus";
+
+import Bus from "@/Bus";
 import RotationManager from "@/utils/aiming/rotate";
 import MovementCorrection, {
 	doMovementCorrection,
 	doSilentMovementCorrection,
 } from "@/utils/movement/MovementCorrection";
-import { mod as CPlr } from "@/utils/wrappers/clientplayer";
 import { mod } from "@/utils/wrappers/entity";
 
 import Refs, { ready } from "./game";
@@ -22,19 +23,19 @@ const planFor = (player: Entity): NonNullable<typeof RotationManager.currentPlan
 };
 
 export function hook() {
-	const { ClientPlayer } = CPlr;
 	const { Entity } = mod;
 
-	const original = ClientPlayer.prototype.onLivingUpdate;
-	ClientPlayer.prototype.onLivingUpdate = new Proxy(original, {
-		apply(target, thisArg: ClientPlayer, args: []) {
-			const plan = planFor(thisArg);
+	Bus.on(
+		"livingUpdate",
+		() => {
+			const player = Refs.player;
+			if (!player) return;
+			const plan = planFor(player);
 			if (plan && plan.movementCorrection === MovementCorrection.Silent)
-				doSilentMovementCorrection(thisArg.rawInput, plan.target.yaw, thisArg.rotationYaw);
-			return Reflect.apply(target, thisArg, args);
+				doSilentMovementCorrection(player.rawInput, plan.target.yaw, player.rotationYaw);
 		},
-	});
-
+		Priority.HIGHEST,
+	);
 	const game = Refs.game;
 	game.applyMouseLook = new Proxy(game.applyMouseLook, {
 		apply(target, thisArg: (typeof Refs)["game"], argArray: [apply?: boolean]) {

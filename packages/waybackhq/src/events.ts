@@ -8,6 +8,8 @@ import { AnyPacket } from "./hooks/packetHook";
 type ClientEvents = {
 	gameTick: void;
 	playerTick: Cancelable;
+	livingUpdate: Cancelable;
+	afterLivingUpdate: void;
 	teleport: CancelableWrapper<TeleportTarget>;
 	velocity: CancelableWrapper<{
 		entityID: number;
