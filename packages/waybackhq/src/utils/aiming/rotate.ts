@@ -69,8 +69,6 @@ export default new (class RotationManager {
 				const { yaw, pitch } = plan.target;
 				const { player } = Refs;
 				if (yaw - player.prevRotationYaw !== 0 || pitch - player.prevRotationPitch !== 0) {
-					player.prevRotationYaw = yaw;
-					player.prevRotationPitch = pitch;
 					inp.yaw = yaw;
 					inp.pitch = pitch;
 				}

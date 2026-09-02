@@ -1,6 +1,7 @@
 import type { Entity } from "@wq2/waybackhq-types/src/entity/entity";
 
 import { Priority } from "@vape/core/event/Bus";
+import { ClientPlayer } from "@wq2/waybackhq-types/src/client/clientplayer";
 
 import Bus from "@/Bus";
 import RotationManager from "@/utils/aiming/rotate";
@@ -8,6 +9,7 @@ import MovementCorrection, {
 	doMovementCorrection,
 	doSilentMovementCorrection,
 } from "@/utils/movement/MovementCorrection";
+import { ready as CPlrReady, mod as CPlr } from "@/utils/wrappers/clientplayer";
 import { mod } from "@/utils/wrappers/entity";
 
 import Refs, { ready } from "./game";
@@ -21,8 +23,28 @@ const planFor = (player: Entity): NonNullable<typeof RotationManager.currentPlan
 		? plan
 		: null;
 };
-
-export function hook() {
+export async function hookJump() {
+	await CPlrReady;
+	const { ClientPlayer } = CPlr; // CP!!! big fan
+	const origJump = ClientPlayer.prototype.jump;
+	ClientPlayer.prototype.jump = new Proxy(origJump, {
+		apply(target, thisArg: ClientPlayer, args) {
+			const plan = planFor(thisArg);
+			if (!plan) return Reflect.apply(target, thisArg, args);
+			const {
+				target: { yaw },
+			} = plan;
+			const correct = doMovementCorrection(plan.movementCorrection);
+			const old = thisArg.rotationYaw;
+			if (correct) thisArg.rotationYaw = yaw;
+			const r = Reflect.apply(target, thisArg, args);
+			if (correct) thisArg.rotationYaw = old;
+			return r;
+		},
+	});
+}
+export async function hook() {
+	await ready;
 	const { Entity } = mod;
 
 	Bus.on(
@@ -66,5 +88,5 @@ export function hook() {
 		},
 	});
 }
-
-ready.then(hook);
+hook();
+hookJump();
