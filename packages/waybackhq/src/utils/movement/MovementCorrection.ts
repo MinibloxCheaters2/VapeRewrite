@@ -22,7 +22,6 @@ enum MovementCorrection {
 }
 
 export const ENTRIES = [
-	MovementCorrection.Auto,
 	MovementCorrection.None,
 	MovementCorrection.Silent,
 	MovementCorrection.Strict,
