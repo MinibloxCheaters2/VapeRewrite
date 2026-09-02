@@ -44,9 +44,7 @@ export function hook() {
 			const plan = planFor(player);
 			if (!plan || argArray[0] === false) return r;
 			player.rotationYawHead = plan.target.yaw;
-			const prevBody = player.renderYawOffset;
 			player.renderYawOffset = plan.target.yaw;
-			player.prevRenderYawOffset = prevBody;
 			return r;
 		},
 	});
