@@ -61,14 +61,14 @@ export default class KillAura extends Mod {
 	unblock() {
 		if (!this.blocking) return;
 		Refs.input.rightDown = false;
-		Refs.player.stopUsingItem();
+		Refs.player?.stopUsingItem?.();
 		this.blocking = false;
 	}
 
 	sendAttack(e: EntityLivingBase) {
 		if (this.swing !== "none") swing(this.swing);
 		const { game: g, player, session } = Refs;
-		player.attackTargetEntityWithCurrentItem(e);
+		if (!player || !session) return;
 		const rot = lookAtEntity(
 			new SimpleVec3(player.posX, player.posY, player.posZ),
 			player.getEyeHeight(),
@@ -77,7 +77,8 @@ export default class KillAura extends Mod {
 		RotationManager.scheduleRotation(
 			new RotationPlan(rot, this.movementCorrection.value().value, 2),
 		);
-		if (g.netRole === "client") session.sendActions(1, e.entityId, false, false, 0);
+		player.attackTargetEntityWithCurrentItem(e);
+		if (g.netRole === "client") session.sendActions(4, e.entityId, false, false, 0);
 	}
 
 	@Bus.Subscribe("playerTick")

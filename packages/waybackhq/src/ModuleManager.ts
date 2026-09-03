@@ -15,6 +15,8 @@ import InventoryMove from "./features/modules/impl/utility/InventoryMove";
 import Test from "./features/modules/impl/utility/Test";
 import NoFall from "./features/modules/impl/world/NoFall";
 import Timer from "./features/modules/impl/world/Timer";
+import Disabler from "./features/modules/impl/utility/Disabler";
+import Sprint from "./features/modules/impl/utility/Sprint";
 
 type Named = {};
 
@@ -36,6 +38,7 @@ const mm = new ModuleManager<Named>({
 		new KeepSprint(),
 		new InventoryMove(),
 		new Derp(),
+		new Sprint
 	],
 });
 

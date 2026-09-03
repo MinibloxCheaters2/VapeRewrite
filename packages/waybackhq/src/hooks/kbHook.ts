@@ -3,7 +3,7 @@ import { Entity } from "@wq2/waybackhq-types/src/entity/entity";
 import { EntityLivingBase } from "@wq2/waybackhq-types/src/entity/entityliving";
 import { DecodedVelocity, Session } from "@wq2/waybackhq-types/src/net/session";
 
-import bus from "@/Bus";
+import Bus from "@/Bus";
 import { mod } from "@/utils/wrappers/entityliving";
 import { ready, session } from "@/utils/wrappers/session";
 
@@ -25,7 +25,7 @@ export default function hook() {
 				z,
 				entityID: id,
 			});
-			bus.emit("velocity", v);
+			Bus.emit("velocity", v);
 			if (v.canceled) return;
 			[vel.x, vel.y, vel.z] = [v.data.x, v.data.y, v.data.z];
 			return Reflect.apply(target, thisArg, argArray);
@@ -46,7 +46,7 @@ export default function hook() {
 				z: dz,
 				entityID: thisArg.entityId,
 			});
-			bus.emit("velocity", v);
+			Bus.emit("velocity", v);
 			if (v.canceled) return;
 			argArray[2] = v.data.x;
 			argArray[3] = v.data.z;
