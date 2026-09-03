@@ -2,6 +2,8 @@ import ModuleManager from "@vape/core/features/modules/api/ModuleManager";
 
 import Bus from "@/Bus";
 import { isC2S } from "@/utils";
+import Miniblox from "@/utils/refs/miniblox";
+import { showNotification } from "@vape/core/ui/notifications";
 
 function hook() {
 	Bus.on("connect", () => {
@@ -15,6 +17,14 @@ function hook() {
 					pkt.session = na.session;
 					// legacy non-accounts don't have requestedUUID as a name
 					pkt.requestedUuid = na.requestedUuid;
+				} else {
+					setTimeout(() => {
+						const {player} = Miniblox;
+						if (!player) return;
+						if (player.name.startsWith("Ennocent")) {
+							showNotification("Vape Rewrite", "Enable AntiBan or GAY", "alert", 1.5e3);
+						}
+					}, 3e3);
 				}
 			}
 			return false;

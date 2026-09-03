@@ -428,7 +428,11 @@ const Miniblox = {
 
 	/** Miniblox.game.player with a remap proxy applied */
 	get player() {
-		return initOrR(_player, () => remapObj(Miniblox.game.player, mappings.ClientEntityPlayer));
+		return initOrR(_player, () => {
+			const {game} = Miniblox;
+			if (!game) return undefined;
+			return remapObj(game.player, mappings.ClientEntityPlayer);
+		});
 	},
 };
 expose("Miniblox", () => Miniblox);
