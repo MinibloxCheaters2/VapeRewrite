@@ -1,30 +1,42 @@
 import Category from "@vape/core/features/modules/api/Category";
 import Mod from "@vape/core/features/modules/api/Module";
-import { SliderSetting } from "@vape/core/index";
 
 import Bus from "@/Bus";
-import Refs from "@/utils/Refs";
 import getMovement from "@/utils/movement/getMoveDir";
+import Refs from "@/utils/Refs";
 
-let lol = 0;
 
 export default class Fly extends Mod {
 	public name = "Fly";
 	public category = Category.BLATANT;
 
-	readonly speedSetting: SliderSetting = this.createSliderSetting("Speed", 10, 0.1, 100, 0.01);
+	readonly speedSetting = this.createSliderSetting("Speed", 10, 0.1, 100, 0.01);
+	readonly verticalSpeedSetting = this.createSliderSetting("VerticalSpeed", 10, 0.1, 100, 0.1);
+	readonly bypassValue = this.createSliderSetting("BypassValue", 5, 0, 1, 0.01);
 
 	@Bus.Subscribe("gameTick")
 	onTick(): void {
-		const {player} = Refs;
+		const { player } = Refs;
 		if (!player) return;
 		const [x, z] = getMovement(this.speedSetting.value());
-		player.rigidBody.velocity.x = x;
-		if (player.rigidBody.velocity.y < 0) {
-			player.jump();
-			// player.rigidBody.velocity.y = -player.rigidBody.velocity.y;
+		const {rigidBody: {velocity}} = player;
+		velocity.x = x;
+		velocity.z = z;
+		const { inputManager } = player;
+		const {keys} = inputManager;
+		const [up, down] = [keys.get("flyUp").pressed, keys.get("flyDown").pressed];
+		const vSpeed = this.verticalSpeedSetting.value();
+		let yVelocity;
+		if (up && !down) {
+			yVelocity = vSpeed;
+		} else if (down && !up) {
+			yVelocity = -vSpeed;
 		}
-		player.rigidBody.velocity.z = z;
+		if (yVelocity !== undefined) {
+			velocity.y = yVelocity;
+		} else if (velocity.y < this.bypassValue.value()) {
+			velocity.y = -velocity.y;
+		}
 	}
 
 	getTag(): string {

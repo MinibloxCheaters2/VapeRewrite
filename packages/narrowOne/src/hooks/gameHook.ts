@@ -13,14 +13,15 @@ export let game;
 export default function hook() {
 	return new Promise<typeof game>((res) => {
 		Array.from = new Proxy(origArrayFrom, {
-			apply(target, thisArg, argArray) {
-				const [obj] = argArray;
-				if (obj?.next && obj?.next()?.value?.game) {
-					game = obj.next().value.game;
-					Array.from = origArrayFrom;
-					res(game);
-				}
-				return Reflect.apply(target, thisArg, argArray);
+			apply(target, thisArg: any, argArray: [ArrayLike<unknown>]) {
+				const r: Array<unknown> = Reflect.apply(target, thisArg, argArray);
+				const n = r[0];
+				if (!n || typeof n !== "object") return r;
+				const g = "game" in n && n.game;
+				if (!g) return r;
+				game = g;
+				res(g);
+				return r;
 			},
 		});
 	});

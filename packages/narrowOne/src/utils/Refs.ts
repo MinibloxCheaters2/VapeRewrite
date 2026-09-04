@@ -12,7 +12,7 @@ const Refs = {
 		return main?.gameManager?.activeGame ?? game;
 	},
 	get player(): NonNullable<any> | null {
-		return Refs.game.getMyPlayer();
+		return Refs.game?.getMyPlayer();
 	}
 };
 
