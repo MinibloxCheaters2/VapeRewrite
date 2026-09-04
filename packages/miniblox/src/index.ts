@@ -1,5 +1,6 @@
 import "@vape/core/meta.js?userscript-metadata";
 import "./meta.js?userscript-metadata";
+import "@vape/core/types/vm.d.ts";
 import "@vape/core/exposed";
 import "./hooks";
 import "./utils/refs";

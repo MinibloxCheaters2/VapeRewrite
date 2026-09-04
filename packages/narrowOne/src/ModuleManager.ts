@@ -4,6 +4,7 @@ import Fly from "./features/modules/impl/blatant/fly/Fly";
 import Phase from "./features/modules/impl/blatant/Phase";
 import Speed from "./features/modules/impl/blatant/Speed";
 import FilterBypass from "./features/modules/impl/utility/FilterBypass";
+import DetectionDebugger from "./features/modules/impl/utility/DetectionDebugger";
 
 type Named = {};
 
@@ -14,7 +15,8 @@ const mm = new ModuleManager<Named>({
 		new Fly(),
 		new Phase(),
 		new FilterBypass(),
-		//		new Timer(),
+		DetectionDebugger.INSTANCE
+		// new Timer(),
 	],
 });
 

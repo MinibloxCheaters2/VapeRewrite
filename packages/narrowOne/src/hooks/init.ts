@@ -4,4 +4,5 @@
  */
 
 import "./gameHook";
+import "./mainHook";
 //import "./hookTick";
