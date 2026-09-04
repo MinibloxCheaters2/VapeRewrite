@@ -13,42 +13,55 @@
  * @module
  */
 
-import DetectionDebugger from "@/features/modules/impl/utility/DetectionDebugger";
 import { expose } from "@vape/core/exposed";
+
+// import DetectionDebugger from "@/features/modules/impl/utility/DetectionDebugger";
+
 import { origArrayFrom } from "./gameHook";
+import { showNotification } from "@vape/core/ui/notifications";
 
 const w = (unsafeWindow ?? window) as typeof window;
 export const origFunction = w.Function;
 
 export let main;
-export function thing(cls: any) {
+export function thing(cls: any, contributed = false) {
+	if (main !== undefined) return;
 	if (cls == null) return;
 	if (typeof cls !== "object" && "constructor" in cls) return;
 	if (["cam", "assets"].every((x) => x in cls)) {
 		main = cls;
-		w.Function = origFunction;
+		showNotification(
+			"Hook",
+			"All features should be available now",
+			"info",
+			0.5e3
+		);
+		if (!contributed) w.Function = origFunction;
 		Array.from = origArrayFrom;
 		expose("main", () => main);
+		return main;
 		// if (DetectionDebugger.INSTANCE.enabled)
 		// 	DetectionDebugger.INSTANCE.rehook();
 	}
 }
 export default function hook() {
-	w.Function = new Proxy(origFunction, {
-		construct(target, argArray, newTarget) {
-			const r = Reflect.construct(target, argArray, newTarget);
-			return new Proxy(r, {
-				apply(_, __, argArray) {
-					function call() {
-						return Reflect.apply(_, __, argArray);
-					}
-					if (argArray.length !== 1) return call();
-					thing(argArray[0]);
-					return call();
-				},
-			});
-		},
+	return new Promise((res) => {
+		w.Function = new Proxy(origFunction, {
+			construct(target, argArray, newTarget) {
+				const r = Reflect.construct(target, argArray, newTarget);
+				return new Proxy(r, {
+					apply(_, __, argArray) {
+						function call() {
+							return Reflect.apply(_, __, argArray);
+						}
+						if (argArray.length !== 1) return call();
+						res(thing(argArray[0]));
+						return call();
+					},
+				});
+			},
+		});
 	});
 }
 
-hook();
+export const ready = hook();

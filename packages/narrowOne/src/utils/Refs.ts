@@ -11,7 +11,7 @@ const Refs = {
 	get game() {
 		return main?.gameManager?.activeGame ?? game;
 	},
-	get player() {
+	get player(): NonNullable<any> | null {
 		return Refs.game.getMyPlayer();
 	}
 };

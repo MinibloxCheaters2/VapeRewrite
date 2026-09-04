@@ -1,43 +1,31 @@
-import { SliderSetting } from "@vape/core/features/config/Settings";
 import Category from "@vape/core/features/modules/api/Category";
 import Mod from "@vape/core/features/modules/api/Module";
+import { SliderSetting } from "@vape/core/index";
 
 import Bus from "@/Bus";
-import { getMoveDir } from "@/utils/movement";
+import Refs from "@/utils/Refs";
+import getMovement from "@/utils/movement/getMoveDir";
 
 export default class Speed extends Mod {
 	public name = "Speed";
 	public category = Category.BLATANT;
 
-	private readonly speedSetting: SliderSetting = this.createSliderSetting(
-		"Speed",
-		1,
-		0.11,
-		6.0,
-		0.01,
-	);
+	readonly speedSetting: SliderSetting = this.createSliderSetting("Speed", 10, 0.1, 100, 0.01);
+	readonly jump = this.createToggleSetting("Jump");
 
-	@Bus.Subscribe("playerTick")
+	@Bus.Subscribe("gameTick")
 	onTick(): void {
-		// const {
-		// 	game: { localPlayer },
-		// } = Refs;
-		const dir = getMoveDir(this.speedSetting.value());
-		const [x, z] = dir;
-
-		// localPlayer.motionX = x;
-		// localPlayer.motionZ = z;
-	}
-
-	onDisable(): void {
-		// const {
-		// 	game: { localPlayer },
-		// } = Refs;
-		// localPlayer.motionX = Math.max(Math.min(localPlayer.motionX, 0.3), -0.3);
-		// localPlayer.motionZ = Math.max(Math.min(localPlayer.motionZ, 0.3), -0.3);
+		const {player} = Refs;
+		if (!player) return;
+		const [x, z] = getMovement(this.speedSetting.value());
+		player.rigidBody.velocity.x = x;
+		player.rigidBody.velocity.z = z;
+		if (this.jump.value()) {
+			player.onJumpPress();
+		}
 	}
 
 	getTag(): string {
-		return this.speedSetting.value().toFixed(2);
+		return `Normal ${this.speedSetting.value().toFixed(2)}`;
 	}
 }

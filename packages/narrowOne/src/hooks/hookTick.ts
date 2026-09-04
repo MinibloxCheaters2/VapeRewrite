@@ -1,0 +1,42 @@
+import Refs from "@/utils/Refs";
+import { ready } from "./gameHook";
+import bus from "@/Bus";
+import { showNotification } from "@vape/core/ui/notifications";
+import { Cancelable } from "@vape/core/index";
+
+let origGameLoop, origPlayerLoop;
+
+export default function hookGameTick() {
+	const prototype = Object.getPrototypeOf(Refs.game);
+	// hooking the prototype instead,
+	// so we hook every new game's loop function along with the current one.
+	origGameLoop = prototype.loop;
+	prototype.loop = new Proxy(origGameLoop, {
+		apply(target, thisArg, argArray) {
+			bus.emit("gameTick");
+			return Reflect.apply(target, thisArg, argArray);
+		},
+	});
+}
+export function hookPlayerTick() {
+	if (!Refs.player) {
+		showNotification("Hooks", "player missing, can't hook player tick", "alert", 1.5e3);
+		return;
+	}
+	const prototype = Object.getPrototypeOf(Refs.player);
+	origPlayerLoop = prototype.loop;
+	prototype.loop = new Proxy(origPlayerLoop, {
+		apply(target, thisArg, argArray) {
+			const c = new Cancelable();
+			bus.emit("playerTick", c);
+			if (!c.canceled)
+				return Reflect.apply(target, thisArg, argArray);
+		},
+	});
+}
+
+// we only need game for this, main is extra.
+ready.then(() => {
+	hookGameTick();
+	hookPlayerTick();
+});

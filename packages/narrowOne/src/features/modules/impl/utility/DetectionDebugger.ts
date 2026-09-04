@@ -96,7 +96,7 @@ export default class DetectionDebugger extends Mod {
 						apply: (target, thisArg, argArray) => {
 							const a = Reflect.apply(target, thisArg, argArray);
 							if (!main && argArray.length === 1) {
-								thing(argArray[0]);
+								thing(argArray[0], true);
 							}
 							this.logFunctionCall(r, argArray, a);
 							return a;

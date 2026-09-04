@@ -8,17 +8,21 @@
 
 /** used in mainHook.ts to remove the `Array.from` hook */
 export let origArrayFrom = Array.from;
+/** don't use this, use the one from Refs instead. */
 export let game;
 export default function hook() {
-	Array.from = new Proxy(origArrayFrom, {
-		apply(target, thisArg, argArray) {
-			const [obj] = argArray;
-			if (obj?.next && obj?.next()?.value?.game) {
-				game = obj.next().value.game;
-				Array.from = origArrayFrom;
-			}
-			return Reflect.apply(target, thisArg, argArray);
-		},
+	return new Promise<typeof game>((res) => {
+		Array.from = new Proxy(origArrayFrom, {
+			apply(target, thisArg, argArray) {
+				const [obj] = argArray;
+				if (obj?.next && obj?.next()?.value?.game) {
+					game = obj.next().value.game;
+					Array.from = origArrayFrom;
+					res(game);
+				}
+				return Reflect.apply(target, thisArg, argArray);
+			},
+		});
 	});
 }
-hook();
+export const ready = hook();
