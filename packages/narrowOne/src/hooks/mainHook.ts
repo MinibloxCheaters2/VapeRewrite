@@ -14,11 +14,11 @@
  */
 
 import { expose } from "@vape/core/exposed";
-
 // import DetectionDebugger from "@/features/modules/impl/utility/DetectionDebugger";
+import { showNotification } from "@vape/core/ui/notifications";
 
 import { origArrayFrom } from "./gameHook";
-import { showNotification } from "@vape/core/ui/notifications";
+import createProxy from "@vape/core/utils/helpers/proxy";
 
 const w = (unsafeWindow ?? window) as typeof window;
 export const origFunction = w.Function;
@@ -30,12 +30,7 @@ export function thing(cls: any, contributed = false) {
 	if (typeof cls !== "object" && "constructor" in cls) return;
 	if (["cam", "assets"].every((x) => x in cls)) {
 		main = cls;
-		showNotification(
-			"Hook",
-			"All features should be available now",
-			"info",
-			0.5e3
-		);
+		showNotification("Vape", "All features are now unlocked.", "info", 1.5e3);
 		if (!contributed) w.Function = origFunction;
 		Array.from = origArrayFrom;
 		expose("main", () => main);
@@ -44,12 +39,37 @@ export function thing(cls: any, contributed = false) {
 		// 	DetectionDebugger.INSTANCE.rehook();
 	}
 }
+export function trigger() {
+	/**
+	 * Forges an RCE packet.
+	 * The network will then send a string message after your function completes or errors.
+	 * Make sure to `await` a Promise that doesn't resolve in order to bypass this.
+	 * ...Or just patch the sendStringMessage function, but I'm lazy and this works, so...
+	 */
+	function forceRCE(ws: WebSocket, code: string, id = 0) {
+		const json = new TextEncoder().encode(JSON.stringify({ id, c: code }));
+		const buf = new ArrayBuffer(8 + json.length);
+		new Uint32Array(buf)[0] = 55;
+		new Uint32Array(buf)[1] = json.length;
+		new Uint8Array(buf, 8).set(json);
+		ws.dispatchEvent(new MessageEvent("message", { data: buf }));
+	}
+
+	const k = crypto.randomUUID().replaceAll("-", "67");
+	(w as typeof w & Record<string, unknown>)[k] = (m: any) => {
+		thing(m);
+		delete w[k];
+	};
+	forceRCE(ws, /*js*/`
+globalThis["${k}"](main); await new Promise(() => {});
+`);
+}
 export default function hook() {
 	return new Promise((res) => {
-		w.Function = new Proxy(origFunction, {
+		w.Function = createProxy(origFunction, {
 			construct(target, argArray, newTarget) {
 				const r = Reflect.construct(target, argArray, newTarget);
-				return new Proxy(r, {
+				return createProxy(r, {
 					apply(_, __, argArray) {
 						function call() {
 							return Reflect.apply(_, __, argArray);

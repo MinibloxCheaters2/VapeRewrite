@@ -4,6 +4,7 @@ import RotationManager from "@/utils/aiming/rotate";
 import { waitForReact } from "@/utils/helpers/waitForReact";
 import MovementCorrection, { getEffectiveMode } from "@/utils/movement/MovementCorrection";
 import Miniblox from "@/utils/refs/miniblox";
+import createProxy from "@vape/core/utils/helpers/proxy";
 
 let origApplyInput: PlayerMovement["applyInput"];
 
@@ -14,7 +15,7 @@ export default function hook() {
 	const { player } = Miniblox;
 	origApplyInput = player.applyInput;
 	console.log(player, player.applyInput);
-	player.applyInput = new Proxy(origApplyInput, {
+	player.applyInput = createProxy(origApplyInput, {
 		apply(target, thisArg, argArray) {
 			const ts = thisArg as PlayerMovement;
 			//const [oldYaw, oldPitch, oldJumping] = [ts.yaw, ts.pitch, ts.jumping];

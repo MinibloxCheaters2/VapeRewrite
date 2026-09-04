@@ -3,10 +3,11 @@
  * @module
  */
 
+import createProxy from "../utils/helpers/proxy";
 import { exposedName } from "../utils/mapping/names";
 
 function replaceAndCopyFunction<OP, OR>(oldFunc: (...args: OP[]) => OR, newFunc: (r: OR) => OR) {
-	return new Proxy(oldFunc, {
+	return createProxy(oldFunc, {
 		apply(orig, origID, origArgs) {
 			const result = orig.apply(origID, origArgs);
 			newFunc(result);

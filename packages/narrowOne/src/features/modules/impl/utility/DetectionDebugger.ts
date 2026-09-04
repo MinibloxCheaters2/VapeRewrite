@@ -11,6 +11,7 @@ import { main, thing } from "@/hooks/mainHook";
 import Category from "@vape/core/features/modules/api/Category";
 import Mod from "@vape/core/features/modules/api/Module";
 import { showNotification } from "@vape/core/ui/notifications";
+import createProxy from "@vape/core/utils/helpers/proxy";
 
 const w = (unsafeWindow ?? window) as typeof window;
 
@@ -76,7 +77,7 @@ export default class DetectionDebugger extends Mod {
 	}
 	protected onEnable(): void {
 		[w.eval, w.Function] = [
-			new Proxy(origEval, {
+			createProxy(origEval, {
 				apply(target, thisArg, argArray) {
 					const r = Reflect.apply(target, thisArg, argArray);
 					const log = {
@@ -89,10 +90,10 @@ export default class DetectionDebugger extends Mod {
 					return r;
 				},
 			}),
-			new Proxy(origFunction, {
+			createProxy(origFunction, {
 				construct: (target, argArray, newTarget) => {
 					const r = Reflect.construct(target, argArray, newTarget);
-					return new Proxy(r, {
+					return createProxy(r, {
 						apply: (target, thisArg, argArray) => {
 							const a = Reflect.apply(target, thisArg, argArray);
 							if (!main && argArray.length === 1) {

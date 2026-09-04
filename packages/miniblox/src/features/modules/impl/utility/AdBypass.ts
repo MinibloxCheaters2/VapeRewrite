@@ -3,6 +3,7 @@ import Mod from "@vape/core/features/modules/api/Module";
 
 import { Subscribe } from "@/event/Bus";
 import Miniblox from "@/utils/refs/miniblox";
+import createProxy from "@vape/core/utils/helpers/proxy";
 
 interface AdProvider {
 	playRewardedAd(): Promise<boolean>;
@@ -32,13 +33,13 @@ export default class AdBypass extends Mod {
 		}
 
 		origPlayRewardedAd = ads.playRewardedAd;
-		ads.playRewardedAd = new Proxy(origPlayRewardedAd, {
+		ads.playRewardedAd = createProxy(origPlayRewardedAd, {
 			apply(/*target, thisArg, argArray*/) {
 				return Promise.resolve(true);
 			},
 		});
 		origShouldPlayVideoAd = ads.shouldPlayVideoAd;
-		ads.shouldPlayVideoAd = new Proxy(origShouldPlayVideoAd, {
+		ads.shouldPlayVideoAd = createProxy(origShouldPlayVideoAd, {
 			apply(/*target, thisArg, argArray*/) {
 				return false;
 			},

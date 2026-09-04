@@ -8,6 +8,7 @@ import { mod } from "@/utils/wrappers/entityliving";
 import { ready, session } from "@/utils/wrappers/session";
 
 import Refs from "./game";
+import createProxy from "@vape/core/utils/helpers/proxy";
 
 let origApplyVelocity: Session["applyVelocity"];
 let origKnockBack: EntityLivingBase["knockBack"];
@@ -15,7 +16,7 @@ let origKnockBack: EntityLivingBase["knockBack"];
 export default function hook() {
 	origApplyVelocity = session.prototype.applyVelocity;
 	origKnockBack = mod.EntityLivingBase.prototype.knockBack;
-	session.prototype.applyVelocity = new Proxy(origApplyVelocity, {
+	session.prototype.applyVelocity = createProxy(origApplyVelocity, {
 		apply(target, thisArg: Session, argArray: [velocity: DecodedVelocity]) {
 			const [vel] = argArray;
 			const { x, y, z, id } = vel;
@@ -31,7 +32,7 @@ export default function hook() {
 			return Reflect.apply(target, thisArg, argArray);
 		},
 	});
-	mod.EntityLivingBase.prototype.knockBack = new Proxy(origKnockBack, {
+	mod.EntityLivingBase.prototype.knockBack = createProxy(origKnockBack, {
 		apply(
 			target,
 			thisArg: EntityLivingBase,

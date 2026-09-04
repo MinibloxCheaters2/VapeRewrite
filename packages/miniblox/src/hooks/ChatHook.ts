@@ -7,6 +7,7 @@ import type { Chat, ChatData, ChatLog } from "@wq2/miniblox-sdk";
 
 import Bus from "@/Bus";
 import Miniblox from "@/utils/refs/miniblox";
+import createProxy from "@vape/core/utils/helpers/proxy";
 
 const idSymbol = Symbol();
 
@@ -20,7 +21,7 @@ export default new (class ChatHook {
 	init() {
 		const { chat } = Miniblox;
 		this.origAddChat = chat.addChat;
-		chat.addChat = new Proxy(chat.addChat, {
+		chat.addChat = createProxy(chat.addChat, {
 			apply(orig, ts, args: [ChatData]) {
 				const modifiedArgs = args;
 				modifiedArgs[0][idSymbol] = crypto.randomUUID() as UUIDv4;

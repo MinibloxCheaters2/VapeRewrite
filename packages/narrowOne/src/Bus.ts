@@ -3,7 +3,7 @@ import EventBus from "@wq2/event-bus";
 
 import ClientEvents from "./events";
 
-const bus = new EventBus<ClientEvents>();
-setBusInstance(bus);
+const Bus = new EventBus<ClientEvents>();
+setBusInstance(Bus);
 
-export default bus;
+export default Bus;

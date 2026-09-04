@@ -7,6 +7,7 @@ import { MAIN_LOGGER as logger } from "@vape/core/utils/logging/loggers";
 import Bus from "@/Bus";
 import { waitForReact } from "@/utils/helpers/waitForReact";
 import Miniblox from "@/utils/refs/miniblox";
+import createProxy from "@vape/core/utils/helpers/proxy";
 
 let _Message: Message<object> & {
 	prototype: {
@@ -16,7 +17,7 @@ let _Message: Message<object> & {
 };
 // let _proto2: object;
 // let origToBinary, origFromBinary: (binary: Uint8Array) => Message<object>;
-let origSend: (typeof ClientSocketT)["sendPacket"];
+let origSend: (typeof ClientSocketT)["sendPacket"] | undefined;
 
 export const discoveredPackets = new Map<string, Message<object>>();
 
@@ -28,7 +29,7 @@ function hookSendPacket() {
 		return;
 	}
 	origSend = cs.sendPacket;
-	cs.sendPacket = new Proxy(origSend, {
+	cs.sendPacket = createProxy(origSend, {
 		apply(target, thisArg, argArray) {
 			const cw = new CancelableWrapper(argArray.splice(0, 1)[0]);
 			Bus.emit("sendPacket", cw);
@@ -82,7 +83,7 @@ declare class Decoder {
 	): this;
 }
 
-let origEmit: Decoder["emit"];
+let origEmit: Decoder["emit"] | undefined;
 
 /**
  * exported because connect hook needs to run ts
@@ -96,7 +97,7 @@ export function hookReceivePacket() {
 	expose("Message", () => _Message);
 	_proto2 = getMsgRuntime(SPacketUpdateInventory);
 	origFromBinary = _Message.prototype.fromBinary;
-	_Message.prototype.fromBinary = new Proxy(origFromBinary, {
+	_Message.prototype.fromBinary = createProxy(origFromBinary, {
 		apply(target, thisArg, argArray) {
 			const cw = new CancelableWrapper(thisArg);
 			Bus.emit("receivePacket", cw);
@@ -115,7 +116,7 @@ export function hookReceivePacket() {
 		Decoder: typeof Decoder;
 	};
 	origEmit = parser.Decoder.prototype.emit;
-	parser.Decoder.prototype.emit = new Proxy(origEmit, {
+	parser.Decoder.prototype.emit = createProxy(origEmit, {
 		apply(target, thisArg, argArray) {
 			const { type, nsp, data } = argArray[1] as {
 				type: 2 | number;

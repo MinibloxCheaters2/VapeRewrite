@@ -4,6 +4,7 @@ import CancelableWrapper from "@vape/core/event/CancelableWrapper";
 import { PACKET } from "@wq2/waybackhq-types/src/net/protocol";
 
 import Bus from "@/Bus";
+import createProxy from "@vape/core/utils/helpers/proxy";
 
 const connectionPromise = import("@wq2/waybackhq-types/src/net/connection").then(
 	(x) => x.Connection,
@@ -17,7 +18,7 @@ export type AnyPacket = [ID: PacketID, ...unknown[]];
 export async function hookSendPacket() {
 	const connection = await connectionPromise;
 	// sendFast is just an alias to sendReliable, I don't need to hook that.
-	connection.prototype.sendReliable = new Proxy(connection.prototype.sendReliable, {
+	connection.prototype.sendReliable = createProxy(connection.prototype.sendReliable, {
 		apply(target, thisArg: Connection, argArray: [AnyPacket]) {
 			function callOrig(data = [wrap.data]) {
 				Reflect.apply(target, thisArg, data);
@@ -33,7 +34,7 @@ export async function hookSendPacket() {
 
 export async function hookReceivePacket() {
 	const connection = await connectionPromise;
-	connection.prototype.handleMessage = new Proxy(connection.prototype.handleMessage, {
+	connection.prototype.handleMessage = createProxy(connection.prototype.handleMessage, {
 		apply(target, thisArg: Connection, argArray: [string]) {
 			let packet: AnyPacket;
 			try {

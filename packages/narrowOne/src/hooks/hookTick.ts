@@ -1,8 +1,9 @@
 import Refs from "@/utils/Refs";
 import { ready } from "./gameHook";
-import bus from "@/Bus";
+import Bus from "@/Bus";
 import { showNotification } from "@vape/core/ui/notifications";
 import { Cancelable } from "@vape/core/index";
+import createProxy from "@vape/core/utils/helpers/proxy";
 
 let origGameLoop, origPlayerLoop;
 
@@ -11,9 +12,9 @@ export default function hookGameTick() {
 	// hooking the prototype instead,
 	// so we hook every new game's loop function along with the current one.
 	origGameLoop = prototype.loop;
-	prototype.loop = new Proxy(origGameLoop, {
+	prototype.loop = createProxy(origGameLoop, {
 		apply(target, thisArg, argArray) {
-			bus.emit("gameTick");
+			Bus.emit("gameTick");
 			return Reflect.apply(target, thisArg, argArray);
 		},
 	});
@@ -25,10 +26,10 @@ export function hookPlayerTick() {
 	}
 	const prototype = Object.getPrototypeOf(Refs.player);
 	origPlayerLoop = prototype.loop;
-	prototype.loop = new Proxy(origPlayerLoop, {
+	prototype.loop = createProxy(origPlayerLoop, {
 		apply(target, thisArg, argArray) {
 			const c = new Cancelable();
-			bus.emit("playerTick", c);
+			Bus.emit("playerTick", c);
 			if (!c.canceled)
 				return Reflect.apply(target, thisArg, argArray);
 		},

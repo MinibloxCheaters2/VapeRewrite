@@ -5,13 +5,16 @@ import Cancelable from "@vape/core/event/Cancelable";
 import Bus from "@/Bus";
 import { waitForReact } from "@/utils/helpers/waitForReact";
 import Miniblox from "@/utils/refs/miniblox";
+import createProxy from "@vape/core/utils/helpers/proxy";
 
 let origGameTick: Game["fixedUpdate"];
 let origPlayerTick: PlayerMovement["fixedUpdate"];
 
 export function hookGameTick() {
-	origGameTick = Miniblox.game.fixedUpdate;
-	Miniblox.game.fixedUpdate = new Proxy(origGameTick, {
+	const {game} = Miniblox;
+	if (!game) return;
+	origGameTick = game.fixedUpdate;
+	game.fixedUpdate = createProxy(origGameTick, {
 		apply(target, thisArg, argArray) {
 			Bus.emit("gameTick");
 			return Reflect.apply(target, thisArg, argArray);
@@ -20,8 +23,10 @@ export function hookGameTick() {
 }
 
 export function hookPlayerTick() {
-	origPlayerTick = Miniblox.player.fixedUpdate;
-	Miniblox.player.fixedUpdate = new Proxy(origPlayerTick, {
+	const {player} = Miniblox;
+	if (!player) return;
+	origPlayerTick = player.fixedUpdate;
+	player.fixedUpdate = createProxy(origPlayerTick, {
 		apply(target, thisArg, argArray) {
 			const c = new Cancelable();
 			Bus.emit("playerTick", c);

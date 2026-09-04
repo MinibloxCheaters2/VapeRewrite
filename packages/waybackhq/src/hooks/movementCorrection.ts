@@ -13,6 +13,7 @@ import { ready as CPlrReady, mod as CPlr } from "@/utils/wrappers/clientplayer";
 import { mod } from "@/utils/wrappers/entity";
 
 import Refs, { ready } from "./game";
+import createProxy from "@vape/core/utils/helpers/proxy";
 
 const planFor = (player: Entity): NonNullable<typeof RotationManager.currentPlan> | null => {
 	const plan = RotationManager.currentPlan;
@@ -27,7 +28,7 @@ export async function hookJump() {
 	await CPlrReady;
 	const { ClientPlayer } = CPlr; // CP!!! big fan
 	const origJump = ClientPlayer.prototype.jump;
-	ClientPlayer.prototype.jump = new Proxy(origJump, {
+	ClientPlayer.prototype.jump = createProxy(origJump, {
 		apply(target, thisArg: ClientPlayer, args) {
 			const plan = planFor(thisArg);
 			if (!plan) return Reflect.apply(target, thisArg, args);
@@ -59,10 +60,11 @@ export async function hook() {
 		Priority.HIGHEST,
 	);
 	const game = Refs.game;
-	game.applyMouseLook = new Proxy(game.applyMouseLook, {
+	game.applyMouseLook = createProxy(game.applyMouseLook, {
 		apply(target, thisArg: (typeof Refs)["game"], argArray: [apply?: boolean]) {
 			const r = Reflect.apply(target, thisArg, argArray);
 			const player = thisArg.localPlayer;
+			if (!player) return r;
 			const plan = planFor(player);
 			if (!plan || argArray[0] === false) return r;
 			player.rotationYawHead = plan.target.yaw;
@@ -71,7 +73,7 @@ export async function hook() {
 		},
 	});
 	const origFlying = Entity.prototype.moveFlying;
-	Entity.prototype.moveFlying = new Proxy(origFlying, {
+	Entity.prototype.moveFlying = createProxy(origFlying, {
 		apply(target, thisArg: Entity, args) {
 			const plan = planFor(thisArg);
 			if (!plan) return Reflect.apply(target, thisArg, args);

@@ -6,18 +6,21 @@ import Bus from "@/Bus";
 import RotationManager from "@/utils/aiming/rotate";
 
 import Refs, { ready } from "./game";
+import createProxy from "@vape/core/utils/helpers/proxy";
 
 let origSetRotationAngles: PlayerModel["setRotationAngles"];
 
 function waitForRenderer() {
-	return new Promise<PlayerRenderer>((res) => {
-		const renderer = Refs.game.renderer.playerRenderers.get(Refs.player.entityId);
+	return new Promise<PlayerRenderer>((res, rej) => {
+		const {player} = Refs;
+		if (!player) return rej("called waitForRenderer when player is null");
+		const renderer = Refs.game.renderer.playerRenderers.get(player.entityId);
 		if (renderer) return res(renderer);
 		const orig = Refs.game.renderer.renderPlayers;
-		Refs.game.renderer.renderPlayers = new Proxy(orig, {
+		Refs.game.renderer.renderPlayers = createProxy(orig, {
 			apply(target, thisArg: WorldRenderer, argArray) {
 				const r = Reflect.apply(target, thisArg, argArray);
-				const renderer = thisArg.playerRenderers.get(Refs.player.entityId);
+				const renderer = thisArg.playerRenderers.get(player.entityId);
 				if (renderer) {
 					thisArg.renderPlayers = orig;
 					res(renderer);
@@ -34,7 +37,7 @@ function hookRenderer() {
 		let _smoothedPitch = 0;
 		// slightly more complex because there's no rotationPitchHead or anything,
 		// so I have to do ts.
-		renderer.model.setRotationAngles = new Proxy(origSetRotationAngles, {
+		renderer.model.setRotationAngles = createProxy(origSetRotationAngles, {
 			apply(
 				target,
 				thisArg: PlayerModel,

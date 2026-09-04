@@ -12,7 +12,22 @@ const Refs = {
 		return main?.gameManager?.activeGame ?? game;
 	},
 	get player(): NonNullable<any> | null {
-		return Refs.game?.getMyPlayer();
+		const game = Refs.game;
+		if (!game) return null;
+		// avoid calling the method.
+		// this is useless since only the background game doesn't have `myPlayer`,
+		// and instead just scans `players.values` for what player it owns.
+		return game.myPlayer ?? game.getMyPlayer();
+	},
+	get players(): Map<unknown, unknown> {
+		return Refs.game?.players;
+	},
+	/**
+	 * **IMPORTANT**:
+	 * this requires access to `main`, avoid using this or use a fallback if possible.
+	 */
+	get network() {
+		return main?.network;
 	}
 };
 

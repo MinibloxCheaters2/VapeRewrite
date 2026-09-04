@@ -9,6 +9,7 @@ import Bus from "@/Bus";
 import { mod as CPlr, ready as cplrReady } from "@/utils/wrappers/clientplayer";
 
 import Refs, { ready } from "./game";
+import createProxy from "@vape/core/utils/helpers/proxy";
 
 let origGameTick: Game["runTick"];
 let origOnUpdate: Entity["onUpdate"];
@@ -48,7 +49,7 @@ function hookPlayerCreate() {
 
 export function hookGameTick() {
 	origGameTick = Refs.game.runTick;
-	Refs.game.runTick = new Proxy(origGameTick, {
+	Refs.game.runTick = createProxy(origGameTick, {
 		apply(target, thisArg, argArray) {
 			const r = Reflect.apply(target, thisArg, argArray);
 			Bus.emit("gameTick");
@@ -68,7 +69,7 @@ export function hookPlayerTick() {
 		return;
 	}
 	origOnUpdate = Refs.player.onUpdate;
-	Refs.player.onUpdate = new Proxy(origOnUpdate, {
+	Refs.player.onUpdate = createProxy(origOnUpdate, {
 		apply(target, thisArg, argArray) {
 			const c = new Cancelable();
 			Bus.emit("playerTick", c);
@@ -83,7 +84,7 @@ export function hookLivingUpdate() {
 	cplrReady.then(() => {
 		const { ClientPlayer } = CPlr;
 		origLivingUpdate = ClientPlayer.prototype.onLivingUpdate;
-		ClientPlayer.prototype.onLivingUpdate = new Proxy(origLivingUpdate, {
+		ClientPlayer.prototype.onLivingUpdate = createProxy(origLivingUpdate, {
 			apply(target, thisArg: ClientPlayer, argArray: []) {
 				const c = new Cancelable();
 				Bus.emit("livingUpdate", c);

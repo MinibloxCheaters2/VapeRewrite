@@ -1,3 +1,4 @@
+import createProxy from "../../../utils/helpers/proxy.js";
 import type Category from "./Category.js";
 import type Mod from "./Module.js";
 
@@ -87,7 +88,7 @@ export function setModuleManager(instance: ModuleManager<any>): void {
  * Named modules are also accessible directly:
  * `ModuleManager.antiBan` resolves to `instance.named.antiBan`.
  */
-const ModManager = new Proxy({} as ModuleManager<object>, {
+const ModManager = createProxy({} as ModuleManager<object>, {
 	get(_target, prop, receiver) {
 		if (prop === Symbol.toPrimitive || prop === Symbol.toStringTag) {
 			return undefined;

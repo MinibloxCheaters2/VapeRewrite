@@ -1,6 +1,7 @@
 import type EventBus from "@wq2/event-bus";
 
 import { EventDict } from "@wq2/event-bus";
+import createProxy from "./utils/helpers/proxy";
 
 /**
  * The actual EventBus instance, set by the game-specific package at startup.
@@ -35,7 +36,7 @@ export function getBusInstance(): EventBus<EventDict> {
  * This lets core code do `Bus.registerSubscriber(this)` without
  * knowing which concrete EventBus implementation is in use.
  */
-const Bus = new Proxy({} as Record<string, (...args: any[]) => any>, {
+const Bus = createProxy({} as Record<string, (...args: any[]) => any>, {
 	get(_target, prop, _receiver) {
 		const bus = getBusInstance();
 		const value = (bus as any)[prop];
