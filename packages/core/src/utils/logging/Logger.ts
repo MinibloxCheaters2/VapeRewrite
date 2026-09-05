@@ -4,6 +4,15 @@
 
 import { REAL_CLIENT_NAME } from "../../Client";
 
+const c = window.console;
+const methods = {
+	debug: c.debug,
+	log: c.log,
+	info: c.info,
+	warn: c.warn,
+	error: c.error
+};
+
 export class Logger {
 	/**
 	 * Returns the console format args for a title with the specified background color and black text
@@ -33,7 +42,7 @@ export class Logger {
 		args: unknown[],
 		customFmt = "",
 	) {
-		console[level](
+		methods[level](
 			`%c ${REAL_CLIENT_NAME} %c %c ${this.name} ${customFmt}`,
 			`background: ${levelColor}; color: black; font-weight: bold; border-radius: 5px;`,
 			"",

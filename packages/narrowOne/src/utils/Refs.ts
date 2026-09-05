@@ -19,7 +19,7 @@ const Refs = {
 		// and instead just scans `players.values` for what player it owns.
 		return game.myPlayer ?? game.getMyPlayer();
 	},
-	get players(): Map<unknown, unknown> {
+	get players(): Map<number, any> | undefined {
 		return Refs.game?.players;
 	},
 	/**

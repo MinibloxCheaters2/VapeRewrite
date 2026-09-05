@@ -7,7 +7,9 @@
  * @module
  */
 
+import { ready } from "@/hooks/gameHook";
 import { main, thing } from "@/hooks/mainHook";
+import Refs from "@/utils/Refs";
 import Category from "@vape/core/features/modules/api/Category";
 import Mod from "@vape/core/features/modules/api/Module";
 import { showNotification } from "@vape/core/ui/notifications";
@@ -76,6 +78,21 @@ export default class DetectionDebugger extends Mod {
 		origLog("[DetectionDebugger] function:", log);
 	}
 	protected onEnable(): void {
+		ready.then(() => {
+			Refs.player.__proto__.report = createProxy(Refs.player.__proto__.report, {
+				apply(target, thisArg, argArray: [reason: number, n: number]) {
+					if (!thisArg.hasOwnership) return Reflect.apply(target, thisArg, argArray);
+					origLog("[DetectionDebugger] client-sided ac:", thisArg, argArray);
+					const [reason, n] = argArray;
+					showNotification(
+						"DetectionDebugger",
+						`Flagged client-sided ac: ${reason} (${n})`,
+						"alert"
+					);
+					return Reflect.apply(target, thisArg, argArray);
+				},
+			});
+		});
 		[w.eval, w.Function] = [
 			createProxy(origEval, {
 				apply(target, thisArg, argArray) {

@@ -16,9 +16,9 @@
 import { expose } from "@vape/core/exposed";
 // import DetectionDebugger from "@/features/modules/impl/utility/DetectionDebugger";
 import { showNotification } from "@vape/core/ui/notifications";
+import createProxy from "@vape/core/utils/helpers/proxy";
 
 import { origArrayFrom } from "./gameHook";
-import createProxy from "@vape/core/utils/helpers/proxy";
 
 const w = (unsafeWindow ?? window) as typeof window;
 export const origFunction = w.Function;
@@ -39,7 +39,8 @@ export function thing(cls: any, contributed = false) {
 		// 	DetectionDebugger.INSTANCE.rehook();
 	}
 }
-export function trigger() {
+export function trigger(ws: WebSocket) {
+	// TODO: implement ts lazy ahh
 	/**
 	 * Forges an RCE packet.
 	 * The network will then send a string message after your function completes or errors.
@@ -48,10 +49,11 @@ export function trigger() {
 	 */
 	function forceRCE(ws: WebSocket, code: string, id = 0) {
 		const json = new TextEncoder().encode(JSON.stringify({ id, c: code }));
-		const buf = new ArrayBuffer(8 + json.length);
-		new Uint32Array(buf)[0] = 55;
-		new Uint32Array(buf)[1] = json.length;
-		new Uint8Array(buf, 8).set(json);
+		const buf = new ArrayBuffer((4 + json.length) * 4);
+		const ui32a = new Uint32Array(buf);
+		ui32a[0] = 55;
+		ui32a[1] = json.length;
+		ui32a.set(json);
 		ws.dispatchEvent(new MessageEvent("message", { data: buf }));
 	}
 
@@ -60,9 +62,47 @@ export function trigger() {
 		thing(m);
 		delete w[k];
 	};
-	forceRCE(ws, /*js*/`
+	forceRCE(
+		ws,
+		/*js*/ `
 globalThis["${k}"](main); await new Promise(() => {});
-`);
+`,
+	);
+}
+function hookWebSocket() {
+	function isGameWebSocket(url: string): boolean {
+		return url.startsWith("wss://ws") && url.endsWith(".narrow-one.com/ws");
+	}
+	const { WebSocket } = w;
+	const [origWebSocket, origSend] = [
+		WebSocket,
+		WebSocket.prototype.send
+	];
+	WebSocket.prototype.send = new Proxy(origSend, {
+		apply(target, thisArg: WebSocket, argArray: [data: string | BufferSource | Blob]) {
+			try {
+				const {url} = thisArg;
+				if (isGameWebSocket(url) && !main) {
+					trigger(thisArg);
+				}
+				if (main) WebSocket.prototype.send = origSend;
+			} catch (_) {
+				((_useless) => {})(_); // shut up linter
+			}
+			return Reflect.apply(target, thisArg, argArray);
+		},
+	});
+	w.WebSocket = new Proxy(origWebSocket, {
+		construct(target, argArray: [url: string | URL, protocols?: string | string[]], newTarget) {
+			const ws: WebSocket = Reflect.construct(target, argArray, newTarget);
+			const {url} = ws;
+			if (isGameWebSocket(url) && !main) {
+				trigger(ws);
+			}
+			if (main) WebSocket.prototype.send = origSend;
+			return ws;
+		},
+	});
 }
 export default function hook() {
 	return new Promise((res) => {
@@ -81,6 +121,7 @@ export default function hook() {
 				});
 			},
 		});
+		hookWebSocket();
 	});
 }
 

@@ -9,15 +9,22 @@ export default class KillAura extends Mod {
 
 	@Bus.Subscribe("playerTick")
 	private onTick() {
-		const {players, network} = Refs;
+		const {players, player, network} = Refs;
 		// network is undefined in the case of us not having `main`.
 		// game can't be undefined, since well...
 		// our hook runs when the player loop is called.
 		// idk why I'm checking if players is null because it shouldn't.
-		if (!network || !players) return;
-		for (const player of Refs.players.values()) {
+		if (!network || !players || !player) return;
+		const selfTeam = player.teamId;
+		for (const oPlr of players.values()) {
+			// const {rigidBody} = oPlr;
+			if (oPlr === player || oPlr.dead) continue;
+			if (oPlr.teamId === selfTeam) continue;
+			// TODO: requires rotations
 			network.sendMeleeHitPlayer(
-				player.id
+				oPlr.id,
+				oPlr.currentSpawnId,
+				player.id // myId
 			);
 		}
 	}
