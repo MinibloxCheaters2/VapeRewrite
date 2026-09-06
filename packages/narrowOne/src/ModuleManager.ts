@@ -7,6 +7,7 @@ import DetectionDebugger from "./features/modules/impl/utility/DetectionDebugger
 import NoClip from "./features/modules/impl/blatant/NoClip";
 import KillAura from "./features/modules/impl/blatant/KillAura";
 import AutoReport from "./features/modules/impl/utility/AutoReport";
+import AdBypass from "./features/modules/impl/utility/AdBypass";
 
 type Named = {};
 
@@ -19,6 +20,7 @@ const mm = new ModuleManager<Named>({
 		new Fly(),
 		new NoClip(),
 		new FilterBypass(),
+		new AdBypass,
 		DetectionDebugger.INSTANCE
 		// new Timer(),
 	],
