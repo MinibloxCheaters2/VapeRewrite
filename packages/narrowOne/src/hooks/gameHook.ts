@@ -11,9 +11,9 @@ import createProxy from "@vape/core/utils/helpers/proxy";
 /** used in mainHook.ts to remove the `Array.from` hook */
 export let origArrayFrom = Array.from;
 /** don't use this, use the one from Refs instead. */
-export let game;
+export let gameObj: any;
 export default function hook() {
-	return new Promise<typeof game>((res) => {
+	return new Promise<typeof gameObj>((res) => {
 		Array.from = createProxy(origArrayFrom, {
 			apply(target, thisArg: any, argArray: [ArrayLike<unknown>]) {
 				const r: Array<unknown> = Reflect.apply(target, thisArg, argArray);
@@ -21,7 +21,7 @@ export default function hook() {
 				if (!n || typeof n !== "object") return r;
 				const g = "game" in n && n.game;
 				if (!g) return r;
-				game = g;
+				gameObj = g;
 				res(g);
 				return r;
 			},

@@ -1,5 +1,5 @@
 import Bus from "@/Bus";
-import Refs from "@/utils/Refs";
+import game from "@/utils/refs/game";
 import Category from "@vape/core/features/modules/api/Category"
 import Mod from "@vape/core/features/modules/api/Module"
 
@@ -19,7 +19,7 @@ export default class AutoReport extends Mod {
 
 	@Bus.Subscribe("playerTick")
 	private onTick() {
-		const {players, player, game} = Refs;
+		const {players, player, instance: game} = game;
 		if (!players || !game) return;
 		for (const plr of players.values()) {
 			if (plr === player) continue;

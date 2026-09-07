@@ -1,4 +1,4 @@
-import Refs from "@/utils/Refs";
+import game from "@/utils/refs/game";
 import { ready } from "./gameHook";
 import Bus from "@/Bus";
 import { showNotification } from "@vape/core/ui/notifications";
@@ -8,7 +8,7 @@ import createProxy from "@vape/core/utils/helpers/proxy";
 let origGameLoop, origPlayerLoop;
 
 export default function hookGameTick() {
-	const prototype = Object.getPrototypeOf(Refs.game);
+	const prototype = Object.getPrototypeOf(game.instance);
 	// hooking the prototype instead,
 	// so we hook every new game's loop function along with the current one.
 	origGameLoop = prototype.loop;
@@ -20,11 +20,11 @@ export default function hookGameTick() {
 	});
 }
 export function hookPlayerTick() {
-	if (!Refs.player) {
+	if (!game.player) {
 		showNotification("Hooks", "player missing, can't hook player tick", "alert", 1.5e3);
 		return;
 	}
-	const prototype = Object.getPrototypeOf(Refs.player);
+	const prototype = Object.getPrototypeOf(game.player);
 	origPlayerLoop = prototype.loop;
 	prototype.loop = createProxy(origPlayerLoop, {
 		apply(target, thisArg, argArray) {

@@ -8,8 +8,13 @@ import type CancelableWrapper from "@vape/core/event/CancelableWrapper";
 import { Priority } from "@vape/core/index";
 
 import Bus from "@/Bus";
+import { PosData } from "@/events";
+import { main } from "@/hooks/mainHook";
+
+import game from "../refs/game";
 import Rotation from "./rotation";
-import Refs from "../Refs";
+import THREE from "../refs/three";
+import { BufferGeometry, Line, LineBasicMaterial, NormalBufferAttributes } from "three";
 
 export class RotationPlan {
 	constructor(
@@ -19,8 +24,12 @@ export class RotationPlan {
 }
 
 export default new (class RotationManager {
-	#currentPlan: RotationPlan | undefined = undefined;
+	#currentPlan: RotationPlan | undefined;
 	#trackedRot = Rotation.ZERO;
+	#tracer: Line<BufferGeometry<NormalBufferAttributes>, LineBasicMaterial>
+ | null = null;
+	#tracerGeo: BufferGeometry | null = null;
+
 	constructor() {
 		Bus.registerSubscriber(this);
 	}
@@ -28,13 +37,13 @@ export default new (class RotationManager {
 		return this.#currentPlan;
 	}
 	get playerRot() {
-		return new Rotation(Refs.player.rotationYaw, Refs.player.rotationPitch);
+		return new Rotation(game.player.rotationYaw, game.player.rotationPitch);
 	}
 	get trackedRot() {
 		return this.#trackedRot;
 	}
 	get serverRotation() {
-		return /*packetQueueManager.serverRot ?? */this.#trackedRot;
+		return /*packetQueueManager.serverRot ?? */ this.#trackedRot;
 	}
 	get activeRotation() {
 		return this.#currentPlan?.target ?? this.playerRot;
@@ -42,50 +51,77 @@ export default new (class RotationManager {
 	scheduleRotation(plan: RotationPlan) {
 		this.#currentPlan = plan;
 	}
+
 	@Bus.Subscribe("playerTick")
 	private onTick() {
 		const { currentPlan: plan } = this;
-		if (!plan) return;
-		// Refs.player.rotationYawHead = plan.target.yaw;
+		if (!plan) {
+			this.#removeTracer();
+			return;
+		}
+
+		this.#ensureTracer();
+		this.#updateTracer();
 		plan.resetIn--;
 		if (plan.resetIn <= 0) {
 			this.#currentPlan = undefined;
+			this.#removeTracer();
 		}
 	}
-	@Bus.Subscribe("sendPacket", Priority.LOWEST)
-	private onPacket(wrap: CancelableWrapper<AnyPacket>) {
+
+	@Bus.Subscribe("sendPos", Priority.LOWEST)
+	private onPacket(wrap: CancelableWrapper<PosData>) {
 		const { currentPlan: plan } = this;
 		if (!plan) return;
 		const { target } = plan;
-		switch (wrap.data[0]) {
-			case protocol.PACKET.INPUT: {
-				const inp = protocol.decodeMove(wrap.data);
-				const { yaw, pitch } = plan.target;
-				const { player } = Refs;
-				if (yaw - player.prevRotationYaw !== 0 || pitch - player.prevRotationPitch !== 0) {
-					inp.yaw = yaw;
-					inp.pitch = pitch;
-				}
-				this.#trackedRot = Rotation.fromPacket(inp)!;
-				wrap.data = protocol.encodeMove(inp) as AnyPacket;
-				break;
-			}
-			case protocol.PACKET.ACTION: {
-				const act = protocol.decodeAction(wrap.data);
-				wrap.data = protocol.encodeAction(
-					act.seq,
-					act.attacks,
-					act.attackTarget,
-					act.useDown,
-					act.useUp,
-					act.drop,
-					act.slot,
-					target.yaw,
-					target.pitch,
-					act.stateAck,
-				) as AnyPacket;
-				break;
-			}
+		wrap.data.rot.x = target.yaw;
+		wrap.data.rot.y = target.pitch;
+	}
+
+	#ensureTracer() {
+		if (this.#tracer || !main?.scene) return;
+		const geo = new THREE.BufferGeometry();
+		geo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(6), 3));
+		const mat = new THREE.LineBasicMaterial({ color: 0xff4444, transparent: true, opacity: 0.9 });
+		const tracer = new THREE.Line(geo, mat);
+		tracer.frustumCulled = false;
+		tracer.renderOrder = 999;
+		this.#tracer = tracer;
+		main.scene.add(this.#tracer);
+		this.#tracerGeo = geo;
+	}
+
+	#updateTracer() {
+		const plan = this.#currentPlan;
+		const p = game.player as any;
+		if (!plan || !p || !this.#tracerGeo?.attributes) return;
+		const eye = p.getCamPos();
+		if (!eye) return;
+
+		const { yaw, pitch } = plan.target;
+		const cp = Math.cos(pitch),
+			sp = Math.sin(pitch);
+		const sy = Math.sin(yaw),
+			cy = Math.cos(yaw);
+		// shoot convention = getShootDirection() (0,0,-1) base — matches the packet rot
+		const d = { x: -sy * cp, y: sp, z: -cy * cp };
+		const len = 60;
+
+		const a = this.#tracerGeo.attributes.position.array;
+		a[0] = eye.x;
+		a[1] = eye.y;
+		a[2] = eye.z;
+		a[3] = eye.x + d.x * len;
+		a[4] = eye.y + d.y * len;
+		a[5] = eye.z + d.z * len;
+		this.#tracerGeo.attributes.position.needsUpdate = true;
+	}
+
+	#removeTracer() {
+		if (this.#tracer) {
+			main.scene.remove(this.#tracer);
+			this.#tracer = null;
+			this.#tracerGeo = null;
 		}
 	}
 })();

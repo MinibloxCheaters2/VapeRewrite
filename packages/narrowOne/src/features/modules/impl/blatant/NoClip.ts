@@ -1,4 +1,4 @@
-import Refs from "@/utils/Refs";
+import game from "@/utils/refs/game";
 import { Category, Mod } from "@vape/core/index";
 
 export default class NoClip extends Mod {
@@ -6,13 +6,13 @@ export default class NoClip extends Mod {
 	category = Category.BLATANT;
 
     onEnable() {
-		const {player} = Refs;
+		const {player} = game;
 		if (!player) return;
         player.rigidBody.noclip = true;
     }
 
     onDisable() {
-		const {player} = Refs;
+		const {player} = game;
 		if (!player) return;
         player.rigidBody.noclip = false;
     }

@@ -1,5 +1,7 @@
 import Bus from "@/Bus";
-import Refs from "@/utils/Refs";
+import { lookAtPlayer } from "@/utils/aiming/lookAt";
+import RotationManager, { RotationPlan } from "@/utils/aiming/rotate";
+import game from "@/utils/refs/game";
 import Category from "@vape/core/features/modules/api/Category";
 import Mod from "@vape/core/features/modules/api/Module";
 
@@ -9,7 +11,7 @@ export default class KillAura extends Mod {
 
 	@Bus.Subscribe("playerTick")
 	private onTick() {
-		const {players, player, network} = Refs;
+		const {players, player, network} = game;
 		// network is undefined in the case of us not having `main`.
 		// game can't be undefined, since well...
 		// our hook runs when the player loop is called.
@@ -21,6 +23,12 @@ export default class KillAura extends Mod {
 			if (oPlr === player || oPlr.dead) continue;
 			if (oPlr.teamId === selfTeam) continue;
 			// TODO: requires rotations
+			const look = lookAtPlayer(
+				oPlr.pos,
+				player.pos
+			);
+			RotationManager.scheduleRotation(new RotationPlan(look, 5));
+			player.addMeleeHitFlash();
 			network.sendMeleeHitPlayer(
 				oPlr.id,
 				oPlr.currentSpawnId,

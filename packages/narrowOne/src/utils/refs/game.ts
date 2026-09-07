@@ -3,16 +3,16 @@
  * @module
  */
 
-import { game } from "@/hooks/gameHook";
+import { gameObj } from "@/hooks/gameHook";
 import { main } from "@/hooks/mainHook";
 import { expose } from "@vape/core/exposed";
 
-const Refs = {
-	get game() {
-		return main?.gameManager?.activeGame ?? game;
+const game = {
+	get instance() {
+		return main?.gameManager?.activeGame ?? gameObj;
 	},
 	get player(): NonNullable<any> | null {
-		const game = Refs.game;
+		const game = this.instance;
 		if (!game) return null;
 		// avoid calling the method.
 		// this is useless since only the background game doesn't have `myPlayer`,
@@ -20,7 +20,7 @@ const Refs = {
 		return game.myPlayer ?? game.getMyPlayer();
 	},
 	get players(): Map<number, any> | undefined {
-		return Refs.game?.players;
+		return this.instance?.players;
 	},
 	/**
 	 * **IMPORTANT**:
@@ -31,6 +31,6 @@ const Refs = {
 	}
 };
 
-expose("Refs", () => Refs);
+expose("Refs", () => game);
 
-export default Refs;
+export default game;

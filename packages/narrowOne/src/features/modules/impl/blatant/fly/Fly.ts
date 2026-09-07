@@ -3,7 +3,7 @@ import Mod from "@vape/core/features/modules/api/Module";
 
 import Bus from "@/Bus";
 import getMovement from "@/utils/movement/getMoveDir";
-import Refs from "@/utils/Refs";
+import game from "@/utils/refs/game";
 
 
 export default class Fly extends Mod {
@@ -15,7 +15,7 @@ export default class Fly extends Mod {
 
 	@Bus.Subscribe("gameTick")
 	onTick(): void {
-		const { player } = Refs;
+		const { player } = game;
 		if (!player) return;
 		const [x, z] = getMovement(this.speedSetting.value());
 		const {rigidBody: {velocity}} = player;

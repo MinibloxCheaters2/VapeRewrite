@@ -3,7 +3,7 @@ import Mod from "@vape/core/features/modules/api/Module";
 import { SliderSetting } from "@vape/core/index";
 
 import Bus from "@/Bus";
-import Refs from "@/utils/Refs";
+import game from "@/utils/refs/game";
 import getMovement from "@/utils/movement/getMoveDir";
 
 export default class Speed extends Mod {
@@ -15,7 +15,7 @@ export default class Speed extends Mod {
 
 	@Bus.Subscribe("gameTick")
 	onTick(): void {
-		const {player} = Refs;
+		const {player} = game;
 		if (!player) return;
 		const [x, z] = getMovement(this.speedSetting.value());
 		player.rigidBody.velocity.x = x;

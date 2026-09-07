@@ -8,6 +8,7 @@ import NoClip from "./features/modules/impl/blatant/NoClip";
 import KillAura from "./features/modules/impl/blatant/KillAura";
 import AutoReport from "./features/modules/impl/utility/AutoReport";
 import AdBypass from "./features/modules/impl/utility/AdBypass";
+import { BowAimbot } from "./features/modules/impl/blatant/BowAimbot";
 
 type Named = {};
 
@@ -21,6 +22,7 @@ const mm = new ModuleManager<Named>({
 		new NoClip(),
 		new FilterBypass(),
 		new AdBypass,
+		new BowAimbot,
 		DetectionDebugger.INSTANCE
 		// new Timer(),
 	],
