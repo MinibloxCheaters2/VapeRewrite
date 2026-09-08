@@ -7,7 +7,7 @@
 			"@vape/core": ["../../core/src"],
 			"@wq2/waybackhq-types/*": ["./*"]
 		},
-		"baseUrl": "./src/"
+		"rootDir": "./src/"
 	},
 	"include": ["src/**/*"]
 }

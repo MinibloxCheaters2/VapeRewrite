@@ -11,6 +11,7 @@ import { mod as THREE } from "@/utils/wrappers/three";
 
 import Bus from "../../Bus";
 import Rotation, { type IRotation } from "../aiming/rotation";
+import { sendSilently } from "./packetUtil";
 
 export class PacketRecord<T> {
 	constructor(
@@ -41,12 +42,6 @@ enum PreAction {
 export default new (class PacketQueueManager {
 	private packetQueue: PacketRecord<AnyPacket>[] = [];
 	#posBox?: Mesh;
-
-	get serverPos(): PBFloatVector3 | undefined {
-		return getPosFromPacket(
-			this.packetQueue.find((p) => getPosFromPacket(p.packet) !== undefined)?.packet,
-		);
-	}
 
 	get serverRot(): Rotation | undefined {
 		return Rotation.fromPacket(

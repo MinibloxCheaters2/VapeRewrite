@@ -15,10 +15,13 @@ export type PacketName = keyof Packet;
 export type PacketID = Packet[PacketName];
 export type AnyPacket = [ID: PacketID, ...unknown[]];
 
+export let origSendReliable: Connection["sendReliable"];
+
 export async function hookSendPacket() {
 	const connection = await connectionPromise;
+	origSendReliable = connection.prototype.sendReliable;
 	// sendFast is just an alias to sendReliable, I don't need to hook that.
-	connection.prototype.sendReliable = createProxy(connection.prototype.sendReliable, {
+	connection.prototype.sendReliable = createProxy(origSendReliable, {
 		apply(target, thisArg: Connection, argArray: [AnyPacket]) {
 			function callOrig(data = [wrap.data]) {
 				Reflect.apply(target, thisArg, data);
