@@ -59,7 +59,7 @@ export function asMessage<T extends object>(msg: MappedMessage): Message<T> {
 			return new packetClass().fromJsonString(a, b);
 		}
 		static equals(a: unknown, b: unknown) {
-			return runtime.util.equals(packetClass, a, b);
+			return runtime.util.equals(packetClass as unknown as typeof Message, a as object, b as object);
 		}
 	};
 }

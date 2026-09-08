@@ -5,7 +5,7 @@ import { argument, literal } from "@wq2/brigadier-ts";
 
 import Miniblox from "@/utils/refs/miniblox";
 
-import ModuleArgumentType from "../api/brigadier/ModuleArgumentType";
+import ModuleArgumentType from "@vape/core/features/commands/api/brigadier/ModuleArgumentType";
 
 dispatcher.register(
 	literal("toggle").then(

@@ -3,9 +3,9 @@ import type Mod from "@vape/core/features/modules/api/Module";
 import dispatcher from "@vape/core/features/commands/api/CommandDispatcher";
 import { argument, literal, StringArgumentType } from "@wq2/brigadier-ts";
 
-import Miniblox from "@/utils/refs/miniblox";
+// import Miniblox from "@/utils/refs/miniblox";
 
-import ModuleArgumentType from "../api/brigadier/ModuleArgumentType";
+import ModuleArgumentType from "@vape/core/features/commands/api/brigadier/ModuleArgumentType";
 
 dispatcher.register(
 	literal("bind").then(
@@ -16,10 +16,10 @@ dispatcher.register(
 				const actual = to === "none" ? "" : to;
 				// the setter handles the setting logic.
 				m.bind = actual;
-				Miniblox.chat.addChat({
-					text: `Bound ${m.name} to ${actual}!`,
-					color: "aqua",
-				});
+				// Miniblox.chat.addChat({
+				// 	text: `Bound ${m.name} to ${actual}!`,
+				// 	color: "aqua",
+				// });
 			}),
 		),
 	),

@@ -1,4 +1,4 @@
-import type LegitModule from "../api/LegitModule";
+import type LegitModule from "@vape/core/features/modules/api/LegitModule";
 
 import LegitModuleManager from "@vape/core/features/modules/api/LegitModuleManager";
 

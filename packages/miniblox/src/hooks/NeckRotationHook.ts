@@ -7,10 +7,12 @@ import Miniblox from "@/utils/refs/miniblox";
 import createProxy from "@vape/core/utils/helpers/proxy";
 
 let origInit: ClientEntityPlayer["init"];
-let origRenderPosAndRot: RenderPlayer["renderPositionAndRotation"];
+type HookFn = (this: RenderPlayer, ...args: unknown[]) => void;
+type HookedRenderPlayer = RenderPlayer & { renderPositionAndRotation: HookFn };
+let origRenderPosAndRot: HookFn;
 
 function hookRenderPlayer(mesh: RenderPlayer) {
-	const cRenderPlayer = mesh.constructor.prototype;
+	const cRenderPlayer = mesh.constructor.prototype as HookedRenderPlayer;
 	const { player, controls } = Miniblox;
 	origRenderPosAndRot = cRenderPlayer.renderPositionAndRotation;
 	cRenderPlayer.renderPositionAndRotation = createProxy(origRenderPosAndRot, {

@@ -33,7 +33,7 @@ export function getInheritanceTree(obj: HasProto): Set<Constructor> {
 			break;
 		}
 		tree.add(parent);
-		cur = parent as HasProto;
+		cur = parent as unknown as HasProto;
 		if (cur == null) break;
 	}
 	return tree;

@@ -8,6 +8,14 @@
 		"jsx": "preserve",
 		"jsxImportSource": "solid-js",
 		"skipLibCheck": true,
-		"lib": ["DOM", "DOM.Iterable", "ESNext"]
-	}
+		"lib": ["DOM", "DOM.Iterable", "ESNext"],
+		"strict": false
+	},
+	"include": [
+		"rolldown.config.ts",
+		"cssMinifyPlugin.ts",
+		"minifyPlugin.ts",
+		"thingPlugin.ts",
+		"oxfmt.config.ts"
+	]
 }

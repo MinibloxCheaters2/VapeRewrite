@@ -9,14 +9,14 @@ import { S2CData } from "@/event/Events";
 import { isC2S, isS2C } from "@/utils";
 import Miniblox from "@/utils/refs/miniblox";
 
-class Log<T extends AnyPacket> {
+class Log {
 	constructor(
-		public packet: T extends S2CPacket ? S2CData<T> : T,
+		public packet: C2SPacket | S2CData,
 		public timestamp: number,
 	) {}
 }
 
-function isPacketBlacklisted(packet: AnyPacket): boolean {
+function isPacketBlacklisted(packet: C2SPacket | S2CData): boolean {
 	return (
 		isS2C("CPacketChunkData", packet) ||
 		isC2S("SPacketPing", packet) ||
@@ -30,8 +30,8 @@ function isPacketBlacklisted(packet: AnyPacket): boolean {
 export default class PacketLogger extends Mod {
 	name = "PacketLogger";
 	category = Category.UTILITY;
-	#c2s: Log<C2SPacket>[] = [];
-	#s2c: Log<S2CPacket>[] = [];
+	#c2s: Log[] = [];
+	#s2c: Log[] = [];
 
 	@Subscribe("sendPacket")
 	private onSendPacket(e: CancelableWrapper<C2SPacket>) {

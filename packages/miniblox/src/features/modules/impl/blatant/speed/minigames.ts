@@ -8,6 +8,12 @@ import { Priority, Subscribe } from "@/event/Bus";
 import { isC2S } from "@/utils";
 import Miniblox from "@/utils/refs/miniblox";
 
+type SpoofedInput = C2SPacket & {
+	jump: boolean;
+	onGround: boolean;
+	clone(): SpoofedInput;
+};
+
 export default class Minigames extends SubModule<Speed> {
 	#spoofJump = false;
 	@Subscribe("playerTick")
@@ -23,10 +29,12 @@ export default class Minigames extends SubModule<Speed> {
 	@Subscribe("sendPacket", Priority.HIGHEST)
 	private onSendPacket(wrap: CancelableWrapper<C2SPacket>) {
 		if (!this.#spoofJump) return;
-		if (isC2S("SPacketPlayerInput", wrap.data) && wrap.data.onGround) {
-			wrap.data = wrap.data.clone();
-			wrap.data.jump = true;
-			wrap.data.onGround = false;
+		const input = wrap.data as SpoofedInput;
+		if (isC2S("SPacketPlayerInput", input) && input.onGround) {
+			const clone = input.clone();
+			clone.jump = true;
+			clone.onGround = false;
+			wrap.data = clone;
 			this.#spoofJump = false;
 		}
 	}

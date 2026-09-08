@@ -1,5 +1,5 @@
 import type Mod from "../modules/api/Module";
-import type { AnySetting, BaseSetting } from "./Settings";
+import type { AnySetting } from "./Settings";
 
 import { MAIN_LOGGER as logger } from "../../utils/logging/loggers";
 import { siteKey } from "../../utils/siteKey";
@@ -24,7 +24,11 @@ export interface SerializedSetting<V> {
 	value: V;
 }
 
-function serializeBaseSetting<V>(set: BaseSetting<V>): SerializedSetting<V> {
+function serializeBaseSetting<V>(set: {
+	name: string;
+	type: string;
+	value: () => V;
+}): SerializedSetting<V> {
 	return {
 		name: set.name,
 		type: set.type,
@@ -39,7 +43,7 @@ export class ModuleConfig {
 	) {}
 	static from(mod: Mod): ModuleConfig {
 		const settings: SerializedSetting<unknown>[] = [];
-		iterSubSettings(mod, (s) => settings.push(serializeBaseSetting(s)));
+		iterSubSettings(mod, (s) => settings.push(serializeBaseSetting<unknown>(s)));
 		return new ModuleConfig(mod.enabled, settings);
 	}
 }

@@ -1,3 +1,4 @@
+/// <reference types="@types/node" />
 import { readPackageUp } from "read-package-up";
 import { defineConfig, RolldownOptions, RolldownPlugin } from "rolldown";
 import userscript from "rolldown-plugin-userscript";

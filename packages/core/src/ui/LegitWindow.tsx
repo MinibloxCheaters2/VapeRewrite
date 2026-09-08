@@ -447,7 +447,7 @@ function LegitSettingRenderer(props: { setting: AnySetting }) {
 			</Match>
 			<Match when={props.setting.type === "dropdown"}>
 				{(() => {
-					const s = props.setting as import("../features/config/Settings").DropdownSetting;
+					const s = props.setting as import("../features/config/Settings").DropdownSetting<import("../features/config/Settings").ModeLike>;
 					return (
 						<DropdownComponent
 							name={s.name}

@@ -33,7 +33,7 @@ export default class Paranoia extends Mod {
 	#alertFromField<P extends S2CPacket, K extends keyof P>(
 		pkt: P,
 		key: K,
-		name = pkt.typeName,
+		name = (pkt.constructor as { typeName?: string }).typeName,
 		alertWrongType = true,
 	) {
 		const v = pkt[key];

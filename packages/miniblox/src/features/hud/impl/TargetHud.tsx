@@ -1,12 +1,12 @@
 import type { EntityLivingBase } from "@wq2/miniblox-sdk";
 
 import HudElement from "@vape/core/features/hud/api/JSXHudElement";
-import ModuleManager from "@vape/core/features/modules/api/ModuleManager";
 import { guiVisible } from "@vape/core/ui/guiState";
 import { createSignal } from "solid-js";
 
 import { getMostRecentTarget } from "@/utils/movement/TargetTracker";
 import Miniblox from "@/utils/refs/miniblox";
+import { mm } from "@/features/modules/registry";
 
 interface TargetInfo {
 	name: string;
@@ -94,7 +94,9 @@ function make2DCanvas(
 
 async function renderSkinHead(entity: EntityLivingBase): Promise<string | null> {
 	const manager = Miniblox.skinManager;
-	const id = "profile" in entity ? entity.profile.cosmetics.skin : null;
+	const id = "profile" in entity
+		? (entity as EntityLivingBase & { profile: { cosmetics: { skin: string } } }).profile.cosmetics.skin
+		: null;
 	if (id && !manager.hasSkin(id)) {
 		try {
 			await manager.downloadSkin(id);
@@ -152,7 +154,7 @@ export default class TargetHud extends HudElement {
 
 	private resolveTarget(): EntityLivingBase | null {
 		// Show the local player while the HUD editor preview is active.
-		if (ModuleManager.hudManager.stateAccessor()) return Miniblox.player ?? null;
+		if (mm.named.hudManager.stateAccessor()) return Miniblox.player ?? null;
 		const recent = getMostRecentTarget();
 		if (recent) return recent;
 		return null;
@@ -188,7 +190,7 @@ export default class TargetHud extends HudElement {
 
 	private getName(target: EntityLivingBase): string {
 		const raw = this.useDisplayNameSetting.value() ? target.getDisplayName?.() : target.getName?.();
-		const name = (raw ?? target.id ?? "").replace(/§./g, "");
+		const name = String(raw ?? target.id ?? "").replace(/§./g, "");
 		return name || String(target.id);
 	}
 
@@ -258,9 +260,9 @@ export default class TargetHud extends HudElement {
 					height: "89px",
 					padding: "0",
 					background,
-					backdropFilter: renderBackground ? "blur(4px)" : undefined,
+					"backdrop-filter": renderBackground ? "blur(4px)" : undefined,
 					border,
-					fontFamily: this.fontSetting.value(),
+					"font-family": this.fontSetting.value(),
 				}}
 			>
 				<div class="vape-target-avatar">
@@ -271,8 +273,8 @@ export default class TargetHud extends HudElement {
 							style={{
 								width: "100%",
 								height: "100%",
-								imageRendering: "pixelated",
-								objectFit: "fill",
+								"image-rendering": "pixelated",
+								"object-fit": "fill",
 							}}
 						/>
 					) : (
@@ -283,7 +285,7 @@ export default class TargetHud extends HudElement {
 					<div
 						class="vape-target-name"
 						style={{
-							textShadow: "1px 1px 0 rgba(0, 0, 0, 0.55)",
+							"text-shadow": "1px 1px 0 rgba(0, 0, 0, 0.55)",
 						}}
 					>
 						{target.name}

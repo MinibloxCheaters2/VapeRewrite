@@ -1,5 +1,5 @@
 import type { CPacketMap, SPacketMap } from "./packetRefs";
-import type { C2SPacket } from "@wq2/miniblox-sdk";
+import type { C2SPacket, S2CPacket } from "@wq2/miniblox-sdk";
 
 import { S2CData } from "@/event/Events";
 
@@ -8,11 +8,16 @@ import Miniblox from "../refs/miniblox";
 export function isC2S<const K extends keyof SPacketMap>(
 	name: K,
 	pkt: unknown,
-): pkt is InstanceType<SPacketMap[K]> {
+): pkt is InstanceType<SPacketMap[K]>;
+export function isC2S(name: string, pkt: unknown): pkt is C2SPacket;
+export function isC2S<const K extends keyof SPacketMap>(
+	name: K | string,
+	pkt: unknown,
+): pkt is InstanceType<SPacketMap[K]> | C2SPacket {
 	return (
 		(
 			pkt as typeof pkt & {
-				constructor: { typeName: K };
+				constructor: { typeName: K | string };
 			}
 		)?.constructor?.typeName === name
 	);
@@ -21,12 +26,17 @@ export function isC2S<const K extends keyof SPacketMap>(
 export function isS2C<const K extends keyof CPacketMap>(
 	name: K,
 	pkt: unknown,
-): pkt is InstanceType<CPacketMap[K]> {
+): pkt is InstanceType<CPacketMap[K]>;
+export function isS2C(name: string, pkt: unknown): pkt is S2CPacket;
+export function isS2C<const K extends keyof CPacketMap>(
+	name: K | string,
+	pkt: unknown,
+): pkt is InstanceType<CPacketMap[K]> | S2CPacket {
 	return (
 		(pkt instanceof S2CData && pkt.name === name) ||
 		(
 			pkt as typeof pkt & {
-				constructor: { typeName: K };
+				constructor: { typeName: K | string };
 			}
 		)?.constructor?.typeName === name
 	);

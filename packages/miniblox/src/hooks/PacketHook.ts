@@ -5,6 +5,7 @@ import CancelableWrapper from "@vape/core/event/CancelableWrapper";
 import { MAIN_LOGGER as logger } from "@vape/core/utils/logging/loggers";
 
 import Bus from "@/Bus";
+import { S2CData } from "@/event/Events";
 import { waitForReact } from "@/utils/helpers/waitForReact";
 import Miniblox from "@/utils/refs/miniblox";
 import createProxy from "@vape/core/utils/helpers/proxy";
@@ -125,7 +126,7 @@ export function hookReceivePacket() {
 			};
 			if (type === 2 && data instanceof Array && typeof data[0] === "string") {
 				argArray.splice(1, 1);
-				const cw = new CancelableWrapper((data as [string, object])[1]);
+				const cw = new CancelableWrapper<S2CData>((data as [string, object])[1] as S2CData);
 				Bus.emit("receivePacket", cw);
 				data[1] = cw.data;
 				if (cw.canceled) return;

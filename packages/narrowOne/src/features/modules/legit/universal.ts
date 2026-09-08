@@ -287,7 +287,9 @@ class Speedometer extends LegitModule {
 				"z-index": "10003",
 			});
 			this.#overlay.textContent = "0.0 sps";
-			shadowWrapper.host.appendChild(this.#overlay);
+			shadowWrapper.wrapper.appendChild(
+				this.#overlay,
+			);
 			this.#startLoop();
 		} else {
 			cancelAnimationFrame(this.#rafId);

@@ -1,4 +1,5 @@
 import "@vape/core/meta.js?userscript-metadata";
+import "@vape/core/types/vm.d.ts";
 import "./meta.js?userscript-metadata";
 import "./ModuleManager";
 import "./Bus";

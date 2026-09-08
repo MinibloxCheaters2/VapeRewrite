@@ -4,7 +4,7 @@ import type { Category } from "./Category";
 
 import { createSignal } from "solid-js";
 
-import Bus from "@/Bus";
+import Bus from "../../../Bus";
 
 // why tf does @/... not work for this, but it works for @/Bus???
 import { toggleAlertEnabled } from "../../../ui/globalSettings";

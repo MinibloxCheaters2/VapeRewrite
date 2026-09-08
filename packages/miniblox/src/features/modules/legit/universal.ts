@@ -8,6 +8,8 @@ import THREE from "@/utils/refs/three";
 
 import { register } from "./shared";
 
+type GameSceneObject = Parameters<typeof Miniblox.game.gameScene.scene.add>[0];
+
 const BROWSER_FONTS = [
 	"Arial",
 	"Verdana",
@@ -101,13 +103,13 @@ class Breadcrumbs extends LegitModule {
 			const line = new THREE.Line(geo, this.#material);
 			line.visible = false;
 			this.#line = line;
-			Miniblox.game.gameScene.scene.add(this.#line);
+			Miniblox.game.gameScene.scene.add(this.#line as unknown as GameSceneObject);
 			this.#lastSpawn = null;
 			this.#startLoop();
 		} else {
 			cancelAnimationFrame(this.#rafId);
 			if (this.#line) {
-				Miniblox.game.gameScene.scene.remove(this.#line);
+				Miniblox.game.gameScene.scene.remove(this.#line as unknown as GameSceneObject);
 				this.#line.geometry.clearGroups();
 				this.#line = null;
 			}
@@ -287,7 +289,9 @@ class Speedometer extends LegitModule {
 				"z-index": "10003",
 			});
 			this.#overlay.textContent = "0.0 sps";
-			shadowWrapper.host.appendChild(this.#overlay);
+			shadowWrapper.wrapper.appendChild(
+				this.#overlay,
+			);
 			this.#startLoop();
 		} else {
 			cancelAnimationFrame(this.#rafId);

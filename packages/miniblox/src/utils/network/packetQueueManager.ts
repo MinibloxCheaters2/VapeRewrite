@@ -1,6 +1,6 @@
 // TODO: support queueing S2C packets?
 
-import type CancelableWrapper from "../../event/CancelableWrapper";
+import type CancelableWrapper from "@vape/core/event/CancelableWrapper";
 import type { AnyPacket, C2SPacket, PBFloatVector3 } from "@wq2/miniblox-sdk";
 import type { Material, Mesh } from "three";
 
@@ -146,7 +146,9 @@ export default new (class PacketQueueManager {
 		mtr.opacity = 0.5;
 		mesh.renderOrder = 6;
 		mesh.visible = true;
-		Miniblox.game.gameScene.ambientMeshes.add(mesh);
+		Miniblox.game.gameScene.ambientMeshes.add(
+			mesh as unknown as Parameters<typeof Miniblox.game.gameScene.ambientMeshes.add>[0],
+		);
 		return mesh;
 	}
 

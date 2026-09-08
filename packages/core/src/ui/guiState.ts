@@ -30,7 +30,7 @@ const initialCategories: Record<string, boolean> = {
 export const [categoryWindows, setCategoryWindows] = createSignal<Record<string, boolean>>({
 	...initialCategories,
 	...readStoredJSON<Partial<Record<string, boolean>>>(siteKey("vapeGuiCategoryWindows"), {}),
-});
+} as Record<string, boolean>);
 
 // Toggle category window
 export function toggleCategoryWindow(category: string) {
@@ -76,7 +76,7 @@ export const [categoryWindowPositions, setCategoryWindowPositions] = createSigna
 		siteKey("vapeGuiCategoryPositions"),
 		{},
 	),
-});
+} as Record<string, { x: number; y: number }>);
 
 export function setCategoryWindowPosition(category: string, x: number, y: number) {
 	setCategoryWindowPositions((prev) => ({

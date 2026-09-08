@@ -92,7 +92,7 @@ export default class FakeLag extends Mod {
 		const playerPos = Miniblox.player.pos;
 		const srvPos = svPos
 			? SimpleVec3.fromFloatVec3(svPos)
-			: SimpleVec3.fromThreeVec3(Miniblox.player.pos);
+			: SimpleVec3.fromFloatVec3(Miniblox.player.pos);
 		const serverPos = playerPos.clone().setX(srvPos.x).setY(srvPos.y).setZ(srvPos.z);
 
 		const serverDistance = Math.min(...targets.map((e) => e.pos.distanceTo(serverPos)));

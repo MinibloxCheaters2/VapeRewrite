@@ -81,6 +81,10 @@ function HudManagerPanel() {
 			HudManager.removeHudElement(hud);
 		}
 	};
+	const handleClose = () => {
+		setShowSettings(false);
+		setShowAddMenu(false);
+	};
 	// TODO: fix overlay system (you can't move, pin, or configure elements)
 	return (
 		<Show when={false}>

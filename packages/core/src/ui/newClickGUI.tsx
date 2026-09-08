@@ -41,7 +41,9 @@ export function CategoryWindow(props: CategoryWindowProps) {
 	// categories that are already open.
 	const [heightAnimated, setHeightAnimated] = createSignal(false);
 
-	const modules = ModuleManager.findModules(P.byCategory(Category[props.category.toUpperCase()]));
+	const modules = ModuleManager.findModules(
+		P.byCategory(Category[props.category.toUpperCase() as keyof typeof Category]),
+	);
 
 	// oxlint-disable-next-line no-unassigned-vars
 	let windowRef: HTMLDivElement | undefined;

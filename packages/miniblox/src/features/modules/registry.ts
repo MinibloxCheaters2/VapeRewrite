@@ -65,7 +65,7 @@ const phase = new Phase();
 const scaffold = new Scaffold();
 const hudManager = new HudManagerModule();
 
-const mm = new ModuleManager<MinibloxModules>({
+export const mm = new ModuleManager<MinibloxModules>({
 	named: { antiBan, noSlow, phase, scaffold, hudManager },
 	modules: [
 		// blatant

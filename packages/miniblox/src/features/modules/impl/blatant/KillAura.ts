@@ -1,4 +1,4 @@
-import type { EntityLivingBase } from "@wq2/miniblox-sdk";
+import type { EntityLivingBase, World } from "@wq2/miniblox-sdk";
 
 import Category from "@vape/core/features/modules/api/Category";
 import Mod from "@vape/core/features/modules/api/Module";
@@ -82,7 +82,7 @@ export default class KillAura extends Mod {
 				}),
 			);
 		} else {
-			playerController.sendUseItem(player, world, player.getHeldItem());
+			playerController.sendUseItem(player, world as unknown as World, player.getHeldItem());
 		}
 		this.blocking = true;
 	}

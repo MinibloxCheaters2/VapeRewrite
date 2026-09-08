@@ -1,4 +1,4 @@
-import type { Mapping } from "../helpers/remapProxy";
+import type { Mapping } from "@vape/core/utils/helpers/remapProxy";
 /**
  * Contains various mappings for objects. These are used in the auto-remapping proxy, so you don't have to think about using dumps ever again!
  * @module
@@ -52,7 +52,6 @@ export default new (class Mappings {
 				"setFlag",
 				"updatePlayerMoveState",
 				"applyInput",
-				"onPlayerUpdate",
 			),
 		);
 	}
