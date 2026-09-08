@@ -1,7 +1,7 @@
 export default new (class ShadowWrapper {
 	#root: ShadowRoot | undefined;
 	#wrapper: HTMLDivElement | undefined;
-	#host: HTMLDivElement | undefined;
+	#_host: HTMLDivElement | undefined;
 
 	/**
 	 * From: https://github.com/crackbob/ballcrack/blob/01c625b5545aa93aded44c8b27b878029dddf883/src/shadowWrapper.js#L5C30-L20C50
@@ -18,7 +18,7 @@ export default new (class ShadowWrapper {
 		const container = document.createElement("div");
 		const shadow = attachShadow.apply(container, [{ mode: "closed" }]) as ShadowRoot;
 		document.body.appendChild(container);
-		this.#host = container;
+		this.#_host = container;
 		return shadow;
 	}
 
@@ -56,6 +56,6 @@ export default new (class ShadowWrapper {
 	 */
 	get #host() {
 		this.#root ??= this.#makeShadowRoot();
-		return this.#host;
+		return this.#_host;
 	}
 })();
