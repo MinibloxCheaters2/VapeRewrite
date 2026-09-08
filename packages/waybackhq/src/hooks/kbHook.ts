@@ -38,7 +38,7 @@ export default function hook() {
 			thisArg: EntityLivingBase,
 			argArray: [Entity, dmg: number, x: number, z: number],
 		) {
-			if (thisArg.entityId !== Refs.player.entityId)
+			if (thisArg.entityId !== Refs.player?.entityId)
 				return Reflect.apply(target, thisArg, argArray);
 			const [, , dx, dz] = argArray;
 			const v = new CancelableWrapper({

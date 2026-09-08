@@ -8,7 +8,8 @@ import canPlayerSeeEntity from "./wallCheck";
 
 export function findTargets(range = 6, _angle = 360, checkWalls = false): ELB[] {
 	const { localPlayer: player, world } = Refs.game;
-	if (world === undefined) throw new Error("findTargets called while world is null");
+	if (player === null) throw new Error("findTargets called while player is null");
+	if (world === null) throw new Error("findTargets called while world is null");
 
 	const sqRange = range * range;
 	const { entities } = world;

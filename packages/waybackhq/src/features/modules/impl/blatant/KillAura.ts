@@ -68,7 +68,8 @@ export default class KillAura extends Mod {
 	sendAttack(e: EntityLivingBase) {
 		if (this.swing !== "none") swing(this.swing);
 		const { game: g, player, session } = Refs;
-		if (!player || !session) return;
+		const isClient = g.netRole === "client";
+		if (!player) return;
 		const rot = lookAtEntity(
 			new SimpleVec3(player.posX, player.posY, player.posZ),
 			player.getEyeHeight(),
@@ -77,8 +78,11 @@ export default class KillAura extends Mod {
 		RotationManager.scheduleRotation(
 			new RotationPlan(rot, this.movementCorrection.value().value, 2),
 		);
+		console.log("before attack");
 		player.attackTargetEntityWithCurrentItem(e);
-		if (g.netRole === "client") session.sendActions(4, e.entityId, false, false, 0);
+		console.log("after attack");
+		if (isClient && session)
+			session.sendActions(4, e.entityId, false, false, 0);
 	}
 
 	@Bus.Subscribe("playerTick")
