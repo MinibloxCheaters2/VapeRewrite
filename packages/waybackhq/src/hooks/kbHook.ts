@@ -1,4 +1,5 @@
 import { CancelableWrapper } from "@vape/core/index";
+import createProxy from "@vape/core/utils/helpers/proxy";
 import { Entity } from "@wq2/waybackhq-types/src/entity/entity";
 import { EntityLivingBase } from "@wq2/waybackhq-types/src/entity/entityliving";
 import { DecodedVelocity, Session } from "@wq2/waybackhq-types/src/net/session";
@@ -8,7 +9,6 @@ import { mod } from "@/utils/wrappers/entityliving";
 import { ready, session } from "@/utils/wrappers/session";
 
 import Refs from "./game";
-import createProxy from "@vape/core/utils/helpers/proxy";
 
 let origApplyVelocity: Session["applyVelocity"];
 let origKnockBack: EntityLivingBase["knockBack"];
@@ -43,7 +43,7 @@ export default function hook() {
 			const [, , dx, dz] = argArray;
 			const v = new CancelableWrapper({
 				x: dx,
-				y: thisArg.world.knockback || 0.36,
+				y: /*thisArg.world.knockback.vertical || */0.36,
 				z: dz,
 				entityID: thisArg.entityId,
 			});

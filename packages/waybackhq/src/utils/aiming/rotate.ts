@@ -19,7 +19,7 @@ import Rotation from "./rotation";
 export class RotationPlan {
 	constructor(
 		public target: Rotation,
-		public movementCorrection: MovementCorrection = MovementCorrection.Auto,
+		public movementCorrection: MovementCorrection = MovementCorrection.Silent,
 		public resetIn = 1,
 	) {}
 }
@@ -34,7 +34,9 @@ export default new (class RotationManager {
 		return this.#currentPlan;
 	}
 	get playerRot() {
-		return new Rotation(Refs.player.rotationYaw, Refs.player.rotationPitch);
+		const {player} = Refs;
+		if (!player) return Rotation.ZERO;
+		return new Rotation(player.rotationYaw, player.rotationPitch);
 	}
 	get trackedRot() {
 		return this.#trackedRot;
@@ -68,6 +70,7 @@ export default new (class RotationManager {
 				const inp = protocol.decodeMove(wrap.data);
 				const { yaw, pitch } = plan.target;
 				const { player } = Refs;
+				if (!player) break;
 				if (yaw - player.prevRotationYaw !== 0 || pitch - player.prevRotationPitch !== 0) {
 					inp.yaw = yaw;
 					inp.pitch = pitch;

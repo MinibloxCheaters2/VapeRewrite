@@ -10,7 +10,7 @@ export default function swing(replicateTo: ReplicationDirection = "both") {
 	const { netRole, session, localPlayer: player } = Refs.game;
 	const both = replicateTo === "both";
 	const [client, server] = [both || replicateTo === "client", both || replicateTo === "server"];
-	if (client) player.swingItem();
+	if (client && player) player.swingItem();
 	if (netRole === "client" && session && server) {
 		session.sendSwing();
 	}
