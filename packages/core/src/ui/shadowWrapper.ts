@@ -51,8 +51,10 @@ export default new (class ShadowWrapper {
 	 * Putting stuff in the document's body is detectable.
 	 * I don't know a way to create a shadow root without a div wrapper.
 	 * Vector doesn't really care about doing client-sided detections as of right now, so we're fine.
+	 * This is now fully private. Don't make it public, since if you can make something with the host,
+	 * you can most likely do it with the normal wrapper.
 	 */
-	private get host() {
+	get #host() {
 		this.#root ??= this.#makeShadowRoot();
 		return this.#host;
 	}
