@@ -4,18 +4,35 @@ import Bus from "@/Bus";
 import { main } from "@/hooks/mainHook";
 import { solveNarrowAim, bowSpeed, bowStrength } from "@/utils/aiming/projectileAim";
 import game from "@/utils/refs/game";
+import { ready } from "@/hooks/gameHook";
+import createProxy from "@vape/core/utils/helpers/proxy";
+import type { Vector3 } from "three";
+
+let hooked: boolean, orig: () => Vector3;
 
 export class BowAimbot extends Mod {
 	name = "BowAimbot";
 	category = Category.BLATANT;
-	constructor() {
-		super();
+
+	protected onEnable(): void {
+		ready.then(() => {
+			hooked = true;
+			orig = game.player.getShootDirection;
+			game.player.getShootDirection = createProxy(orig, {
+				apply: (target, thisArg, argArray: []) => {
+					const aim = this.findTarget();
+					return aim?.direction ?? Reflect.apply(target, thisArg, argArray);
+				},
+			});
+		})
+	}
+	protected onDisable(): void {
+		if (!hooked) return;
+		game.player.getShootDirection = orig;
 	}
 
-	@Bus.Subscribe("gameTick")
-	private onTick() {
+	private findTarget() {
 		const { player: me } = game;
-		if (!main) return;
 		if (!me || !me.game || me.game.gameEnded) return;
 		// TODO: the game devs don't check if you're holding a melee weapon,
 		// they probably don't check here for holding a bow either.
@@ -35,12 +52,7 @@ export class BowAimbot extends Mod {
 
 		const aim = solveNarrowAim(origin, target, vel, vx, strength);
 		if (!aim) return;
-
-		me.lookRot.x = aim.yaw;
-		me.lookRot.y = aim.pitch;
-		me.inputManager.lookInput.set(0, 0);
-		if (me.smoothCam) me.smoothLookRotTarget.copy(me.lookRot);
-		me.cachedCamRotDirty = true;
+		return aim;
 	}
 
 	private findNearest(): any {

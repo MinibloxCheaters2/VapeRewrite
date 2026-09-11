@@ -82,14 +82,14 @@ export default class DetectionDebugger extends Mod {
 			game.player.__proto__.report = createProxy(game.player.__proto__.report, {
 				apply(target, thisArg, argArray: [reason: number, n: number]) {
 					if (!thisArg.hasOwnership) return Reflect.apply(target, thisArg, argArray);
-					origLog("[DetectionDebugger] client-sided ac:", thisArg, argArray);
+					origLog("[DetectionDebugger] client-sided ac:", thisArg, argArray, new Error().stack);
 					const [reason, n] = argArray;
 					showNotification(
 						"DetectionDebugger",
 						`Flagged client-sided ac: ${reason} (${n})`,
 						"alert"
 					);
-					return Reflect.apply(target, thisArg, argArray);
+					// return Reflect.apply(target, thisArg, argArray);
 				},
 			});
 		});
