@@ -39,6 +39,9 @@ export function thing(cls: any, contributed = false) {
 		// 	DetectionDebugger.INSTANCE.rehook();
 	}
 }
+
+const k = crypto.randomUUID().replaceAll("-", "67");
+
 export function trigger(ws: WebSocket) {
 	// TODO: implement ts lazy ahh
 	/**
@@ -57,8 +60,7 @@ export function trigger(ws: WebSocket) {
 		ws.dispatchEvent(new MessageEvent("message", { data: buf }));
 	}
 
-	const k = crypto.randomUUID().replaceAll("-", "67");
-	(w as typeof w & Record<string, unknown>)[k] = (m: any) => {
+	if (!w[k]) (w as typeof w & Record<string, unknown>)[k] = (m: any) => {
 		thing(m);
 		delete w[k];
 	};
@@ -78,7 +80,7 @@ function hookWebSocket() {
 		WebSocket,
 		WebSocket.prototype.send
 	];
-	WebSocket.prototype.send = new Proxy(origSend, {
+	WebSocket.prototype.send = createProxy(origSend, {
 		apply(target, thisArg: WebSocket, argArray: [data: string | BufferSource | Blob]) {
 			try {
 				const {url} = thisArg;
@@ -92,7 +94,7 @@ function hookWebSocket() {
 			return Reflect.apply(target, thisArg, argArray);
 		},
 	});
-	w.WebSocket = new Proxy(origWebSocket, {
+	w.WebSocket = createProxy(origWebSocket, {
 		construct(target, argArray: [url: string | URL, protocols?: string | string[]], newTarget) {
 			const ws: WebSocket = Reflect.construct(target, argArray, newTarget);
 			const {url} = ws;

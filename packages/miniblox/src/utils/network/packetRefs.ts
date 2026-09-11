@@ -8,6 +8,7 @@ import { discoveredPackets } from "@/hooks/PacketHook";
 
 import Miniblox from "../refs/miniblox";
 import { packets as dummyPackets } from "./WasmTest";
+import createProxy from "@vape/core/utils/helpers/proxy";
 
 export type CPacketMap = typeof CPACKET_MAP;
 export type SPacketMap = typeof SPACKET_MAP;
@@ -21,7 +22,7 @@ function makeProxyRef<T extends CPacketMap | SPacketMap, V = T[keyof T]>(
 	obj: T,
 	getUncached: (k: keyof T) => V,
 ) {
-	return new Proxy<T>(obj, {
+	return createProxy<T>(obj, {
 		get(target, v) {
 			const orig = Reflect.get(target, v) as V;
 			let r = orig;

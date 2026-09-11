@@ -1,6 +1,7 @@
 import game from "@/utils/refs/game";
 import { ready } from "./gameHook";
 import RotationManager from "@/utils/aiming/rotate";
+import createProxy from "@vape/core/utils/helpers/proxy";
 
 let skeletonProto: any = null;
 
@@ -10,7 +11,7 @@ export function hookHeadPitch() {
 
 	skeletonProto = Object.getPrototypeOf(skel);
 	const orig = skeletonProto.setLookRotY;
-	skeletonProto.setLookRotY = new Proxy(orig, {
+	skeletonProto.setLookRotY = createProxy(orig, {
 		apply(target, thisArg, args) {
 			if (thisArg === game.player?.skeleton) {
 				const plan = RotationManager.currentPlan;
