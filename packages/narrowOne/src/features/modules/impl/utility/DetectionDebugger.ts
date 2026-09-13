@@ -116,7 +116,7 @@ export default class DetectionDebugger extends Mod {
 							if (!main && argArray.length === 1) {
 								thing(argArray[0], true);
 							}
-							this.logFunctionCall(r, argArray, a);
+							this.logFunctionCall(target, argArray, a);
 							return a;
 						},
 					});

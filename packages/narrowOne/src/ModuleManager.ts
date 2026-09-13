@@ -10,6 +10,7 @@ import AutoReport from "./features/modules/impl/utility/AutoReport";
 import AdBypass from "./features/modules/impl/utility/AdBypass";
 import { BowAimbot } from "./features/modules/impl/blatant/BowAimbot";
 import ArrowCooldown from "./features/modules/impl/combat/ArrowCooldown";
+import ArrowPhase from "./features/modules/impl/blatant/ArrowPhase";
 
 type Named = {};
 
@@ -24,6 +25,7 @@ const mm = new ModuleManager<Named>({
 		new FilterBypass(),
 		new AdBypass,
 		new BowAimbot,
+		new ArrowPhase,
 		new ArrowCooldown,
 		DetectionDebugger.INSTANCE
 		// new Timer(),

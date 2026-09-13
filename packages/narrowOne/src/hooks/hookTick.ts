@@ -28,6 +28,7 @@ export function hookPlayerTick() {
 	origPlayerLoop = prototype.loop;
 	prototype.loop = createProxy(origPlayerLoop, {
 		apply(target, thisArg, argArray) {
+			if (thisArg !== game.player) return Reflect.apply(target, thisArg, argArray);
 			const c = new Cancelable();
 			Bus.emit("playerTick", c);
 			if (!c.canceled)

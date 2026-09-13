@@ -1,15 +1,8 @@
 import Bus from "@/Bus";
-import game from "@/utils/refs/game";
+import Refs from "@/utils/refs/game";
 import Category from "@vape/core/features/modules/api/Category"
 import Mod from "@vape/core/features/modules/api/Module"
-
-const STATIC_REPORTS: [number, number][] = [
-	[2, 1],
-	[3, 1],
-	[4, 1],
-	[4, 3],
-	[5, 1]
-];
+import THREE from "@/utils/refs/three";
 
 export default class AutoReport extends Mod {
 	name = "AutoReport";
@@ -19,22 +12,18 @@ export default class AutoReport extends Mod {
 
 	@Bus.Subscribe("playerTick")
 	private onTick() {
-		const {players, player, instance: game} = game;
-		if (!players || !game) return;
-		for (const plr of players.values()) {
-			if (plr === player) continue;
-			game.antiCheat.reportPlayer(
-				plr.id,
-				1, // fly is the only one with a special severity number thing
-				this.valueSetting.value()
-			);
-			for (const [reason, extra] of STATIC_REPORTS) {
-				game.antiCheat.reportPlayer(
-					plr.id,
-					reason,
-					extra
-				);
-			}
+		const {players, player, network, instance: game} = Refs;
+		// network is undefined in the case of us not having `main`.
+		// game can't be undefined, since well...
+		// our hook runs when the player loop is called.
+		// idk why I'm checking if players is null because it shouldn't.
+		if (!network || !players || !player) return;
+		const selfTeam = player.teamId;
+		for (const oPlr of players.values()) {
+			// const {rigidBody} = oPlr;
+			if (oPlr === player || oPlr.dead) continue;
+			if (oPlr.teamId === selfTeam) continue;
+			player.pos.copy(oPlr.pos);
 		}
 	}
 }
