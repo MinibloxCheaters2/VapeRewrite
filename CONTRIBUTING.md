@@ -22,14 +22,17 @@ To make a cheat for Miniblox, you need to understand how Miniblox works...
 
 ## Useful bundle versions
 
-Unfortunately, Vector has done some things to make reverse-engineering a tiny bit harder.
-It's not as hard, but finding some stuff is annoying sometimes (i.e. remapping more fields/symbols).
+Unfortunately,
+Vector has done some things to make reverse-engineering a tiny bit harder.
+It's not as hard, but finding some stuff is annoying sometimes
+(i.e. remapping more fields/symbols).
 
-See [here](https://github.com/MinibloxCheaters2/miniblox-sdk/blob/main/CONTRIBUTING.md#useful-bundle-versions) for the list.
+See [Epstein List] for the list.
+[Epstein List](https://github.com/MinibloxCheaters2/miniblox-sdk/blob/main/CONTRIBUTING.md#useful-bundle-versions)
 
 ## Project structure
 
-```
+```text
 ├── .devcontainer/		# Dev container config
 ├── .forgejo/			# Forgejo CI workflows
 ├── .github/			# GitHub Actions workflows & templates
@@ -63,16 +66,16 @@ See [here](https://github.com/MinibloxCheaters2/miniblox-sdk/blob/main/CONTRIBUT
 │   │   │   └── configs.ts	#     Config definitions
 │   │   ├── hud/		#   HUD elements (on-screen overlays)
 │   │   │   ├── api/		#     HUD base classes & manager
-│   │   │   └── impl/		#     HUD implementations (array list, CPS, FPS, keystrokes, speed, target)
+│   │   │   └── impl/		#     HUD implementations
 │   │   └── modules/		#   Modules (the actual cheat features)
 │   │       ├── api/		#     Module base classes & managers
 │   │       ├── impl/		#     Module implementations by category
-│   │       │   ├── blatant/	#       Blatant modules (Blink, KillAura, Scaffold, Fly, Speed, etc.)
-│   │       │   ├── combat/	#       Combat modules (AutoClicker, Criticals, Velocity, WTap, etc.)
-│   │       │   ├── inventory/	#       Inventory modules (AutoArmor, InventoryManager)
-│   │       │   ├── minigames/	#       Minigames modules (Breaker, ChestAura, MurderMystery, etc.)
-│   │       │   ├── render/	#       Render modules (Chams)
-│   │       │   ├── utility/	#       Utility modules (AntiBan, Sprint, PingSpoof, etc.)
+│   │       │   ├── blatant/	#	Blatant modules
+│   │       │   ├── combat/		#	Combat modules
+│   │       │   ├── inventory/	#	Inventory modules (AutoArmor, InventoryManager)
+│   │       │   ├── minigames/	#	Minigames modules
+│   │       │   ├── render/		#	Render modules (Chams)
+│   │       │   ├── utility/	#	Utility modules (AntiBan, Sprint, PingSpoof, etc.)
 │   │       │   └── world/	#       World modules (NoFall, Timer, LiquidWalk)
 │   │       └── legit/		#     Legit mode state machine
 │   ├── hooks/			# Game event hooks (packet, tick, chat, connect, etc.)
@@ -87,7 +90,7 @@ See [here](https://github.com/MinibloxCheaters2/miniblox-sdk/blob/main/CONTRIBUT
 │   │   │   └── cleanup/	#     Inventory cleanup planner
 │   │   ├── logging/		#   Logger system
 │   │   ├── mapping/		#   Packet/event name mappings
-│   │   ├── math/		#   Vector & math utilities
+│   │   ├── math/			#   Vector & math utilities
 │   │   ├── movement/		#   Movement prediction & correction
 │   │   ├── network/		#   Packet queue, refs, WASM packet gen
 │   │   ├── refs/		#   References to game objects (ThreeJS, Miniblox)
@@ -100,7 +103,7 @@ See [here](https://github.com/MinibloxCheaters2/miniblox-sdk/blob/main/CONTRIBUT
 │   ├── meta.js			# # UserScript metadata block
 │   └── style.css		# # Global styles
 ├── wiki-assets/		# Wiki documentation images
-├── minifyPlugin.ts		# Custom minification plugin for rolldown (built-in one removes comments required for user-scripts)
+├── minifyPlugin.ts		# Custom minification plugin for rolldown, preserves comments
 ├── package.json		# Project metadata & dependencies
 ├── rolldown.config.ts	# Rolldown build config
 └── tsconfig.json		# TypeScript configuration

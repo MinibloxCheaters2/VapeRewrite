@@ -7,19 +7,16 @@ import { EXPOSE_SYMBOLS, LOG_EXPOSE_NAME } from "./debugControls";
 import { MAIN_LOGGER as logger } from "./utils/logging/loggers";
 import { exposedName } from "./utils/mapping/names";
 
-function getStore(): { [k: string]: unknown } {
-	if (!("_store" in getStore)) (getStore as typeof getStore & { _store: { [k: string]: unknown } })._store = {};
-	return (getStore as typeof getStore & { _store: { [k: string]: unknown } })._store;
-}
+let store: object = {};
 
 function init() {
 	if (!EXPOSE_SYMBOLS) return;
-	unsafeWindow[exposedName] = getStore();
+	unsafeWindow[exposedName] = store;
 	if (LOG_EXPOSE_NAME) logger.info("Symbol expose store name:", exposedName);
 }
 export function expose(name: string, value: () => unknown) {
 	if (!EXPOSE_SYMBOLS) return;
-	getStore()[name] = value();
+	store[name] = value();
 }
 
 init();
