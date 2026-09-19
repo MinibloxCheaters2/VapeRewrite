@@ -1,4 +1,4 @@
-import { ModuleManager, setModuleManager } from "@vape/core/features/modules/api/ModuleManager";
+import { create } from "@vape/core/features/modules/api/ModuleManager";
 
 // blatant
 import Blink from "./impl/blatant/Blink";
@@ -51,80 +51,62 @@ import LiquidWalk from "./impl/world/LiquidWalk";
 import NoFall from "./impl/world/NoFall";
 import Timer from "./impl/world/Timer";
 
-type MinibloxModules = {
-	antiBan: AntiBan;
-	noSlow: NoSlow;
-	phase: Phase;
-	scaffold: Scaffold;
-	hudManager: HudManagerModule;
-};
+export const mm = create(
+	// blatant
+	new Blink(),
+	new Fly(),
+	new KillAura(),
+	new MaceKill(),
+	new NoSlow(),
+	new Phase(),
+	new Scaffold(),
+	new Spider(),
+	new Speed(),
+	new TargetStrafe(),
+	new TickBase(),
 
-const antiBan = new AntiBan();
-const noSlow = new NoSlow();
-const phase = new Phase();
-const scaffold = new Scaffold();
-const hudManager = new HudManagerModule();
+	// combat
+	new AutoClicker(),
+	new Criticals(),
+	new NoRecoil(),
+	new Velocity(),
+	new WTap(),
 
-export const mm = new ModuleManager<MinibloxModules>({
-	named: { antiBan, noSlow, phase, scaffold, hudManager },
-	modules: [
-		// blatant
-		new Blink(),
-		new Fly(),
-		new KillAura(),
-		new MaceKill(),
-		noSlow,
-		phase,
-		new Scaffold(),
-		new Spider(),
-		new Speed(),
-		new TargetStrafe(),
-		new TickBase(),
+	// inventory
+	new AutoArmor(),
+	new InventoryManager(),
 
-		// combat
-		new AutoClicker(),
-		new Criticals(),
-		new NoRecoil(),
-		new Velocity(),
-		new WTap(),
+	// minigames
+	new Breaker(),
+	new ChestAura(),
+	new ChestStealer(),
+	new MurderMystery(),
 
-		// inventory
-		new AutoArmor(),
-		new InventoryManager(),
+	// render
+	new Chams(),
+	// TODO: phase this out, as it should be replaced with the overlay thing
+	HudManagerModule.INSTANCE,
 
-		// minigames
-		new Breaker(),
-		new ChestAura(),
-		new ChestStealer(),
-		new MurderMystery(),
+	// utility
+	AdBypass.INSTANCE,
+	AntiBan.INSTANCE,
+	new AntiSpamBypass(),
+	new AutoRejoin(),
+	new AutoRespawn(),
+	new AutoSword(),
+	Dupe.INSTANCE,
+	new FakeLag(),
+	new FilterBypass(),
+	new NoFlash(),
+	new PacketLogger(),
+	new Paranoia(),
+	new PingSpoof(),
+	new RejoinOnMute(),
+	new Sprint(),
+	new Test(),
 
-		// render
-		new Chams(),
-		hudManager,
-
-		// utility
-		AdBypass.INSTANCE,
-		antiBan,
-		new AntiSpamBypass(),
-		new AutoRejoin(),
-		new AutoRespawn(),
-		new AutoSword(),
-		Dupe.INSTANCE,
-		new FakeLag(),
-		new FilterBypass(),
-		new NoFlash(),
-		new PacketLogger(),
-		new Paranoia(),
-		new PingSpoof(),
-		new RejoinOnMute(),
-		new Sprint(),
-		new Test(),
-
-		// world
-		new LiquidWalk(),
-		new NoFall(),
-		new Timer(),
-	],
-});
-
-setModuleManager(mm);
+	// world
+	new LiquidWalk(),
+	new NoFall(),
+	new Timer(),
+);

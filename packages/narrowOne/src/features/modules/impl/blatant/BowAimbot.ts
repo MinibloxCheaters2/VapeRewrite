@@ -7,6 +7,7 @@ import game from "@/utils/refs/game";
 import { ready } from "@/hooks/gameHook";
 import createProxy from "@vape/core/utils/helpers/proxy";
 import type { Vector3 } from "three";
+import canAttack from "@/utils/combat/teams";
 
 let hooked: boolean, orig: () => Vector3;
 
@@ -62,7 +63,7 @@ export class BowAimbot extends Mod {
 		let bestDist = Infinity;
 		const myPos = player.pos;
 		for (const p of players.values()) {
-			if (p === player || p.dead || p.teamId === player.teamId) continue;
+			if (p === player || p.dead || !canAttack(player.teamId, p.teamId)) continue;
 			if (!p.hasValidPosition) continue;
 			const d = myPos.distanceTo(p.pos);
 			if (d < bestDist) {

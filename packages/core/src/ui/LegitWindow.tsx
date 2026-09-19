@@ -1,7 +1,7 @@
 import type { AnySetting } from "../features/config/Settings";
 import type LegitModule from "../features/modules/api/LegitModule";
 
-import { createSignal, For, Match, onCleanup, onMount, Show, Switch } from "solid-js";
+import { createSignal, For, Match, Show, Switch } from "solid-js";
 
 import LegitModuleManager from "../features/modules/api/LegitModuleManager";
 import getResourceURL from "../utils/helpers/cachedResourceURL";
@@ -55,16 +55,6 @@ export function LegitWindow() {
 		setDragging(false);
 	};
 
-	onMount(() => {
-		document.addEventListener("pointermove", handlePointerMove);
-		document.addEventListener("pointerup", handlePointerUp);
-	});
-
-	onCleanup(() => {
-		document.removeEventListener("pointermove", handlePointerMove);
-		document.removeEventListener("pointerup", handlePointerUp);
-	});
-
 	const isVisible = () => legitWindowVisible();
 
 	return (
@@ -80,7 +70,9 @@ export function LegitWindow() {
 					height: "389px",
 					"z-index": "10002",
 				}}
-				on:pointerdown={handlePointerDown}
+				onPointerDown={handlePointerDown}
+				onPointerMove={handlePointerMove}
+				onPointerUp={handlePointerUp}
 			>
 				<div
 					{...{ [dragHandleAttrName]: "" }}
@@ -120,11 +112,11 @@ export function LegitWindow() {
 							height: "40px",
 						}}
 						type="button"
-						on:click={() => setLegitWindowVisible(false)}
-						on:pointerenter={(e) => {
+						onClick={() => setLegitWindowVisible(false)}
+						onPointerEnter={(e) => {
 							e.currentTarget.style.opacity = "1";
 						}}
-						on:pointerleave={(e) => {
+						onPointerLeave={(e) => {
 							e.currentTarget.style.opacity = "0.7";
 						}}
 					>
@@ -221,10 +213,10 @@ function LegitModuleCard(props: { mod: LegitModule }) {
 				overflow: "hidden",
 				transition: "background-color 0.16s linear",
 			}}
-			on:pointerenter={() => setHovered(true)}
-			on:pointerleave={() => setHovered(false)}
-			on:click={() => props.mod.toggle()}
-			on:contextmenu={(e) => {
+			onPointerEnter={() => setHovered(true)}
+			onPointerLeave={() => setHovered(false)}
+			onClick={() => props.mod.toggle()}
+			onContextMenu={(e) => {
 				e.preventDefault();
 				setSettingsOpen(true);
 			}}
@@ -284,9 +276,9 @@ function LegitModuleCard(props: { mod: LegitModule }) {
 					width: "14px",
 					height: "24px",
 				}}
-				on:pointerenter={() => setDotsHovered(true)}
-				on:pointerleave={() => setDotsHovered(false)}
-				on:click={(e) => {
+				onPointerEnter={() => setDotsHovered(true)}
+				onPointerLeave={() => setDotsHovered(false)}
+				onClick={(e) => {
 					e.stopPropagation();
 					setSettingsOpen(true);
 				}}
@@ -319,7 +311,7 @@ function LegitModuleCard(props: { mod: LegitModule }) {
 						"border-radius": "4px",
 						"z-index": 1,
 					}}
-					on:click={() => setSettingsOpen(false)}
+					onClick={() => setSettingsOpen(false)}
 				>
 					<div
 						style={{
@@ -333,7 +325,7 @@ function LegitModuleCard(props: { mod: LegitModule }) {
 							display: "flex",
 							"flex-direction": "column",
 						}}
-						on:click={(e) => e.stopPropagation()}
+						onClick={(e) => e.stopPropagation()}
 					>
 						<div
 							style={{
@@ -345,9 +337,9 @@ function LegitModuleCard(props: { mod: LegitModule }) {
 								cursor: "pointer",
 								"z-index": 2,
 							}}
-							on:pointerenter={() => setBackHovered(true)}
-							on:pointerleave={() => setBackHovered(false)}
-							on:click={() => setSettingsOpen(false)}
+							onPointerEnter={() => setBackHovered(true)}
+							onPointerLeave={() => setBackHovered(false)}
+							onClick={() => setSettingsOpen(false)}
 						>
 							<img
 								src={getResourceURL("guiback")}

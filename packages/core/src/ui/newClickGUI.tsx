@@ -1,6 +1,6 @@
 import type Mod from "../features/modules/api/Module";
 
-import { createEffect, createSignal, For, onCleanup, onMount, Show } from "solid-js";
+import { createEffect, createSignal, For, onSettled, Show } from "solid-js";
 
 import Category, { type CategoryInfo } from "../features/modules/api/Category";
 import ModuleManager, { P } from "../features/modules/api/ModuleManager";
@@ -41,7 +41,7 @@ export function CategoryWindow(props: CategoryWindowProps) {
 	// categories that are already open.
 	const [heightAnimated, setHeightAnimated] = createSignal(false);
 
-	const modules = ModuleManager.findModules(
+	const modules = ModuleManager.instance.findModules(
 		P.byCategory(Category[props.category.toUpperCase() as keyof typeof Category]),
 	);
 
@@ -51,11 +51,11 @@ export function CategoryWindow(props: CategoryWindowProps) {
 	let contentRef: HTMLDivElement | undefined;
 
 	// Update window height when content changes or modules expand/collapse
-	createEffect(() => {
+	createEffect(expanded, exp => {
 		// Trigger recalculation when updateTrigger changes
 		updateTrigger();
 
-		if (expanded() && contentRef) {
+		if (exp && contentRef) {
 			// Use requestAnimationFrame for immediate update
 			requestAnimationFrame(() => {
 				const height = contentRef.scrollHeight;
@@ -110,24 +110,16 @@ export function CategoryWindow(props: CategoryWindowProps) {
 		toggleCategoryExpanded(props.category);
 	};
 
-	onMount(() => {
-		document.addEventListener("pointermove", handlePointerMove);
-		document.addEventListener("pointerup", handlePointerUp);
-
+	onSettled(() => {
 		// Initial height calculation - use double RAF to ensure DOM is fully rendered
 		if (contentRef) {
-			requestAnimationFrame(() => {
+			requestAnimationFrame(() =>
 				requestAnimationFrame(() => {
 					const height = contentRef.scrollHeight;
 					setWindowHeight(41 + height);
-				});
-			});
+				}),
+			);
 		}
-	});
-
-	onCleanup(() => {
-		document.removeEventListener("pointermove", handlePointerMove);
-		document.removeEventListener("pointerup", handlePointerUp);
 	});
 
 	// const contentHeight = () => {
@@ -152,8 +144,10 @@ export function CategoryWindow(props: CategoryWindowProps) {
 					"z-index": "10002",
 					transition: heightAnimated() ? "height 0.16s linear" : "none",
 				}}
-				on:pointerdown={handlePointerDown}
-				on:contextmenu={handleContextMenu}
+				onPointerDown={handlePointerDown}
+				onPointerMove={handlePointerMove}
+				onPointerUp={handlePointerUp}
+				onContextMenu={handleContextMenu}
 			>
 				{/* Header */}
 				<div
@@ -194,11 +188,11 @@ export function CategoryWindow(props: CategoryWindowProps) {
 							height: "40px",
 						}}
 						type="button"
-						on:click={() => toggleCategoryExpanded(props.category)}
-						on:pointerenter={(e) => {
+						onClick={() => toggleCategoryExpanded(props.category)}
+						onPointerEnter={(e) => {
 							e.currentTarget.style.opacity = "1";
 						}}
-						on:pointerleave={(e) => {
+						onPointerLeave={(e) => {
 							e.currentTarget.style.opacity = "0.7";
 						}}
 					>
@@ -272,10 +266,10 @@ function ModuleButton(props: { mod: Mod; onExpandChange: () => void }) {
 					"border-bottom": toggled() ? `1px solid var(--vape-divider-dark)` : "none",
 					position: "relative",
 				}}
-				on:pointerenter={() => setHovered(true)}
-				on:pointerleave={() => setHovered(false)}
-				on:click={() => props.mod.toggle()}
-				on:contextmenu={handleContextMenu}
+				onPointerEnter={() => setHovered(true)}
+				onPointerLeave={() => setHovered(false)}
+				onClick={() => props.mod.toggle()}
+				onContextMenu={handleContextMenu}
 			>
 				<span
 					style={{
@@ -314,13 +308,13 @@ function ModuleButton(props: { mod: Mod; onExpandChange: () => void }) {
 							transition: "background-color 0.16s linear",
 							"font-family": "Arial, sans-serif",
 						}}
-						on:pointerenter={(e) => {
+						onPointerEnter={(e) => {
 							e.currentTarget.style.backgroundColor = "rgba(255, 255, 255, 0.12)";
 						}}
-						on:pointerleave={(e) => {
+						onPointerLeave={(e) => {
 							e.currentTarget.style.backgroundColor = "rgba(255, 255, 255, 0.08)";
 						}}
-						on:click={(e) => {
+						onClick={(e) => {
 							e.stopImmediatePropagation();
 							e.stopPropagation();
 							setListening(true);
@@ -350,18 +344,18 @@ function ModuleButton(props: { mod: Mod; onExpandChange: () => void }) {
 						opacity: toggled() ? "0.5" : "0.7",
 					}}
 					type="button"
-					on:click={(e) => {
+					onClick={(e) => {
 						e.stopPropagation();
 						setExpanded(!expanded());
 						// Notify parent to update height immediately
 						requestAnimationFrame(() => props.onExpandChange());
 					}}
-					on:pointerenter={(e) => {
+					onPointerEnter={(e) => {
 						if (!toggled()) {
 							e.currentTarget.style.opacity = "1";
 						}
 					}}
-					on:pointerleave={(e) => {
+					onPointerLeave={(e) => {
 						if (!toggled()) {
 							e.currentTarget.style.opacity = "0.7";
 						}

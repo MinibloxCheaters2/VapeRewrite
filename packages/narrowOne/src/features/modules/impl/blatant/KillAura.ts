@@ -1,6 +1,7 @@
 import Bus from "@/Bus";
 import { lookAtPlayer } from "@/utils/aiming/lookAt";
 import RotationManager, { RotationPlan } from "@/utils/aiming/rotate";
+import canAttack from "@/utils/combat/teams";
 import game from "@/utils/refs/game";
 import Category from "@vape/core/features/modules/api/Category";
 import Mod from "@vape/core/features/modules/api/Module";
@@ -21,8 +22,7 @@ export default class KillAura extends Mod {
 		for (const oPlr of players.values()) {
 			// const {rigidBody} = oPlr;
 			if (oPlr === player || oPlr.dead) continue;
-			if (oPlr.teamId === selfTeam) continue;
-			// TODO: requires rotations
+			if (!canAttack(selfTeam, oPlr.teamId)) continue;
 			const look = lookAtPlayer(
 				oPlr.pos,
 				player.pos

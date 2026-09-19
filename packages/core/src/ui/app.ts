@@ -28,7 +28,7 @@ export function initApp() {
 	initProfilesPanel();
 	initFriendsPanel();
 	initTargetsPanel();
-	initMusicPlayer();
+	// initMusicPlayer();
 	const css = document.createElement("style");
 	css.innerText = globalCss;
 	shadowWrapper.root.appendChild(css);

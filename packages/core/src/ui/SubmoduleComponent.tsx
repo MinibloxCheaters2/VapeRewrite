@@ -95,8 +95,8 @@ export function SubmoduleComponent(props: {
 				style={{
 					"background-color": hovered() ? "var(--vape-main-light)" : "var(--vape-main-dark)",
 				}}
-				on:pointerenter={() => setHovered(true)}
-				on:pointerleave={() => setHovered(false)}
+				onPointerEnter={() => setHovered(true)}
+				onPointerLeave={() => setHovered(false)}
 			>
 				<span
 					style={{
@@ -112,13 +112,13 @@ export function SubmoduleComponent(props: {
 				<div style={{ position: "relative", "margin-right": "4px" }}>
 					<div
 						class="vape-chip"
-						on:pointerenter={(e) => {
+						onPointerEnter={(e) => {
 							e.currentTarget.style.backgroundColor = "rgba(255, 255, 255, 0.12)";
 						}}
-						on:pointerleave={(e) => {
+						onPointerLeave={(e) => {
 							e.currentTarget.style.backgroundColor = "rgba(255, 255, 255, 0.08)";
 						}}
-						on:click={(e) => {
+						onClick={(e) => {
 							e.stopPropagation();
 							setShowModeList(!showModeList());
 						}}
@@ -162,17 +162,17 @@ export function SubmoduleComponent(props: {
 											"font-family": "Arial, sans-serif",
 											transition: "background-color 0.16s linear",
 										}}
-										on:click={(e) => {
+										onClick={(e) => {
 											e.stopPropagation();
 											props.onChange(sub.name);
 											setShowModeList(false);
 										}}
-										on:pointerenter={(e) => {
+										onPointerEnter={(e) => {
 											if (sub.name !== props.value) {
 												e.currentTarget.style.backgroundColor = "var(--vape-main-light)";
 											}
 										}}
-										on:pointerleave={(e) => {
+										onPointerLeave={(e) => {
 											if (sub.name !== props.value) {
 												e.currentTarget.style.backgroundColor = "transparent";
 											}
@@ -198,14 +198,14 @@ export function SubmoduleComponent(props: {
 						opacity: hovered() || settingsExpanded() ? "1" : "0.7",
 						transition: "opacity 0.16s linear",
 					}}
-					on:click={(e) => {
+					onClick={(e) => {
 						e.stopPropagation();
 						toggleSettings();
 					}}
-					on:pointerenter={(e) => {
+					onPointerEnter={(e) => {
 						e.currentTarget.style.opacity = "1";
 					}}
-					on:pointerleave={(e) => {
+					onPointerLeave={(e) => {
 						if (!settingsExpanded()) {
 							e.currentTarget.style.opacity = "0.7";
 						}

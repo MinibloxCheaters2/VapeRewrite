@@ -1,5 +1,5 @@
 import { createEffect, createSignal, For, Show } from "solid-js";
-import { render } from "solid-js/web";
+import { render } from "@solidjs/web";
 
 import { listConfigs, loadConfig, loadedConfig, saveConfig } from "../features/config/configs";
 import getResourceURL from "../utils/helpers/cachedResourceURL";
@@ -64,8 +64,8 @@ function ProfilesPanel() {
 
 	// Refresh the profile list whenever the panel becomes visible so newly
 	// created profiles and the active one stay in sync.
-	createEffect(() => {
-		if (isVisible()) refreshProfiles();
+	createEffect(isVisible, visible => {
+		if (visible) refreshProfiles();
 	});
 
 	const selectProfile = (profileName: string) => {
@@ -96,7 +96,7 @@ function ProfilesPanel() {
 					"background-color": "var(--vape-main)",
 					"z-index": "10001",
 				}}
-				on:pointerdown={handlePointerDown}
+				onPointerDown={handlePointerDown}
 			>
 				{/* Header */}
 				<div
@@ -130,11 +130,11 @@ function ProfilesPanel() {
 					<button
 						class="vape-close-btn"
 						type="button"
-						on:click={() => setProfilesPanelVisible(false)}
-						on:pointerenter={(e) => {
+						onClick={() => setProfilesPanelVisible(false)}
+						onPointerenter={(e) => {
 							e.currentTarget.style.opacity = "1";
 						}}
-						on:pointerleave={(e) => {
+						onPointerleave={(e) => {
 							e.currentTarget.style.opacity = "0.7";
 						}}
 					>
@@ -165,13 +165,13 @@ function ProfilesPanel() {
 									padding: "0 12px",
 									"background-color": profile.active ? "var(--vape-accent)" : "var(--vape-main)",
 								}}
-								on:click={() => selectProfile(profile.name)}
-								on:pointerenter={(e) => {
+								onClick={() => selectProfile(profile.name)}
+								onPointerEnter={(e) => {
 									if (!profile.active) {
 										e.currentTarget.style.backgroundColor = "var(--vape-main-light)";
 									}
 								}}
-								on:pointerleave={(e) => {
+								onPointerLeave={(e) => {
 									if (!profile.active) {
 										e.currentTarget.style.backgroundColor = "var(--vape-main)";
 									}
@@ -204,11 +204,11 @@ function ProfilesPanel() {
 						"background-color": "var(--vape-main)",
 					}}
 					type="submit"
-					on:click={createProfile}
-					on:pointerenter={(e) => {
+					onClick={createProfile}
+					onPointerEnter={(e) => {
 						e.currentTarget.style.backgroundColor = "var(--vape-main-light)";
 					}}
-					on:pointerleave={(e) => {
+					onPointerLeave={(e) => {
 						e.currentTarget.style.backgroundColor = "var(--vape-main)";
 					}}
 				>

@@ -9,7 +9,6 @@
 // @match       https://*.mathnest.space/*
 // @match       https://*.storyhall.site/*
 //#endregion
-// @run-at      document-idle
 // ==/UserScript==
 
 /**

@@ -1,12 +1,13 @@
+import swc from "@wq2/rolldown-plugin-swc";
 /// <reference types="@types/node" />
 import { readPackageUp } from "read-package-up";
 import { defineConfig, RolldownOptions, RolldownPlugin } from "rolldown";
 import userscript from "rolldown-plugin-userscript";
-import swc from "@wq2/rolldown-plugin-swc";
-import solid from "@wq2/rolldown-plugin-solid-oxc";
 import { withFilter } from "rolldown/filter";
-import minify from "./minifyPlugin";
+
 import minifyCSS from "./cssMinifyPlugin";
+import minify from "./minifyPlugin";
+import solid from "./solid";
 import thing from "./thingPlugin";
 
 const { packageJson } = (await readPackageUp())!;
@@ -24,7 +25,11 @@ export const REAL_CLIENT_NAME =
  * - entrypoint in `packages/name/src/index.ts`
  * - tsconfig in `packages/name/tsconfig.json`
  */
-function defineGame(name: string, plugins?: RolldownPlugin[], opts?: RolldownOptions): RolldownOptions {
+function defineGame(
+	name: string,
+	plugins?: RolldownPlugin[],
+	opts?: RolldownOptions,
+): RolldownOptions {
 	return {
 		input: `packages/${name}/src/index.ts`,
 		platform: "browser",
@@ -51,7 +56,9 @@ function defineGame(name: string, plugins?: RolldownPlugin[], opts?: RolldownOpt
 				},
 			),
 			minifyCSS(),
-			withFilter(solid(), {
+			withFilter(solid({
+				include: /\.tsx$/
+			}), {
 				transform: { moduleType: ["jsx", "tsx"] },
 			}),
 			plugins,
@@ -59,10 +66,7 @@ function defineGame(name: string, plugins?: RolldownPlugin[], opts?: RolldownOpt
 			process.env.NODE_ENV === "production" ? minify() : undefined,
 			userscript((meta: string) => {
 				const newMeta = meta
-					.replace(
-						"process.env.AUTHOR",
-						packageJson.author?.name ?? "Unspecified",
-					)
+					.replace("process.env.AUTHOR", packageJson.author?.name ?? "Unspecified")
 					.replace("process.env.VERSION", packageJson.version)
 					.replace("process.env.NAME", REAL_CLIENT_NAME)
 					.replace("process.env.GAME", name);
@@ -84,7 +88,7 @@ function defineGame(name: string, plugins?: RolldownPlugin[], opts?: RolldownOpt
 			sourcemap: "inline",
 		},
 		tsconfig: `packages/${name}/tsconfig.json`,
-		...opts
+		...opts,
 	};
 }
 
@@ -92,5 +96,5 @@ export default defineConfig([
 	defineGame("miniblox"),
 	defineGame("waybackhq", [thing()]),
 	defineGame("narrowOne"),
-	defineGame("voxiom")
+	defineGame("voxiom"),
 ]);

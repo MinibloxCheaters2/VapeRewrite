@@ -123,34 +123,20 @@ export const [targetsPanelPosition, setTargetsPanelPosition] = createSignal(
 	}),
 );
 
+function persist(key: string, get: () => unknown) {
+	return createEffect(() => JSON.stringify(get()), data => GM_setValue(siteKey(key), data));
+}
+
 // Persist ClickGUI state so it survives page reloads.
-createEffect(() => {
-	GM_setValue(siteKey("vapeGuiCategoryWindows"), JSON.stringify(categoryWindows()));
-});
-createEffect(() => {
-	GM_setValue(siteKey("vapeGuiCategoryPositions"), JSON.stringify(categoryWindowPositions()));
-});
-createEffect(() => {
-	GM_setValue(siteKey("vapeGuiCategoryExpanded"), JSON.stringify(categoryExpanded()));
-});
-createEffect(() => {
-	GM_setValue(siteKey("vapeGuiLegitWindowVisible"), JSON.stringify(legitWindowVisible()));
-});
-createEffect(() => {
-	GM_setValue(siteKey("vapeGuiLegitWindowPosition"), JSON.stringify(legitWindowPosition()));
-});
-createEffect(() => {
-	GM_setValue(siteKey("vapeGuiFriendsPanelVisible"), JSON.stringify(friendsPanelVisible()));
-});
-createEffect(() => {
-	GM_setValue(siteKey("vapeGuiTargetsPanelVisible"), JSON.stringify(targetsPanelVisible()));
-});
-createEffect(() => {
-	GM_setValue(siteKey("vapeGuiFriendsPanelPosition"), JSON.stringify(friendsPanelPosition()));
-});
-createEffect(() => {
-	GM_setValue(siteKey("vapeGuiTargetsPanelPosition"), JSON.stringify(targetsPanelPosition()));
-});
+persist("vapeGuiCategoryWindows", categoryWindows);
+persist("vapeGuiCategoryPositions", categoryWindowPositions);
+persist("vapeGuiCategoryExpanded", categoryExpanded);
+persist("vapeGuiLegitWindowVisible", legitWindowVisible);
+persist("vapeGuiLegitWindowPosition", legitWindowPosition);
+persist("vapeGuiFriendsPanelVisible", friendsPanelVisible);
+persist("vapeGuiTargetsPanelVisible", targetsPanelVisible);
+persist("vapeGuiFriendsPanelPosition", friendsPanelPosition);
+persist("vapeGuiTargetsPanelPosition", targetsPanelPosition);
 
 try {
 	// Also register RightShift as alternative

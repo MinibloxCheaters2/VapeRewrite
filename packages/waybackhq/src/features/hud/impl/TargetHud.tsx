@@ -1,6 +1,6 @@
 import HudElement from "@vape/core/features/hud/api/JSXHudElement";
-import ModuleManager from "@vape/core/features/modules/api/ModuleManager";
 import { guiVisible } from "@vape/core/ui/guiState";
+import { EntityLivingBase } from "@wq2/waybackhq-types/src/entity/entityliving";
 // import { getMostRecentTarget } from "@/utils/movement/TargetTracker";
 // import Miniblox from "@/utils/refs/miniblox";
 import { createSignal } from "solid-js";
@@ -115,7 +115,7 @@ export default class TargetHud extends HudElement {
 
 	private resolveTarget(): EntityLivingBase | null {
 		// Show the local player while the HUD editor preview is active.
-		if (ModuleManager.hudManager.stateAccessor()) return Miniblox.player ?? null;
+		// if (HudManagerModule.stateAccessor()) return Miniblox.player ?? null;
 		const recent = getMostRecentTarget();
 		if (recent) return recent;
 		return null;

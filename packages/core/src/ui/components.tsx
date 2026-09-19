@@ -18,9 +18,9 @@ export function ToggleComponent(props: {
 			style={{
 				"--row-bg": hovered() ? "var(--vape-main-light)" : "var(--vape-main-dark)",
 			}}
-			on:pointerenter={() => setHovered(true)}
-			on:pointerleave={() => setHovered(false)}
-			on:click={() => props.onChange(!props.enabled)}
+			onPointerEnter={() => setHovered(true)}
+			onPointerLeave={() => setHovered(false)}
+			onClick={() => props.onChange(!props.enabled)}
 		>
 			<span class="vape-label">{props.name}</span>
 			<div
@@ -88,8 +88,8 @@ export function SliderComponent(props: {
 	return (
 		<div
 			class="vape-setting-row"
-			on:pointerenter={() => setHovered(true)}
-			on:pointerleave={() => setHovered(false)}
+			onPointerEnter={() => setHovered(true)}
+			onPointerLeave={() => setHovered(false)}
 		>
 			<div class="vape-slider-row">
 				<span class="vape-label-sm">{props.name}</span>
@@ -102,7 +102,7 @@ export function SliderComponent(props: {
 				/>
 				<Show when={props.unit}>{(unit) => <span class="vape-label-sm">{unit()}</span>}</Show>
 			</div>
-			<div ref={sliderRef} class="vape-slider-wrap" on:pointerdown={handlePointerDown}>
+			<div ref={sliderRef} class="vape-slider-wrap" onPointerDown={handlePointerDown}>
 				<div class="vape-slider-fill" style={{ width: `${Math.max(4, percentage())}%` }}>
 					<div
 						style={{
@@ -157,9 +157,9 @@ export function DropdownComponent(props: {
 				style={{
 					"--row-bg": hovered() ? "var(--vape-main-light)" : "var(--vape-main-dark)",
 				}}
-				on:pointerenter={() => setHovered(true)}
-				on:pointerleave={() => setHovered(false)}
-				on:click={toggleExpanded}
+				onPointerEnter={() => setHovered(true)}
+				onPointerLeave={() => setHovered(false)}
+				onClick={toggleExpanded}
 			>
 				<span class="vape-label">{props.name}</span>
 				<span class="vape-value">{getName(props.value)}</span>
@@ -184,19 +184,19 @@ export function DropdownComponent(props: {
 								style={{
 									"--item-bg": option === props.value ? "rgba(255, 255, 255, 0.05)" : "transparent",
 								}}
-								on:click={() => {
+								onClick={() => {
 									props.onChange(option);
 									setExpanded(false);
 									if (props.onExpandChange) {
 										requestAnimationFrame(() => props.onExpandChange?.());
 									}
 								}}
-								on:pointerenter={(e) => {
+								onPointerEnter={(e) => {
 									if (option !== props.value) {
 										e.currentTarget.style.backgroundColor = "rgba(255, 255, 255, 0.03)";
 									}
 								}}
-								on:pointerleave={(e) => {
+								onPointerLeave={(e) => {
 									if (option !== props.value) {
 										e.currentTarget.style.backgroundColor = "transparent";
 									}
@@ -243,9 +243,9 @@ export function TextBoxComponent(props: {
 				style={{
 					"--input-bg": focused() ? "var(--vape-main-light)" : "rgba(255, 255, 255, 0.05)",
 				}}
-				on:input={(e) => props.onChange(e.currentTarget.value)}
-				on:focus={() => setFocused(true)}
-				on:blur={() => setFocused(false)}
+				onInput={(e) => props.onChange(e.currentTarget.value)}
+				onFocus={() => setFocused(true)}
+				onBlur={() => setFocused(false)}
 			/>
 		</div>
 	);
@@ -376,7 +376,7 @@ export function ColorSliderComponent(props: {
 
 	return (
 		<div style={{ "background-color": "var(--vape-main-dark)" }}>
-			<div class="vape-color-header" on:click={() => setExpanded(!expanded())}>
+			<div class="vape-color-header" onClick={() => setExpanded(!expanded())}>
 				<span class="vape-label-sm">{props.name}</span>
 				<div style={{ flex: "1" }} />
 				<div
@@ -400,7 +400,7 @@ export function ColorSliderComponent(props: {
 							cursor: "crosshair",
 							"margin-bottom": "12px",
 						}}
-						on:pointerdown={(e) => {
+						onPointerDown={(e) => {
 							setDraggingSV(true);
 							updateSV(e);
 						}}
@@ -433,7 +433,7 @@ export function ColorSliderComponent(props: {
 									"linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000)",
 								cursor: "pointer",
 							}}
-							on:pointerdown={(e) => {
+							onPointerDown={(e) => {
 								setDraggingHue(true);
 								updateHue(e);
 							}}
@@ -468,7 +468,7 @@ export function ColorSliderComponent(props: {
 								"background-image": `linear-gradient(to right, transparent, ${color()}), repeating-linear-gradient(45deg, #ccc 0, #ccc 2px, #fff 2px, #fff 4px)`,
 								cursor: "pointer",
 							}}
-							on:pointerdown={(e) => {
+							onPointerDown={(e) => {
 								setDraggingOpacity(true);
 								updateOpacity(e);
 							}}

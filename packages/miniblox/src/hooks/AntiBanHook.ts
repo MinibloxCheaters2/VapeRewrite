@@ -3,7 +3,7 @@ import { showNotification } from "@vape/core/ui/notifications";
 
 import Bus from "@/Bus";
 import { isC2S } from "@/utils";
-import { mm } from "@/features/modules/registry";
+import AntiBan from "@/features/modules/impl/utility/AntiBan";
 
 function hook() {
 	Bus.on("connect", () => {
@@ -12,8 +12,9 @@ function hook() {
 				pkt.hydration = "0";
 				(pkt as typeof pkt & { prefetch?: unknown }).prefetch = undefined;
 				pkt.metricsId = crypto.randomUUID();
-				if (mm.named.antiBan.enabled) {
-					const na = mm.named.antiBan.handleNonAccount();
+				const antiBan = AntiBan.INSTANCE;
+				if (antiBan.enabled) {
+					const na = antiBan.handleNonAccount();
 					pkt.session = na.session;
 					// legacy non-accounts don't have requestedUUID as a name
 					pkt.requestedUuid = na.requestedUuid;

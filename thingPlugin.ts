@@ -1,5 +1,4 @@
-import MagicString from "magic-string";
-import { RolldownPlugin } from "rolldown";
+import { RolldownPlugin, RolldownMagicString } from "rolldown";
 
 export default function dtsUserscriptPlugin(PKG = "@wq2/waybackhq-types"): RolldownPlugin {
   // match things like "@wq2/waybackhq-types" or "@wq2/waybackhq-types/..."
@@ -25,7 +24,7 @@ export default function dtsUserscriptPlugin(PKG = "@wq2/waybackhq-types"): Rolld
       // quick bailout
       if (code.indexOf(PKG) === -1) return null;
 
-      const ms = new MagicString(code);
+      const ms = new RolldownMagicString(code);
       let changed = false;
 
       // 1) handle simple string-literal dynamic imports: import('pkg/x')
@@ -41,7 +40,10 @@ export default function dtsUserscriptPlugin(PKG = "@wq2/waybackhq-types"): Rolld
       });
 
       if (!changed) return null;
-      return { code: ms.toString(), map: ms.generateMap({ hires: true }) };
+	  // this is a binding source map, but Rolldown doesn't want it,
+	  // even though it lists it as a valid option?
+	  const map = ms.generateMap({ hires: true });
+      return { code: ms.toString(), map: map.toString() };
     },
   };
 }

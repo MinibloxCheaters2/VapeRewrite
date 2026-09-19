@@ -1,5 +1,5 @@
 import { createSignal, Show } from "solid-js";
-import { render } from "solid-js/web";
+import { render } from "@solidjs/web";
 
 import getResourceURL from "../utils/helpers/cachedResourceURL";
 import CategoryListPanel from "./CategoryListPanel";
@@ -50,9 +50,9 @@ function TargetSubButton(props: {
 				cursor: "pointer",
 				position: "relative",
 			}}
-			on:pointerenter={() => setHovered(true)}
-			on:pointerleave={() => setHovered(false)}
-			on:click={props.onClick}
+			onPointerEnter={() => setHovered(true)}
+			onPointerLeave={() => setHovered(false)}
+			onClick={props.onClick}
 		>
 			{/* Inner background (lighter when not enabled) */}
 			<div

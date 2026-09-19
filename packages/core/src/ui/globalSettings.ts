@@ -113,9 +113,8 @@ export const [targetNPCsEnabled, setTargetNPCsEnabled] = createSignal(initial.ta
 export const [showHealth, setShowHealth] = createSignal(initial.showHealth);
 export const [injureMode, setInjureMode] = createSignal(initial.injureMode);
 
-createEffect(() => {
-	GM_setValue(
-		SETTINGS_KEY,
+createEffect(
+	() =>
 		JSON.stringify({
 			notificationsEnabled: notificationsEnabled(),
 			toggleAlertEnabled: toggleAlertEnabled(),
@@ -145,5 +144,7 @@ createEffect(() => {
 			showHealth: showHealth(),
 			injureMode: injureMode(),
 		}),
-	);
-});
+	(data) => {
+		GM_setValue(SETTINGS_KEY, data);
+	},
+);

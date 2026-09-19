@@ -1,5 +1,5 @@
 import { createSignal, Show } from "solid-js";
-import { render } from "solid-js/web";
+import { render } from "@solidjs/web";
 
 import getResourceURL from "../utils/helpers/cachedResourceURL";
 import { dragHandleAttrName } from "../utils/mapping/names";
@@ -66,7 +66,7 @@ function SettingsPanel() {
 					overflow: "hidden",
 					"user-select": "none",
 				}}
-				on:pointerdown={handlePointerDown}
+				onPointerDown={handlePointerDown}
 			>
 				{/* Header */}
 				<div
@@ -90,11 +90,11 @@ function SettingsPanel() {
 					<button
 						class="vape-close-btn"
 						type="button"
-						on:click={() => setSettingsPanelVisible(false)}
-						on:pointerenter={(e) => {
+						onClick={() => setSettingsPanelVisible(false)}
+						onPointerEnter={(e) => {
 							e.currentTarget.style.opacity = "1";
 						}}
-						on:pointerleave={(e) => {
+						onPointerLeave={(e) => {
 							e.currentTarget.style.opacity = "0.7";
 						}}
 					>

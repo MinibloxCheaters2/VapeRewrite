@@ -1,5 +1,10 @@
-import { createSignal, For, onMount, Show } from "solid-js";
-import { render } from "solid-js/web";
+/**
+ * @todo this needs a whole redo
+ * @module
+ */
+
+import { createSignal, For, Show } from "solid-js";
+import { render } from "@solidjs/web";
 
 import { guiVisible } from "./guiState";
 import shadowWrapper from "./shadowWrapper";
@@ -356,8 +361,8 @@ function MusicPlayer() {
 						"z-index": "10001",
 						"font-family": "Arial, sans-serif",
 					}}
-					on:pointerenter={() => setExpanded(true)}
-					on:pointerleave={() => {
+					onPointerEnter={() => setExpanded(true)}
+					onPointerLeave={() => {
 						setExpanded(false);
 						setSearching(false);
 					}}
@@ -431,7 +436,7 @@ function MusicPlayer() {
 												type="text"
 												placeholder="🔍 Search music..."
 												value={searchQuery()}
-												on:input={(e) => handleSearchInput(e.currentTarget.value)}
+												onInput={(e) => handleSearchInput(e.currentTarget.value)}
 												autofocus
 												style={{
 													flex: "1",
@@ -447,7 +452,7 @@ function MusicPlayer() {
 											/>
 											<button
 												type="button"
-												on:click={(e) => {
+												onClick={(e) => {
 													e.stopPropagation();
 													setSearching(false);
 												}}
@@ -465,10 +470,10 @@ function MusicPlayer() {
 													"justify-content": "center",
 													transition: "background 0.2s",
 												}}
-												on:pointerenter={(e) => {
+												onPointerEnter={(e) => {
 													e.currentTarget.style.background = "rgba(255, 255, 255, 0.2)";
 												}}
-												on:pointerleave={(e) => {
+												onPointerLeave={(e) => {
 													e.currentTarget.style.background = "rgba(255, 255, 255, 0.1)";
 												}}
 											>
@@ -500,7 +505,7 @@ function MusicPlayer() {
 											>
 												{(track) => (
 													<div
-														on:click={(e) => {
+														onClick={(e) => {
 															e.stopPropagation();
 															loadTrack(track);
 															setSearching(false);
@@ -515,10 +520,10 @@ function MusicPlayer() {
 															transition: "background 0.2s",
 															"margin-bottom": "6px",
 														}}
-														on:pointerenter={(e) => {
+														onPointerEnter={(e) => {
 															e.currentTarget.style.background = "rgba(5, 134, 105, 0.2)";
 														}}
-														on:pointerleave={(e) => {
+														onPointerLeave={(e) => {
 															e.currentTarget.style.background = "transparent";
 														}}
 													>
@@ -625,7 +630,7 @@ function MusicPlayer() {
 										>
 											<button
 												type="button"
-												on:click={(e) => {
+												onClick={(e) => {
 													e.stopPropagation();
 													if (isPlaying()) {
 														pauseTrack();
@@ -649,14 +654,14 @@ function MusicPlayer() {
 													transition: "all 0.2s",
 													opacity: currentTrack() ? "1" : "0.3",
 												}}
-												on:pointerenter={(e) => {
+												onPointerEnter={(e) => {
 													if (currentTrack()) {
 														e.currentTarget.style.background = "rgb(5, 134, 105)";
 														e.currentTarget.style.color = "white";
 														e.currentTarget.style.transform = "scale(1.05)";
 													}
 												}}
-												on:pointerleave={(e) => {
+												onPointerLeave={(e) => {
 													e.currentTarget.style.background = "transparent";
 													e.currentTarget.style.color = "rgb(5, 134, 105)";
 													e.currentTarget.style.transform = "scale(1)";
@@ -667,7 +672,7 @@ function MusicPlayer() {
 
 											<button
 												type="button"
-												on:click={(e) => {
+												onClick={(e) => {
 													e.stopPropagation();
 													playNextTrack();
 												}}
@@ -690,14 +695,14 @@ function MusicPlayer() {
 													transition: "all 0.2s",
 													opacity: currentTrack() && searchResults().length > 0 ? "1" : "0.3",
 												}}
-												on:pointerenter={(e) => {
+												onPointerEnter={(e) => {
 													if (currentTrack() && searchResults().length > 0) {
 														e.currentTarget.style.background = "rgb(5, 134, 105)";
 														e.currentTarget.style.color = "white";
 														e.currentTarget.style.transform = "scale(1.05)";
 													}
 												}}
-												on:pointerleave={(e) => {
+												onPointerLeave={(e) => {
 													e.currentTarget.style.background = "transparent";
 													e.currentTarget.style.color = "rgb(5, 134, 105)";
 													e.currentTarget.style.transform = "scale(1)";
@@ -708,7 +713,7 @@ function MusicPlayer() {
 
 											<button
 												type="button"
-												on:click={(e) => {
+												onClick={(e) => {
 													e.stopPropagation();
 													setSearching(true);
 												}}
@@ -724,12 +729,12 @@ function MusicPlayer() {
 													transition: "all 0.2s",
 													"font-family": "Arial, sans-serif",
 												}}
-												on:pointerenter={(e) => {
+												onPointerEnter={(e) => {
 													e.currentTarget.style.background = "rgba(5, 134, 105, 0.2)";
 													e.currentTarget.style.color = "rgb(5, 134, 105)";
 													e.currentTarget.style.borderColor = "rgb(5, 134, 105)";
 												}}
-												on:pointerleave={(e) => {
+												onPointerLeave={(e) => {
 													e.currentTarget.style.background = "rgba(0, 0, 0, 0.3)";
 													e.currentTarget.style.color = "rgb(150, 150, 150)";
 													e.currentTarget.style.borderColor = "rgba(5, 134, 105, 0.3)";

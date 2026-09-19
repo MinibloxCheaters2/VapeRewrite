@@ -19,6 +19,7 @@ interface NonAccountData {
 export default class AntiBan extends Mod {
 	name = "AntiBan";
 	category = Category.UTILITY;
+	public static readonly INSTANCE = new AntiBan();
 
 	private integration = this.createToggleSetting("AccountGen", false);
 	private endpoint = this.createTextBoxSetting("APIServerLocation", "http://localhost:3785/");

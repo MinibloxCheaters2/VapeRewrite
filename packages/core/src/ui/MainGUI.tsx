@@ -1,8 +1,8 @@
 import type HudElement from "../features/hud/api/BaseHudElement";
 import type Mod from "../features/modules/api/Module";
 
-import { createEffect, createSignal, For, onCleanup, onMount, Show } from "solid-js";
-import { render } from "solid-js/web";
+import { render } from "@solidjs/web";
+import { createEffect, createSignal, For, onCleanup, Show } from "solid-js";
 
 import { REAL_CLIENT_NAME } from "../Client";
 import { loadedConfig } from "../features/config/configs";
@@ -134,16 +134,6 @@ function MainGUI() {
 		setDragging(false);
 	};
 
-	onMount(() => {
-		document.addEventListener("pointermove", handlePointerMove);
-		document.addEventListener("pointerup", handlePointerUp);
-	});
-
-	onCleanup(() => {
-		document.removeEventListener("pointermove", handlePointerMove);
-		document.removeEventListener("pointerup", handlePointerUp);
-	});
-
 	const categoryEntries = Object.keys(Category)
 		.filter((k) => Number.isNaN(Number(k)))
 		.map((k) => ({
@@ -162,14 +152,13 @@ function MainGUI() {
 	const [showSettings, setShowSettings] = createSignal(false);
 	const [settingsMain, setSettingsMain] = createSignal(true);
 	const [activeSettingsCategory, setActiveSettingsCategory] = createSignal("");
-	// Settings state (signals imported from globalSettings.ts)
 
 	const blurOverlay = document.createElement("div");
 	blurOverlay.style.cssText =
 		"position:fixed;inset:0;backdrop-filter:blur(24px);pointer-events:none;z-index:10000;";
-	createEffect(() => {
+	createEffect(guiVisible, visible => {
 		const host = shadowWrapper.wrapper;
-		if (guiVisible()) {
+		if (visible) {
 			shadowWrapper.wrapper.appendChild(blurOverlay);
 			host.style.position = "fixed";
 			host.style.inset = "0";
@@ -182,29 +171,37 @@ function MainGUI() {
 			host.style.zIndex = "";
 			host.style.pointerEvents = "";
 		}
+		return () => blurOverlay.remove();
 	});
-	onCleanup(() => blurOverlay.remove());
 
 	let guiRainbowTimer: ReturnType<typeof setTimeout> | undefined;
-	createEffect(() => {
-		if (guiRainbowTimer !== undefined) {
-			clearTimeout(guiRainbowTimer);
-			guiRainbowTimer = undefined;
-		}
-		if (!guiThemeRainbow() || !guiVisible()) {
-			return;
-		}
-		const speed = rainbowSpeed();
-		const rate = rainbowUpdateRate();
-		const interval = rate > 0 ? 1000 / rate : 16;
+	createEffect(
+		() => {
+			return {
+				rainbow: guiThemeRainbow(),
+				visible: guiVisible(),
+				rainbowSpeed: rainbowSpeed(),
+				rainbowUpdateRate: rainbowUpdateRate(),
+			};
+		},
+		({ rainbow, rainbowSpeed: speed, rainbowUpdateRate: rate, visible }) => {
+			if (guiRainbowTimer !== undefined) {
+				clearTimeout(guiRainbowTimer);
+				guiRainbowTimer = undefined;
+			}
+			if (!visible || !rainbow) {
+				return;
+			}
+			const interval = rate > 0 ? 1000 / rate : 16;
 
-		const tick = () => {
-			const hue = (Date.now() * 0.001 * 0.2 * speed) % 1;
-			shadowWrapper.wrapper.style.setProperty("--vape-accent", hsvToRgbString(hue, 0.9, 1));
+			const tick = () => {
+				const hue = (Date.now() * 0.001 * 0.2 * speed) % 1;
+				shadowWrapper.wrapper.style.setProperty("--vape-accent", hsvToRgbString(hue, 0.9, 1));
+				guiRainbowTimer = setTimeout(tick, interval);
+			};
 			guiRainbowTimer = setTimeout(tick, interval);
-		};
-		guiRainbowTimer = setTimeout(tick, interval);
-	});
+		},
+	);
 	onCleanup(() => {
 		if (guiRainbowTimer !== undefined) clearTimeout(guiRainbowTimer);
 	});
@@ -275,7 +272,9 @@ function MainGUI() {
 					overflow: "hidden",
 					"user-select": "none",
 				}}
-				on:pointerdown={handlePointerDown}
+				onPointerDown={handlePointerDown}
+				onPointerUp={handlePointerUp}
+				onPointerMove={handlePointerMove}
 			>
 				<div
 					{...{ [dragHandleAttrName]: "" }}
@@ -291,7 +290,7 @@ function MainGUI() {
 								when={settingsMain()}
 								fallback={
 									<>
-										<button class="vape-close-btn" type="button" on:click={closeSettingsCategory}>
+										<button class="vape-close-btn" type="button" onClick={closeSettingsCategory}>
 											<img
 												src={getResourceURL("guiback")}
 												alt="Back"
@@ -313,7 +312,7 @@ function MainGUI() {
 										>
 											{activeSettingsCategory()}
 										</span>
-										<button class="vape-close-btn" type="button" on:click={closeSettings}>
+										<button class="vape-close-btn" type="button" onClick={closeSettings}>
 											<img
 												src={getResourceURL("close")}
 												alt="Close"
@@ -326,7 +325,7 @@ function MainGUI() {
 									</>
 								}
 							>
-								<button class="vape-close-btn" type="button" on:click={closeSettings}>
+								<button class="vape-close-btn" type="button" onClick={closeSettings}>
 									<img
 										src={getResourceURL("guiback")}
 										alt="Back"
@@ -348,7 +347,7 @@ function MainGUI() {
 								>
 									Settings
 								</span>
-								<button class="vape-close-btn" type="button" on:click={closeSettings}>
+								<button class="vape-close-btn" type="button" onClick={closeSettings}>
 									<img
 										src={getResourceURL("close")}
 										alt="Close"
@@ -392,7 +391,7 @@ function MainGUI() {
 							width: "40px",
 						}}
 						type="button"
-						on:click={() => setShowSettings(true)}
+						onClick={() => setShowSettings(true)}
 					>
 						<img
 							src={getResourceURL("guisettings")}
@@ -480,9 +479,9 @@ function MainGUI() {
 								"border-radius": "50%",
 							}}
 							type="button"
-							on:click={() => setOverlaysOpen(true)}
-							on:pointerenter={() => setOverlayHovered(true)}
-							on:pointerleave={() => setOverlayHovered(false)}
+							onClick={() => setOverlaysOpen(true)}
+							onPointerEnter={() => setOverlayHovered(true)}
+							onPointerLeave={() => setOverlayHovered(false)}
 						>
 							<img
 								src={getResourceURL("overlaysicon")}
@@ -513,7 +512,7 @@ function MainGUI() {
 								transition: "opacity 0.2s linear",
 								cursor: "pointer",
 							}}
-							on:click={() => setOverlaysOpen(false)}
+							onClick={() => setOverlaysOpen(false)}
 						/>
 						<div
 							style={{
@@ -558,11 +557,11 @@ function MainGUI() {
 								<button
 									class="vape-close-btn"
 									type="button"
-									on:click={() => setOverlaysOpen(false)}
-									on:pointerenter={(e) => {
+									onClick={() => setOverlaysOpen(false)}
+									onPointerEnter={(e) => {
 										e.currentTarget.style.opacity = "1";
 									}}
-									on:pointerleave={(e) => {
+									onPointerLeave={(e) => {
 										e.currentTarget.style.opacity = "0.7";
 									}}
 								>
@@ -596,11 +595,11 @@ function MainGUI() {
 												transition: "background-color 0.16s linear",
 											}}
 											type="button"
-											on:click={() => {
+											onClick={() => {
 												toggleHud(hudClass);
 											}}
-											on:pointerenter={() => setToggleHovered(true)}
-											on:pointerleave={() => setToggleHovered(false)}
+											onPointerEnter={() => setToggleHovered(true)}
+											onPointerLeave={() => setToggleHovered(false)}
 										>
 											<span
 												style={{
@@ -925,7 +924,7 @@ function MainGUI() {
 							}}
 							type="button"
 							title="Legit mode"
-							on:click={() => toggleLegitWindow()}
+							onClick={() => toggleLegitWindow()}
 						>
 							<img
 								src={getResourceURL("legit")}
@@ -950,7 +949,7 @@ function MainGUI() {
 						id="search"
 						type="text"
 						value={searchText()}
-						on:input={(e) => setSearchText(e.currentTarget.value)}
+						onInput={(e) => setSearchText(e.currentTarget.value)}
 						placeholder=""
 						style={{
 							flex: "1",
@@ -976,7 +975,7 @@ function MainGUI() {
 						}}
 					>
 						<For
-							each={ModuleManager.modules.filter((m) =>
+							each={ModuleManager.instance.modules.filter((m) =>
 								m.name.toLowerCase().includes(searchText().toLowerCase()),
 							)}
 						>
@@ -1006,9 +1005,9 @@ function SearchResultItem(props: { mod: Mod }) {
 				transition: "background-color 0.16s linear",
 			}}
 			type="button"
-			on:pointerenter={() => setHovered(true)}
-			on:pointerleave={() => setHovered(false)}
-			on:click={() => props.mod.toggle()}
+			onPointerEnter={() => setHovered(true)}
+			onPointerLeave={() => setHovered(false)}
+			onClick={() => props.mod.toggle()}
 		>
 			<span
 				style={{
@@ -1073,10 +1072,10 @@ function CategoryButton(props: { category: string; info: CategoryInfo }) {
 			style={{
 				background: hovered() || expanded() ? "var(--vape-main-light)" : "var(--vape-main)",
 			}}
-			on:pointerenter={() => setHovered(true)}
-			on:pointerleave={() => setHovered(false)}
-			on:click={() => toggleCategoryWindow(props.category)}
-			on:contextmenu={handleContextMenu}
+			onPointerEnter={() => setHovered(true)}
+			onPointerLeave={() => setHovered(false)}
+			onClick={() => toggleCategoryWindow(props.category)}
+			onContextMenu={handleContextMenu}
 			type="button"
 		>
 			<img
@@ -1132,9 +1131,9 @@ function MiscItem(props: { label: string; subText?: string; onClick?: () => void
 				background: hovered() ? "var(--vape-main-light)" : "var(--vape-main)",
 			}}
 			type="button"
-			on:pointerenter={() => setHovered(true)}
-			on:pointerleave={() => setHovered(false)}
-			on:click={() => props.onClick?.()}
+			onPointerEnter={() => setHovered(true)}
+			onPointerLeave={() => setHovered(false)}
+			onClick={() => props.onClick?.()}
 		>
 			<span
 				style={{
@@ -1180,9 +1179,9 @@ function ActionButton(props: { label: string; onClick?: () => void; disabled?: b
 					background: hovered() ? "rgba(255,255,255,0.0875)" : "rgba(255,255,255,0.05)",
 				}}
 				type="button"
-				on:pointerenter={() => setHovered(true)}
-				on:pointerleave={() => setHovered(false)}
-				on:click={() => props.onClick?.()}
+				onPointerEnter={() => setHovered(true)}
+				onPointerLeave={() => setHovered(false)}
+				onClick={() => props.onClick?.()}
 			>
 				<span
 					style={{
@@ -1212,9 +1211,9 @@ function SettingsCategoryButton(props: { title: string; onClick: () => void; sub
 				background: hovered() ? "var(--vape-main-light)" : "transparent",
 			}}
 			type="button"
-			on:pointerenter={() => setHovered(true)}
-			on:pointerleave={() => setHovered(false)}
-			on:click={props.onClick}
+			onPointerEnter={() => setHovered(true)}
+			onPointerLeave={() => setHovered(false)}
+			onClick={props.onClick}
 		>
 			<span
 				style={{

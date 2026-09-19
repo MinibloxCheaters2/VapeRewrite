@@ -64,7 +64,7 @@ export default class ArrowCooldown extends Mod {
 				origMethods.getFireUpCooldownActive = p.getFireUpCooldownActive;
 				p.getFireUpCooldownActive = createProxy(origMethods.getFireUpCooldownActive, {
 					apply(/*target, thisArg, argArray*/) {
-						console.log("[ArrowCooldown] FUCA", new Error().stack);
+						// console.log("[ArrowCooldown] FUCA", new Error().stack);
 						return false;
 					},
 				});

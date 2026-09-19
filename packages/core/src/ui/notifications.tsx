@@ -1,5 +1,5 @@
-import { createSignal, For, onCleanup, onMount } from "solid-js";
-import { render } from "solid-js/web";
+import { createSignal, For, onSettled } from "solid-js";
+import { render } from "@solidjs/web";
 
 import getResourceURL from "../utils/helpers/cachedResourceURL";
 import { notificationsEnabled } from "./globalSettings";
@@ -64,17 +64,16 @@ function NotificationItem(props: { notification: Notification; offset: number })
 	const [exiting, setExiting] = createSignal(false);
 	const [mounted, setMounted] = createSignal(false);
 
-	onMount(() => {
+	onSettled(() => {
 		requestAnimationFrame(() => {
 			setMounted(true);
 		});
+		return () => clearTimeout(timer);
 	});
 
 	const timer = setTimeout(() => {
 		setExiting(true);
 	}, props.notification.duration);
-
-	onCleanup(() => clearTimeout(timer));
 
 	return (
 		<div

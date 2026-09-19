@@ -5,6 +5,7 @@ import { guiVisible, setGuiVisible } from "@vape/core/ui/guiState";
 export default class HudManagerModule extends Mod {
 	public name = "HudManager";
 	public category = Category.RENDER;
+	public static readonly INSTANCE = new HudManagerModule();
 
 	private wasGuiVisible = false;
 

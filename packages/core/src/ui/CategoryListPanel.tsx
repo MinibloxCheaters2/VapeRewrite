@@ -3,8 +3,6 @@ import {
 	createEffect,
 	createSignal,
 	For,
-	type JSX,
-	onMount,
 	type Setter,
 	Show,
 } from "solid-js";
@@ -106,10 +104,10 @@ export default function CategoryListPanel(props: CategoryListPanelProps) {
 		setDragging(false);
 	};
 
-	onMount(() => {
-		document.addEventListener("pointermove", handlePointerMove);
-		document.addEventListener("pointerup", handlePointerUp);
-	});
+	// on mount(() => {
+	// 	document.addEventListener("pointermove", handlePointerMove);
+	// 	document.addEventListener("pointerup", handlePointerUp);
+	// });
 
 	const isVisible = () => props.visible;
 
@@ -157,7 +155,9 @@ export default function CategoryListPanel(props: CategoryListPanelProps) {
 					"z-index": "10002",
 					transition: "height 0.16s linear",
 				}}
-				on:pointerdown={handlePointerDown}
+				onPointerDown={handlePointerDown}
+				onPointerUp={handlePointerUp}
+				onPointerMove={handlePointerMove}
 			>
 				{/* Header */}
 				<div
@@ -202,13 +202,13 @@ export default function CategoryListPanel(props: CategoryListPanelProps) {
 							background: settingsHovered() ? "rgba(255,255,255,0.06)" : "transparent",
 						}}
 						type="button"
-						on:click={(e) => {
+						onClick={(e) => {
 							e.stopPropagation();
 							setShowSettings(!showSettings());
 							updateHeight();
 						}}
-						on:pointerenter={() => setSettingsHovered(true)}
-						on:pointerleave={() => setSettingsHovered(false)}
+						onPointerEnter={() => setSettingsHovered(true)}
+						onPointerLeave={() => setSettingsHovered(false)}
 					>
 						<img
 							src={getResourceURL("customsettings")}
@@ -232,12 +232,12 @@ export default function CategoryListPanel(props: CategoryListPanelProps) {
 							height: "40px",
 						}}
 						type="button"
-						on:click={() => {
+						onClick={() => {
 							setExpanded(!expanded());
 							updateHeight();
 						}}
-						on:pointerenter={() => setArrowHovered(true)}
-						on:pointerleave={() => setArrowHovered(false)}
+						onPointerEnter={() => setArrowHovered(true)}
+						onPointerLeave={() => setArrowHovered(false)}
 					>
 						<img
 							src={getResourceURL("contract")}
@@ -287,9 +287,9 @@ export default function CategoryListPanel(props: CategoryListPanelProps) {
 											"margin-left": "10px",
 											"margin-top": "3px",
 										}}
-										on:pointerenter={() => setItemHovered(true)}
-										on:pointerleave={() => setItemHovered(false)}
-										on:click={() => props.toggleItem(item)}
+										onPointerEnter={() => setItemHovered(true)}
+										onPointerLeave={() => setItemHovered(false)}
+										onClick={() => props.toggleItem(item)}
 									>
 										{/* Dot */}
 										<div
@@ -362,9 +362,9 @@ export default function CategoryListPanel(props: CategoryListPanelProps) {
 												padding: "0",
 											}}
 											type="button"
-											on:pointerenter={() => setDotHovered(true)}
-											on:pointerleave={() => setDotHovered(false)}
-											on:click={(e) => {
+											onPointerEnter={() => setDotHovered(true)}
+											onPointerLeave={() => setDotHovered(false)}
+											onClick={(e) => {
 												e.stopPropagation();
 												props.removeItem(item);
 											}}
@@ -399,8 +399,8 @@ export default function CategoryListPanel(props: CategoryListPanelProps) {
 								"margin-top": "3px",
 								"margin-bottom": "6px",
 							}}
-							on:pointerenter={() => setAddHovered(true)}
-							on:pointerleave={() => setAddHovered(false)}
+							onPointerEnter={() => setAddHovered(true)}
+							onPointerLeave={() => setAddHovered(false)}
 						>
 							<input
 								type="text"
@@ -418,8 +418,8 @@ export default function CategoryListPanel(props: CategoryListPanelProps) {
 									padding: "0 10px",
 									outline: "none",
 								}}
-								on:input={(e) => setAddText(e.currentTarget.value)}
-								on:keydown={(e) => {
+								onInput={(e) => setAddText(e.currentTarget.value)}
+								onKeyDown={(e) => {
 									if (e.key === "Enter") handleAdd();
 								}}
 							/>
@@ -436,7 +436,7 @@ export default function CategoryListPanel(props: CategoryListPanelProps) {
 									padding: "0",
 								}}
 								type="button"
-								on:click={handleAdd}
+								onClick={handleAdd}
 							>
 								<img
 									src={getResourceURL("add")}

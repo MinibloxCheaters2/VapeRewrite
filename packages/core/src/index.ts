@@ -21,7 +21,11 @@ export { default as Cancelable } from "./event/Cancelable";
 export { default as CancelableWrapper } from "./event/CancelableWrapper";
 
 // ── Modules API ──────────────────────────────────────────────────────
-export { ModuleManager, setModuleManager, P } from "./features/modules/api/ModuleManager";
+export {
+	create as createModManager,
+	P,
+	default as ModuleManager,
+} from "./features/modules/api/ModuleManager";
 export { default as Mod } from "./features/modules/api/Module";
 export { Category, CategoryInfo, categoryInfoSet } from "./features/modules/api/Category";
 export type { CategoryData } from "./features/modules/api/Category";

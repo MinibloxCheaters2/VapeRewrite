@@ -1,4 +1,4 @@
-import { ModuleManager, setModuleManager } from "@vape/core/features/modules/api/ModuleManager";
+import ModuleManager, { create } from "@vape/core/features/modules/api/ModuleManager";
 
 import Derp from "./features/modules/impl/blatant/Derp";
 import Fly from "./features/modules/impl/blatant/fly";
@@ -12,34 +12,26 @@ import KeepSprint from "./features/modules/impl/combat/KeepSprint";
 import Velocity from "./features/modules/impl/combat/Velocity";
 import WTap from "./features/modules/impl/combat/WTap";
 import InventoryMove from "./features/modules/impl/utility/InventoryMove";
+import Sprint from "./features/modules/impl/utility/Sprint";
 import Test from "./features/modules/impl/utility/Test";
 import NoFall from "./features/modules/impl/world/NoFall";
 import Timer from "./features/modules/impl/world/Timer";
-import Disabler from "./features/modules/impl/utility/Disabler";
-import Sprint from "./features/modules/impl/utility/Sprint";
 
-type Named = {};
-
-const mm = new ModuleManager<Named>({
-	named: {},
-	modules: [
-		new Speed(),
-		new Fly(),
-		new KillAura(),
-		new InfiniteAura(),
-		new NoSlow(),
-		new Phase(),
-		new Timer(),
-		new AutoClicker(),
-		new Velocity(),
-		new WTap(),
-		new NoFall(),
-		new Test(),
-		new KeepSprint(),
-		new InventoryMove(),
-		new Derp(),
-		new Sprint
-	],
-});
-
-setModuleManager(mm);
+export const mm = create(
+	new Speed(),
+	new Fly(),
+	new KillAura(),
+	new InfiniteAura(),
+	new NoSlow(),
+	new Phase(),
+	new Timer(),
+	new AutoClicker(),
+	new Velocity(),
+	new WTap(),
+	new NoFall(),
+	new Test(),
+	new KeepSprint(),
+	new InventoryMove(),
+	new Derp(),
+	new Sprint(),
+);

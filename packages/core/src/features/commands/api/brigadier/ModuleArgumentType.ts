@@ -18,7 +18,7 @@ export default class ModuleArgumentType extends ArgumentType<Mod> {
 		_context: CommandContext<unknown>,
 		builder: SuggestionsBuilder,
 	): Promise<Suggestions> {
-		const suggestions = ModuleManager.moduleNames.filter((m) =>
+		const suggestions = ModuleManager.instance.moduleNames.filter((m) =>
 			m.toLowerCase().startsWith(builder.getRemaining().toLowerCase()),
 		);
 		let b = builder;
@@ -31,7 +31,7 @@ export default class ModuleArgumentType extends ArgumentType<Mod> {
 	parse(reader: StringReader): Mod {
 		const start = reader.getCursor();
 		const name = reader.readString();
-		const mod = ModuleManager.findModule(P.byName(name));
+		const mod = ModuleManager.instance.findModule(P.byName(name));
 		if (mod === undefined) {
 			reader.setCursor(start);
 			throw MODULE_NOT_FOUND.createWithContext(reader, name);

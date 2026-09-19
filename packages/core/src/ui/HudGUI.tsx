@@ -1,7 +1,7 @@
 import type BaseHudElement from "../features/hud/api/BaseHudElement";
 
-import { createSignal, For, onCleanup, onMount, Show } from "solid-js";
-import { render } from "solid-js/web";
+import { createSignal, For, onCleanup, Show } from "solid-js";
+import { render } from "@solidjs/web";
 
 import { getName, type ModeLike } from "../features/config/Settings";
 import HudManager from "../features/hud/api/HudManager";
@@ -57,16 +57,6 @@ function HudManagerPanel() {
 		setDragging(false);
 	};
 
-	onMount(() => {
-		document.addEventListener("pointermove", handlePointerMove);
-		document.addEventListener("pointerup", handlePointerUp);
-	});
-
-	onCleanup(() => {
-		document.removeEventListener("pointermove", handlePointerMove);
-		document.removeEventListener("pointerup", handlePointerUp);
-	});
-
 	const selectedHud = HudManager.selectedHudAccessor;
 
 	const handleAddHud = (hudClass: new () => BaseHudElement) => {
@@ -102,7 +92,9 @@ function HudManagerPanel() {
 					"border-radius": "8px",
 					"z-index": "10002",
 				}}
-				on:pointerdown={handlePointerDown}
+				onPointerDown={handlePointerDown}
+				onPointerUp={handlePointerUp}
+				onPointerMove={handlePointerMove}
 			>
 				{/* Drag handle */}
 				<div
@@ -145,11 +137,11 @@ function HudManagerPanel() {
 						transition: "opacity 0.16s linear",
 					}}
 					type="button"
-					on:click={() => setShowAddMenu(!showAddMenu())}
-					on:pointerenter={(e) => {
+					onClick={() => setShowAddMenu(!showAddMenu())}
+					onPointerEnter={(e) => {
 						e.currentTarget.style.opacity = "0.8";
 					}}
-					on:pointerleave={(e) => {
+					onPointerLeave={(e) => {
 						e.currentTarget.style.opacity = "1";
 					}}
 				>
@@ -173,13 +165,13 @@ function HudManagerPanel() {
 					}}
 					type="button"
 					disabled={!selectedHud()}
-					on:click={() => selectedHud() && setShowSettings(!showSettings())}
-					on:pointerenter={(e) => {
+					onClick={() => selectedHud() && setShowSettings(!showSettings())}
+					onPointerEnter={(e) => {
 						if (selectedHud()) {
 							e.currentTarget.style.backgroundColor = "var(--vape-main-light)";
 						}
 					}}
-					on:pointerleave={(e) => {
+					onPointerLeave={(e) => {
 						if (selectedHud()) {
 							e.currentTarget.style.backgroundColor = "var(--vape-main-light)";
 						}
@@ -214,13 +206,13 @@ function HudManagerPanel() {
 					}}
 					type="button"
 					disabled={!selectedHud()}
-					on:click={() => selectedHud() && handleDeleteHud()}
-					on:pointerenter={(e) => {
+					onClick={() => selectedHud() && handleDeleteHud()}
+					onPointerEnter={(e) => {
 						if (selectedHud()) {
 							e.currentTarget.style.opacity = "0.8";
 						}
 					}}
-					on:pointerleave={(e) => {
+					onPointerLeave={(e) => {
 						if (selectedHud()) {
 							e.currentTarget.style.opacity = "1";
 						}
@@ -241,11 +233,11 @@ function HudManagerPanel() {
 						"margin-left": "8px",
 					}}
 					type="button"
-					on:click={handleClose}
-					on:pointerenter={(e) => {
+					onClick={handleClose}
+					onPointerEnter={(e) => {
 						e.currentTarget.style.backgroundColor = "var(--vape-main-light)";
 					}}
-					on:pointerleave={(e) => {
+					onPointerLeave={(e) => {
 						e.currentTarget.style.backgroundColor = "var(--vape-main-light)";
 					}}
 				>
@@ -295,11 +287,11 @@ function HudManagerPanel() {
 											transition: "background-color 0.16s linear",
 										}}
 										type="button"
-										on:click={() => handleAddHud(hudClass)}
-										on:pointerenter={(e) => {
+										onClick={() => handleAddHud(hudClass)}
+										onPointerEnter={(e) => {
 											e.currentTarget.style.backgroundColor = "var(--vape-main-light)";
 										}}
-										on:pointerleave={(e) => {
+										onPointerLeave={(e) => {
 											e.currentTarget.style.backgroundColor = "transparent";
 										}}
 									>
@@ -476,16 +468,6 @@ function HudElementRenderer(props: { hud: JSXHudElement }) {
 		setDragging(false);
 	};
 
-	onMount(() => {
-		document.addEventListener("pointermove", handlePointerMove);
-		document.addEventListener("pointerup", handlePointerUp);
-	});
-
-	onCleanup(() => {
-		document.removeEventListener("pointermove", handlePointerMove);
-		document.removeEventListener("pointerup", handlePointerUp);
-	});
-
 	const _isSelected = () => HudManager.selectedHud === props.hud;
 	return (
 		<Show when={props.hud.visibleAccessor()}>
@@ -502,7 +484,9 @@ function HudElementRenderer(props: { hud: JSXHudElement }) {
 						/*isSelected() && hudManagerActive() ? "2px solid var(--vape-accent)" : */ "none",
 					"outline-offset": "2px",
 				}}
-				on:pointerdown={handlePointerDown}
+				onPointerDown={handlePointerDown}
+				onPointerUp={handlePointerUp}
+				onPointerMove={handlePointerMove}
 			>
 				{props.hud.render()}
 			</div>

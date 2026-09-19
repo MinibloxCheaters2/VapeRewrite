@@ -49,7 +49,9 @@ export class ModuleConfig {
 }
 
 function serializeModules(): Record<string, ModuleConfig> {
-	return Object.fromEntries(ModuleManager.modules.map((x) => [x.name, ModuleConfig.from(x)]));
+	return Object.fromEntries(
+		ModuleManager.instance.modules.map((x) => [x.name, ModuleConfig.from(x)]),
+	);
 }
 
 export class Config {
@@ -131,7 +133,7 @@ export function loadConfig(name: string = loadedConfig.name) {
 	GM_setValue(LAST_CONFIG_KEY, name);
 
 	for (const [name, config] of Object.entries(loadedConfig.modules)) {
-		const mod = ModuleManager.findModule(P.byName(name));
+		const mod = ModuleManager.instance.findModule(P.byName(name));
 		if (mod === undefined) {
 			logger.warn("Module not found while loading config:", name);
 			continue;
@@ -207,7 +209,7 @@ export function updateLoadedConfig(moduleName?: string, settingName?: string) {
 		return;
 	}
 
-	const mod = ModuleManager.findModule(P.byName(moduleName));
+	const mod = ModuleManager.instance.findModule(P.byName(moduleName));
 	if (!mod) return;
 
 	if (!settingName) {

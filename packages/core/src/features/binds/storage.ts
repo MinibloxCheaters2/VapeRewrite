@@ -10,7 +10,7 @@ const BINDS_KEY = siteKey("vapeBinds");
  */
 export function saveBinds() {
 	const binds: Record<string, string> = {};
-	for (const mod of ModuleManager.modules) {
+	for (const mod of ModuleManager.instance.modules) {
 		if (mod.bind) binds[mod.name] = mod.bind;
 	}
 	GM_setValue(BINDS_KEY, JSON.stringify(binds));
@@ -29,7 +29,7 @@ export function loadBinds() {
 		binds = {};
 	}
 	for (const [name, key] of Object.entries(binds)) {
-		const mod = ModuleManager.findModule(P.byName(name));
+		const mod = ModuleManager.instance.findModule(P.byName(name));
 		if (mod) mod.bind = key;
 	}
 }
