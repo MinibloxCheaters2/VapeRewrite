@@ -1,4 +1,7 @@
-import type { Vector3 } from "three";
+import type { Vector3 } from "@types/three";
+
+export type ArrayVec3 = [x: number, y: number, z: number];
+export type ArrayVec2 = [x: number, y: number];
 
 interface FloatVec3 {
 	x: number;

@@ -1,3 +1,5 @@
+import shadowWrapper from "../../ui/shadowWrapper";
+
 export type Callback = (e: KeyboardEvent) => void;
 interface Bind {
 	id: string;
@@ -52,6 +54,15 @@ export function removeBind(key: string, id: string): boolean {
 }
 
 unsafeWindow.addEventListener("keydown", (e) => {
+	const active = document.activeElement;
+	const shadowActive = shadowWrapper.root.activeElement;
+	const typing =
+		["INPUT", "TEXTAREA", "SELECT"].some(
+			(tag) => active?.tagName === tag || shadowActive?.tagName === tag,
+		) ||
+		active?.isContentEditable ||
+		shadowActive?.isContentEditable;
+	if (typing) return;
 	bound[normalizeCase(keyMap[e.code] ?? e.code)]?.forEach?.((x) => {
 		x.callback(e);
 	});

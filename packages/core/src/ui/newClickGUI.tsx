@@ -22,6 +22,7 @@ import {
 	toggleCategoryExpanded,
 } from "./guiState";
 import { SubmoduleComponent } from "./SubmoduleComponent";
+import shadowWrapper from "./shadowWrapper";
 
 interface CategoryWindowProps {
 	category: string;
@@ -250,7 +251,7 @@ function ModuleButton(props: { mod: Mod; onExpandChange: () => void }) {
 		e.stopImmediatePropagation();
 		e.stopPropagation();
 		props.mod.bind = e.key.toLowerCase();
-		document.removeEventListener("keydown", handleKeyboardEvent);
+		shadowWrapper.root.removeEventListener("keydown", handleKeyboardEvent);
 	};
 
 	return (
@@ -318,7 +319,7 @@ function ModuleButton(props: { mod: Mod; onExpandChange: () => void }) {
 							e.stopImmediatePropagation();
 							e.stopPropagation();
 							setListening(true);
-							document.addEventListener("keydown", handleKeyboardEvent);
+							shadowWrapper.root.addEventListener("keydown", handleKeyboardEvent);
 						}}
 					>
 						{bind() === "" ? (

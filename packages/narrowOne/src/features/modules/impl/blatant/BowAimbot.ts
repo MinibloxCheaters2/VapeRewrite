@@ -1,7 +1,5 @@
 import { Category, Mod } from "@vape/core/index";
 
-import Bus from "@/Bus";
-import { main } from "@/hooks/mainHook";
 import { solveNarrowAim, bowSpeed, bowStrength } from "@/utils/aiming/projectileAim";
 import game from "@/utils/refs/game";
 import { ready } from "@/hooks/gameHook";
@@ -14,6 +12,12 @@ let hooked: boolean, orig: () => Vector3;
 export class BowAimbot extends Mod {
 	name = "BowAimbot";
 	category = Category.BLATANT;
+
+	private readonly modeSetting = this.createDropdownSetting("Mode", ["Silent", "Camera"]);
+
+	get mode() {
+		return this.modeSetting.value();
+	}
 
 	protected onEnable(): void {
 		ready.then(() => {

@@ -44,8 +44,8 @@ function SettingsPanel() {
 		setDragging(false);
 	};
 
-	document.addEventListener("pointermove", handlePointerMove);
-	document.addEventListener("pointerup", handlePointerUp);
+	shadowWrapper.root.addEventListener("pointermove", handlePointerMove);
+	shadowWrapper.root.addEventListener("pointerup", handlePointerUp);
 
 	const isVisible = () => guiVisible() && settingsPanelVisible();
 

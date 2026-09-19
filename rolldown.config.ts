@@ -28,7 +28,6 @@ export const REAL_CLIENT_NAME =
 function defineGame(
 	name: string,
 	plugins?: RolldownPlugin[],
-	opts?: RolldownOptions,
 ): RolldownOptions {
 	return {
 		input: `packages/${name}/src/index.ts`,
@@ -56,11 +55,7 @@ function defineGame(
 				},
 			),
 			minifyCSS(),
-			withFilter(solid({
-				include: /\.tsx$/
-			}), {
-				transform: { moduleType: ["jsx", "tsx"] },
-			}),
+			solid(),
 			plugins,
 			// this MUST be before UserScript, so the comments from it won't be removed.
 			process.env.NODE_ENV === "production" ? minify() : undefined,
@@ -87,8 +82,7 @@ function defineGame(
 			minify: false,
 			sourcemap: "inline",
 		},
-		tsconfig: `packages/${name}/tsconfig.json`,
-		...opts,
+		tsconfig: `packages/${name}/tsconfig.json`
 	};
 }
 

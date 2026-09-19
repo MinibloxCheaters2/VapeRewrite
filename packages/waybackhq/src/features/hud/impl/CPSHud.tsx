@@ -1,4 +1,5 @@
 import HudElement from "@vape/core/features/hud/api/JSXHudElement";
+import shadowWrapper from "@vape/core/ui/shadowWrapper";
 import { createSignal } from "solid-js";
 
 export default class CPSHud extends HudElement {
@@ -48,14 +49,14 @@ export default class CPSHud extends HudElement {
 			this.#cpsUpdateInterval = setTimeout(updateCPS, 50) as unknown as number;
 		};
 
-		document.addEventListener("mousedown", handleMouseDown);
+		shadowWrapper.root.addEventListener("mousedown", handleMouseDown);
 		this.#mouseDownHandler = handleMouseDown;
 		updateCPS();
 	}
 
 	public onRemove(): void {
 		if (this.#mouseDownHandler) {
-			document.removeEventListener("mousedown", this.#mouseDownHandler);
+			shadowWrapper.root.removeEventListener("mousedown", this.#mouseDownHandler);
 		}
 		if (this.#cpsUpdateInterval) {
 			clearTimeout(this.#cpsUpdateInterval);

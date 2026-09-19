@@ -11,6 +11,7 @@ import AdBypass from "./features/modules/impl/utility/AdBypass";
 import AutoReport from "./features/modules/impl/utility/AutoReport";
 import DetectionDebugger from "./features/modules/impl/utility/DetectionDebugger";
 import FilterBypass from "./features/modules/impl/utility/FilterBypass";
+import AntiCheatBypass from "./features/modules/impl/blatant/AntiCheatBypass";
 
 create(
 	new Speed(),
@@ -24,5 +25,6 @@ create(
 	new ArrowPhase(),
 	new ArrowCooldown(),
 	DetectionDebugger.INSTANCE,
+	new AntiCheatBypass(),
 	// new Timer(),
 );

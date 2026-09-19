@@ -2,6 +2,7 @@ import { createSignal, For, Show } from "solid-js";
 
 import { getName, type ModeLike } from "../features/config/Settings";
 import getResourceURL from "../utils/helpers/cachedResourceURL";
+import shadowWrapper from "./shadowWrapper";
 
 // Toggle component
 export function ToggleComponent(props: {
@@ -80,8 +81,8 @@ export function SliderComponent(props: {
 		props.onChange(Math.round(newValue * 100) / 100);
 	};
 
-	document.addEventListener("pointermove", handlePointerMove);
-	document.addEventListener("pointerup", handlePointerUp);
+	shadowWrapper.root.addEventListener("pointermove", handlePointerMove);
+	shadowWrapper.root.addEventListener("pointerup", handlePointerUp);
 
 	const percentage = () => ((props.value - props.min) / (props.max - props.min)) * 100;
 
@@ -371,8 +372,8 @@ export function ColorSliderComponent(props: {
 		setDraggingOpacity(false);
 	};
 
-	document.addEventListener("pointermove", handlePointerMove);
-	document.addEventListener("pointerup", handlePointerUp);
+	shadowWrapper.root.addEventListener("pointermove", handlePointerMove);
+	shadowWrapper.root.addEventListener("pointerup", handlePointerUp);
 
 	return (
 		<div style={{ "background-color": "var(--vape-main-dark)" }}>

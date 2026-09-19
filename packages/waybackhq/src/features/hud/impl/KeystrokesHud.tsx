@@ -1,4 +1,5 @@
 import HudElement from "@vape/core/features/hud/api/JSXHudElement";
+import shadowWrapper from "@vape/core/ui/shadowWrapper";
 import { createSignal } from "solid-js";
 
 export default class KeystrokesHud extends HudElement {
@@ -70,10 +71,10 @@ export default class KeystrokesHud extends HudElement {
 			}
 		};
 
-		document.addEventListener("keydown", handleKeyDown);
-		document.addEventListener("keyup", handleKeyUp);
-		document.addEventListener("mousedown", handleMouseDown);
-		document.addEventListener("mouseup", handleMouseUp);
+		shadowWrapper.root.addEventListener("keydown", handleKeyDown);
+		shadowWrapper.root.addEventListener("keyup", handleKeyUp);
+		shadowWrapper.root.addEventListener("mousedown", handleMouseDown);
+		shadowWrapper.root.addEventListener("mouseup", handleMouseUp);
 
 		this.#keyDownHandler = handleKeyDown;
 		this.#keyUpHandler = handleKeyUp;
@@ -83,16 +84,16 @@ export default class KeystrokesHud extends HudElement {
 
 	public onRemove(): void {
 		if (this.#keyDownHandler) {
-			document.removeEventListener("keydown", this.#keyDownHandler);
+			shadowWrapper.root.removeEventListener("keydown", this.#keyDownHandler);
 		}
 		if (this.#keyUpHandler) {
-			document.removeEventListener("keyup", this.#keyUpHandler);
+			shadowWrapper.root.removeEventListener("keyup", this.#keyUpHandler);
 		}
 		if (this.#mouseDownHandler) {
-			document.removeEventListener("mousedown", this.#mouseDownHandler);
+			shadowWrapper.root.removeEventListener("mousedown", this.#mouseDownHandler);
 		}
 		if (this.#mouseUpHandler) {
-			document.removeEventListener("mouseup", this.#mouseUpHandler);
+			shadowWrapper.root.removeEventListener("mouseup", this.#mouseUpHandler);
 		}
 	}
 

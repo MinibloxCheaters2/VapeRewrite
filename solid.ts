@@ -7,19 +7,10 @@
 import type { TransformOptions } from "@solidjs/compiler";
 import type { Plugin } from "rolldown";
 
-type MaybeArray<T> = T | T[];
-type StringOrRegExp = string | RegExp;
-
-export interface Options {
-	include?: MaybeArray<StringOrRegExp>;
-	exclude?: MaybeArray<StringOrRegExp>;
-	solid?: TransformOptions;
-}
-
 /**
  * Rolldown plugin for SolidJS using OXC-based compiler
  */
-export default function solidOxc({ include, exclude, solid }: Options = {}): Plugin {
+export default function solidOxc(solid: TransformOptions = {}): Plugin {
 	// Lazy load the native module
 	let compiler: typeof import("@solidjs/compiler") | null = null;
 
@@ -41,24 +32,19 @@ export default function solidOxc({ include, exclude, solid }: Options = {}): Plu
 		// Rolldown skips calling the plugin entirely for non-matching files
 		transform: {
 			filter: {
-				id: {
-					include,
-					exclude,
-				},
+				moduleType: ["jsx", "tsx"]
 			},
 			async handler(code: string, id: string) {
 				// Strip query parameters (e.g., ?v=123 from dev servers)
 				const fileId = id.split("?", 1)[0];
 
-				if (!compiler) {
-					this.error("solid-jsx-oxc module not loaded");
-				}
+				if (!compiler) this.error("solid-jsx-oxc module not loaded");
 
 				try {
 					const result = await compiler!.transformAsync(code, {
 						...solid,
 						filename: fileId,
-						sourceMap: true,
+						sourceMap: false,
 					});
 
 					return {

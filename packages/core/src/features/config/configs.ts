@@ -4,6 +4,7 @@ import type { AnySetting } from "./Settings";
 import { MAIN_LOGGER as logger } from "../../utils/logging/loggers";
 import { siteKey } from "../../utils/siteKey";
 import ModuleManager, { P } from "../modules/api/ModuleManager";
+import { flush } from "solid-js";
 
 function iterSubSettings(mod: Mod, fn: (s: AnySetting) => void) {
 	for (const s of mod.settings) {

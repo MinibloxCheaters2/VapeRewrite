@@ -2,10 +2,9 @@ import type { BaseSetting, SubmoduleSetting } from "../../config/Settings";
 import type SubModule from "../../config/SubModule";
 import type { Category } from "./Category";
 
-import { createSignal } from "solid-js";
+import { createSignal, flush } from "solid-js";
 
 import Bus from "../../../Bus";
-
 // why tf does @/... not work for this, but it works for @/Bus???
 import { toggleAlertEnabled } from "../../../ui/globalSettings";
 import { showNotification } from "../../../ui/notifications";
@@ -81,10 +80,12 @@ export default abstract class Mod extends Configurable {
 	}
 
 	set bind(value: string) {
-		this.#updateBind(this.bindSignal[0](), value);
+		flush(() => {
+			this.#updateBind(this.bindSignal[0](), value);
 
-		this.bindSignal[1](value);
-		saveBinds();
+			this.bindSignal[1](value);
+			saveBinds();
+		});
 	}
 
 	get stateAccessor() {
@@ -103,7 +104,7 @@ export default abstract class Mod extends Configurable {
 	 * Do NOT override this, override {@link onEnable} instead
 	 * This registers the module and calls {@link onEnable}.
 	 */
-	private onEnableInternal(): void {
+	#onEnableInternal(): void {
 		Bus.registerSubscriber(this);
 		this.#registerActiveSubModules();
 		this.onEnable();
@@ -113,7 +114,7 @@ export default abstract class Mod extends Configurable {
 	 * Do NOT override this, override {@link onEnable} instead.
 	 * This deregisters the module and calls {@link onDisable}.
 	 */
-	private onDisableInternal(): void {
+	#onDisableInternal(): void {
 		this.#unregisterAllSubModules();
 		Bus.unregisterSubscriber(this);
 		this.onDisable();
@@ -173,21 +174,26 @@ export default abstract class Mod extends Configurable {
 	/** Called when the module is disabled. */
 	protected onDisable(): void {}
 
-	/** Toggles this module without sending a notification. */
-	public toggleSilently(): void {
-		this.enabled = !this.enabled;
+	/**
+	 * Toggles this module without sending a notification.
+	 * @returns {boolean} if the module is now enabled.
+	 */
+	public toggleSilently(): boolean {
+		const state = !this.enabled;
+		this.enabled = state;
+		return state;
 	}
 
 	/** Toggles this module and sends a notification. */
 	public toggle(): void {
-		this.toggleSilently();
+		const enabled = this.toggleSilently();
 		if (toggleAlertEnabled()) {
-			showNotification(this.name, this.enabled ? "Enabled" : "Disabled", "info", 2000);
+			showNotification(this.name, enabled ? "Enabled" : "Disabled", "info", 2000);
 		}
 	}
 
 	private set state(value: boolean) {
-		this.stateSignal[1](value);
+		flush(() => this.stateSignal[1](value));
 	}
 
 	private get state(): boolean {
@@ -198,9 +204,9 @@ export default abstract class Mod extends Configurable {
 		if (this.state === value) return;
 		this.state = value;
 		if (value) {
-			this.onEnableInternal();
+			this.#onEnableInternal();
 		} else {
-			this.onDisableInternal();
+			this.#onDisableInternal();
 		}
 		updateLoadedConfig(this.name);
 	}

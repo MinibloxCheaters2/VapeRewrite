@@ -59,6 +59,12 @@ export default class ArrowCooldown extends Mod {
 			if ("fireAmount01" in p) {
 				p.fireAmount01 = Infinity;
 			}
+			if ("shootOrLoadTimer" in p) {
+				p.shootOrLoadTimer = -Infinity;
+			}
+			if ("loadingOrShootingState" in p) {
+				p.loadingOrShootingState = false;
+			}
 
 			if (typeof p.getFireUpCooldownActive === "function") {
 				origMethods.getFireUpCooldownActive = p.getFireUpCooldownActive;
