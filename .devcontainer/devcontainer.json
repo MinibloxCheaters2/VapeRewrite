@@ -6,7 +6,6 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"biomejs.biome",
 				"streetsidesoftware.code-spell-checker",
 				"bierner.github-markdown-preview",
 				"editorconfig.editorconfig"

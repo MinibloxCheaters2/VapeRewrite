@@ -26,13 +26,17 @@
 		"lint:fix": "oxlint check packages/*/src --fix",
 		"fmt": "oxfmt check packages/*/src"
 	},
+	"catalog": {
+		"@solidjs/web": "^2.0.0-rc.9",
+		"solid-js": "2.0.0-rc.9"
+	},
 	"dependencies": {
-		"@solidjs/web": "^2.0.0-rc.0",
 		"@wq2/brigadier-ts": "^1.0.8",
 		"@wq2/event-bus": "^0.1.0",
 		"oxc-minify": "^0.150.0",
 		"rolldown": "^1.2.0",
-		"solid-js": "2.0.0-rc.8"
+		"solid-js": "catalog:",
+		"@solidjs/web": "catalog:"
 	},
 	"devDependencies": {
 		"@solidjs/compiler": "^2.0.0-rc.9",

@@ -90,5 +90,6 @@ export default defineConfig([
 	defineGame("miniblox"),
 	defineGame("waybackhq", [thing()]),
 	defineGame("narrowOne"),
+	defineGame("classicNarrowOne"),
 	defineGame("voxiom"),
 ]);

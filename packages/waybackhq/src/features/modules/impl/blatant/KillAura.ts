@@ -78,9 +78,7 @@ export default class KillAura extends Mod {
 		RotationManager.scheduleRotation(
 			new RotationPlan(rot, this.movementCorrection.value().value, 2),
 		);
-		console.log("before attack");
 		player.attackTargetEntityWithCurrentItem(e);
-		console.log("after attack");
 		if (isClient && session)
 			session.sendActions(4, e.entityId, false, false, 0);
 	}

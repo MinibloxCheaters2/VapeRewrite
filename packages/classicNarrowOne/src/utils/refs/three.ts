@@ -1,3 +1,6 @@
+/**
+ * @todo figure this out
+ */
 import { expose } from "@vape/core/exposed";
 
 type ThreeModule = typeof import("three");
