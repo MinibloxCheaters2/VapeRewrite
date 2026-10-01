@@ -91,7 +91,5 @@ export default defineConfig([
 	defineGame("waybackhq", [thing()]),
 	defineGame("narrowOne"),
 	defineGame("classicNarrowOne"),
-	defineGame("kirka"),
-	defineGame("happy wheels"),
-	defineGame("voxiom"),
+	defineGame("kirka")
 ]);
