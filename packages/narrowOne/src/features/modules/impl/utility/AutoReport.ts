@@ -2,7 +2,6 @@ import Bus from "@/Bus";
 import Refs from "@/utils/refs/game";
 import Category from "@vape/core/features/modules/api/Category"
 import Mod from "@vape/core/features/modules/api/Module"
-import THREE from "@/utils/refs/three";
 
 export default class AutoReport extends Mod {
 	name = "AutoReport";

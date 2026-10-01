@@ -6,7 +6,7 @@ import { MAIN_LOGGER as logger } from "@vape/core/utils/logging/loggers";
 
 import Bus from "@/Bus";
 import { S2CData } from "@/event/Events";
-import { waitForReact } from "@/utils/helpers/waitForReact";
+import waitUntilReady from "@/utils/helpers/waitUntilReady";
 import Miniblox from "@/utils/refs/miniblox";
 import createProxy from "@vape/core/utils/helpers/proxy";
 
@@ -151,5 +151,5 @@ const packetHook = {
 		hookSendPacket();
 	},
 };
-waitForReact().then(() => packetHook.init());
+waitUntilReady().then(() => packetHook.init());
 export default packetHook;

@@ -7,7 +7,6 @@ import { initFriendsPanel } from "./FriendsPanel";
 import { initHudGUI } from "./HudGUI";
 import { initMainGUI } from "./MainGUI";
 import { initMusicPlayer } from "./MusicPlayer";
-import { initNewClickGUI } from "./newClickGUI";
 import { initNotifications } from "./notifications";
 import { initProfilesPanel } from "./ProfilesPanel";
 import { initSettingsPanel } from "./SettingsPanel";
@@ -21,7 +20,6 @@ export function initApp() {
 
 	// Initialize GUIs
 	initMainGUI();
-	initNewClickGUI();
 	initHudGUI();
 	initNotifications();
 	initSettingsPanel();

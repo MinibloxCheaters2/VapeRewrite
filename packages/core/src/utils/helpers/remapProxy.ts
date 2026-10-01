@@ -1,6 +1,9 @@
 import { LOG_REMAPPING } from "../../debugControls";
 import logger from "../logging/loggers";
 
+/**
+ * obf -> orig
+ */
 export type Mapping = Record<string | symbol, string | symbol>;
 
 // https://grok.com/share/bGVnYWN5LWNvcHk%3D_6bb5b2ee-ec03-4093-ae7f-7dd3fbf17998

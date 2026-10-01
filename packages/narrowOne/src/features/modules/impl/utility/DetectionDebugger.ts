@@ -9,7 +9,7 @@
 
 import { ready } from "@/hooks/gameHook";
 import { main, thing } from "@/hooks/mainHook";
-import game from "@/utils/refs/game";
+import game, { anyReady } from "@/utils/refs/game";
 import Category from "@vape/core/features/modules/api/Category";
 import Mod from "@vape/core/features/modules/api/Module";
 import { showNotification } from "@vape/core/ui/notifications";
@@ -78,7 +78,7 @@ export default class DetectionDebugger extends Mod {
 		origLog("[DetectionDebugger] function:", log);
 	}
 	protected onEnable(): void {
-		ready.then(() => {
+		anyReady.then(() => {
 			game.player.__proto__.report = createProxy(game.player.__proto__.report, {
 				apply(target, thisArg, argArray: [reason: number, n: number]) {
 					if (!thisArg.hasOwnership) return Reflect.apply(target, thisArg, argArray);

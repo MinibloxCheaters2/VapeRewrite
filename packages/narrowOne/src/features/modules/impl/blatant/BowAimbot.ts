@@ -1,8 +1,7 @@
 import { Category, Mod } from "@vape/core/index";
 
 import { solveNarrowAim, bowSpeed, bowStrength } from "@/utils/aiming/projectileAim";
-import game from "@/utils/refs/game";
-import { ready } from "@/hooks/gameHook";
+import game, { anyReady } from "@/utils/refs/game";
 import createProxy from "@vape/core/utils/helpers/proxy";
 import type { Vector3 } from "three";
 import canAttack from "@/utils/combat/teams";
@@ -13,14 +12,16 @@ export class BowAimbot extends Mod {
 	name = "BowAimbot";
 	category = Category.BLATANT;
 
-	private readonly modeSetting = this.createDropdownSetting("Mode", ["Silent", "Camera"]);
+	private readonly modeSetting = this.createDropdownSetting(
+		"Mode", ["Silent", "Camera"], "Silent"
+	);
 
 	get mode() {
 		return this.modeSetting.value();
 	}
 
 	protected onEnable(): void {
-		ready.then(() => {
+		anyReady.then(() => {
 			hooked = true;
 			orig = game.player.getShootDirection;
 			game.player.getShootDirection = createProxy(orig, {

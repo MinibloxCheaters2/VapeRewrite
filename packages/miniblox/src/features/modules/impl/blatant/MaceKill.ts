@@ -28,24 +28,28 @@ export default class MaceKill extends Mod {
 	category = Category.BLATANT;
 
 	#fallDistance = this.createSliderSetting("FallDistance", 60, 20, 400);
+	#intermediateFallDistance = this.createSliderSetting(
+		"IntermediateFallDistanceForNotGettingValuePatched",
+		0.13,
+		0.09,
+		3,
+		0.01,
+	);
 
 	private get fallDistance() {
 		return this.#fallDistance.value();
 	}
-	hackyFallDamageFix = false;
+	private get intermediateFallDistance() {
+		return this.#intermediateFallDistance.value();
+	}
 
 	@Subscribe("sendPacket")
 	onSendPacket({ data: pkt }: CancelableWrapper<C2SPacket>) {
-		// if (this.hackyFallDamageFix && isC2S("SPacketPlayerPosLook", pkt) && pkt.onGround) {
-		// 	pkt.onGround = false;
-		// 	this.hackyFallDamageFix = false;
-		// }
 		if (!isC2S("SPacketUseEntity", pkt) || pkt.action !== 1) return;
 		const { player, Items } = Miniblox;
 		if (player.inventory.getCurrentItem()?.item !== Items.mace) return;
 		teleport(player.pos.y + this.fallDistance, false);
-		teleport(player.pos.y + (this.fallDistance - 0.08), false);
+		teleport(player.pos.y + (this.fallDistance - this.intermediateFallDistance), false);
 		teleport(player.pos.y, false);
-		// this.hackyFallDamageFix = true;
 	}
 }

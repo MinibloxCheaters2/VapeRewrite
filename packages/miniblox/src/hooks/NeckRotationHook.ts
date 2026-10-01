@@ -1,10 +1,10 @@
 import { ClientEntityPlayer, RenderPlayer } from "@wq2/miniblox-sdk";
 
 import RotationManager from "@/utils/aiming/rotate";
-import { waitForReact } from "@/utils/helpers/waitForReact";
 import MovementCorrection, { getEffectiveMode } from "@/utils/movement/MovementCorrection";
 import Miniblox from "@/utils/refs/miniblox";
 import createProxy from "@vape/core/utils/helpers/proxy";
+import waitUntilReady from "@/utils/helpers/waitUntilReady";
 
 let origInit: ClientEntityPlayer["init"];
 type HookFn = (this: RenderPlayer, ...args: unknown[]) => void;
@@ -48,4 +48,4 @@ export default function hook() {
 	});
 }
 
-waitForReact().then(hook);
+waitUntilReady().then(hook);

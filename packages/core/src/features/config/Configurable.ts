@@ -53,7 +53,7 @@ export default class Configurable {
 			setValue: (v) => {
 				if (value() === v) return;
 				setValueSignal(v);
-				if (this.modName) updateLoadedConfig(this.modName, name);
+				if (this.modName) updateLoadedConfig(this.modName, name, v);
 			},
 			visible,
 		};
@@ -78,7 +78,7 @@ export default class Configurable {
 			setValue: (v) => {
 				if (value() === v) return;
 				setValueSignal(v);
-				if (this.modName) updateLoadedConfig(this.modName, name);
+				if (this.modName) updateLoadedConfig(this.modName, name, v);
 			},
 			min,
 			max,
@@ -104,7 +104,7 @@ export default class Configurable {
 			setValue: (v) => {
 				if (value() === v) return;
 				setValueSignal(() => v);
-				if (this.modName) updateLoadedConfig(this.modName, name);
+				if (this.modName) updateLoadedConfig(this.modName, name, v);
 			},
 			options,
 			visible,
@@ -128,7 +128,7 @@ export default class Configurable {
 			setValue: (v) => {
 				if (value() === v) return;
 				setValueSignal(v);
-				if (this.modName) updateLoadedConfig(this.modName, name);
+				if (this.modName) updateLoadedConfig(this.modName, name, v);
 			},
 			placeholder,
 			visible,
@@ -162,7 +162,7 @@ export default class Configurable {
 				if (oldValue === v) return;
 				setValueSignal(v);
 				this.onSubmoduleChange(name, oldValue, v);
-				if (this.modName) updateLoadedConfig(this.modName, name);
+				if (this.modName) updateLoadedConfig(this.modName, name, v);
 			},
 			submodules: items,
 			visible,
@@ -196,7 +196,7 @@ export default class Configurable {
 				const c = color();
 				if (c.h === value.h && c.s === value.s && c.v === value.v && c.o === value.o) return;
 				setColorSignal(value);
-				if (this.modName) updateLoadedConfig(this.modName, name);
+				if (this.modName) updateLoadedConfig(this.modName, name, value);
 			},
 			hue: () => color().h,
 			sat: () => color().s,
@@ -205,7 +205,7 @@ export default class Configurable {
 				const c = color();
 				if (c.h === h && c.s === s && c.v === v && c.o === o) return;
 				setColorSignal({ h, s, v, o });
-				if (this.modName) updateLoadedConfig(this.modName, name);
+				if (this.modName) updateLoadedConfig(this.modName, name, { h, s, v, o });
 			},
 			visible,
 		};

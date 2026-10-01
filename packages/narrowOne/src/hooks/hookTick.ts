@@ -1,5 +1,4 @@
-import game from "@/utils/refs/game";
-import { ready } from "./gameHook";
+import game, { anyReady } from "@/utils/refs/game";
 import Bus from "@/Bus";
 import { showNotification } from "@vape/core/ui/notifications";
 import { Cancelable } from "@vape/core/index";
@@ -38,7 +37,7 @@ export function hookPlayerTick() {
 }
 
 // we only need game for this, main is extra.
-ready.then(() => {
+anyReady.then(() => {
 	hookGameTick();
 	hookPlayerTick();
 });

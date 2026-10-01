@@ -3,11 +3,13 @@
  * @module
  */
 
-import { gameObj } from "@/hooks/gameHook";
-import { main } from "@/hooks/mainHook";
+import { gameObj, ready as gameReady } from "@/hooks/gameHook";
+import { main, ready as mainReady } from "@/hooks/mainHook";
 import { expose } from "@vape/core/exposed";
 
-const game = {
+export const anyReady = Promise.race([gameReady, mainReady]);
+
+const gameRefs = {
 	get instance() {
 		return main?.gameManager?.activeGame ?? gameObj;
 	},
@@ -31,6 +33,6 @@ const game = {
 	}
 };
 
-expose("Refs", () => game);
+expose("Refs", () => gameRefs);
 
-export default game;
+export default gameRefs;

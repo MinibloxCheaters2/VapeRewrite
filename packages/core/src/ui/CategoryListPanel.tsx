@@ -3,12 +3,14 @@ import {
 	createEffect,
 	createSignal,
 	For,
+	onSettled,
 	type Setter,
 	Show,
 } from "solid-js";
 
 import getResourceURL from "../utils/helpers/cachedResourceURL";
 import { dragHandleAttrName } from "../utils/mapping/names";
+import { JSX } from "@solidjs/web/jsx-runtime";
 
 export interface CategoryListPanelProps {
 	/** Panel title displayed in the header */
@@ -104,32 +106,59 @@ export default function CategoryListPanel(props: CategoryListPanelProps) {
 		setDragging(false);
 	};
 
-	// on mount(() => {
-	// 	document.addEventListener("pointermove", handlePointerMove);
-	// 	document.addEventListener("pointerup", handlePointerUp);
-	// });
+	// window.innerHeight is not reactive, so it is mirrored into a signal that
+	// the resize handler can write to.
+	const [viewportHeight, setViewportHeight] = createSignal(window.innerHeight);
+
+	const handleResize = () => {
+		setViewportHeight(window.innerHeight);
+	};
+
+	onSettled(() => {
+		document.addEventListener("pointermove", handlePointerMove);
+		document.addEventListener("pointerup", handlePointerUp);
+		window.addEventListener("resize", handleResize);
+		return () => {
+			document.removeEventListener("pointermove", handlePointerMove);
+			document.removeEventListener("pointerup", handlePointerUp);
+			window.removeEventListener("resize", handleResize);
+		};
+	});
 
 	const isVisible = () => props.visible;
 
-	// Update height when content changes
-	const updateHeight = () => {
+	// The panel is anchored at its `top` offset, so the room left for the
+	// scrolling body is whatever the viewport has below that point. The 560
+	// ceiling is the design max; below it the viewport wins, so a short screen
+	// scrolls instead of running off the bottom.
+	const contentMaxHeight = () => {
+		const fromTop = viewportHeight() - position().y - 45;
+		return Math.max(80, Math.min(fromTop, 560));
+	};
+
+	// Measure after the browser has laid out the new content. The double rAF
+	// lets the pending DOM insert from the reactive update land first.
+	const updateHeight = (maxContentHeight: number) => {
 		if (!expanded() || !contentRef) return;
 		requestAnimationFrame(() => {
 			requestAnimationFrame(() => {
 				const contentH = contentRef?.scrollHeight || 0;
 				const total = 45 + contentH;
-				setWindowHeight(Math.min(total, 611));
+				setWindowHeight(Math.min(total, 45 + maxContentHeight));
 			});
 		});
 	};
 
-	createEffect(() => {
-		// react to these so height updates
-		expanded();
-		showSettings();
-		props.items();
-		void props.children;
-		updateHeight();
+	// react to these so height updates
+	const heightDeps = () => [
+		expanded(),
+		showSettings(),
+		props.items(),
+		props.children,
+		contentMaxHeight(),
+	];
+	createEffect(heightDeps, ([, , , , maxContentHeight]) => {
+		updateHeight(maxContentHeight);
 	});
 
 	const handleAdd = () => {
@@ -156,8 +185,6 @@ export default function CategoryListPanel(props: CategoryListPanelProps) {
 					transition: "height 0.16s linear",
 				}}
 				onPointerDown={handlePointerDown}
-				onPointerUp={handlePointerUp}
-				onPointerMove={handlePointerMove}
 			>
 				{/* Header */}
 				<div
@@ -205,7 +232,7 @@ export default function CategoryListPanel(props: CategoryListPanelProps) {
 						onClick={(e) => {
 							e.stopPropagation();
 							setShowSettings(!showSettings());
-							updateHeight();
+							updateHeight(contentMaxHeight());
 						}}
 						onPointerEnter={() => setSettingsHovered(true)}
 						onPointerLeave={() => setSettingsHovered(false)}
@@ -234,7 +261,7 @@ export default function CategoryListPanel(props: CategoryListPanelProps) {
 						type="button"
 						onClick={() => {
 							setExpanded(!expanded());
-							updateHeight();
+							updateHeight(contentMaxHeight());
 						}}
 						onPointerEnter={() => setArrowHovered(true)}
 						onPointerLeave={() => setArrowHovered(false)}
@@ -263,7 +290,7 @@ export default function CategoryListPanel(props: CategoryListPanelProps) {
 						style={{
 							"overflow-y": "auto",
 							"overflow-x": "hidden",
-							"max-height": "560px",
+							"max-height": `${contentMaxHeight()}px`,
 						}}
 					>
 						{/* Item list */}

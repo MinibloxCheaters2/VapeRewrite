@@ -1,6 +1,6 @@
 import type Mod from "../features/modules/api/Module";
 
-import { createEffect, createSignal, For, onSettled, Show } from "solid-js";
+import { createEffect, createSignal, For, onCleanup, onSettled, Show } from "solid-js";
 
 import Category, { type CategoryInfo } from "../features/modules/api/Category";
 import ModuleManager, { P } from "../features/modules/api/ModuleManager";
@@ -22,7 +22,6 @@ import {
 	toggleCategoryExpanded,
 } from "./guiState";
 import { SubmoduleComponent } from "./SubmoduleComponent";
-import shadowWrapper from "./shadowWrapper";
 
 interface CategoryWindowProps {
 	category: string;
@@ -51,25 +50,45 @@ export function CategoryWindow(props: CategoryWindowProps) {
 	// oxlint-disable-next-line no-unassigned-vars
 	let contentRef: HTMLDivElement | undefined;
 
-	// Update window height when content changes or modules expand/collapse
-	createEffect(expanded, exp => {
-		// Trigger recalculation when updateTrigger changes
-		updateTrigger();
+	// window.innerHeight is not reactive, so it is mirrored into a signal that
+	// the resize handler writes to.
+	const [viewportHeight, setViewportHeight] = createSignal(window.innerHeight);
 
-		if (exp && contentRef) {
-			// Use requestAnimationFrame for immediate update
-			requestAnimationFrame(() => {
-				const height = contentRef.scrollHeight;
-				setWindowHeight(41 + height);
-				// Enable the height transition only after the initial height has
-				// been applied, so an already-open category doesn't replay its
-				// expand animation when the GUI is re-opened.
-				requestAnimationFrame(() => setHeightAnimated(true));
-			});
-		} else {
-			setWindowHeight(41);
-			setHeightAnimated(true);
-		}
+	// The panel is anchored at its `top` offset, so the room left for the
+	// scrolling body is whatever the viewport has below that point. The 560
+	// ceiling is the design max; below it the viewport wins, so a short screen
+	// scrolls instead of running off the bottom.
+	const contentMaxHeight = () => {
+		const fromTop = viewportHeight() - position().y - 41;
+		return Math.max(80, Math.min(fromTop, 560));
+	};
+
+	// Update window height when content changes or modules expand/collapse.
+	// `updateTrigger` is bumped by children that change their own height (a
+	// module's settings opening, a dropdown), so it has to be part of the
+	// compute phase - reading it in the apply phase would not re-run this.
+	const heightDeps = (): [boolean, number, number] => [
+		expanded(),
+		updateTrigger(),
+		contentMaxHeight(),
+	];
+	createEffect(heightDeps, ([exp, , maxContentHeight]) => {
+		// The ref is bound during render, which finishes before the next frame,
+		// so measuring here rather than synchronously also covers the first run.
+		requestAnimationFrame(() => {
+			if (!exp) {
+				setWindowHeight(41);
+				setHeightAnimated(true);
+				return;
+			}
+			if (!contentRef) return;
+			const height = Math.min(contentRef.scrollHeight, maxContentHeight);
+			setWindowHeight(41 + height);
+			// Enable the height transition only after the initial height has
+			// been applied, so an already-open category doesn't replay its
+			// expand animation when the GUI is re-opened.
+			requestAnimationFrame(() => setHeightAnimated(true));
+		});
 	});
 
 	// Provide update function to child components
@@ -111,16 +130,13 @@ export function CategoryWindow(props: CategoryWindowProps) {
 		toggleCategoryExpanded(props.category);
 	};
 
+	const handleResize = () => {
+		setViewportHeight(window.innerHeight);
+	};
+
 	onSettled(() => {
-		// Initial height calculation - use double RAF to ensure DOM is fully rendered
-		if (contentRef) {
-			requestAnimationFrame(() =>
-				requestAnimationFrame(() => {
-					const height = contentRef.scrollHeight;
-					setWindowHeight(41 + height);
-				}),
-			);
-		}
+		window.addEventListener("resize", handleResize);
+		return () => window.removeEventListener("resize", handleResize);
 	});
 
 	// const contentHeight = () => {
@@ -215,9 +231,11 @@ export function CategoryWindow(props: CategoryWindowProps) {
 				<Show when={expanded()}>
 					<div
 						ref={contentRef}
+						class="clickgui-scrollbar"
 						style={{
-							"overflow-y": "visible",
+							"overflow-y": "auto",
 							"overflow-x": "hidden",
+							"max-height": `${contentMaxHeight()}px`,
 						}}
 					>
 						<For each={modules}>
@@ -244,6 +262,11 @@ function ModuleButton(props: { mod: Mod; onExpandChange: () => void }) {
 		requestAnimationFrame(() => props.onExpandChange());
 	};
 
+	// Listens on unsafeWindow, not the shadow root: the GUI is injected into a
+	// shadow tree and a keydown only reaches the root while focus happens to be
+	// inside it, so binds would silently drop input. The listener is symmetric -
+	// added and removed on unsafeWindow - and torn down on dispose too, so a
+	// capture in progress cannot outlive the button.
 	const handleKeyboardEvent = (e: KeyboardEvent) => {
 		if (!listening()) return;
 		setListening(false);
@@ -251,8 +274,12 @@ function ModuleButton(props: { mod: Mod; onExpandChange: () => void }) {
 		e.stopImmediatePropagation();
 		e.stopPropagation();
 		props.mod.bind = e.key.toLowerCase();
-		shadowWrapper.root.removeEventListener("keydown", handleKeyboardEvent);
+		unsafeWindow.removeEventListener("keydown", handleKeyboardEvent);
 	};
+
+	onCleanup(() => {
+		unsafeWindow.removeEventListener("keydown", handleKeyboardEvent);
+	});
 
 	return (
 		<div>
@@ -319,7 +346,7 @@ function ModuleButton(props: { mod: Mod; onExpandChange: () => void }) {
 							e.stopImmediatePropagation();
 							e.stopPropagation();
 							setListening(true);
-							shadowWrapper.root.addEventListener("keydown", handleKeyboardEvent);
+							unsafeWindow.addEventListener("keydown", handleKeyboardEvent);
 						}}
 					>
 						{bind() === "" ? (
@@ -493,8 +520,4 @@ function ModuleSettings(props: { mod: Mod; onExpandChange: () => void }) {
 			</Show>
 		</div>
 	);
-}
-
-export function initNewClickGUI() {
-	// Category windows are now rendered within MainGUI.tsx
 }

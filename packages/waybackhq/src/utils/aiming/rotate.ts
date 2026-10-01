@@ -41,9 +41,6 @@ export default new (class RotationManager {
 	get trackedRot() {
 		return this.#trackedRot;
 	}
-	get serverRotation() {
-		return packetQueueManager.serverRot ?? this.#trackedRot;
-	}
 	get activeRotation() {
 		return this.#currentPlan?.target ?? this.playerRot;
 	}

@@ -1,5 +1,4 @@
-import game from "@/utils/refs/game";
-import { ready } from "./gameHook";
+import game, { anyReady } from "@/utils/refs/game";
 import RotationManager from "@/utils/aiming/rotate";
 import createProxy from "@vape/core/utils/helpers/proxy";
 
@@ -30,4 +29,4 @@ export default function hookHeadRotation() {
 	hookHeadPitch();
 }
 
-ready.then(hookHeadRotation);
+anyReady.then(hookHeadRotation);

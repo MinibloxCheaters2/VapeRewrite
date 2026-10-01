@@ -1,7 +1,9 @@
 import type { Entity } from "@wq2/waybackhq-types/src/entity/entity";
 
 import { Priority } from "@vape/core/event/Bus";
+import createProxy from "@vape/core/utils/helpers/proxy";
 import { ClientPlayer } from "@wq2/waybackhq-types/src/client/clientplayer";
+import { Game } from "@wq2/waybackhq-types/src/game";
 
 import Bus from "@/Bus";
 import RotationManager from "@/utils/aiming/rotate";
@@ -13,7 +15,6 @@ import { ready as CPlrReady, mod as CPlr } from "@/utils/wrappers/clientplayer";
 import { mod } from "@/utils/wrappers/entity";
 
 import Refs, { ready } from "./game";
-import createProxy from "@vape/core/utils/helpers/proxy";
 
 const planFor = (player: Entity): NonNullable<typeof RotationManager.currentPlan> | null => {
 	const plan = RotationManager.currentPlan;
@@ -61,20 +62,26 @@ export async function hook() {
 	);
 	const game = Refs.game;
 	game.applyMouseLook = createProxy(game.applyMouseLook, {
-		apply(target, thisArg: (typeof Refs)["game"], argArray: [apply?: boolean]) {
-			const r = Reflect.apply(target, thisArg, argArray);
+		apply(target, thisArg: Game, argArray: [apply?: boolean]) {
 			const player = thisArg.localPlayer;
-			if (!player) return r;
+			if (!player) return;
 			const plan = planFor(player);
-			if (!plan || argArray[0] === false) return r;
-			player.rotationYawHead = plan.target.yaw;
+			const [oY, oP] = [player.rotationYaw, player.rotationPitch];
+			if (plan) {
+				player.rotationYaw = plan.target.yaw;
+				player.rotationPitch = plan.target.pitch;
+			}
+			const r = Reflect.apply(target, thisArg, argArray);
+			if (!plan) return r;
+			player.rotationYaw = oY;
+			player.rotationPitch = oP;
 			player.renderYawOffset = plan.target.yaw;
 			return r;
 		},
 	});
 	const origFlying = Entity.prototype.moveFlying;
 	Entity.prototype.moveFlying = createProxy(origFlying, {
-		apply(target, thisArg: Entity, args) {
+		apply(target, thisArg: Entity, args: [strafe: number, forward: number, friction: number]) {
 			const plan = planFor(thisArg);
 			if (!plan) return Reflect.apply(target, thisArg, args);
 			const {

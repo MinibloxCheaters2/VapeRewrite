@@ -16,9 +16,9 @@ import "./utils/movement/ServerFallDistance";
 import { initApp } from "@vape/core/ui/app";
 
 import { initHudSystem } from "@/features/hud";
-import { waitForReact } from "@/utils/helpers/waitForReact";
+import waitUntilReady from "./utils/helpers/waitUntilReady";
 
-waitForReact().then(() => {
+waitUntilReady().then(() => {
 	initHudSystem();
 	initApp();
 });

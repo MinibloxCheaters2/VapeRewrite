@@ -4,7 +4,6 @@ import type { AnySetting } from "./Settings";
 import { MAIN_LOGGER as logger } from "../../utils/logging/loggers";
 import { siteKey } from "../../utils/siteKey";
 import ModuleManager, { P } from "../modules/api/ModuleManager";
-import { flush } from "solid-js";
 
 function iterSubSettings(mod: Mod, fn: (s: AnySetting) => void) {
 	for (const s of mod.settings) {
@@ -25,15 +24,22 @@ export interface SerializedSetting<V> {
 	value: V;
 }
 
-function serializeBaseSetting<V>(set: {
-	name: string;
-	type: string;
-	value: () => V;
-}): SerializedSetting<V> {
+/**
+ * Serializes a setting from a value the caller already holds.
+ *
+ * The value is passed in rather than read back off the setting because writes
+ * are batched in Solid 2.0: a read that follows a write in the same tick still
+ * sees the previous value, so serializing here would persist the edit before
+ * this one.
+ */
+function serializeSetting<V>(
+	setting: { name: string; type: string },
+	value: V,
+): SerializedSetting<V> {
 	return {
-		name: set.name,
-		type: set.type,
-		value: set.value(),
+		name: setting.name,
+		type: setting.type,
+		value,
 	};
 }
 
@@ -44,7 +50,7 @@ export class ModuleConfig {
 	) {}
 	static from(mod: Mod): ModuleConfig {
 		const settings: SerializedSetting<unknown>[] = [];
-		iterSubSettings(mod, (s) => settings.push(serializeBaseSetting<unknown>(s)));
+		iterSubSettings(mod, (s) => settings.push(serializeSetting<unknown>(s, s.value())));
 		return new ModuleConfig(mod.enabled, settings);
 	}
 }
@@ -201,8 +207,23 @@ function scheduleSave() {
 	}, 500);
 }
 
-/** Updates the loadedConfig to reflect the current state of modules and settings */
-export function updateLoadedConfig(moduleName?: string, settingName?: string) {
+// Marks "no value supplied" so that a legitimate null/undefined setting value
+// is not mistaken for an omitted argument.
+const NO_VALUE = Symbol("no-value");
+
+/**
+ * Updates the loadedConfig to reflect the current state of modules and settings.
+ *
+ * `value` is the new value the caller just wrote. It must be passed rather than
+ * read back off the setting: writes are batched, so `setting.value()` in the
+ * same tick still returns the previous value and the save would lag one edit
+ * behind.
+ */
+export function updateLoadedConfig(
+	moduleName?: string,
+	settingName?: string,
+	value: unknown = NO_VALUE,
+) {
 	if (!moduleName) {
 		// Full update
 		loadedConfig.modules = serializeModules();
@@ -227,7 +248,10 @@ export function updateLoadedConfig(moduleName?: string, settingName?: string) {
 	});
 	if (!setting) return;
 
-	const serialized = serializeBaseSetting<unknown>(setting);
+	const serialized = serializeSetting<unknown>(
+		setting,
+		value === NO_VALUE ? setting.value() : value,
+	);
 	let moduleConfig = loadedConfig.modules[moduleName];
 	if (!moduleConfig) {
 		// Starting from an empty/missing config: create the module entry so the

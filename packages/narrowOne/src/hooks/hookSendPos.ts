@@ -3,12 +3,11 @@ import { showNotification } from "@vape/core/ui/notifications";
 import createProxy from "@vape/core/utils/helpers/proxy";
 
 import Bus from "@/Bus";
-import game from "@/utils/refs/game";
+import game, { anyReady } from "@/utils/refs/game";
 
-import { ready } from "./gameHook";
 import { ServerMove } from "@/events";
 
-let orig;
+export let origSendPos;
 
 export function hook() {
 	if (!game.player) {
@@ -16,7 +15,7 @@ export function hook() {
 		return;
 	}
 	const prototype = Object.getPrototypeOf(game.player);
-	orig = prototype.sendPlayerDataToServer;
+	origSendPos = prototype.sendPlayerDataToServer;
 	prototype.setServerData = createProxy(prototype.setServerData, {
 		apply(
 			target,
@@ -40,7 +39,7 @@ export function hook() {
 			if (!wrap.canceled) Reflect.apply(target, plr, argArray);
 		},
 	});
-	prototype.sendPlayerDataToServer = createProxy(orig, {
+	prototype.sendPlayerDataToServer = createProxy(origSendPos, {
 		apply(target, thisArg, argArray) {
 			const [origPos, origRot] = [thisArg.pos, thisArg.lookRot];
 			const [pos, rot] = [thisArg.pos.clone(), thisArg.lookRot.clone()];
@@ -60,4 +59,4 @@ export function hook() {
 }
 
 // we only need game for this, main is extra.
-ready.then(hook);
+anyReady.then(hook);

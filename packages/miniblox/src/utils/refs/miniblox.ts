@@ -40,7 +40,7 @@ export async function importMiniblox() {
 
 let miniblox: object;
 
-importMiniblox().then((t) => {
+export const ready = importMiniblox().then((t) => {
 	miniblox = t;
 	expose("MinibloxRaw", () => t);
 });

@@ -47,9 +47,13 @@ export default class AntiCheatBypass extends Mod {
 	category = Category.BLATANT;
 
 	private readonly speedSetting = this.createSliderSetting("Speed", 14, 0.01, 45, 0.01);
+	private readonly maxItersSetting = this.createSliderSetting("MaxIterations", 60, 1, 10, 1);
 
 	private get speed() {
 		return this.speedSetting.value();
+	}
+	private get maxIterations() {
+		return this.maxItersSetting.value();
 	}
 
 	@Bus.Subscribe("serverMove")
@@ -60,11 +64,12 @@ export default class AntiCheatBypass extends Mod {
 		sendPosSilently(data.pos, lr);
 		const lPos: ArrayVec3 = [game.player.pos.x, game.player.pos.y, game.player.pos.z];
 		let finished = false;
-		for (let iterations = 0; !finished && iterations < 30; iterations++) {
-			const [pos, f] = lerpToPosition(lPos, data.pos, this.speed);
+		const {speed, maxIterations} = this;
+		for (let iterations = 0; !finished && iterations < maxIterations; iterations++) {
+			const [pos, f] = lerpToPosition(lPos, data.pos, speed);
 			finished = f;
 			console.info(
-				`lerping: ${data.pos} -> ${lPos} @ ${this.speed} = ${pos} in ${iterations} iters`,
+				`lerping: ${data.pos} -> ${lPos} @ ${speed} = ${pos} in ${iterations} iters. finished: ${finished}`,
 			);
 			sendPosSilently(pos, lr);
 			if (finished) {

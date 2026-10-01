@@ -2,7 +2,7 @@ import type HudElement from "../features/hud/api/BaseHudElement";
 import type Mod from "../features/modules/api/Module";
 
 import { render } from "@solidjs/web";
-import { createEffect, createSignal, For, onCleanup, Show } from "solid-js";
+import { createEffect, createSignal, For, Show } from "solid-js";
 
 import { REAL_CLIENT_NAME } from "../Client";
 import { loadedConfig } from "../features/config/configs";
@@ -171,39 +171,34 @@ function MainGUI() {
 			host.style.zIndex = "";
 			host.style.pointerEvents = "";
 		}
+		// Runs before the next apply and on dispose, so the overlay is never
+		// left attached to a host the GUI has stopped owning.
 		return () => blurOverlay.remove();
 	});
 
-	let guiRainbowTimer: ReturnType<typeof setTimeout> | undefined;
-	createEffect(
-		() => {
-			return {
-				rainbow: guiThemeRainbow(),
-				visible: guiVisible(),
-				rainbowSpeed: rainbowSpeed(),
-				rainbowUpdateRate: rainbowUpdateRate(),
-			};
-		},
-		({ rainbow, rainbowSpeed: speed, rainbowUpdateRate: rate, visible }) => {
-			if (guiRainbowTimer !== undefined) {
-				clearTimeout(guiRainbowTimer);
-				guiRainbowTimer = undefined;
-			}
-			if (!visible || !rainbow) {
-				return;
-			}
-			const interval = rate > 0 ? 1000 / rate : 16;
+	const rainbowDeps = () => ({
+		rainbow: guiThemeRainbow(),
+		visible: guiVisible(),
+		speed: rainbowSpeed(),
+		rate: rainbowUpdateRate(),
+	});
+	createEffect(rainbowDeps, ({ rainbow, visible, speed, rate }) => {
+		if (!visible || !rainbow) return;
+		const interval = rate > 0 ? 1000 / rate : 16;
 
-			const tick = () => {
-				const hue = (Date.now() * 0.001 * 0.2 * speed) % 1;
-				shadowWrapper.wrapper.style.setProperty("--vape-accent", hsvToRgbString(hue, 0.9, 1));
-				guiRainbowTimer = setTimeout(tick, interval);
-			};
-			guiRainbowTimer = setTimeout(tick, interval);
-		},
-	);
-	onCleanup(() => {
-		if (guiRainbowTimer !== undefined) clearTimeout(guiRainbowTimer);
+		// Timer is local to the apply run: the returned cleanup runs before the
+		// next apply and on dispose, so the loop is stopped on every path out.
+		let timer: ReturnType<typeof setTimeout> | undefined;
+		const tick = () => {
+			const hue = (Date.now() * 0.001 * 0.2 * speed) % 1;
+			shadowWrapper.wrapper.style.setProperty("--vape-accent", hsvToRgbString(hue, 0.9, 1));
+			timer = setTimeout(tick, interval);
+		};
+		timer = setTimeout(tick, interval);
+
+		return () => {
+			if (timer !== undefined) clearTimeout(timer);
+		};
 	});
 
 	const openSettingsCategory = (name: string) => {

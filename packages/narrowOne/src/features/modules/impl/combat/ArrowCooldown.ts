@@ -3,7 +3,7 @@ import Mod from "@vape/core/features/modules/api/Module";
 import createProxy from "@vape/core/utils/helpers/proxy";
 
 import { ready } from "@/hooks/gameHook";
-import game from "@/utils/refs/game";
+import game, { anyReady } from "@/utils/refs/game";
 
 let hooked: boolean;
 
@@ -21,7 +21,7 @@ export default class ArrowCooldown extends Mod {
 	category = Category.COMBAT;
 
 	protected onEnable(): void {
-		ready.then(() => {
+		anyReady.then(() => {
 			hooked = true;
 			const p = Object.getPrototypeOf(game.player.bowWeapon);
 			if (typeof p.getLoadSpeed === "function") {

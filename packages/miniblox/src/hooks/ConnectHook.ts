@@ -1,11 +1,11 @@
 import type { ClientSocket } from "@wq2/miniblox-sdk";
 
 import Bus from "@/Bus";
-import { waitForReact } from "@/utils/helpers/waitForReact";
 import Miniblox from "@/utils/refs/miniblox";
 
 import { hookReceivePacket } from "./PacketHook";
 import createProxy from "@vape/core/utils/helpers/proxy";
+import waitUntilReady from "@/utils/helpers/waitUntilReady";
 
 let orig: (typeof ClientSocket)["connect"] | undefined;
 
@@ -23,4 +23,4 @@ export function hookConnect() {
 	});
 }
 
-waitForReact().then(hookConnect);
+waitUntilReady().then(hookConnect);

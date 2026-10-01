@@ -12,6 +12,8 @@ import { mod as THREE } from "@/utils/wrappers/three";
 import Bus from "../../Bus";
 import Rotation, { type IRotation } from "../aiming/rotation";
 import { sendSilently } from "./packetUtil";
+import { SimpleVec3 } from "@vape/core/utils/math/vec";
+import getPosFromPacket from "./getPos";
 
 export class PacketRecord<T> {
 	constructor(
@@ -43,14 +45,14 @@ export default new (class PacketQueueManager {
 	private packetQueue: PacketRecord<AnyPacket>[] = [];
 	#posBox?: Mesh;
 
-	get serverRot(): Rotation | undefined {
-		return Rotation.fromPacket(
-			this.packetQueue.find(Rotation.hasRotation)?.packet as IRotation | undefined,
-		);
-	}
-
 	constructor() {
 		Bus.registerSubscriber(this);
+	}
+
+	get serverPos(): SimpleVec3 | undefined {
+		return getPosFromPacket(
+			this.packetQueue.find((p) => getPosFromPacket(p.packet) !== undefined)?.packet,
+		);
 	}
 
 	get lagging() {

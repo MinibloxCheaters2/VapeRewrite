@@ -71,10 +71,10 @@ export default class KeystrokesHud extends HudElement {
 			}
 		};
 
-		shadowWrapper.root.addEventListener("keydown", handleKeyDown);
-		shadowWrapper.root.addEventListener("keyup", handleKeyUp);
-		shadowWrapper.root.addEventListener("mousedown", handleMouseDown);
-		shadowWrapper.root.addEventListener("mouseup", handleMouseUp);
+		unsafeWindow.addEventListener("keydown", handleKeyDown);
+		unsafeWindow.addEventListener("keyup", handleKeyUp);
+		unsafeWindow.addEventListener("mousedown", handleMouseDown);
+		unsafeWindow.addEventListener("mouseup", handleMouseUp);
 
 		this.#keyDownHandler = handleKeyDown;
 		this.#keyUpHandler = handleKeyUp;

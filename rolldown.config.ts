@@ -80,7 +80,7 @@ function defineGame(
 			dir: `dist/${name}/`,
 			entryFileNames: `${name}.user.js`,
 			minify: false,
-			sourcemap: "inline",
+			// sourcemap: "inline",
 		},
 		tsconfig: `packages/${name}/tsconfig.json`
 	};
@@ -91,5 +91,7 @@ export default defineConfig([
 	defineGame("waybackhq", [thing()]),
 	defineGame("narrowOne"),
 	defineGame("classicNarrowOne"),
+	defineGame("kirka"),
+	defineGame("happy wheels"),
 	defineGame("voxiom"),
 ]);

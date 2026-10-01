@@ -3,9 +3,9 @@ import type { Game, PlayerMovement } from "@wq2/miniblox-sdk";
 import Cancelable from "@vape/core/event/Cancelable";
 
 import Bus from "@/Bus";
-import { waitForReact } from "@/utils/helpers/waitForReact";
 import Miniblox from "@/utils/refs/miniblox";
 import createProxy from "@vape/core/utils/helpers/proxy";
+import waitUntilReady from "@/utils/helpers/waitUntilReady";
 
 let origGameTick: Game["fixedUpdate"];
 let origPlayerTick: PlayerMovement["fixedUpdate"];
@@ -35,7 +35,7 @@ export function hookPlayerTick() {
 	});
 }
 
-waitForReact().then(() => {
+waitUntilReady().then(() => {
 	hookGameTick();
 	hookPlayerTick();
 });
