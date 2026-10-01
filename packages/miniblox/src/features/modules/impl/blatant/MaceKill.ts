@@ -38,7 +38,7 @@ export default class MaceKill extends Mod {
 		if (!isC2S("SPacketUseEntity", pkt) || pkt.action !== 1) return;
 		const { player, Items } = Miniblox;
 		if (player.inventory.getCurrentItem()?.item !== Items.mace) return;
-		teleport(player.pos.y + this.fallDistance, true);
+		teleport(player.pos.y + this.fallDistance, false);
 		teleport(player.pos.y, false);
 	}
 }
