@@ -26,6 +26,9 @@ interface GlobalSettings {
 	friendsColorVal: number;
 	targetsList: string[];
 	targetsEnabled: string[];
+	// scriptsList: string[];
+	// scriptsEnabled: string[];
+	// scriptsData: Record<string, string>;
 	targetPlayersEnabled: boolean;
 	targetNPCsEnabled: boolean;
 	showHealth: boolean;
@@ -58,6 +61,9 @@ const DEFAULTS: GlobalSettings = {
 	friendsColorVal: 1,
 	targetsList: [],
 	targetsEnabled: [],
+	// scriptsList: [],
+	// scriptsEnabled: [],
+	// scriptsData: {},
 	targetPlayersEnabled: true,
 	targetNPCsEnabled: false,
 	showHealth: false,
@@ -106,6 +112,9 @@ export const [friendsColorVal, setFriendsColorVal] = createSignal(initial.friend
 
 export const [targetsList, setTargetsList] = createSignal(initial.targetsList);
 export const [targetsEnabled, setTargetsEnabled] = createSignal(initial.targetsEnabled);
+// export const [scriptsList, setScriptsList] = createSignal(initial.scriptsList);
+// export const [scriptsEnabled, setScriptsEnabled] = createSignal(initial.scriptsEnabled);
+// export const [scriptsData, setScriptsData] = createSignal<Record<string, string>>(initial.scriptsData);
 export const [targetPlayersEnabled, setTargetPlayersEnabled] = createSignal(
 	initial.targetPlayersEnabled,
 );
@@ -139,6 +148,9 @@ createEffect(
 			friendsColorVal: friendsColorVal(),
 			targetsList: targetsList(),
 			targetsEnabled: targetsEnabled(),
+			// scriptsList: scriptsList(),
+			// scriptsEnabled: scriptsEnabled(),
+			// scriptsData: scriptsData(),
 			targetPlayersEnabled: targetPlayersEnabled(),
 			targetNPCsEnabled: targetNPCsEnabled(),
 			showHealth: showHealth(),

@@ -188,7 +188,7 @@ export default class ArrayListHud extends HudElement {
 	}
 
 	public render() {
-		const modules = ModuleManager.modules.map((a) => ({
+		const modules = ModuleManager.instance.modules.map((a) => ({
 			name: a.name,
 			tag: a.tagAccessor,
 			enabled: a.stateAccessor,

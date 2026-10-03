@@ -148,3 +148,10 @@ try {
 } catch (error) {
 	logger.error("Failed to register GUI keybinds:", error);
 }
+
+
+// export const [scriptsList, setScriptsList] = createSignal<string[]>([]);
+// export const [scriptsEnabled, setScriptsEnabled] = createSignal<string[]>([]);
+// export const [scriptsData, setScriptsData] = createSignal<Record<string, string>>({});
+// export const [scriptsPanelVisible, setScriptsPanelVisible] = createSignal(false);
+// export const [scriptsPanelPosition, setScriptsPanelPosition] = createSignal<Position>({ x: 0, y: 0 });

@@ -28,6 +28,7 @@ import {
 	PlayerControllerMP,
 	SkinManager,
 	TextureManager,
+	ItemSpear,
 } from "@wq2/miniblox-sdk";
 
 import { scriptEl } from "@/hooks/gameScript";
@@ -82,6 +83,7 @@ let _playerController: PlayerController | undefined;
 let _Blocks: AllBlocks | undefined;
 let _Materials: typeof Materials | undefined;
 let _Items: typeof Items | undefined;
+let _ItemSpear: typeof ItemSpear | undefined;
 let _ItemSword: typeof ItemSword | undefined;
 let _ItemArmor: typeof ItemArmor | undefined;
 let _ItemStack: typeof ItemStack | undefined;
@@ -252,6 +254,9 @@ const Miniblox = {
 				(x) => typeof x === "function" && "redstoneLight" in x && "air" in x && "leaves" in x,
 			),
 		);
+	},
+	get ItemSpear() {
+		return initOrR(_ItemSpear, () => Miniblox.Items.infernium_spear.constructor as typeof ItemSpear);
 	},
 	get ItemBlock() {
 		return initOrR(_ItemBlock, () => Miniblox.Items.stone.constructor as typeof ItemBlock);

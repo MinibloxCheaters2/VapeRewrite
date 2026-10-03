@@ -49,6 +49,7 @@ import {
 	setCategoryWindowPositions,
 	setFriendsPanelVisible,
 	setTargetsPanelVisible,
+	// setScriptsPanelVisible,
 	toggleCategoryWindow,
 	toggleLegitWindow,
 } from "./guiState";
@@ -458,6 +459,7 @@ function MainGUI() {
 							onClick={() => setProfilesPanelVisible(true)}
 						/>
 						<MiscItem label="Targets" onClick={() => setTargetsPanelVisible((v) => !v)} />
+						{/* <MiscItem label="Scripts" onClick={() => setScriptsPanelVisible((v) => !v)} /> */}
 					</div>
 
 					<div class="vape-bottom-bar">

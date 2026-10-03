@@ -6,7 +6,6 @@ import globalCss from "../style.css";
 import { initFriendsPanel } from "./FriendsPanel";
 import { initHudGUI } from "./HudGUI";
 import { initMainGUI } from "./MainGUI";
-import { initMusicPlayer } from "./MusicPlayer";
 import { initNotifications } from "./notifications";
 import { initProfilesPanel } from "./ProfilesPanel";
 import { initSettingsPanel } from "./SettingsPanel";

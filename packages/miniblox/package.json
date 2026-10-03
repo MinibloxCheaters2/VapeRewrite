@@ -11,7 +11,7 @@
 		"@wq2/packet-gen-wasm": "^0.0.2"
 	},
 	"devDependencies": {
-		"@wq2/miniblox-sdk": "3.46.200-0.0.0",
+		"@wq2/miniblox-sdk": "3.46.229-0.0.0",
 		"@types/three": "0.170.0"
 	}
 }

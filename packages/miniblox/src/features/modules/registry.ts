@@ -50,6 +50,8 @@ import Test from "./impl/utility/Test";
 import LiquidWalk from "./impl/world/LiquidWalk";
 import NoFall from "./impl/world/NoFall";
 import Timer from "./impl/world/Timer";
+import Lunge from "./impl/combat/Lunge";
+import TPAura from "./impl/blatant/TPAura";
 
 export const mm = create(
 	// blatant
@@ -64,6 +66,7 @@ export const mm = create(
 	new Speed(),
 	new TargetStrafe(),
 	new TickBase(),
+	new TPAura,
 
 	// combat
 	new AutoClicker(),
@@ -71,6 +74,7 @@ export const mm = create(
 	new NoRecoil(),
 	new Velocity(),
 	new WTap(),
+	new Lunge(),
 
 	// inventory
 	new AutoArmor(),

@@ -8,6 +8,7 @@ import waitTicks from "@vape/core/utils/time/wait";
 import { SubscribeAsync } from "@/event/Bus";
 import { isC2S } from "@/utils";
 import Miniblox from "@/utils/refs/miniblox";
+import selectSlot from "@/utils/inventory/selectSlot";
 
 export default class AutoSword extends Mod {
 	public name = "AutoSword";
@@ -118,7 +119,7 @@ export default class AutoSword extends Mod {
 		player.inventory.currentItem = swordSlot;
 		// this should work if my remap proxy works
 		Miniblox.playerControllerMP.syncItem();
-		game.info.selectedSlot = swordSlot;
+		selectSlot(swordSlot);
 		this.lastSlotSwitch = now;
 	}
 
@@ -126,8 +127,7 @@ export default class AutoSword extends Mod {
 		const { player, game } = Miniblox;
 		if (!player || !game || this.previousSlot === null) return;
 
-		player.inventory.currentItem = this.previousSlot;
-		game.info.selectedSlot = this.previousSlot;
+		selectSlot(this.previousSlot);
 		Miniblox.playerControllerMP.syncItem();
 		this.previousSlot = null;
 	}

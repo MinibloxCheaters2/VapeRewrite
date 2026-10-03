@@ -14,7 +14,7 @@ import { main } from "@/hooks/mainHook";
 import game from "../refs/game";
 import Rotation from "./rotation";
 import THREE from "../refs/three";
-import { BufferGeometry, Line, LineBasicMaterial, NormalBufferAttributes } from "three";
+import type { BufferGeometry, Line, LineBasicMaterial, NormalBufferAttributes } from "three";
 
 export class RotationPlan {
 	constructor(
