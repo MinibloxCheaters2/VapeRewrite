@@ -8,6 +8,7 @@ import "./utils/network/WasmTest";
 import "./hooks/init";
 import "./features/modules/legit";
 import "./features/commands/Listener";
+import "./features/commands/CommandManager";
 import "./utils/network/packetQueueManager";
 import "./utils/aiming/rotate";
 import "./features/modules/registry";
