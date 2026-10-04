@@ -25,8 +25,8 @@
 		"fmt": "oxfmt check packages/*/src"
 	},
 	"catalog": {
-		"@solidjs/web": "^2.0.0-rc.9",
-		"solid-js": "2.0.0-rc.9"
+		"@solidjs/web": "2.0.0-rc.13",
+		"solid-js": "2.0.0-rc.13"
 	},
 	"dependencies": {
 		"@wq2/brigadier-ts": "^1.0.8",
@@ -37,7 +37,7 @@
 		"@solidjs/web": "catalog:"
 	},
 	"devDependencies": {
-		"@solidjs/compiler": "^2.0.0-rc.9",
+		"@solidjs/compiler": "^2.0.0-rc.13",
 		"@violentmonkey/types": "^0.3.3",
 		"@wq2/rolldown-plugin-swc": "^0.0.2",
 		"cross-env": "^10.1.0",
