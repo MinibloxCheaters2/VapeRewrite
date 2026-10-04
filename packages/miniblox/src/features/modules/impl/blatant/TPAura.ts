@@ -118,7 +118,7 @@ export default class TPAura extends Mod {
 		if (outOfRange) {
 			ClientSocket.sendPacket(
 				new SPacketPlayerPosLook({
-					onGround: true,
+					onGround: player.onGround,
 					pos: e.pos,
 					yaw: rots.yaw,
 					pitch: rots.pitch,
@@ -163,10 +163,10 @@ export default class TPAura extends Mod {
 		if (outOfRange)
 			ClientSocket.sendPacket(
 				new SPacketPlayerPosLook({
-					onGround: true,
+					onGround: player.onGround,
 					pos: player.pos,
-					yaw: rots.yaw,
-					pitch: rots.pitch,
+					yaw: player.yaw,
+					pitch: player.pitch,
 				}),
 			);
 	}
