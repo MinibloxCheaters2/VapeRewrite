@@ -28,7 +28,7 @@ It's not as hard, but finding some stuff is annoying sometimes
 (i.e. remapping more fields/symbols).
 
 See [Epstein List] for the list.
-[Epstein List](https://github.com/MinibloxCheaters2/miniblox-sdk/blob/main/CONTRIBUTING.md#useful-bundle-versions)
+[Epstein List]: <https://github.com/MinibloxCheaters2/miniblox-sdk/blob/main/CONTRIBUTING.md#useful-bundle-versions>
 
 ## Project structure
 
