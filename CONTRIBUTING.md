@@ -4,7 +4,7 @@ To make a cheat for Miniblox, you need to understand how Miniblox works...
 
 ## Miniblox internals
 
-- [Vite] (latest version, since they have Rolldown, and there's chunking/code splitting enabled because libraries like i.e. ThreeJS are in separate files, ESM)
+- [Vite] (latest version, since they have Rolldown, and there's chunking/code splitting enabled because libraries like ThreeJS are in separate files, ESM)
 - [ThreeJS] (r184, see the `canvas` with `data-engine="three.js r184"`)
 - [TypeScript] (confirmed by enums being structured like IIFEs and way the too-many AI sloppenated comments in `index.html`)
 - [NextJS] (?, app/client/**src/lib**/{...}.ts is a very common NextJS file structure)
