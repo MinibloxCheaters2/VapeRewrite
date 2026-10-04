@@ -1,0 +1,43 @@
+import type { BlockPos } from "@wq2/miniblox-sdk";
+
+import Category from "@vape/core/features/modules/api/Category";
+import Mod from "@vape/core/features/modules/api/Module";
+
+import { Subscribe } from "@/event/Bus";
+import { blockHandlers, oneInRange } from "@/utils";
+import Miniblox from "@/utils/refs/miniblox";
+
+export default class ChestAura extends Mod {
+	name = "ChestAura";
+	category = Category.MINIGAMES;
+
+	#rng = this.createSliderSetting("Range", 0.5, 1.5, 6.5, 0.5);
+	#lootedPositions: BlockPos[] = [];
+
+	get #range() {
+		return this.#rng.value();
+	}
+
+	// TODO(ChestAura): clear on world change or disconnect
+	@Subscribe("connect")
+	private onConnect() {
+		this.#lootedPositions.length = 0;
+	}
+
+	@Subscribe("playerTick")
+	private onPlayerTick() {
+		const { Blocks, world } = Miniblox;
+		if (world === undefined) return;
+		const chest = oneInRange(this.#range, (pos) => {
+			return (
+				!this.#lootedPositions.includes(pos) &&
+				world.getBlock(pos) instanceof Blocks.chest.constructor
+			);
+		});
+		if (chest) {
+			this.#lootedPositions.push(chest);
+			blockHandlers.rightClick(chest);
+			return;
+		}
+	}
+}

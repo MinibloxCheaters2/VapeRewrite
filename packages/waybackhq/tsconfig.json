@@ -1,0 +1,12 @@
+{
+	"extends": "../../tsconfig.json",
+	"compilerOptions": {
+		"paths": {
+			"@/*": ["./src/*"],
+			"@vape/core/*": ["../core/src/*"],
+			"@vape/core": ["../core/src"],
+			"@wq2/waybackhq-types/*": ["./src/*"]
+		}
+	},
+	"include": ["src/**/*"]
+}

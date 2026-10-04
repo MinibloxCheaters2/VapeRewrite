@@ -9,7 +9,6 @@ function minifyPlugin(opts?: Opts): Plugin {
 		{
 			name: "oxc-minify",
 			renderChunk: {
-				order: "pre",
 				handler(code, chunk) {
 					const result = minifySync(chunk.fileName, code, {
 						sourcemap: true,

@@ -6,12 +6,16 @@
 		"declaration": false,
 		"allowSyntheticDefaultImports": true,
 		"jsx": "preserve",
-		"jsxImportSource": "solid-js",
+		"jsxImportSource": "@solidjs/web",
 		"skipLibCheck": true,
 		"lib": ["DOM", "DOM.Iterable", "ESNext"],
-		"paths": {
-			"@/*": ["./src/*"],
-		},
+		"strict": false
 	},
-	"include": ["src/**/*"],
+	"include": [
+		"rolldown.config.ts",
+		"cssMinifyPlugin.ts",
+		"minifyPlugin.ts",
+		"thingPlugin.ts",
+		"oxfmt.config.ts"
+	]
 }

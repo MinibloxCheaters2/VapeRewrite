@@ -1,0 +1,32 @@
+import game, { anyReady } from "@/utils/refs/game";
+import RotationManager from "@/utils/aiming/rotate";
+import createProxy from "@vape/core/utils/helpers/proxy";
+
+let skeletonProto: any = null;
+
+export function hookHeadPitch() {
+	const skel = game.player?.skeleton;
+	if (!skel || skeletonProto) return;
+
+	skeletonProto = Object.getPrototypeOf(skel);
+	const orig = skeletonProto.setLookRotY;
+	skeletonProto.setLookRotY = createProxy(orig, {
+		apply(target, thisArg, args) {
+			if (thisArg === game.player?.skeleton) {
+				const plan = RotationManager.currentPlan;
+				if (plan) args[0] = -plan.target.pitch;
+			}
+			return Reflect.apply(target, thisArg, args);
+		},
+	});
+}
+
+export function hookHeadYaw() {
+}
+
+export default function hookHeadRotation() {
+	hookHeadYaw();
+	hookHeadPitch();
+}
+
+anyReady.then(hookHeadRotation);

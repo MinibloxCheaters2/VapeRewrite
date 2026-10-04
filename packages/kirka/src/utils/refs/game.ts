@@ -1,0 +1,70 @@
+import { expose } from "@vape/core/exposed";
+
+import VueStore from "./vueStore";
+import { Game, Player } from "../types/unknown";
+import remapObj from "@vape/core/utils/helpers/remapProxy";
+import mappings from "../mappings/mappings";
+
+let rawGame, game;
+
+const gameRefs = {
+	get vueState() {
+		return VueStore.state;
+	},
+
+	get rawWorld() {
+		const g = gameRefs.game;
+		if (!g) return;
+		return g.world;
+	},
+
+	get world() {
+		const {rawWorld} = gameRefs;
+		return remapObj(rawWorld, mappings.world);
+	},
+
+	/**
+	 * > [!WARNING]
+	 * > this doesn't have the localPlayer.
+	 * @returns player ID thing -> player
+	 */
+	get players(): Map<string, Player> {
+		const w = gameRefs.world;
+		if (!w) return;
+		return w.players;
+	},
+	// get lUser() {
+	// 	return Object.values(gameRefs.vueState).find(
+	// 		(x) =>
+	// 			typeof x === "object" && ["dailyReward", "firstGameDone", "inventory"].every((q) => q in x),
+	// 	)?.user;
+	// },
+	get localPlayer(): Player {
+		const g = gameRefs.game;
+		if (!g) return;
+		return remapObj(g.localPlayer, mappings.player);
+	},
+
+	/** raw game obj without any remap proxy */
+	get rawGame(): Game {
+		if (rawGame) return rawGame;
+		const vState = gameRefs.vueState;
+		if (!vState) return;
+		rawGame = Object.values(vState).find((value) => {
+			return value != null && "version" in value;
+		});
+		return rawGame;
+	},
+
+	get game(): Game {
+		if (game) return game;
+		const {rawGame} = gameRefs;
+		if (!rawGame) return;
+		game = remapObj(rawGame, mappings.game);
+		return game;
+	},
+};
+
+export default gameRefs;
+
+expose("Refs", () => gameRefs);
