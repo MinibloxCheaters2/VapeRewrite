@@ -1,7 +1,7 @@
 import { expose } from "@vape/core/exposed";
 import initOrR from "@vape/core/utils/helpers/initOrR";
 import remapObj from "@vape/core/utils/helpers/remapProxy";
-import { getInheritanceTree, type HasProto } from "@vape/core/utils/helpers/tree";
+import { getInheritanceChain } from "@vape/core/utils/helpers/tree";
 import logger from "@vape/core/utils/logging/loggers";
 import {
 	AllBlocks,
@@ -350,7 +350,7 @@ const Miniblox = {
 		return initOrR(
 			_EntityLivingBase,
 			() =>
-				Array.from(getInheritanceTree(Miniblox.player as unknown as HasProto)).find((x) => {
+				Array.from(getInheritanceChain(Miniblox.player)).find((x) => {
 					const ctor = (
 						x as unknown as EntityLivingBase & {
 							constructor: typeof EntityLivingBase;
