@@ -20,7 +20,7 @@ jobs:
         run: bun install
 
       - name: Build
-        run: bun run build:js
+        run: bun run build
 
       - name: Upload artifacts
         uses: forgejo/upload-artifact@v5
