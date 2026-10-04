@@ -16,6 +16,13 @@ jobs:
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
 
+      - uses: actions/cache@v6
+        with:
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-${{ matrix.bun }}-bun-${{ hashFiles('**/bun.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ matrix.bun }}-bun-
+
       - name: Install
         run: bun install
 
