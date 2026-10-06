@@ -12,7 +12,7 @@ interface Response {
 	updatedAt: number;
 }
 
-const {mirrors, updatedAt} = await fetch("https://miniblox.io/auth-api/mirrors", {
+const {mirrors} = await fetch("https://miniblox.io/auth-api/mirrors", {
 	headers: {
 		accept: "*/*",
 		"accept-language": "en-US,en;q=0.9",
