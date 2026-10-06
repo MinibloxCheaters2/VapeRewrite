@@ -6,7 +6,8 @@ Currently the only UserScript cheeto for Miniblox that is being updated frequent
 ## A note on developer console injection
 
 This will be supported soon,
-as we have swapped out code replacement-based injection for our own hooking method, and it now runs way after the page loads.
+as we have swapped out code replacement-based injection for our own hooking method,
+and it now runs way after the page loads.
 
 ## Development (using [Bun](https://bun.sh))
 
@@ -15,6 +16,7 @@ as we have swapped out code replacement-based injection for our own hooking meth
 $ bun run dev
 
 # To build script and minify the code
+# (TODO: fix minification with whitespace/comments removal breaking builds again)
 $ bun run build
 
 # Linting to check for any errors
