@@ -30,6 +30,11 @@ Object.getOwnPropertyNames = replaceAndCopyFunction(Object.getOwnPropertyNames, 
 	return list;
 });
 
+Object.keys = replaceAndCopyFunction(Object.keys, (list) => {
+	spliceIt(list, exposedName);
+	return list;
+});
+
 Object.getOwnPropertyDescriptors = replaceAndCopyFunction(Object.getOwnPropertyDescriptors, (l) => {
 	delete l[exposedName];
 	return l;
