@@ -13,7 +13,6 @@ import { AnyPacket } from "@/hooks/packetHook";
 import { mod as protocol } from "@/utils/wrappers/protocol";
 
 import MovementCorrection from "../movement/MovementCorrection";
-import packetQueueManager from "../network/packetQueueManager";
 import Rotation from "./rotation";
 
 export class RotationPlan {

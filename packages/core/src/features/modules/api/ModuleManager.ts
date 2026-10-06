@@ -19,7 +19,7 @@ export default class ModuleManager {
 
 	public static get instance() {
 		if (!_instance) {
-			debugger;
+			
 			throw new Error("ModManager accessed before create(...) called");
 		};
 		return _instance;

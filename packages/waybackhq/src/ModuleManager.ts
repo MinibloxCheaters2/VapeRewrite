@@ -1,4 +1,4 @@
-import ModuleManager, { create } from "@vape/core/features/modules/api/ModuleManager";
+import { create } from "@vape/core/features/modules/api/ModuleManager";
 
 import Derp from "./features/modules/impl/blatant/Derp";
 import Fly from "./features/modules/impl/blatant/fly";

@@ -10,7 +10,7 @@ import { mod as protocol } from "@/utils/wrappers/protocol";
 import { mod as THREE } from "@/utils/wrappers/three";
 
 import Bus from "../../Bus";
-import Rotation, { type IRotation } from "../aiming/rotation";
+
 import { sendSilently } from "./packetUtil";
 import { SimpleVec3 } from "@vape/core/utils/math/vec";
 import getPosFromPacket from "./getPos";

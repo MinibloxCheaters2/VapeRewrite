@@ -4,6 +4,7 @@ import Mod from "@vape/core/features/modules/api/Module";
 import Bus from "@/Bus";
 import getMovement from "@/utils/movement/getMoveDir";
 import game from "@/utils/refs/game";
+import isKeyDown from "@/utils/input/key";
 
 
 export default class Fly extends Mod {
@@ -23,11 +24,12 @@ export default class Fly extends Mod {
 		velocity.z = z;
 		const vSpeed = this.verticalSpeedSetting.value();
 		let yVelocity = 0;
-		// if (up && !down) {
-		// 	yVelocity = vSpeed;
-		// } else if (down && !up) {
-		// 	yVelocity = -vSpeed;
-		// }
+		const [up, down] = [isKeyDown("Space"), isKeyDown("Shift")];
+		if (up && !down) {
+			yVelocity = vSpeed;
+		} else if (down && !up) {
+			yVelocity = -vSpeed;
+		}
 		velocity.y = yVelocity;
 	}
 

@@ -1,6 +1,6 @@
 import type BaseHudElement from "../features/hud/api/BaseHudElement";
 
-import { createSignal, For, onCleanup, Show } from "solid-js";
+import { createSignal, For, Show } from "solid-js";
 import { render } from "@solidjs/web";
 
 import { getName, type ModeLike } from "../features/config/Settings";

@@ -10,7 +10,6 @@ export default class NoFall extends Mod {
 	public name = "NoFall";
 	public category = Category.WORLD;
 	#modeSetting = this.createDropdownSetting("Mode", ["Normal", "AntiCheat"]);
-	#doFlag = false;
 
 	private get mode() {
 		return this.#modeSetting.value();
@@ -28,7 +27,7 @@ export default class NoFall extends Mod {
 			case "AntiCheat":
 				{
 					if (!Refs.player.onGround && Refs.player.fallDistance >= MAX_FALL_DISTANCE) {
-						const { localPlayer: player, world, session } = Refs.game;
+						const { session } = Refs.game;
 						if (Refs.player.onGround) {
 							return;
 						}

@@ -11,7 +11,7 @@ import Bus from "../../Bus";
  */
 export default function waitTicks(ticks: number) {
 	let t = 0;
-	return new Promise<number>((res, _) => {
+	return new Promise<number>((res, __) => {
 		Bus.onceB("gameTick", () => {
 			if (t++ >= ticks) {
 				res(t);
@@ -27,7 +27,7 @@ export default function waitTicks(ticks: number) {
  */
 export function waitTick() {
 	let t = 0;
-	return new Promise<number>((res, _) => {
+	return new Promise<number>((res, __) => {
 		Bus.once("gameTick", () => {
 			t++;
 			res(t);

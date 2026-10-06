@@ -11,7 +11,7 @@ export default class AutoReport extends Mod {
 
 	@Bus.Subscribe("playerTick")
 	private onTick() {
-		const {players, player, network, instance: game} = Refs;
+		const {players, player, network} = Refs;
 		// network is undefined in the case of us not having `main`.
 		// game can't be undefined, since well...
 		// our hook runs when the player loop is called.

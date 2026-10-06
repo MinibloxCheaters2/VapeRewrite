@@ -2,7 +2,6 @@ import Category from "@vape/core/features/modules/api/Category";
 import Mod from "@vape/core/features/modules/api/Module";
 import createProxy from "@vape/core/utils/helpers/proxy";
 
-import { ready } from "@/hooks/gameHook";
 import game, { anyReady } from "@/utils/refs/game";
 
 let hooked: boolean;

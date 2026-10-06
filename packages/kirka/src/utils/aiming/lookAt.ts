@@ -1,7 +1,14 @@
-import { SimpleVec3 } from "@vape/core/src/utils/math/vec";
-import gameRefs from "../refs/game";
-const yawMax = Math.PI * 2; // if it's above this, move down to 0
+/**
+ * @todo: implement properly
+ * pasted from Trollium for Kirka.io
+ */
 
+(() => {})();
+
+// import { SimpleVec3 } from "@vape/core/src/utils/math/vec";
+// import gameRefs from "../refs/game";
+// const yawMax = Math.PI * 2; // if it's above this, move down to 0
+/*
 export function lookAt({ x, y, z }: SimpleVec3, returnValues = false) {
 	const localPosition = gameRefs.localPlayer[offsets.playerPosition];
 
@@ -43,23 +50,8 @@ function screen(position) {
 		position[offsets.z],
 	);
 
-	const rotation = camera[offsets.rotation];
-	/*
-            const cameraX = rotation[offsets.x]
-            const cameraY = rotation[offsets.y]
-            const cameraZ = rotation[offsets.z]
-            */
 
 	// Camera order is YXZ
-	/*
-            const viewAngles = angles()
-            rotation[offsets.x] = viewAngles[offsets.x]
-            rotation[offsets.y] = viewAngles[offsets.y]
-
-            camera[offsets.updateWorldMatrix](true)
-            camera[offsets.updateMatrixWorld](true)
-            camera[offsets.updateProjectionMatrix]()
-            */
 
 	cloned[offsets.project](camera);
 
@@ -70,3 +62,4 @@ function screen(position) {
 
 	return [screenX, screenY, visible];
 }
+*/

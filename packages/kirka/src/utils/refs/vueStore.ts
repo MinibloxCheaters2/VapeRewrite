@@ -1,7 +1,9 @@
 import { expose } from "@vape/core/exposed";
 import initOrR from "@vape/core/src/utils/helpers/initOrR";
 
+// oxlint-disable-next-line no-unassigned-vars
 let _store;
+// oxlint-disable-next-line no-unassigned-vars
 let _state;
 
 const VueStore = {

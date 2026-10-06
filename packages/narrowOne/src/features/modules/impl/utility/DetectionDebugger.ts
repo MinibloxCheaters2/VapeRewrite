@@ -7,7 +7,7 @@
  * @module
  */
 
-import { ready } from "@/hooks/gameHook";
+
 import { main, thing } from "@/hooks/mainHook";
 import game, { anyReady } from "@/utils/refs/game";
 import Category from "@vape/core/features/modules/api/Category";

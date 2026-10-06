@@ -43,7 +43,7 @@ export async function hookReceivePacket() {
 			try {
 				packet = JSON.parse(argArray[0]);
 			} catch (error) {
-				return;
+				return void error;
 			}
 			if (!Array.isArray(packet)) {
 				return;

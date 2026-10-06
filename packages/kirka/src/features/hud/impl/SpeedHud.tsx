@@ -18,29 +18,29 @@ export default class SpeedHud extends HudElement {
 	});
 	private speedSignal = createSignal(0);
 	#updateFrame: number;
-	#lastPos: { x: number; z: number } | null = null;
-	#lastTime = 0;
+	// #lastPos: { x: number; z: number } | null = null;
+	// #lastTime = 0;
 
 	public onAdd(): void {
 		const update = () => {
 			try {
-				throw "TODO";
-				const { localPlayer: player } = Refs.game;
-				if (!player) return;
-				const now = performance.now();
-				const dt = (now - this.#lastTime) / 1000;
-				const pos = player.getPosition(1);
+				// throw "TODO";
+				// const { localPlayer: player } = Refs.game;
+				// if (!player) return;
+				// const now = performance.now();
+				// const dt = (now - this.#lastTime) / 1000;
+				// const pos = player.getPosition(1);
 
-				if (this.#lastPos && dt > 0) {
-					const dx = pos.x - this.#lastPos.x;
-					const dz = pos.z - this.#lastPos.z;
-					const dist = Math.sqrt(dx * dx + dz * dz);
-					const speed = (dist / dt) * 20;
-					this.speedSignal[1](Math.round(speed * 10) / 10);
-				}
+				// if (this.#lastPos && dt > 0) {
+				// 	const dx = pos.x - this.#lastPos.x;
+				// 	const dz = pos.z - this.#lastPos.z;
+				// 	const dist = Math.sqrt(dx * dx + dz * dz);
+				// 	const speed = (dist / dt) * 20;
+				// 	this.speedSignal[1](Math.round(speed * 10) / 10);
+				// }
 
-				this.#lastPos = { x: pos.x, z: pos.z };
-				this.#lastTime = now;
+				// this.#lastPos = { x: pos.x, z: pos.z };
+				// this.#lastTime = now;
 			} catch {}
 			this.#updateFrame = requestAnimationFrame(update);
 		};

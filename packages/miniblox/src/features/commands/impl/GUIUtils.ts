@@ -4,7 +4,7 @@ import { literal } from "@wq2/brigadier-ts";
 import Miniblox from "@/utils/refs/miniblox";
 
 dispatcher.register(
-	literal("enchant").executes(async (_) => {
+	literal("enchant").executes(async (__) => {
 		Miniblox.game.player.displayGui({
 			getGuiID() {
 				return "enchanting_table";
@@ -14,7 +14,7 @@ dispatcher.register(
 );
 
 dispatcher.register(
-	literal("craft").executes(async (_) => {
+	literal("craft").executes(async () => {
 		Miniblox.game.player.displayGui({
 			getGuiID() {
 				return "workbench";

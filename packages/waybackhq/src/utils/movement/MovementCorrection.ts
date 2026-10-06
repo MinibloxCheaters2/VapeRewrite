@@ -1,7 +1,7 @@
 import type { Tagged } from "@vape/core/features/config/Settings";
-import type { SPacketPlayerInput } from "@wq2/miniblox-sdk";
 
-import RotationManager from "../aiming/rotate";
+
+
 
 /**
  * Corrects your movement.
