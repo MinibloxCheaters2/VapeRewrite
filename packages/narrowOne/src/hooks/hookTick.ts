@@ -1,7 +1,7 @@
 import game, { anyReady } from "@/utils/refs/game";
 import Bus from "@/Bus";
 import { showNotification } from "@vape/core/ui/notifications";
-import { Cancelable } from "@vape/core/index";
+import { Cancelable, expose } from "@vape/core/index";
 import createProxy from "@vape/core/utils/helpers/proxy";
 
 let origGameLoop, origPlayerLoop;
@@ -36,8 +36,9 @@ export function hookPlayerTick() {
 	});
 }
 
-// we only need game for this, main is extra.
 anyReady.then(() => {
 	hookGameTick();
 	hookPlayerTick();
 });
+expose("hookGameTick", () => hookGameTick);
+expose("hookPlayerTick", () => hookPlayerTick);
