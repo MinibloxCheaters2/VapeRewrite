@@ -27,9 +27,9 @@ export default class KillAura extends Mod {
 				oPlr.pos,
 				player.pos
 			);
-			RotationManager.scheduleRotation(new RotationPlan(look, 5));
-			player.addMeleeHitFlash();
-			network.sendMeleeHitPlayer(
+			RotationManager.scheduleRotation(new RotationPlan(look, 2));
+			oPlr.addMeleeHitFlash();
+			for (let i = 0; i < 9; i++) network.sendMeleeHitPlayer(
 				oPlr.id,
 				oPlr.currentSpawnId,
 				player.id // myId
