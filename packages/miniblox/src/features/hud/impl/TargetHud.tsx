@@ -6,7 +6,6 @@ import { createSignal } from "solid-js";
 
 import { getMostRecentTarget } from "@/utils/movement/TargetTracker";
 import Miniblox from "@/utils/refs/miniblox";
-import { mm } from "@/features/modules/registry";
 import HudManagerModule from "@/features/modules/impl/render/HudManager";
 
 interface TargetInfo {
