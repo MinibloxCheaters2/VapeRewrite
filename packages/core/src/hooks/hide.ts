@@ -3,6 +3,7 @@
  * @module
  */
 
+import { store } from "../exposed";
 import createProxy from "../utils/helpers/proxy";
 import { exposedName } from "../utils/mapping/names";
 
@@ -32,6 +33,10 @@ Object.getOwnPropertyNames = replaceAndCopyFunction(Object.getOwnPropertyNames, 
 
 Object.keys = replaceAndCopyFunction(Object.keys, (list) => {
 	spliceIt(list, exposedName);
+	return list;
+});
+Object.values = replaceAndCopyFunction(Object.values, (list) => {
+	spliceIt(list, store);
 	return list;
 });
 

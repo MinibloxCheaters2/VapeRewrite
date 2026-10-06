@@ -7,7 +7,7 @@ import { EXPOSE_SYMBOLS, LOG_EXPOSE_NAME } from "./debugControls";
 import { MAIN_LOGGER as logger } from "./utils/logging/loggers";
 import { exposedName } from "./utils/mapping/names";
 
-let store: object = {};
+export let store: object = {};
 
 function init() {
 	if (!EXPOSE_SYMBOLS) return;
