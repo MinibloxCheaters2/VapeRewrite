@@ -13,7 +13,7 @@ export default class Speed extends Mod {
 	readonly speedSetting: SliderSetting = this.createSliderSetting("Speed", 10, 0.1, 100, 0.01);
 	readonly jump = this.createToggleSetting("Jump");
 
-	@Bus.Subscribe("gameTick")
+	@Bus.Subscribe("postStepVelocity")
 	onTick(): void {
 		const {player} = game;
 		if (!player) return;

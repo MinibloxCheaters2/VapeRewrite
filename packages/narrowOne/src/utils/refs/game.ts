@@ -11,14 +11,14 @@ export const anyReady = Promise.race([gameReady, mainReady]);
 
 const gameRefs = {
 	get instance() {
-		return main?.gameManager?.activeGame ?? gameObj;
+		return main?.gameManager.activeGame ?? gameObj;
 	},
 	get player(): NonNullable<any> | null {
 		const game = this.instance;
 		if (!game) return null;
 		// avoid calling the method.
-		// this is useless since only the background game doesn't have `myPlayer`,
-		// and instead just scans `players.values` for what player it owns.
+		// this is useless since only the background game has `myPlayer`,
+		// and the online game instead just scans `players.values` for what player it owns.
 		return game.myPlayer ?? game.getMyPlayer();
 	},
 	get players(): Map<number, any> | undefined {
@@ -30,6 +30,13 @@ const gameRefs = {
 	 */
 	get network() {
 		return main?.network;
+	},
+	/**
+	 * **IMPORTANT**:
+	 * this requires access to `main`, avoid using this or use a fallback if possible.
+	 */
+	get gameManager() {
+		return main?.gameManager;
 	}
 };
 

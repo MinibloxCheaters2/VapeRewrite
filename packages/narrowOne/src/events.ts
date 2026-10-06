@@ -21,6 +21,8 @@ type ClientEvents = {
 	playerTick: Cancelable;
 	sendPos: CancelableWrapper<PosData>;
 	serverMove: CancelableWrapper<ServerMove>;
+	preStepVelocity: Cancelable;
+	postStepVelocity: void;
 };
 
 export default ClientEvents;

@@ -1,22 +1,55 @@
-import game, { anyReady } from "@/utils/refs/game";
-import Bus from "@/Bus";
-import { showNotification } from "@vape/core/ui/notifications";
 import { Cancelable, expose } from "@vape/core/index";
+import { showNotification } from "@vape/core/ui/notifications";
 import createProxy from "@vape/core/utils/helpers/proxy";
 
-let origGameLoop, origPlayerLoop;
+import Bus from "@/Bus";
+import game, { anyReady } from "@/utils/refs/game";
+import gameRefs from "@/utils/refs/game";
 
-export default function hookGameTick() {
+import { ready as mainReady } from "./mainHook";
+
+let origGameLoop, origBackgroundGameLoop, origPlayerLoop;
+
+export default function hookGameTick(background = false) {
 	const prototype = Object.getPrototypeOf(game.instance);
 	// hooking the prototype instead,
 	// so we hook every new game's loop function along with the current one.
-	origGameLoop = prototype.loop;
-	prototype.loop = createProxy(origGameLoop, {
+	if (background) origBackgroundGameLoop = prototype.loop;
+	else origGameLoop = prototype.loop;
+	prototype.loop = createProxy(background ? origBackgroundGameLoop : origGameLoop, {
 		apply(target, thisArg, argArray) {
 			Bus.emit("gameTick");
 			return Reflect.apply(target, thisArg, argArray);
 		},
 	});
+}
+/** this needs to be called when `main` is available */
+export function hookBackgroundGameTick() {
+	const { gameManager } = gameRefs;
+	const {
+		fireCurrentGameChangeCbs: oFire,
+		destroyCurrentGame: oDestroy,
+		activeGame: oGame,
+	} = gameManager;
+	function loadBackgroundGame() {
+		gameManager.destroyCurrentGame = createProxy(oDestroy, {
+			apply() {},
+		});
+		gameManager.fireCurrentGameChangeCbs = createProxy(oFire, {
+			apply() {},
+		});
+		gameManager.loadOfflineRoamingGame();
+	}
+	function reset() {
+		gameManager.destroyCurrentGame = oDestroy;
+		gameManager.destroyCurrentGame();
+		gameManager.fireCurrentGameChangeCbs = oFire;
+		gameManager.activeGame = oGame;
+	}
+	const shouldLoadBackgroundGame = !oGame.gameStarted;
+	if (shouldLoadBackgroundGame) loadBackgroundGame();
+	hookGameTick(true);
+	if (shouldLoadBackgroundGame) reset();
 }
 export function hookPlayerTick() {
 	if (!game.player) {
@@ -30,8 +63,7 @@ export function hookPlayerTick() {
 			if (thisArg !== game.player) return Reflect.apply(target, thisArg, argArray);
 			const c = new Cancelable();
 			Bus.emit("playerTick", c);
-			if (!c.canceled)
-				return Reflect.apply(target, thisArg, argArray);
+			if (!c.canceled) return Reflect.apply(target, thisArg, argArray);
 		},
 	});
 }
@@ -40,5 +72,6 @@ anyReady.then(() => {
 	hookGameTick();
 	hookPlayerTick();
 });
+mainReady.then(hookBackgroundGameTick);
 expose("hookGameTick", () => hookGameTick);
 expose("hookPlayerTick", () => hookPlayerTick);
