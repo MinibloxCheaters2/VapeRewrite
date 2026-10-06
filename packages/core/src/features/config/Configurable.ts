@@ -15,6 +15,7 @@ import type SubModule from "./SubModule";
 import { createSignal } from "solid-js";
 
 import { updateLoadedConfig } from "./configs";
+import Mod from "../modules/api/Module";
 
 export default class Configurable {
 	/** Settings */
