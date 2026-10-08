@@ -16,6 +16,14 @@ export interface ServerMove {
 	setback: boolean;
 }
 
+export interface CreateArrow {
+    selfID: number;
+    arrowID: number;
+    dir: Vector3;
+    pos: Vector3;
+    fireAmount01: number;
+}
+
 type ClientEvents = {
 	gameTick: void;
 	playerTick: Cancelable;
@@ -23,6 +31,8 @@ type ClientEvents = {
 	serverMove: CancelableWrapper<ServerMove>;
 	preStepVelocity: Cancelable;
 	postStepVelocity: void;
+	shootDirection: Vector3;
+	createArrow: CancelableWrapper<CreateArrow>;
 };
 
 export default ClientEvents;

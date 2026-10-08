@@ -18,7 +18,7 @@ export default function hookStepVelocity() {
 	rBody.stepVelocity = createProxy(origStepVelocity, {
 		apply(target, thisArg, argArray) {
 			// `player` could be outdated
-			if (thisArg !== Refs.player.rigidBody) return Reflect.apply(target, thisArg, argArray);
+			if (!thisArg.player.hasOwnership) return Reflect.apply(target, thisArg, argArray);
 			const c = new Cancelable();
 			Bus.emit("preStepVelocity", c);
 			if (!c.canceled) {

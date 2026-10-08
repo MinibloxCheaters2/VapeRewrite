@@ -1,6 +1,7 @@
 import type { Quaternion, Vector3 } from "three";
 
 import THREE from "../refs/three";
+import gameRefs from "../refs/game";
 
 interface AimResult {
 	time: number;
@@ -26,6 +27,20 @@ export function directionToShootAim(dir: Vector3): { yaw: number; pitch: number 
 }
 export function aimToQuaternion(p: { yaw: number; pitch: number }): Quaternion {
 	return new THREE.Quaternion().setFromEuler(new THREE.Euler(p.pitch, p.yaw, 0, "YXZ"));
+}
+
+export function hasClearShot(origin: Vector3, end: Vector3): boolean {
+	const {instance, player} = gameRefs;
+	if (!instance || !player) return false;
+	const physics = instance.arrowManager?.physics;
+	if (!physics) return true;
+	const cache = physics.getRayCastCache(origin, end);
+	if (!cache) return true;
+	const hit = physics.rayCastMapColliders(
+		cache,
+		(c: any) => !c.collider.ignoreArrows && c.collider.excludeTeamId !== player.teamId,
+	);
+	return !hit;
 }
 
 export function solveNarrowAim(

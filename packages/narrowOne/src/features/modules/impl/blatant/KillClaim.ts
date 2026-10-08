@@ -1,3 +1,10 @@
+/**
+ * Branched out from KillAura
+ * I genuinely don't know how they even check for range when actually applying damage...
+ * but not when crediting the kill.
+ * @module
+ */
+
 import Bus from "@/Bus";
 import { lookAtPlayer } from "@/utils/aiming/lookAt";
 import RotationManager, { RotationPlan } from "@/utils/aiming/rotate";
@@ -6,14 +13,9 @@ import game from "@/utils/refs/game";
 import Category from "@vape/core/features/modules/api/Category";
 import Mod from "@vape/core/features/modules/api/Module";
 
-export default class KillAura extends Mod {
-	name = "KillAura";
+export default class KillClaim extends Mod {
+	name = "KillClaim";
 	category = Category.BLATANT;
-	#extraReachSetting = this.createSliderSetting("ExtraReach", 2, 2, 24, 1);
-	get extraReach() {
-		return this.#extraReachSetting.value();
-	}
-	static readonly INSTANCE = new KillAura();
 
 	@Bus.Subscribe("playerTick")
 	private onTick() {

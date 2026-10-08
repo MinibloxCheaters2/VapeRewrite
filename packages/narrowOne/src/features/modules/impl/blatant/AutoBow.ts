@@ -1,21 +1,16 @@
 import { Category, Mod } from "@vape/core/index";
 
+import Bus from "@/Bus";
 import { solveNarrowAim, bowSpeed, bowStrength, hasClearShot } from "@/utils/aiming/projectileAim";
 import canAttack from "@/utils/combat/teams";
 import gameRefs from "@/utils/refs/game";
 import { hook, unhook } from "@/hooks/bowHook";
-import Bus from "@/Bus";
 import { Vector3 } from "three";
 
-export class BowAimbot extends Mod {
-	name = "BowAimbot";
+export class AutoBow extends Mod {
+	name = "AutoBow";
 	category = Category.BLATANT;
-
-	private readonly modeSetting = this.createDropdownSetting("Mode", ["Silent", "Camera"], "Silent");
-
-	get mode() {
-		return this.modeSetting.value();
-	}
+	#target: Vector3 | null = null;
 
 	protected onEnable(): void {
 		hook();
@@ -27,45 +22,55 @@ export class BowAimbot extends Mod {
 
 	@Bus.Subscribe("shootDirection")
 	private onShoot(dir: Vector3) {
-		const aim = this.findTarget();
+		const aim = this.#target;
 		if (!aim) return;
-		dir.copy(aim.direction);
+		dir.copy(aim);
+		this.#target = null;
 	}
 
-	private findTarget() {
-		const { player: me } = gameRefs;
-		if (!me || !me.game || me.game.gameEnded) return;
-		if (!me.bowWeapon) return;
 
+	@Bus.Subscribe("gameTick")
+	private onTick() {
+		const {player: me} = gameRefs;
+		if (!me || me.dead) return;
+		const bow = me.bowWeapon;
+		if (!bow) return;
+		const cd = (bow.getFireUpCooldownActive ?? bow.getCooldownActive)?.call(bow);
+		if (cd) return;
+
+		const target = this.findShot(me)?.direction;
+		if (!target) return;
+		this.#target = target;
+		bow.shootArrow(10);
+	}
+
+	private findShot(me: any) {
 		const victim = this.findNearest();
-		if (!victim) return;
+		if (!victim) return null;
 
 		const origin = me.getCamPos();
 		const target = victim.getCamPos();
-
 		let vel = victim.predictedServerVelocity;
 		if (!vel || vel.lengthSq() < 1e-6) vel = victim.rigidBody.velocity;
-		if (!vel) return;
+		if (!vel) return null;
 
 		const strength = bowStrength(me);
 		const vx = bowSpeed(me, strength);
-
 		const aim = solveNarrowAim(origin, target, vel, vx, strength);
-		if (!aim) return;
-		if (!hasClearShot(origin, target.clone().addScaledVector(vel, aim.time))) return;
+		if (!aim) return null;
+		if (!hasClearShot(origin, target.clone().addScaledVector(vel, aim.time))) return null;
 		return aim;
 	}
 
 	private findNearest(): any {
 		const { players, player } = gameRefs;
-		if (!players) return;
-		let best: any = null;
-		let bestDist = Infinity;
-		const myPos = player.pos;
+		if (!players || !player) return null;
+		let best: any = null,
+			bestDist = Infinity;
 		for (const p of players.values()) {
-			if (p === player || p.dead || !canAttack(player.teamId, p.teamId)) continue;
-			if (!p.hasValidPosition) continue;
-			const d = myPos.distanceTo(p.pos);
+			if (p === player || p.dead || !p.hasValidPosition) continue;
+			if (!canAttack(player.teamId, p.teamId)) continue;
+			const d = player.pos.distanceTo(p.pos);
 			if (d < bestDist) {
 				bestDist = d;
 				best = p;

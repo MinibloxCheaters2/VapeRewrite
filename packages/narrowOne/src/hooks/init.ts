@@ -9,3 +9,5 @@ import "./hookTick";
 import "./hookSendPos";
 import "./hookHeadRotation";
 import "./hookStepVelocity";
+import "./bowHook";
+import "./bowOriginHook";

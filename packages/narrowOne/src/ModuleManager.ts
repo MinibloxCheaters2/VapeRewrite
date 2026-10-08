@@ -13,15 +13,17 @@ import DetectionDebugger from "./features/modules/impl/utility/DetectionDebugger
 import FilterBypass from "./features/modules/impl/utility/FilterBypass";
 import AntiCheatBypass from "./features/modules/impl/blatant/AntiCheatBypass";
 import Disabler from "./features/modules/impl/blatant/Disabler";
+import { AutoBow } from "./features/modules/impl/blatant/AutoBow";
 
 create(
 	new Speed(),
-	new KillAura(),
+	KillAura.INSTANCE,
 	new AutoReport(),
 	new Fly(),
 	new NoClip(),
 	new FilterBypass(),
 	new AdBypass(),
+	new AutoBow,
 	new BowAimbot(),
 	new ArrowPhase(),
 	new ArrowCooldown(),

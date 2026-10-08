@@ -48,8 +48,6 @@ export function hook() {
 				rot,
 			});
 			Bus.emit("sendPos", c);
-			// reason for setting `this.noclip`: it effectively makes the method do nothing.
-			// idk why I don't just *not* send it if its canceled, but I guess.
 			[thisArg.pos, thisArg.lookRot] = [pos, rot];
 			const r = c.canceled ? undefined : Reflect.apply(target, thisArg, argArray);
 			[thisArg.pos, thisArg.lookRot] = [origPos, origRot];
