@@ -1,6 +1,8 @@
+import mappings from "@/utils/mappings/mappings";
 import gameRefs from "@/utils/refs/game";
 import Category from "@vape/core/features/modules/api/Category"
 import Mod from "@vape/core/features/modules/api/Module"
+import remapObj from "@vape/core/utils/helpers/remapProxy";
 
 export default class Test extends Mod {
 	name = "Test";
@@ -10,10 +12,14 @@ export default class Test extends Mod {
 		// 	console.log(v, v.position);
 		// });
 		// betting this is some sort of culled variable
-		gameRefs.players?.values?.()?.forEach?.(p => {
-			if (!p?.label) return;
-			console.log(p.label);
-			p.label.WwNmWM = true;
+		gameRefs.players?.values()?.forEach(p => {
+			// TODO
+			// Object.defineProperty(p.info, "occluded", {
+			// 	value: false,
+			// 	writable: false,
+			// 	configurable: false,
+			// 	enumerable: false
+			// })
 		});
 	}
 }

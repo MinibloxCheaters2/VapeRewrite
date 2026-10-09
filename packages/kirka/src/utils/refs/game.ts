@@ -20,6 +20,7 @@ const gameRefs = {
 
 	get world() {
 		const {rawWorld} = gameRefs;
+		if (!rawWorld) return;
 		return remapObj(rawWorld, mappings.world);
 	},
 
@@ -40,18 +41,23 @@ const gameRefs = {
 	// 	)?.user;
 	// },
 	get localPlayer(): Player {
-		const g = gameRefs.game;
-		if (!g) return;
-		return remapObj(g.localPlayer, mappings.player);
+		const {rawLocalPlayer} = gameRefs;
+		if (!rawLocalPlayer) return;
+		return remapObj(rawLocalPlayer, mappings.player);
+	},
+
+	get rawLocalPlayer() {
+		return gameRefs.game?.localPlayer;
 	},
 
 	/** raw game obj without any remap proxy */
 	get rawGame(): Game {
+		// TODO: I don't think this is correct. the game object could change.
 		if (rawGame) return rawGame;
 		const vState = gameRefs.vueState;
 		if (!vState) return;
 		rawGame = Object.values(vState).find((value) => {
-			return value != null && "version" in value;
+			return value != null && typeof value === "object" && "version" in value;
 		});
 		return rawGame;
 	},

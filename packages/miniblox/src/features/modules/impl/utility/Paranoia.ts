@@ -63,13 +63,13 @@ export default class Paranoia extends Mod {
 		)
 			this.#alertFromField(pkt, "id");
 		else if (isS2C("CPacketEntityStatus", pkt)) this.#alertFromField(pkt, "entityId");
-		/*else if (isS2C("CPacketPlayerList", pkt))
+		else if (isS2C("CPacketPlayerList", pkt))
 			for (const pl of pkt.players) {
 				this.#alertFromField(
 					pl,
 					"id",
 					`CPacketPlayerList (${pl.name} ${pl.rank} ${pl.permissionLevel} ${pl.level})`,
 				);
-				}*/
+			}
 	}
 }

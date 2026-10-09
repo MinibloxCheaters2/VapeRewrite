@@ -5,12 +5,11 @@
 
 (() => {})();
 
-// import { SimpleVec3 } from "@vape/core/src/utils/math/vec";
-// import gameRefs from "../refs/game";
-// const yawMax = Math.PI * 2; // if it's above this, move down to 0
-/*
-export function lookAt({ x, y, z }: SimpleVec3, returnValues = false) {
-	const localPosition = gameRefs.localPlayer[offsets.playerPosition];
+import { SimpleVec3 } from "@vape/core/src/utils/math/vec";
+import gameRefs from "../refs/game";
+const yawMax = Math.PI * 2; // if it's above this, move down to 0
+/*export function lookAt({ x, y, z }: SimpleVec3, returnValues = false) {
+	const localPosition = gameRefs.localPlayer.pos;
 
 	const localX = localPosition[offsets.playerX];
 	const localY = localPosition[offsets.playerY];
@@ -61,5 +60,4 @@ function screen(position) {
 	const visible = depth >= -1 && depth <= 1;
 
 	return [screenX, screenY, visible];
-}
-*/
+}*/
