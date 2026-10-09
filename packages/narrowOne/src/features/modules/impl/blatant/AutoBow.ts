@@ -1,11 +1,12 @@
 import { Category, Mod } from "@vape/core/index";
+import { Vector3 } from "three";
 
 import Bus from "@/Bus";
+import { hook, unhook } from "@/hooks/bowHook";
 import { solveNarrowAim, bowSpeed, bowStrength, hasClearShot } from "@/utils/aiming/projectileAim";
 import canAttack from "@/utils/combat/teams";
 import gameRefs from "@/utils/refs/game";
-import { hook, unhook } from "@/hooks/bowHook";
-import { Vector3 } from "three";
+import { main } from "@/hooks/mainHook";
 
 export class AutoBow extends Mod {
 	name = "AutoBow";
@@ -28,19 +29,25 @@ export class AutoBow extends Mod {
 		this.#target = null;
 	}
 
-
 	@Bus.Subscribe("gameTick")
 	private onTick() {
-		const {player: me} = gameRefs;
+		const { player: me } = gameRefs;
 		if (!me || me.dead) return;
 		const bow = me.bowWeapon;
 		if (!bow) return;
-		const cd = (bow.getFireUpCooldownActive ?? bow.getCooldownActive)?.call(bow);
+		const cd = (
+			bow.getFireCooldownActive ??
+			bow.getFireUpCooldownActive ??
+			bow.getCooldownActive
+		)?.call(bow);
 		if (cd) return;
 
 		const target = this.findShot(me)?.direction;
 		if (!target) return;
 		this.#target = target;
+		const mNow = main?.now ?? bow.lastFireTime + 10;
+		if ("lastFireTime" in bow) bow.lastFireTime = mNow;
+		else if ("lastFireUp" in bow) bow.lastFireUp = mNow;
 		bow.shootArrow(10);
 	}
 
