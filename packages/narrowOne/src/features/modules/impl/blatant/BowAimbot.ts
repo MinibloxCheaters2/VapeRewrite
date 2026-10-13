@@ -1,6 +1,6 @@
 import { Category, Mod } from "@vape/core/index";
 
-import { solveNarrowAim, bowSpeed, bowStrength, hasClearShot } from "@/utils/aiming/projectileAim";
+import { solveNarrowAim, bowSpeed, bowStrength, hasClearShot, speedAtElevation } from "@/utils/aiming/projectileAim";
 import canAttack from "@/utils/combat/teams";
 import gameRefs from "@/utils/refs/game";
 import { hook, unhook } from "@/hooks/bowHook";
@@ -33,7 +33,7 @@ export class BowAimbot extends Mod {
 	}
 
 	private findTarget() {
-		const { player: me } = gameRefs;
+		const { player: me, instance } = gameRefs;
 		if (!me || !me.game || me.game.gameEnded) return;
 		if (!me.bowWeapon) return;
 
@@ -47,18 +47,29 @@ export class BowAimbot extends Mod {
 		if (!vel || vel.lengthSq() < 1e-6) vel = victim.rigidBody.velocity;
 		if (!vel) return;
 
-		const strength = bowStrength(me);
-		const vx = bowSpeed(me, strength);
+		const tdm = me.bowWeapon?.getArrowOpts(1).travelDistanceMultiplier ?? 1;
+		const strength = bowStrength(me, tdm);
 
-		const aim = solveNarrowAim(origin, target, vel, vx, strength);
+		const base = bowSpeed(me, strength) * (instance.arrowManager.physics.timeScale ?? 1);
+		const timeScale = instance.arrowManager.physics.timeScale;
+
+		let aim = solveNarrowAim(origin, target, vel, base, strength);
 		if (!aim) return;
+		for (let i = 0; i < 3; i++) {
+			const next = solveNarrowAim(origin, target, vel, speedAtElevation(me, strength, aim.pitch) * timeScale, strength);
+			if (!next) break;
+			const converged = Math.abs(next.pitch - aim.pitch) < 1e-4;
+			aim = next;
+			if (converged) break;
+		}
+
 		if (!hasClearShot(origin, target.clone().addScaledVector(vel, aim.time))) return;
 		return aim;
 	}
 
 	private findNearest(): any {
 		const { players, player } = gameRefs;
-		if (!players) return;
+		if (!players || !player) return;
 		let best: any = null;
 		let bestDist = Infinity;
 		const myPos = player.pos;

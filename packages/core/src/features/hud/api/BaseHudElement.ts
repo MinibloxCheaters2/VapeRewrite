@@ -8,7 +8,7 @@ import type {
 	ToggleSetting,
 } from "../../config/Settings";
 
-import { createSignal } from "solid-js";
+import { createSignal, flush } from "solid-js";
 
 export interface HudPosition {
 	x: number;
@@ -40,7 +40,9 @@ export default abstract class BaseHudElement {
 	}
 
 	set position(value: HudPosition) {
-		this.positionSignal[1](value);
+		flush(() => {
+			this.positionSignal[1](value);
+		});
 	}
 
 	get visibleAccessor() {
@@ -52,7 +54,9 @@ export default abstract class BaseHudElement {
 	}
 
 	set visible(value: boolean) {
+		// flush(() => {
 		this.visibleSignal[1](value);
+		// });
 	}
 
 	/**

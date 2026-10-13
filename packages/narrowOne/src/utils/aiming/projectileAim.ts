@@ -1,3 +1,5 @@
+// all catgpt code :sob:
+// math is for Epstein, not me.
 import type { Quaternion, Vector3 } from "three";
 
 import THREE from "../refs/three";
@@ -15,12 +17,19 @@ const EPS = 1e-6;
 const mapLinear = (x: number, a: number, b: number, c: number, d: number) =>
 	c + ((x - a) * (d - c)) / (b - a);
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+export const bowArrowOpts = (shooter: any, fireAmount01 = 1) =>
+	shooter.bowWeapon?.getArrowOpts(fireAmount01);
 
 export const bowSpeed = (shooter: any, strength = 500) =>
 	mapLinear(strength, 100, 500, 0.05, 0.15) *
 	lerp(0.82, 1.05, shooter.getStatClassValue("arrowFlySpeed"));
-export const bowStrength = (shooter: any, travelDistanceMultiplier = 1) =>
-	lerp(10, 500 * travelDistanceMultiplier, 1);
+export const speedAtElevation = (shooter: any, strength: number, elevation: number) => {
+	const base = bowSpeed(shooter, strength);
+	const c = Math.cos(elevation), s = Math.sin(elevation);
+	return (base * 2 * c) / (2 * c + s);
+};
+export const bowStrength = (shooter: any, fireAmount01 = 1) =>
+	lerp(10, 500 * (bowArrowOpts(shooter, fireAmount01)?.travelDistanceMultiplier ?? 1), fireAmount01);
 
 export function directionToShootAim(dir: Vector3): { yaw: number; pitch: number } {
 	return { yaw: Math.atan2(-dir.x, -dir.z), pitch: Math.atan2(dir.y, Math.hypot(dir.x, dir.z)) };

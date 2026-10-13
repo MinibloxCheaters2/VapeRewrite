@@ -19,6 +19,7 @@ export class AutoBow extends Mod {
 
 	protected onDisable(): void {
 		unhook();
+		this.#target = null;
 	}
 
 	@Bus.Subscribe("shootDirection")
@@ -32,23 +33,28 @@ export class AutoBow extends Mod {
 	@Bus.Subscribe("gameTick")
 	private onTick() {
 		const { player: me } = gameRefs;
-		if (!me || me.dead) return;
+		if (!me || !me.game || me.game.gameEnded || me.dead) return;
 		const bow = me.bowWeapon;
 		if (!bow) return;
-		const cd = (
-			bow.getFireCooldownActive ??
-			bow.getFireUpCooldownActive ??
-			bow.getCooldownActive
-		)?.call(bow);
+
+		// no cooldown accessor on every bow — repeating crossbow has none
+		const cd = (bow.getFireCooldownActive ?? bow.getFireUpCooldownActive ?? bow.getCooldownActive)?.call(bow);
 		if (cd) return;
 
-		const target = this.findShot(me)?.direction;
-		if (!target) return;
-		this.#target = target;
-		const mNow = main?.now ?? bow.lastFireTime + 10;
-		if ("lastFireTime" in bow) bow.lastFireTime = mNow;
-		else if ("lastFireUp" in bow) bow.lastFireUp = mNow;
-		bow.shootArrow(10);
+		const shot = this.findShot(me);
+		if (!shot) return;
+
+		this.#target = shot.direction;
+
+		// mirror the bow's own fire bookkeeping so its cooldown accessor gates
+		// the next tick: lastFireUp (med/large/multi), lastFireTime (small xbow),
+		// lastShootTime (large xbow)
+		const now = main?.now ?? 0;
+		if ("lastFireUp" in bow) bow.lastFireUp = now;
+		if ("lastFireTime" in bow) bow.lastFireTime = now;
+		else if ("lastShootTime" in bow) bow.lastShootTime = now;
+
+		bow.shootArrow(1);
 	}
 
 	private findShot(me: any) {
@@ -61,10 +67,27 @@ export class AutoBow extends Mod {
 		if (!vel || vel.lengthSq() < 1e-6) vel = victim.rigidBody.velocity;
 		if (!vel) return null;
 
-		const strength = bowStrength(me);
-		const vx = bowSpeed(me, strength);
-		const aim = solveNarrowAim(origin, target, vel, vx, strength);
+		// full draw, with the bow's travelDistanceMultiplier (largeBow ×3, multi-shot ×0.4)
+		const tdm = me.bowWeapon.getArrowOpts?.(1)?.travelDistanceMultiplier ?? 1;
+		const strength = bowStrength(me, tdm);
+
+		// true speed = bowSpeed · 2cosE/(2cosE + sinE) · physics.timeScale; E is solved for
+		const base = bowSpeed(me, strength) * (gameRefs.instance?.arrowManager?.physics?.timeScale ?? 1);
+		const speedAt = (pitch: number) => {
+			const c = Math.cos(pitch), s = Math.sin(pitch);
+			return (base * 2 * c) / (2 * c + s);
+		};
+
+		let aim = solveNarrowAim(origin, target, vel, base, strength);
 		if (!aim) return null;
+		for (let i = 0; i < 3; i++) {
+			const next = solveNarrowAim(origin, target, vel, speedAt(aim.pitch), strength);
+			if (!next) break;
+			const converged = Math.abs(next.pitch - aim.pitch) < 1e-4;
+			aim = next;
+			if (converged) break;
+		}
+
 		if (!hasClearShot(origin, target.clone().addScaledVector(vel, aim.time))) return null;
 		return aim;
 	}

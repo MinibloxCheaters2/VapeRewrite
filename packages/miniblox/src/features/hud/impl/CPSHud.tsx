@@ -46,7 +46,7 @@ export default class CPSHud extends HudElement {
 			this.leftCPSSignal[1](this.leftClicks.length);
 			this.rightCPSSignal[1](this.rightClicks.length);
 
-			this.#cpsUpdateInterval = setTimeout(updateCPS, 50) as unknown as number;
+			this.#cpsUpdateInterval = setTimeout(updateCPS, 50);
 		};
 
 		shadowWrapper.root.addEventListener("mousedown", handleMouseDown);

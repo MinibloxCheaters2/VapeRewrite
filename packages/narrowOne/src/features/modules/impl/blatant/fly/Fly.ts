@@ -13,10 +13,18 @@ export default class Fly extends Mod {
 	readonly speedSetting = this.createSliderSetting("Speed", 10, 0.1, 100, 0.01);
 	readonly verticalSpeedSetting = this.createSliderSetting("VerticalSpeed", 10, 0.1, 100, 0.1);
 
+	@Bus.Subscribe("preStepVelocity")
+	onThing() {
+		const { player } = game;
+		if (!player) return;
+		player.fly = true;
+	}
+
 	@Bus.Subscribe("postStepVelocity")
 	onTick(): void {
 		const { player } = game;
 		if (!player) return;
+		player.fly = false;
 		const [x, z] = getMovement(this.speedSetting.value());
 		const {rigidBody: {velocity}} = player;
 		velocity.x = x;

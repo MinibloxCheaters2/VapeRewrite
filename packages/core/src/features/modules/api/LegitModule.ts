@@ -1,4 +1,4 @@
-import { createSignal } from "solid-js";
+import { createSignal, flush } from "solid-js";
 
 import Bus from "../../../Bus";
 import Configurable from "../../config/Configurable";
@@ -20,7 +20,9 @@ export default abstract class LegitModule extends Configurable {
 	}
 
 	set enabled(value: boolean) {
-		this.#stateSignal[1](value);
+		flush(() => {
+			this.#stateSignal[1](value);
+		})
 		if (value) {
 			this.modNameForConfig = this.name;
 			Bus.registerSubscriber(this);

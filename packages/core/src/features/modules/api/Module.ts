@@ -93,8 +93,9 @@ export default abstract class Mod extends Configurable {
 	}
 
 	private tagBy<S extends BaseSetting<V>, V>(setting: S): S {
-		this.tag = setting.name;
-		this.tagSignal[1](setting.name);
+		flush(() => {
+			this.tag = setting.name;
+		})
 		return setting;
 	}
 

@@ -7,19 +7,22 @@
  * @module
  */
 
-
-import { main, thing } from "@/hooks/mainHook";
-import game, { anyReady } from "@/utils/refs/game";
 import Category from "@vape/core/features/modules/api/Category";
 import Mod from "@vape/core/features/modules/api/Module";
 import { showNotification } from "@vape/core/ui/notifications";
 import createProxy from "@vape/core/utils/helpers/proxy";
+import { Logger } from "@vape/core/utils/logging/Logger";
+// mainHook also hooks `Function`,
+// we want to call its proxy in case it initializes before us.
+import { origFunction as realOrigFunction } from "@/hooks/mainHook";
+
+import { main, thing } from "@/hooks/mainHook";
+import game, { anyReady } from "@/utils/refs/game";
 
 const w = (unsafeWindow ?? window) as typeof window;
 
 const [origEval, origFunction] = [w.eval, w.Function];
-// because Violentmonkey is gay and doesn't preserve the ACTUAL console.log
-const origLog = window.console.log;
+const logger = new Logger("DetectionDebugger");
 
 interface CodeLog {
 	type: "function" | "eval";
@@ -35,28 +38,27 @@ export default class DetectionDebugger extends Mod {
 	static readonly INSTANCE = new DetectionDebugger();
 	category = Category.UTILITY;
 	protected onDisable(): void {
+		if (!main) [w.eval, w.Function] = [origEval, realOrigFunction];
 		try {
-		const clipboard = JSON.stringify(logs);
-		navigator.clipboard
-			.writeText(clipboard)
-			.then(() => {
-				showNotification(
-					"DetectionDebugger",
-					"Copied all detection logs to clipboard",
-					"info",
-					0.5e3,
-				);
-				origLog("Detection logs:", logs);
-			})
-			.catch((e) => {
-				showNotification(
-					"DetectionDebugger",
-					`Failed to copy to clipboard, logged to console instead. Error: ${e}`,
-					"alert",
-					0.5e3,
-				);
-				origLog("Detection logs:", logs);
-			});
+			const clipboard = JSON.stringify(logs);
+			navigator.clipboard
+				.writeText(clipboard)
+				.then(() => {
+					showNotification(
+						"DetectionDebugger",
+						"Copied all detection logs to clipboard",
+						"info",
+						0.5e3,
+					);
+				})
+				.catch((e) => {
+					showNotification(
+						"DetectionDebugger",
+						`Failed to copy to clipboard, logged to console instead. Error: ${e}`,
+						"alert",
+						0.5e3,
+					);
+				});
 		} catch (e) {
 			showNotification(
 				"DetectionDebugger",
@@ -64,7 +66,8 @@ export default class DetectionDebugger extends Mod {
 				"alert",
 				0.5e3,
 			);
-			origLog("Detection logs:", logs);
+		} finally {
+			logger.info("Detection logs:", logs);
 		}
 	}
 	logFunctionCall(f: Function, args: unknown[], output: unknown) {
@@ -75,19 +78,19 @@ export default class DetectionDebugger extends Mod {
 			output,
 		} as const;
 		logs.push(log);
-		origLog("[DetectionDebugger] function:", log);
+		logger.info("[DetectionDebugger] function:", log);
 	}
 	protected onEnable(): void {
 		anyReady.then(() => {
 			game.player.__proto__.report = createProxy(game.player.__proto__.report, {
 				apply(target, thisArg, argArray: [reason: number, n: number]) {
 					if (!thisArg.hasOwnership) return Reflect.apply(target, thisArg, argArray);
-					origLog("[DetectionDebugger] client-sided ac:", thisArg, argArray, new Error().stack);
+					logger.warn("[DetectionDebugger] client-sided ac:", thisArg, argArray, new Error().stack);
 					const [reason, n] = argArray;
 					showNotification(
 						"DetectionDebugger",
 						`Flagged client-sided ac: ${reason} (${n})`,
-						"alert"
+						"alert",
 					);
 					// return Reflect.apply(target, thisArg, argArray);
 				},
@@ -103,11 +106,11 @@ export default class DetectionDebugger extends Mod {
 						output: r,
 					} as const;
 					logs.push(log);
-					origLog("[DetectionDebugger] eval:", log);
+					logger.warn("[DetectionDebugger] eval:", log);
 					return r;
 				},
 			}),
-			createProxy(origFunction, {
+			createProxy(realOrigFunction, {
 				construct: (target, argArray, newTarget) => {
 					const r = Reflect.construct(target, argArray, newTarget);
 					return createProxy(r, {
@@ -116,7 +119,8 @@ export default class DetectionDebugger extends Mod {
 							if (!main && argArray.length === 1) {
 								thing(argArray[0], true);
 							}
-							this.logFunctionCall(target, argArray, a);
+							// target is a proxy somehow..?
+							this.logFunctionCall(r, argArray, a);
 							return a;
 						},
 					});

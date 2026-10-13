@@ -14,26 +14,28 @@ type SpoofedInput = C2SPacket & {
 	clone(): SpoofedInput;
 };
 
+const SPEED = 0.25;
+const JUMP_HEIGHT = 0.25;
+
 export default class Minigames extends SubModule<Speed> {
 	#spoofJump = false;
 	@Subscribe("playerTick")
 	private onTick(): void {
 		const { player } = Miniblox;
-		if (!player.isSprinting() || !player.onGround) return;
-		player.motion.x -= Math.sin(player.yaw) * 0.2;
-		player.motion.y = 0;
-		player.motion.z -= Math.cos(player.yaw) * 0.2;
+		if (!player.isSprinting()) return;
+		player.motion.x *= 1.25;
+		if (player.onGround) player.motion.y = JUMP_HEIGHT;
+		player.motion.z *= 1.25;
 		this.#spoofJump = true;
 	}
 
 	@Subscribe("sendPacket", Priority.HIGHEST)
 	private onSendPacket(wrap: CancelableWrapper<C2SPacket>) {
-		if (!this.#spoofJump) return;
 		const input = wrap.data as SpoofedInput;
 		if (isC2S("SPacketPlayerInput", input) && input.onGround) {
 			const clone = input.clone();
 			clone.jump = true;
-			clone.onGround = false;
+			clone.onGround = true;
 			wrap.data = clone;
 			this.#spoofJump = false;
 		}
@@ -46,6 +48,6 @@ export default class Minigames extends SubModule<Speed> {
 	}
 
 	getTag(): string {
-		return `Minigames`;
+		return "Minigames";
 	}
 }
