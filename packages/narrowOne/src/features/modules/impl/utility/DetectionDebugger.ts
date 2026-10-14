@@ -78,14 +78,14 @@ export default class DetectionDebugger extends Mod {
 			output,
 		} as const;
 		logs.push(log);
-		logger.info("[DetectionDebugger] function:", log);
+		logger.info("function:", log);
 	}
 	protected onEnable(): void {
 		anyReady.then(() => {
 			game.player.__proto__.report = createProxy(game.player.__proto__.report, {
 				apply(target, thisArg, argArray: [reason: number, n: number]) {
 					if (!thisArg.hasOwnership) return Reflect.apply(target, thisArg, argArray);
-					logger.warn("[DetectionDebugger] client-sided ac:", thisArg, argArray, new Error().stack);
+					logger.warn("client-sided ac:", thisArg, argArray, new Error().stack);
 					const [reason, n] = argArray;
 					showNotification(
 						"DetectionDebugger",
@@ -106,7 +106,7 @@ export default class DetectionDebugger extends Mod {
 						output: r,
 					} as const;
 					logs.push(log);
-					logger.warn("[DetectionDebugger] eval:", log);
+					logger.warn("eval:", log);
 					return r;
 				},
 			}),
