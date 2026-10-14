@@ -18,18 +18,15 @@ import { PosData, ServerMove } from "@/events";
 import sendPosSilently from "@/utils/movement/sendPos";
 import Refs from "@/utils/refs/game";
 import { ArrayVec2 } from "@vape/core/utils/math/vec";
-import THREE from "@/utils/refs/three";
 import { Vector3 } from "three";
-
-/** threshold to completely silently accept */
-const SILENT_ACCEPT_THRESHOLD = 12;
 
 export default class Disabler extends Mod {
 	name = "Disabler";
 	category = Category.BLATANT;
-	#lastMove = -1;
 	#lastPos: Vector3;
+	#lastMove: number = -1;
 
+	// TODO: somewhat buggy and desyncs sometimes
 	@Bus.Subscribe("serverMove")
 	private onServerMove(wrap: CancelableWrapper<ServerMove>) {
 		if (this.#lastMove - Date.now() > 1e3) return;
@@ -39,15 +36,9 @@ export default class Disabler extends Mod {
 		if (!player) return;
 		if (data.player !== player) return;
 		const playerPos: Vector3 = this.#lastPos;
-		const setbackPosVec = new THREE.Vec3(...data.pos);
-		const distance: number = playerPos.distanceTo(setbackPosVec);
-		const silentAccept = distance < SILENT_ACCEPT_THRESHOLD;
-		console.info(`[Disabler] silent accept?: ${silentAccept ? "Y" : "N"}. distance: ${distance}.`, playerPos, setbackPosVec);
-		if (silentAccept) {
-			wrap.cancel();
-			sendPosSilently(data.pos, [player.lookRot.x, player.lookRot.y]);
-			sendPosSilently(playerPos.toArray(), [player.lookRot.x, player.lookRot.y]);
-		}
+		wrap.cancel();
+		sendPosSilently(playerPos.toArray(), [player.lookRot.x, player.lookRot.y]);
+		sendPosSilently(data.pos, [player.lookRot.x, player.lookRot.y]);
 	}
 
 	@Bus.Subscribe("sendPos")
@@ -59,8 +50,8 @@ export default class Disabler extends Mod {
 		const distance = pos.distanceTo(lastPos);
 		if (distance < 11) return;
 		const lr: ArrayVec2 = [player.lookRot.x, player.lookRot.y];
+		sendPosSilently(lastPos.toArray(), lr);
 		sendPosSilently(pos.toArray(), lr);
-		sendPosSilently([NaN, NaN, NaN], lr);
 		this.#lastMove = Date.now();
 		this.#lastPos = pos.clone();
 		wrap.cancel();
