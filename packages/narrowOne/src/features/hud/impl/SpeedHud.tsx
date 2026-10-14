@@ -19,28 +19,15 @@ export default class SpeedHud extends HudElement {
 	});
 	private speedSignal = createSignal(0);
 	#updateFrame: number;
-	#lastPos: { x: number; z: number } | null = null;
-	#lastTime = 0;
 
 	public onAdd(): void {
 		const update = () => {
 			try {
 				const { player } = Refs;
-				if (!player) return;
-				const now = performance.now();
-				const dt = (now - this.#lastTime) / 1000;
-				const {pos} = player.rigidBody;
-
-				if (this.#lastPos && dt > 0) {
-					const dx = pos.x - this.#lastPos.x;
-					const dz = pos.z - this.#lastPos.z;
-					const dist = Math.sqrt(dx * dx + dz * dz);
-					const speed = (dist / dt) * 20;
-					this.speedSignal[1](Math.round(speed * 10) / 10);
-				}
-
-				this.#lastPos = { x: pos.x, z: pos.z };
-				this.#lastTime = now;
+				if (!player) return this.#updateFrame = requestAnimationFrame(update);
+				const vel = player.rigidBody.velocity;
+				const speed = Math.round(Math.hypot(vel.x, vel.z) * 100) / 100;
+				this.speedSignal[1](speed);
 			} catch {}
 			this.#updateFrame = requestAnimationFrame(update);
 		};
@@ -63,7 +50,7 @@ export default class SpeedHud extends HudElement {
 					"--hud-color": textColor,
 				}}
 			>
-				Speed: {this.speedSignal[0]()} bps
+				Speed: {this.speedSignal[0]()} u/s
 			</div>
 		);
 	}
