@@ -17,14 +17,14 @@ export default class Fly extends Mod {
 	onThing() {
 		const { player } = game;
 		if (!player) return;
-		player.fly = true;
+		player.rigidBody.fly = true;
 	}
 
 	@Bus.Subscribe("postStepVelocity")
 	onTick(): void {
 		const { player } = game;
 		if (!player) return;
-		player.fly = false;
+		player.rigidBody.fly = false;
 		const [x, z] = getMovement(this.speedSetting.value());
 		const {rigidBody: {velocity}} = player;
 		velocity.x = x;
