@@ -67,11 +67,9 @@ export class AutoBow extends Mod {
 		if (!vel || vel.lengthSq() < 1e-6) vel = victim.rigidBody.velocity;
 		if (!vel) return null;
 
-		// full draw, with the bow's travelDistanceMultiplier (largeBow ×3, multi-shot ×0.4)
 		const tdm = me.bowWeapon.getArrowOpts?.(1)?.travelDistanceMultiplier ?? 1;
 		const strength = bowStrength(me, tdm);
 
-		// true speed = bowSpeed · 2cosE/(2cosE + sinE) · physics.timeScale; E is solved for
 		const base = bowSpeed(me, strength) * (gameRefs.instance?.arrowManager?.physics?.timeScale ?? 1);
 		const speedAt = (pitch: number) => {
 			const c = Math.cos(pitch), s = Math.sin(pitch);
