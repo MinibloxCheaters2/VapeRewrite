@@ -15,6 +15,7 @@ import Disabler from "./features/modules/impl/blatant/Disabler";
 import { AutoBow } from "./features/modules/impl/blatant/AutoBow";
 import ServerCrasher from "./features/modules/impl/utility/ServerCrasher";
 import Godmode from "./features/modules/impl/utility/Godmode";
+import M8M6Chat from "./features/modules/impl/utility/M8M6Chat";
 
 create(
 	new Speed(),
@@ -29,6 +30,7 @@ create(
 	new ArrowPhase(),
 	new ArrowCooldown(),
 	DetectionDebugger.INSTANCE,
+	new M8M6Chat,
 	new Disabler(),
 	new Godmode,
 	new ServerCrasher
