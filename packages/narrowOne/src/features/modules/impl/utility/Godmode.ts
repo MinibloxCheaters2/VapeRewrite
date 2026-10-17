@@ -5,13 +5,14 @@ import { Player } from "@wq2/narrow-one-types/src/game";
 
 import gameRefs, { anyReady } from "@/utils/refs/game";
 
-let origProto: Player, origDie: Player["die"];
+let origProto: Player, origDie: Player["die"], hooked = false;
 
 export default class Godmode extends Mod {
 	name = "Godmode";
 	category = Category.UTILITY;
 	#hook() {
 		if (!origProto || !origDie) return;
+		hooked = true;
 		origProto.die = createProxy(origProto.die, {
 			apply(target, thisArg: Player, argArray: [respawn?: boolean]) {
 				if (!thisArg.hasOwnership) return Reflect.apply(target, thisArg, argArray);
@@ -25,12 +26,13 @@ export default class Godmode extends Mod {
 		});
 	}
 	#unhook() {
-		if (!origProto || !origDie) return;
+		if (!origProto || !origDie || !hooked) return;
 		origProto.die = origDie;
+		hooked = false;
 	}
 	protected onEnable(): void {
 		anyReady.then(() => {
-			if (origProto && origDie) return;
+			if (hooked) return;
 			const { player } = gameRefs;
 			origProto = Object.getPrototypeOf(player);
 			origDie = origProto.die;
@@ -38,6 +40,7 @@ export default class Godmode extends Mod {
 		});
 	}
 	protected onDisable(): void {
+		if (!hooked) return;
 		this.#unhook();
 	}
 }
