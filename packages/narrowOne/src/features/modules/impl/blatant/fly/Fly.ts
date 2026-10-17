@@ -5,7 +5,6 @@ import Bus from "@/Bus";
 import getMovement from "@/utils/movement/getMoveDir";
 import game from "@/utils/refs/game";
 
-
 export default class Fly extends Mod {
 	public name = "Fly";
 	public category = Category.BLATANT;
@@ -14,14 +13,14 @@ export default class Fly extends Mod {
 	readonly verticalSpeedSetting = this.createSliderSetting("VerticalSpeed", 10, 0.1, 100, 0.1);
 
 	@Bus.Subscribe("preStepVelocity")
-	onThing() {
+	onPreStepVelocity() {
 		const { player } = game;
 		if (!player) return;
 		player.rigidBody.fly = true;
 	}
 
 	@Bus.Subscribe("postStepVelocity")
-	onTick(): void {
+	onPostStepVelocity(): void {
 		const { player } = game;
 		if (!player) return;
 		player.rigidBody.fly = false;
