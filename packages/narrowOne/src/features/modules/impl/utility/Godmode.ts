@@ -29,6 +29,9 @@ export default class Godmode extends Mod {
 		if (!origProto || !origDie || !hooked) return;
 		origProto.die = origDie;
 		hooked = false;
+		const {player} = gameRefs;
+		if (!player) return;
+		if (player.health === Infinity) player.health = 100;
 	}
 	protected onEnable(): void {
 		anyReady.then(() => {
