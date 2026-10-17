@@ -6,14 +6,23 @@
 import { gameObj, ready as gameReady } from "@/hooks/gameHook";
 import { main, ready as mainReady } from "@/hooks/mainHook";
 import { expose } from "@vape/core/exposed";
+import type { Game, GameManager, NetworkManager, OnlineGame, Player } from "@wq2/narrow-one-types/src/game";
 
 export const anyReady = Promise.race([gameReady, mainReady]);
 
 const gameRefs = {
-	get instance() {
+	get settingsManager() {
+		return main?.settingsManager ?? gameRefs.player.settingsManager;
+	},
+	get instance(): Game | undefined {
 		return main?.gameManager.activeGame ?? gameObj;
 	},
-	get player(): NonNullable<any> | null {
+	get onlineInstance(): OnlineGame | undefined {
+		const i = gameRefs.instance;
+		if (!("chat" in i)) return undefined;
+		return i;
+	},
+	get player(): Player | null {
 		const game = this.instance;
 		if (!game) return null;
 		// avoid calling the method.
@@ -21,21 +30,21 @@ const gameRefs = {
 		// and the online game instead just scans `players.values` for what player it owns.
 		return game.myPlayer ?? game.getMyPlayer();
 	},
-	get players(): Map<number, any> | undefined {
+	get players(): Map<number, Player> | undefined {
 		return this.instance?.players;
 	},
 	/**
 	 * **IMPORTANT**:
 	 * this requires access to `main`, avoid using this or use a fallback if possible.
 	 */
-	get network() {
+	get network(): NetworkManager | undefined {
 		return main?.network;
 	},
 	/**
 	 * **IMPORTANT**:
 	 * this requires access to `main`, avoid using this or use a fallback if possible.
 	 */
-	get gameManager() {
+	get gameManager(): GameManager | undefined {
 		return main?.gameManager;
 	}
 };

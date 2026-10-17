@@ -8,7 +8,7 @@ function waitUntilNextFrame() {
 
 const MAX_PER_FRAME = 100000;
 function sendMessage(text: string) {
-	const { network, instance } = gameRefs;
+	const { network, onlineInstance: instance } = gameRefs;
 	if (!instance && !network) return;
 	function sendWithNetwork() {
 		network.sendChatMessage(text);

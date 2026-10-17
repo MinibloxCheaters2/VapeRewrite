@@ -7,21 +7,22 @@
  */
 
 import createProxy from "@vape/core/utils/helpers/proxy";
+import { OnlineGame } from "@wq2/narrow-one-types/src/game";
 
 /** used in mainHook.ts to remove the `Array.from` hook */
 export let origArrayFrom = Array.from;
 /** don't use this, use the one from Refs instead. */
-export let gameObj: any;
+export let gameObj: OnlineGame;
 export default function hook() {
 	return new Promise<typeof gameObj>((res) => {
 		Array.from = createProxy(origArrayFrom, {
-			apply(target, thisArg: any, argArray: [ArrayLike<unknown>]) {
+			apply(target, thisArg, argArray: [ArrayLike<unknown>]) {
 				const r: Array<unknown> = Reflect.apply(target, thisArg, argArray);
 				const n = r[0];
 				if (!n || typeof n !== "object") return r;
 				const g = "game" in n && n.game;
 				if (!g) return r;
-				gameObj = g;
+				gameObj = g as OnlineGame;
 				res(g);
 				return r;
 			},

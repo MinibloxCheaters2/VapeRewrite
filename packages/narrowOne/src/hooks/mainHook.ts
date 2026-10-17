@@ -19,11 +19,12 @@ import { showNotification } from "@vape/core/ui/notifications";
 import createProxy from "@vape/core/utils/helpers/proxy";
 
 import { origArrayFrom } from "./gameHook";
+import { Main } from "@wq2/narrow-one-types/src/game";
 
 const w = (unsafeWindow ?? window) as typeof window;
 export const origFunction = w.Function;
 
-export let main;
+export let main: Main | undefined;
 export function thing(cls: any, contributed = false) {
 	if (main !== undefined) return;
 	if (cls == null) return;

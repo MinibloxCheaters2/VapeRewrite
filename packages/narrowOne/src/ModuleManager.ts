@@ -14,6 +14,7 @@ import FilterBypass from "./features/modules/impl/utility/FilterBypass";
 import Disabler from "./features/modules/impl/blatant/Disabler";
 import { AutoBow } from "./features/modules/impl/blatant/AutoBow";
 import ServerCrasher from "./features/modules/impl/utility/ServerCrasher";
+import Godmode from "./features/modules/impl/utility/Godmode";
 
 create(
 	new Speed(),
@@ -29,6 +30,7 @@ create(
 	new ArrowCooldown(),
 	DetectionDebugger.INSTANCE,
 	new Disabler(),
+	new Godmode,
 	new ServerCrasher
 	// new Timer(),
 );
