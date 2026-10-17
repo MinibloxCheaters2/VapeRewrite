@@ -1,3 +1,15 @@
+/**
+ * A GodMode...
+ * Doesn't really work well on CTF,
+ * since they check if the player is actually alive before letting them grab the flag...
+ * but grabbing it before dying and then trying to grab it again since it dropped works..?
+ * great anticheat.
+ * anyway, everything else works normally as you'd expect with it
+ * (using the bow, moving, melee probably also, etc.).
+ * haven't tested the King of The Hill game mode yet,
+ * but it'll probably work since the server probably doesn't check there...
+ * @module
+ */
 import Category from "@vape/core/features/modules/api/Category";
 import Mod from "@vape/core/features/modules/api/Module";
 import createProxy from "@vape/core/utils/helpers/proxy";
@@ -7,8 +19,8 @@ import gameRefs, { anyReady } from "@/utils/refs/game";
 
 let origProto: Player, origDie: Player["die"], hooked = false;
 
-export default class Godmode extends Mod {
-	name = "Godmode";
+export default class GodMode extends Mod {
+	name = "GodMode";
 	category = Category.UTILITY;
 	#hook() {
 		if (!origProto || !origDie) return;
