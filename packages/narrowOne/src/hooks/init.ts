@@ -11,3 +11,5 @@ import "./hookHeadRotation";
 import "./hookStepVelocity";
 import "./bowHook";
 import "./bowOriginHook";
+import "./hookRespawn";
+import "./hookFlagChange";

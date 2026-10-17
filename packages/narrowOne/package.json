@@ -12,6 +12,6 @@
 	},
 	"devDependencies": {
 		"@types/three": "0.185.0",
-		"@wq2/narrow-one-types": "0.0.1"
+		"@wq2/narrow-one-types": "0.0.2"
 	}
 }

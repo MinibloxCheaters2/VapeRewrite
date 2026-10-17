@@ -3,6 +3,26 @@ import type { ArrayVec3, ArrayVec2 } from "@vape/core/src/utils/math/vec";
 import game from "../refs/game";
 import { origSendPos } from "@/hooks/hookSendPos";
 
+/**
+ * @param restoreOld restore the player's position and rotation back to what it was before
+ * @returns 
+ */
+export function sendPos(pos: ArrayVec3, rot: ArrayVec2, restoreOld = true) {
+	const { player } = game;
+	if (!player) return;
+	const [x, y, z] = pos;
+	const [yaw, pitch] = rot;
+	const oldPos = restoreOld ? player.pos.clone() : undefined;
+	const oldRot = restoreOld ? player.lookRot.clone() : undefined;
+	player.pos.set(x, y, z);
+	player.lookRot.set(yaw, pitch);
+	player.sendPlayerDataToServer();
+	if (restoreOld) {
+		player.pos.copy(oldPos);
+		player.lookRot.copy(oldRot);
+	}
+}
+
 export default function sendPosSilently(pos: ArrayVec3, rot: ArrayVec2) {
 	const { player, network } = game;
 	if (!player) return;

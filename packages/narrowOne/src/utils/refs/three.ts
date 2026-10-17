@@ -5,7 +5,7 @@ type ThreeExport = keyof ThreeModule;
 
 function getThreeImport(): string | undefined {
 	return performance.getEntriesByType("resource").find((x) => {
-		const {name} = x;
+		const { name } = x;
 		return name.startsWith("https://narrow.one/js/colors-") && name.endsWith(".js");
 	})?.name;
 }
@@ -21,15 +21,16 @@ function importColorsNoRetry() {
  */
 function importColors() {
 	const scriptURL = getThreeImport();
-	if (!scriptURL) return new Promise<any>(r => {
-		let t: number;
-		t = setInterval(() => {
-			const colors = importColorsNoRetry();
-			if (!colors) return;
-			r(colors);
-			clearInterval(t);
-		}, 5);
-	});
+	if (!scriptURL)
+		return new Promise<any>((r) => {
+			let t: number;
+			t = setInterval(() => {
+				const colors = importColorsNoRetry();
+				if (!colors) return;
+				r(colors);
+				clearInterval(t);
+			}, 5);
+		});
 	return import(scriptURL);
 }
 
@@ -58,10 +59,7 @@ function findByPrototypeKey<T extends ThreeExport>(key: string): ThreeModule[T] 
 
 function findObjectByType<const N extends ThreeExport>(type: N): ThreeModule[N] {
 	return findObject(
-		(x) =>
-			x != null &&
-			typeof x === "function" &&
-			x.toString().includes(`this.type="${type}"`),
+		(x) => x != null && typeof x === "function" && x.toString().includes(`this.type="${type}"`),
 	);
 }
 
@@ -85,6 +83,15 @@ const THREE = {
 	// 		&& "clamp" in x
 	// 		&& "DEG2RAD" in x);
 	// },
+
+	get lerp(): (a: number, b: number, t: number) => number {
+		return Object.values(three).find(
+			(x) =>
+				typeof x === "function" &&
+				x.length === 3 &&
+				/return \w\+\s*\w\s*\*\s*\(\w\s*-\s*\w*\)/.test(x.toString()),
+		);
+	},
 
 	get Line() {
 		return findObjectByType("Line");

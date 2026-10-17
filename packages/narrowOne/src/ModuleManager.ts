@@ -17,6 +17,7 @@ import ServerCrasher from "./features/modules/impl/utility/ServerCrasher";
 import GodMode from "./features/modules/impl/utility/Godmode";
 import M8M6Chat from "./features/modules/impl/utility/M8M6Chat";
 import Respawn from "./features/modules/impl/utility/Respawn";
+import AutoWin from "./features/modules/impl/utility/AutoWin";
 
 create(
 	new Speed(),
@@ -35,6 +36,7 @@ create(
 	new Disabler(),
 	new GodMode,
 	new Respawn,
+	new AutoWin,
 	new ServerCrasher
 	// new Timer(),
 );
