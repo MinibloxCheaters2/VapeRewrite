@@ -14,8 +14,9 @@ import FilterBypass from "./features/modules/impl/utility/FilterBypass";
 import Disabler from "./features/modules/impl/blatant/Disabler";
 import { AutoBow } from "./features/modules/impl/blatant/AutoBow";
 import ServerCrasher from "./features/modules/impl/utility/ServerCrasher";
-import Godmode from "./features/modules/impl/utility/Godmode";
+import GodMode from "./features/modules/impl/utility/Godmode";
 import M8M6Chat from "./features/modules/impl/utility/M8M6Chat";
+import Respawn from "./features/modules/impl/utility/Respawn";
 
 create(
 	new Speed(),
@@ -32,7 +33,8 @@ create(
 	DetectionDebugger.INSTANCE,
 	new M8M6Chat,
 	new Disabler(),
-	new Godmode,
+	new GodMode,
+	new Respawn,
 	new ServerCrasher
 	// new Timer(),
 );
