@@ -6,7 +6,7 @@ import type { Vector3 } from "three";
 
 import Category from "@vape/core/features/modules/api/Category";
 import Mod from "@vape/core/features/modules/api/Module";
-import { CancelableWrapper, expose } from "@vape/core/index";
+import { CancelableWrapper } from "@vape/core/index";
 import { showNotification } from "@vape/core/ui/notifications";
 import { Flag, Player } from "@wq2/narrow-one-types";
 
@@ -78,7 +78,6 @@ export default class AutoWin extends Mod {
 	}
 	constructor() {
 		super();
-		expose("AutoWin", () => this);
 	}
 
 	#notify(message: string, type: "info" | "warning" | "alert" = "info") {
@@ -86,7 +85,6 @@ export default class AutoWin extends Mod {
 	}
 
 	#reset() {
-		console.info("reset", new Error().stack);
 		this.#state = State.Idle;
 		this.#targetFlag = null;
 		this.#movePath = [];
@@ -144,7 +142,6 @@ export default class AutoWin extends Mod {
 
 	@Bus.Subscribe("receivedSpawn")
 	private onReceivedSpawn(spawn: SpawnData) {
-		console.log(`onReceivedSpawn in ${this.#state}:`, spawn);
 		if (this.#state !== State.WaitingForRespawn) return;
 		if (!spawn.player.hasOwnership) return;
 
