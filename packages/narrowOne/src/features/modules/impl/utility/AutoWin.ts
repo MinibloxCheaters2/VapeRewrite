@@ -301,6 +301,9 @@ export default class AutoWin extends Mod {
 
 		if (!instance || instance.gameEnded) return;
 
+		if (this.#state === State.GrabbingEnemyFlag && this.#targetFlag.currentHoldingPlayer)
+			this.#reset();
+
 		if (this.#moving) return;
 
 		switch (this.#state) {
