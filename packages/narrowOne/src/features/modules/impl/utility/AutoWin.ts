@@ -76,9 +76,6 @@ export default class AutoWin extends Mod {
 	get #delay() {
 		return this.#delaySetting.value();
 	}
-	constructor() {
-		super();
-	}
 
 	#notify(message: string, type: "info" | "warning" | "alert" = "info") {
 		showNotification("AutoWin", message, type, 500);
@@ -218,7 +215,7 @@ export default class AutoWin extends Mod {
 			return;
 		}
 
-		if (!flag) {
+		if (!flag || flag.holdingHandler || flag.currentHoldingPlayer) {
 			this.#reset();
 			return;
 		}
