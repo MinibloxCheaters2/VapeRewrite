@@ -29,15 +29,18 @@ function lerpTo(start: Vector3, destination: Vector3, range: number) {
 	const distance = moveVec.length();
 
 	if (distance === 0) {
-		return [start.clone()];
+		return [new THREE.Vec3(0, 0, 0)];
 	}
 
 	const steps = Math.ceil(distance / range);
 	const path = [];
 
-	for (let i = 0; i <= steps; i++) {
+	for (let i = 1; i <= steps; i++) {
 		const t = i / steps;
-		path.push(new THREE.Vec3().lerpVectors(start, destination, t));
+		const current = new THREE.Vec3().lerpVectors(start, destination, t);
+		const previous = new THREE.Vec3().lerpVectors(start, destination, (i - 1) / steps);
+
+		path.push(current.sub(previous));
 	}
 
 	return path;
@@ -50,7 +53,6 @@ export default class AutoWin extends Mod {
 	#state = State.Idle;
 	#targetFlag: Flag | null = null;
 	#movePath: Vector3[] = [];
-	#moveDelay = 0;
 	#grabRequested = false;
 	#captureRequested = false;
 	#networkWarningShown = false;
@@ -62,19 +64,12 @@ export default class AutoWin extends Mod {
 	/** Maximum distance between consecutive movement points. */
 	#speedSetting = this.createSliderSetting("Speed", 5, 2, 15, 0.1);
 
-	/** Delay between movement points, measured in ticks. */
-	#delaySetting = this.createSliderSetting("MoveDelay", 15, 0, 25, 1);
-
 	get #maxDistance() {
 		return this.#maxDistanceSetting.value();
 	}
 
 	get #speed() {
 		return this.#speedSetting.value();
-	}
-
-	get #delay() {
-		return this.#delaySetting.value();
 	}
 
 	#notify(message: string, type: "info" | "warning" | "alert" = "info") {
@@ -85,10 +80,11 @@ export default class AutoWin extends Mod {
 		this.#state = State.Idle;
 		this.#targetFlag = null;
 		this.#movePath = [];
-		this.#moveDelay = 0;
 		this.#grabRequested = false;
 		this.#captureRequested = false;
 		this.#networkWarningShown = false;
+		if (gameRefs.player)
+			gameRefs.player.rigidBody.noclip = false;
 	}
 
 	#findTargetFlag(): Flag | null {
@@ -108,7 +104,6 @@ export default class AutoWin extends Mod {
 		const { player } = gameRefs;
 
 		this.#movePath = lerpTo(from ?? player.pos, destination, this.#speed);
-		this.#moveDelay = 0;
 	}
 
 	#getMovementDestination(): Vector3 | null {
@@ -144,7 +139,6 @@ export default class AutoWin extends Mod {
 
 		this.#state = State.ReturnedToBase;
 		this.#movePath = [];
-		this.#moveDelay = 0;
 	}
 
 	@Bus.Subscribe("flagChange")
@@ -155,7 +149,6 @@ export default class AutoWin extends Mod {
 			case FlagChangeType.GRAB:
 				this.#state = State.ReturnToBase;
 				this.#movePath = [];
-				this.#moveDelay = 0;
 				this.#grabRequested = false;
 				return;
 
@@ -173,7 +166,20 @@ export default class AutoWin extends Mod {
 
 	@Bus.Subscribe("preStepVelocity")
 	private onStepVelocity() {
+		const {player} = gameRefs;
+		if (!player) return this.#moving = false;
 		this.#moving = this.#tickMovement();
+		if (this.#moving)
+			player.rigidBody.noclip = true;
+	}
+
+	@Bus.Subscribe("postStepVelocity")
+	private afterStepVelocity() {
+		const {player} = gameRefs;
+		if (!player) return this.#moving = false;
+		if (!this.#moving) {
+			player.rigidBody.noclip = false;
+		}
 	}
 
 	@Bus.Subscribe("serverMove")
@@ -186,22 +192,14 @@ export default class AutoWin extends Mod {
 		this.#notify("Setback detected; recalculating path.", "warning");
 
 		this.#recalculatePath(new THREE.Vec3(...data.pos));
-		this.#moveDelay = this.#delay;
 	}
 
 	#tickMovement(): boolean {
 		if (this.#movePath.length === 0) return false;
+		const nextVelocity = this.#movePath.shift();
+		if (!nextVelocity) return true;
 
-		if (this.#moveDelay < this.#delay) {
-			this.#moveDelay++;
-			return true;
-		}
-
-		const nextPosition = this.#movePath.shift();
-		if (!nextPosition) return true;
-
-		gameRefs.player.setPosition(nextPosition);
-		this.#moveDelay = 0;
+		gameRefs.player.rigidBody.velocity.copy(nextVelocity);
 
 		return true;
 	}
@@ -253,7 +251,6 @@ export default class AutoWin extends Mod {
 
 		this.#state = State.WaitingForRespawn;
 		this.#movePath = [];
-		this.#moveDelay = 0;
 	}
 
 	#prepareCapture() {
