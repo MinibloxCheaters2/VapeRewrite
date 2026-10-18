@@ -80,7 +80,7 @@ function defineGame(
 			dir: `dist/${name}/`,
 			entryFileNames: `${name}.user.js`,
 			minify: false,
-			// sourcemap: "inline",
+			sourcemap: "inline",
 		},
 		tsconfig: `packages/${name}/tsconfig.json`
 	};
