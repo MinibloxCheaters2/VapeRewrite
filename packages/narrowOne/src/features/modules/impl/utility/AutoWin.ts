@@ -86,6 +86,7 @@ export default class AutoWin extends Mod {
 	}
 
 	#reset() {
+		console.info("reset", new Error().stack);
 		this.#state = State.Idle;
 		this.#targetFlag = null;
 		this.#movePath = [];
@@ -169,6 +170,8 @@ export default class AutoWin extends Mod {
 				return;
 
 			case FlagChangeType.CAPTURE:
+				this.#reset();
+				return;
 			case FlagChangeType.RETURN:
 				return;
 		}
