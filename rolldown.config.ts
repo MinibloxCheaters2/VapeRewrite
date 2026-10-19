@@ -1,5 +1,5 @@
+/// <reference types="@types/bun" />
 import swc from "@wq2/rolldown-plugin-swc";
-/// <reference types="@types/node" />
 import { readPackageUp } from "read-package-up";
 import { defineConfig, RolldownOptions, RolldownPlugin } from "rolldown";
 import userscript from "rolldown-plugin-userscript";
@@ -13,6 +13,7 @@ import thing from "./thingPlugin";
 const { packageJson } = (await readPackageUp())!;
 
 export const BUILD_DATE = new Date();
+const IS_PROD = process.env.NODE_ENV === "production";
 
 // on April 1st, Baby Oil Rewrite. otherwise, Vape Rewrite.
 export const REAL_CLIENT_NAME =
@@ -22,7 +23,7 @@ export const REAL_CLIENT_NAME =
 
 /**
  * Required structure:
- * - entrypoint in `packages/name/src/index.ts`
+ * - `packages/name/src/index.ts` is the entrypoint
  * - tsconfig in `packages/name/tsconfig.json`
  */
 function defineGame(
@@ -58,7 +59,13 @@ function defineGame(
 			solid(),
 			plugins,
 			// this MUST be before UserScript, so the comments from it won't be removed.
-			process.env.NODE_ENV === "production" ? minify() : undefined,
+			IS_PROD ? minify({
+				compress: false,
+				mangle: false,
+				codegen: {
+					removeWhitespace: true
+				}
+			}) : undefined,
 			userscript((meta: string) => {
 				const newMeta = meta
 					.replace("process.env.AUTHOR", packageJson.author?.name ?? "Unspecified")
@@ -69,9 +76,17 @@ function defineGame(
 			}),
 		],
 		transform: {
+			typescript: {
+				optimizeConstEnums: true,
+				optimizeEnums: true,
+				removeClassFieldsWithoutInitializer: true
+			},
 			assumptions: {
 				setPublicClassFields: true,
 				noDocumentAll: true,
+				// ignoreFunctionLength: true,
+				// objectRestNoSymbols: true,
+				pureGetters: true
 			},
 		},
 
@@ -79,7 +94,13 @@ function defineGame(
 			format: "iife",
 			dir: `dist/${name}/`,
 			entryFileNames: `${name}.user.js`,
-			minify: false,
+			minify: IS_PROD ? {
+				compress: true,
+				mangle: true,
+				codegen: {removeWhitespace: false}
+			} : {
+				compress: {keepNames: {function: true, class: true}}
+			},
 			sourcemap: "inline",
 		},
 		tsconfig: `packages/${name}/tsconfig.json`

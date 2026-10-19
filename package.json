@@ -38,6 +38,7 @@
 	},
 	"devDependencies": {
 		"@solidjs/compiler": "^2.0.0-rc.13",
+		"@types/bun": "^1.4.3",
 		"@violentmonkey/types": "^0.3.3",
 		"@wq2/rolldown-plugin-swc": "^0.0.2",
 		"cross-env": "^10.1.0",
