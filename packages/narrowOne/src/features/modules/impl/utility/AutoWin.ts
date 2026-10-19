@@ -57,6 +57,7 @@ export default class AutoWin extends Mod {
 	#captureRequested = false;
 	#networkWarningShown = false;
 	#moving = false;
+	#lastMove = -1;
 
 	/** Maximum distance allowed for a flag action. */
 	#maxDistanceSetting = this.createSliderSetting("MaxDistance", 1.5, 1.5, 2.5, 0.01);
@@ -104,6 +105,7 @@ export default class AutoWin extends Mod {
 		const { player } = gameRefs;
 
 		this.#movePath = lerpTo(from ?? player.pos, destination, this.#speed);
+		this.#moving = false;
 	}
 
 	#getMovementDestination(): Vector3 | null {
@@ -126,7 +128,7 @@ export default class AutoWin extends Mod {
 
 		if (!destination) {
 			this.#movePath = [];
-			return;
+			return this.#moving = false;
 		}
 
 		this.#moveTo(destination, position);
@@ -168,16 +170,19 @@ export default class AutoWin extends Mod {
 	private onStepVelocity() {
 		const {player} = gameRefs;
 		if (!player) return this.#moving = false;
-		this.#moving = this.#tickMovement();
-		if (this.#moving)
+		const moving = this.#tickMovement();
+		if (moving)
 			player.rigidBody.noclip = true;
+		this.#moving = moving;
 	}
 
 	@Bus.Subscribe("postStepVelocity")
 	private afterStepVelocity() {
 		const {player} = gameRefs;
 		if (!player) return this.#moving = false;
-		if (!this.#moving) {
+		const now = performance.now();
+		const diff = now - this.#lastMove;
+		if (!this.#moving && this.#movePath.length <= 0 && diff > 9) {
 			player.rigidBody.noclip = false;
 		}
 	}
@@ -197,9 +202,10 @@ export default class AutoWin extends Mod {
 	#tickMovement(): boolean {
 		if (this.#movePath.length === 0) return false;
 		const nextVelocity = this.#movePath.shift();
-		if (!nextVelocity) return true;
+		if (!nextVelocity) return false;
 
 		gameRefs.player.rigidBody.velocity.copy(nextVelocity);
+		this.#lastMove = performance.now();
 
 		return true;
 	}
@@ -210,19 +216,19 @@ export default class AutoWin extends Mod {
 
 		if (player.holdingFlag) {
 			this.#state = State.ReturnToBase;
-			return;
+			return this.#moving = false;
 		}
 
 		if (!flag || flag.holdingHandler || flag.currentHoldingPlayer) {
 			this.#reset();
-			return;
+			return this.#moving = false;
 		}
 
-		if (this.#grabRequested) return;
+		if (this.#grabRequested) return this.#moving = false;
 
 		if (player.pos.distanceTo(flag.position) > this.#maxDistance) {
 			this.#moveTo(flag.position);
-			return;
+			return this.#moving = false;
 		}
 
 		player.sendChangeFlag(flag.id, 0);
@@ -296,7 +302,7 @@ export default class AutoWin extends Mod {
 	private onTick() {
 		const { onlineInstance: instance } = gameRefs;
 
-		if (!instance || instance.gameEnded) return;
+		if (!instance || !instance.gameStarted || instance.gameEnded) return;
 
 		if (this.#state === State.GrabbingEnemyFlag && this.#targetFlag.currentHoldingPlayer)
 			this.#reset();
