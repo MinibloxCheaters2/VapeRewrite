@@ -8,7 +8,7 @@ import "./hooks/init";
 import "./utils/network/packetQueueManager";
 import "./utils/aiming/rotate";
 import "@vape/core/features/binds/handler";
-import { initApp } from "@vape/core/ui/app";
+import { initApp } from "@vape/ui";
 
 import { initHudSystem } from "@/features/hud";
 initApp();

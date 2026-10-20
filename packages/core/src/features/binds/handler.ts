@@ -1,4 +1,4 @@
-import shadowWrapper from "../../ui/shadowWrapper";
+import shadowWrapper from "../../host/shadowWrapper";
 
 export type Callback = (e: KeyboardEvent) => void;
 interface Bind {

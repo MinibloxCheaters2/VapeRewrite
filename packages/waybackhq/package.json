@@ -7,6 +7,8 @@
 	"types": "./src/index.ts",
 	"dependencies": {
 		"@vape/core": "workspace:*",
+		"@vape/ui": "workspace:*",
+		"@vape/ui-api": "workspace:*",
 		"@wq2/waybackhq-types": "^0.0.1",
 		"solid-js": "catalog:",
 		"@solidjs/web": "catalog:"

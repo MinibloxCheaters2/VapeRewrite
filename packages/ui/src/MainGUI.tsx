@@ -1,16 +1,16 @@
-import type HudElement from "../features/hud/api/BaseHudElement";
-import type Mod from "../features/modules/api/Module";
+import type HudElement from "@vape/core/features/hud/api/BaseHudElement";
+import type Mod from "@vape/core/features/modules/api/Module";
 
 import { render } from "@solidjs/web";
 import { createEffect, createSignal, For, Show } from "solid-js";
 
-import { REAL_CLIENT_NAME } from "../Client";
-import { loadedConfig } from "../features/config/configs";
-import HudManager from "../features/hud/api/HudManager";
-import { Category, CategoryInfo } from "../features/modules/api/Category";
-import ModuleManager from "../features/modules/api/ModuleManager";
-import getResourceURL from "../utils/helpers/cachedResourceURL";
-import { dragHandleAttrName } from "../utils/mapping/names";
+import { REAL_CLIENT_NAME } from "@vape/core/Client";
+import { loadedConfig } from "@vape/core/features/config/configs";
+import HudManager from "@vape/core/features/hud/api/HudManager";
+import { Category, CategoryInfo } from "@vape/core/features/modules/api/Category";
+import ModuleManager from "@vape/core/features/modules/api/ModuleManager";
+import getResourceURL from "@vape/core/utils/helpers/cachedResourceURL";
+import { dragHandleAttrName } from "@vape/core/utils/mapping/names";
 import { DropdownComponent, SliderComponent, ToggleComponent } from "./components";
 import {
 	blurBackground,
@@ -56,7 +56,7 @@ import {
 import { LegitWindow } from "./LegitWindow";
 import { CategoryWindow } from "./newClickGUI";
 import { setProfilesPanelVisible } from "./ProfilesPanel";
-import shadowWrapper from "./shadowWrapper";
+import shadowWrapper from "@vape/core/host/shadowWrapper";
 
 function hsvToRgbString(h: number, s: number, v: number): string {
 	const i = Math.floor(h * 6);

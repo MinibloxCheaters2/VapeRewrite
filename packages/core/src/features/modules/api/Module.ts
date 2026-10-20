@@ -5,9 +5,7 @@ import type { Category } from "./Category";
 import { createSignal, flush } from "solid-js";
 
 import Bus from "../../../Bus";
-// why tf does @/... not work for this, but it works for @/Bus???
-import { toggleAlertEnabled } from "../../../ui/globalSettings";
-import { showNotification } from "../../../ui/notifications";
+import { showNotification, toggleAlertEnabled } from "@vape/ui-api";
 import { addBind, removeBind, setBind } from "../../binds/handler";
 import { saveBinds } from "../../binds/storage";
 import { updateLoadedConfig } from "../../config/configs";

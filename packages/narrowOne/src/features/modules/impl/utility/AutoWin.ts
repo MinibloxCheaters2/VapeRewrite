@@ -7,7 +7,7 @@ import type { Vector3 } from "three";
 import Category from "@vape/core/features/modules/api/Category";
 import Mod from "@vape/core/features/modules/api/Module";
 import { CancelableWrapper } from "@vape/core/index";
-import { showNotification } from "@vape/core/ui/notifications";
+import { showNotification } from "@vape/ui-api";
 import { Flag, Player } from "@wq2/narrow-one-types";
 
 import Bus from "@/Bus";

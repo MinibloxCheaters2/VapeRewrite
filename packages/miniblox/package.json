@@ -7,6 +7,8 @@
 	"types": "./src/index.ts",
 	"dependencies": {
 		"@vape/core": "workspace:*",
+		"@vape/ui": "workspace:*",
+		"@vape/ui-api": "workspace:*",
 		"@types/three": "^0.184.1",
 		"@wq2/packet-gen-wasm": "^0.0.2"
 	},

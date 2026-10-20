@@ -15,7 +15,7 @@
 
 import { expose } from "@vape/core/exposed";
 // import DetectionDebugger from "@/features/modules/impl/utility/DetectionDebugger";
-import { showNotification } from "@vape/core/ui/notifications";
+import { showNotification } from "@vape/ui-api";
 import createProxy from "@vape/core/utils/helpers/proxy";
 
 import { origArrayFrom } from "./gameHook";

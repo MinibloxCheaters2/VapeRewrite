@@ -9,7 +9,7 @@
 
 import Category from "@vape/core/features/modules/api/Category";
 import Mod from "@vape/core/features/modules/api/Module";
-import { showNotification } from "@vape/core/ui/notifications";
+import { showNotification } from "@vape/ui-api";
 import createProxy from "@vape/core/utils/helpers/proxy";
 import { Logger } from "@vape/core/utils/logging/Logger";
 // mainHook also hooks `Function`,

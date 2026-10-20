@@ -1,6 +1,6 @@
 import gameRefs from "@/utils/refs/game";
 import { Category, Mod } from "@vape/core";
-import { showNotification } from "@vape/core/ui/notifications";
+import { showNotification } from "@vape/ui-api";
 
 function waitUntilNextFrame() {
 	return new Promise<void>(r => requestAnimationFrame(() => r()));

@@ -1,8 +1,8 @@
-import type { AnySetting, SubmoduleItem } from "../features/config/Settings";
+import type { AnySetting, SubmoduleItem } from "@vape/core/features/config/Settings";
 
 import { createSignal, For, Show } from "solid-js";
 
-import getResourceURL from "../utils/helpers/cachedResourceURL";
+import getResourceURL from "@vape/core/utils/helpers/cachedResourceURL";
 import {
 	ColorSliderComponent,
 	DropdownComponent,

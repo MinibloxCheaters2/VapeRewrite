@@ -14,7 +14,7 @@ import "./utils/aiming/rotate";
 import "./features/modules/registry";
 import "@vape/core/features/binds/handler";
 import "./utils/movement/ServerFallDistance";
-import { initApp } from "@vape/core/ui/app";
+import { initApp } from "@vape/ui";
 
 import { initHudSystem } from "@/features/hud";
 import waitUntilReady from "./utils/helpers/waitUntilReady";

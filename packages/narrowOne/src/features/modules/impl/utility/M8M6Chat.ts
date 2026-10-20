@@ -3,7 +3,7 @@ import Mod from "@vape/core/features/modules/api/Module";
 import createProxy from "@vape/core/utils/helpers/proxy";
 
 import gameRefs, { anyReady } from "@/utils/refs/game";
-import { showNotification } from "@vape/core/ui/notifications";
+import { showNotification } from "@vape/ui-api";
 import type { Chat } from "@wq2/narrow-one-types/src/game";
 
 let origProto: Chat, origUpdateVisibility: () => void;

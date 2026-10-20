@@ -1,7 +1,7 @@
 import type { Line, LineBasicMaterial } from "three";
 
 import LegitModule from "@vape/core/features/modules/api/LegitModule";
-import shadowWrapper from "@vape/core/ui/shadowWrapper";
+import shadowWrapper from "@vape/core/host/shadowWrapper";
 
 import Miniblox from "@/utils/refs/miniblox";
 import THREE from "@/utils/refs/three";

@@ -1,8 +1,8 @@
 import { createEffect, createSignal } from "solid-js";
 
-import { addBind } from "../features/binds/handler";
-import logger from "../utils/logging/loggers";
-import { siteKey } from "../utils/siteKey";
+import { addBind } from "@vape/core/features/binds/handler";
+import logger from "@vape/core/utils/logging/loggers";
+import { siteKey } from "@vape/core/utils/siteKey";
 
 function readStoredJSON<T>(key: string, fallback: T): T {
 	try {

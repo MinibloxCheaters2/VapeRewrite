@@ -1,15 +1,17 @@
-import "./shadowWrapper";
-import { loadBinds } from "../features/binds/storage";
-import { initConfig } from "../features/config/configs";
-// global CSS
-import globalCss from "../style.css";
+import "./api";
+import "@vape/core/host/shadowWrapper";
+import { loadBinds } from "@vape/core/features/binds/storage";
+import { initConfig } from "@vape/core/features/config/configs";
+import shadowWrapper from "@vape/core/host/shadowWrapper";
+
 import { initFriendsPanel } from "./FriendsPanel";
 import { initHudGUI } from "./HudGUI";
 import { initMainGUI } from "./MainGUI";
 import { initNotifications } from "./notifications";
 import { initProfilesPanel } from "./ProfilesPanel";
 import { initSettingsPanel } from "./SettingsPanel";
-import shadowWrapper from "./shadowWrapper";
+// global CSS
+import globalCss from "./style.css";
 import { initTargetsPanel } from "./TargetsPanel";
 
 export function initApp() {

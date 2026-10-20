@@ -1,5 +1,5 @@
 import { CancelableWrapper, expose } from "@vape/core/index";
-import { showNotification } from "@vape/core/ui/notifications";
+import { showNotification } from "@vape/ui-api";
 import createProxy from "@vape/core/utils/helpers/proxy";
 
 import Bus from "@/Bus";

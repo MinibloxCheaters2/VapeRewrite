@@ -6,7 +6,7 @@ import "./Bus";
 import "@vape/core/exposed";
 import "./hooks/init";
 import "@vape/core/features/binds/handler";
-import { initApp } from "@vape/core/ui/app";
+import { initApp } from "@vape/ui";
 
 import { initHudSystem } from "@/features/hud";
 initApp();

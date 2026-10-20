@@ -3,7 +3,7 @@ import type { ItemStack } from "@wq2/miniblox-sdk";
 
 import Category from "@vape/core/features/modules/api/Category";
 import Mod from "@vape/core/features/modules/api/Module";
-import { showNotification } from "@vape/core/ui/notifications";
+import { showNotification } from "@vape/ui-api";
 
 import { Subscribe } from "@/event/Bus";
 import { S2CData } from "@/event/Events";

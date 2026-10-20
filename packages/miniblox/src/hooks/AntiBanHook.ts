@@ -1,5 +1,5 @@
 import Miniblox from "@/utils/refs/miniblox";
-import { showNotification } from "@vape/core/ui/notifications";
+import { showNotification } from "@vape/ui-api";
 
 import Bus from "@/Bus";
 import { isC2S } from "@/utils";

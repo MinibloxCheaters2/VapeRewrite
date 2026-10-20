@@ -2,7 +2,7 @@ import selectSlot, { getSelectedSlot } from "@/utils/inventory/selectSlot";
 import Miniblox from "@/utils/refs/miniblox";
 import Category from "@vape/core/features/modules/api/Category"
 import Mod from "@vape/core/features/modules/api/Module"
-import { showNotification } from "@vape/core/ui/notifications";
+import { showNotification } from "@vape/ui-api";
 
 export default class Lunge extends Mod {
 	name = "Lunge";
