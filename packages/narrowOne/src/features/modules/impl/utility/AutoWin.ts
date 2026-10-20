@@ -311,6 +311,7 @@ export default class AutoWin extends Mod {
 
 		switch (this.#state) {
 			case State.Idle: {
+				if (gameRefs.player.holdingFlag) return this.#state = State.ReturnToBase;
 				const target = this.#findTargetFlag();
 				if (!target) return;
 

@@ -44,9 +44,16 @@ export interface FlagChange {
 	flag: Flag;
 }
 
+export interface PlayerTickData {
+	/** nowMs parameter passed to Player#loop */
+	now: number;
+	/** deltaMs parameter passed to Player#loop */
+	dt: number;
+}
+
 type ClientEvents = {
 	gameTick: void;
-	playerTick: Cancelable;
+	playerTick: CancelableWrapper<PlayerTickData>;
 	sendPos: CancelableWrapper<PosData>;
 	serverMove: CancelableWrapper<ServerMove>;
 	preStepVelocity: Cancelable;

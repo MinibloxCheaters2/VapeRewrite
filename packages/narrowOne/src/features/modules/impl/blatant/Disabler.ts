@@ -52,7 +52,9 @@ export default class Disabler extends Mod {
 		this.#lastPos = pos.clone();
 		if (pos.distanceTo(lastPos) < 11) return;
 		const lr: ArrayVec2 = [player.lookRot.x, player.lookRot.y];
-		sendPosSilently(pos.toArray(), lr);
+		for (let i = 0; i < 5e3; i++) {
+			sendPosSilently(pos.toArray(), lr);
+		}
 		sendPosSilently(lastPos.toArray(), lr);
 		// this.#lastMove = Date.now();
 		wrap.cancel();

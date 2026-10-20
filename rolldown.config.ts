@@ -99,6 +99,7 @@ function defineGame(
 				mangle: true,
 				codegen: {removeWhitespace: false}
 			} : {
+				codegen: {removeWhitespace: false},
 				compress: {keepNames: {function: true, class: true}}
 			},
 			sourcemap: "inline",

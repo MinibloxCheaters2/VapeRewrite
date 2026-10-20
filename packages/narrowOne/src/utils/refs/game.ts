@@ -12,7 +12,7 @@ export const anyReady = Promise.race([gameReady, mainReady]);
 
 const gameRefs = {
 	get settingsManager() {
-		return main?.settingsManager ?? gameRefs.player.settingsManager;
+		return main?.settingsManager ?? gameRefs.player?.settingsManager;
 	},
 	get instance(): Game | undefined {
 		return main?.gameManager.activeGame ?? gameObj;

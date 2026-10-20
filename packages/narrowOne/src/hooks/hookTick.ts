@@ -1,4 +1,4 @@
-import { Cancelable, expose } from "@vape/core/index";
+import { CancelableWrapper, expose } from "@vape/core/index";
 import { showNotification } from "@vape/core/ui/notifications";
 import createProxy from "@vape/core/utils/helpers/proxy";
 
@@ -7,6 +7,7 @@ import game, { anyReady } from "@/utils/refs/game";
 import gameRefs from "@/utils/refs/game";
 
 import { ready as mainReady } from "./mainHook";
+import { Player } from "@wq2/narrow-one-types";
 
 let origGameLoop, origBackgroundGameLoop, origPlayerLoop;
 
@@ -59,9 +60,12 @@ export function hookPlayerTick() {
 	const prototype = Object.getPrototypeOf(game.player);
 	origPlayerLoop = prototype.loop;
 	prototype.loop = createProxy(origPlayerLoop, {
-		apply(target, thisArg, argArray) {
-			if (thisArg !== game.player) return Reflect.apply(target, thisArg, argArray);
-			const c = new Cancelable();
+		apply(target, thisArg: Player, argArray: [now: number, dt: number]) {
+			if (!thisArg.hasOwnership) return Reflect.apply(target, thisArg, argArray);
+			const c = new CancelableWrapper({
+				now: argArray[0],
+				dt: argArray[1]
+			});
 			Bus.emit("playerTick", c);
 			if (!c.canceled) return Reflect.apply(target, thisArg, argArray);
 		},

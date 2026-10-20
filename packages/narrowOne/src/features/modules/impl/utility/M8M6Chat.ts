@@ -25,6 +25,7 @@ export default class M8M6Chat extends Mod {
 			origProto.updateVisibility = createProxy(origUpdateVisibility, {
 				apply(_, thisArg, __) {
 					const { network, settingsManager } = gameRefs;
+					if (!network || !settingsManager) return Reflect.apply(_, thisArg, __);
 					let visible = !thisArg.game.usedForCameraShotsOnly &&
 						network.squadManager.userVisibleSquadId != "M8M6" &&
 						!!settingsManager.getValue("chatEnabled") &&

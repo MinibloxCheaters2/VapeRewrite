@@ -93,6 +93,17 @@ const THREE = {
 		);
 	},
 
+	get mapRange() {
+		return Object.values(three).find((x) => {
+			const baseline = typeof x === "function" && x.length === 5;
+			if (!baseline) return false; // this literally filters out everything but the actual function. this alone probably works fine but I'm lazy so I'm not going to be lazy and leave it there
+			const code = x.toString();
+			return ["return", "let ", "=!1" /* matches the s=!1 default thingy */].every((q) =>
+				code.includes(q),
+			);
+		});
+	},
+
 	get Line() {
 		return findObjectByType("Line");
 	},
