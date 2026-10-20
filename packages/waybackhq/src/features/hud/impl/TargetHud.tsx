@@ -1,5 +1,5 @@
 import HudElement from "@vape/core/features/hud/api/JSXHudElement";
-import { guiVisible } from "@vape/ui-api";
+import { guiVisible } from "@vape/core/features/gui/visibility";
 import { EntityLivingBase } from "@wq2/waybackhq-types/src/entity/entityliving";
 // import { getMostRecentTarget } from "@/utils/movement/TargetTracker";
 // import Miniblox from "@/utils/refs/miniblox";

@@ -19,7 +19,7 @@ import {
 	setRecolorVisuals,
 	setUseFriends,
 	useFriends,
-} from "./globalSettings";
+} from "@vape/core/features/settings/globalSettings";
 import {
 	friendsPanelPosition,
 	friendsPanelVisible,

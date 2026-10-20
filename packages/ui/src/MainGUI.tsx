@@ -41,7 +41,7 @@ import {
 	teamsByServerEnabled,
 	toggleAlertEnabled,
 	useTeamColor,
-} from "./globalSettings";
+} from "@vape/core/features/settings/globalSettings";
 import {
 	categoryWindows,
 	guiVisible,

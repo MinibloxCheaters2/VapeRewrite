@@ -5,7 +5,8 @@ import type { Category } from "./Category";
 import { createSignal, flush } from "solid-js";
 
 import Bus from "../../../Bus";
-import { showNotification, toggleAlertEnabled } from "@vape/ui-api";
+import { showNotification } from "@vape/ui-api";
+import { toggleAlertEnabled } from "../../settings/globalSettings";
 import { addBind, removeBind, setBind } from "../../binds/handler";
 import { saveBinds } from "../../binds/storage";
 import { updateLoadedConfig } from "../../config/configs";

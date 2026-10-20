@@ -1,6 +1,6 @@
 import { createEffect, createSignal } from "solid-js";
 
-import { siteKey } from "@vape/core/utils/siteKey";
+import { siteKey } from "../../utils/siteKey";
 
 interface GlobalSettings {
 	notificationsEnabled: boolean;

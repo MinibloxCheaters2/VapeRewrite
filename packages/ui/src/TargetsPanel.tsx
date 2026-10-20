@@ -17,7 +17,7 @@ import {
 	targetPlayersEnabled,
 	targetsEnabled,
 	targetsList,
-} from "./globalSettings";
+} from "@vape/core/features/settings/globalSettings";
 import {
 	guiVisible,
 	setTargetsPanelPosition,

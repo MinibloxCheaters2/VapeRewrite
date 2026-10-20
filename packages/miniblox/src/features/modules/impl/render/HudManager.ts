@@ -1,6 +1,6 @@
 import Category from "@vape/core/features/modules/api/Category";
 import Mod from "@vape/core/features/modules/api/Module";
-import { guiVisible, setGuiVisible } from "@vape/ui-api";
+import { guiVisible, setGuiVisible } from "@vape/core/features/gui/visibility";
 
 export default class HudManagerModule extends Mod {
 	public name = "HudManager";

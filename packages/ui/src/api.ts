@@ -1,13 +1,5 @@
 import { setUiApi } from "@vape/ui-api";
 
-import {
-	rainbowMode,
-	rainbowSpeed,
-	rainbowUpdateRate,
-	teamsByServerEnabled,
-	toggleAlertEnabled,
-} from "./globalSettings";
-import { guiVisible, setGuiVisible } from "./guiState";
 import { showNotification } from "./notifications";
 
 /**
@@ -17,11 +9,4 @@ import { showNotification } from "./notifications";
  */
 setUiApi({
 	showNotification,
-	toggleAlertEnabled,
-	guiVisible,
-	setGuiVisible,
-	rainbowMode,
-	rainbowSpeed,
-	rainbowUpdateRate,
-	teamsByServerEnabled,
 });

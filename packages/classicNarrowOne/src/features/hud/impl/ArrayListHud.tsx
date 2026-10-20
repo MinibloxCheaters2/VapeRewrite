@@ -1,7 +1,7 @@
 import { REAL_CLIENT_NAME } from "@vape/core/Client";
 import HudElement from "@vape/core/features/hud/api/JSXHudElement";
 import ModuleManager from "@vape/core/features/modules/api/ModuleManager";
-import { rainbowMode, rainbowSpeed, rainbowUpdateRate } from "@vape/ui-api";
+import { rainbowMode, rainbowSpeed, rainbowUpdateRate } from "@vape/core/features/settings/globalSettings";
 import getResourceURL from "@vape/core/utils/helpers/cachedResourceURL";
 import { createSignal, For } from "solid-js";
 

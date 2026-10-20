@@ -2,7 +2,7 @@ import { createSignal, For, onSettled } from "solid-js";
 import { render } from "@solidjs/web";
 
 import getResourceURL from "@vape/core/utils/helpers/cachedResourceURL";
-import { notificationsEnabled } from "./globalSettings";
+import { notificationsEnabled } from "@vape/core/features/settings/globalSettings";
 import shadowWrapper from "@vape/core/host/shadowWrapper";
 
 type NotificationType = "info" | "warning" | "alert";

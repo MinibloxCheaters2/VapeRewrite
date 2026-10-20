@@ -1,8 +1,11 @@
 import { createEffect, createSignal } from "solid-js";
 
 import { addBind } from "@vape/core/features/binds/handler";
+import { toggleGUI } from "@vape/core/features/gui/visibility";
 import logger from "@vape/core/utils/logging/loggers";
 import { siteKey } from "@vape/core/utils/siteKey";
+
+export { guiVisible, setGuiVisible } from "@vape/core/features/gui/visibility";
 
 function readStoredJSON<T>(key: string, fallback: T): T {
 	try {
@@ -12,9 +15,6 @@ function readStoredJSON<T>(key: string, fallback: T): T {
 		return fallback;
 	}
 }
-
-// Global GUI visibility state - default hidden (open with \ key)
-export const [guiVisible, setGuiVisible] = createSignal(false);
 
 // Category window visibility states - all hidden by default
 const initialCategories: Record<string, boolean> = {
@@ -83,12 +83,6 @@ export function setCategoryWindowPosition(category: string, x: number, y: number
 		...prev,
 		[category]: { x, y },
 	}));
-}
-
-// Toggle GUI visibility
-export function toggleGUI() {
-	const newState = !guiVisible();
-	setGuiVisible(newState);
 }
 
 export const [legitWindowVisible, setLegitWindowVisible] = createSignal(

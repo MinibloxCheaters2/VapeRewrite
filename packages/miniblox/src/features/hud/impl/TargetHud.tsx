@@ -1,7 +1,7 @@
 import type { EntityLivingBase } from "@wq2/miniblox-sdk";
 
 import HudElement from "@vape/core/features/hud/api/JSXHudElement";
-import { guiVisible } from "@vape/ui-api";
+import { guiVisible } from "@vape/core/features/gui/visibility";
 import { createSignal } from "solid-js";
 
 import { getMostRecentTarget } from "@/utils/movement/TargetTracker";
