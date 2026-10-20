@@ -18,7 +18,7 @@ import GodMode from "./features/modules/impl/utility/Godmode";
 import M8M6Chat from "./features/modules/impl/utility/M8M6Chat";
 import Respawn from "./features/modules/impl/utility/Respawn";
 import AutoWin from "./features/modules/impl/utility/AutoWin";
-import TeleportTest from "./features/modules/impl/blatant/fly/InfiniteFly";
+import TeleportTest from "./features/modules/impl/blatant/TeleportTest";
 
 create(
 	new Speed(),
