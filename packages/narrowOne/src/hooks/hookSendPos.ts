@@ -1,11 +1,12 @@
 import { CancelableWrapper } from "@vape/core/index";
 import { showNotification } from "@vape/core/ui/notifications";
 import createProxy from "@vape/core/utils/helpers/proxy";
+import { ArrayVec2, ArrayVec3 } from "@vape/core/utils/math/vec";
+import { Player } from "@wq2/narrow-one-types";
 
 import Bus from "@/Bus";
-import game, { anyReady } from "@/utils/refs/game";
-
 import { ServerMove } from "@/events";
+import game, { anyReady } from "@/utils/refs/game";
 
 export let origSendPos;
 
@@ -19,24 +20,24 @@ export function hook() {
 	prototype.setServerData = createProxy(prototype.setServerData, {
 		apply(
 			target,
-			plr,
-			argArray: [
-				pX: number,
-				pY: number,
-				pZ: number,
-				yaw: number,
-				pitch: number,
-				setback: boolean,
-			],
+			thisArg: Player,
+			argArray: [pX: number, pY: number, pZ: number, yaw: number, pitch: number, setback: boolean],
 		) {
+			let [pos, rot, setback] = [
+				argArray.slice(0, 3) as ArrayVec3,
+				argArray.slice(4, 5) as ArrayVec2,
+				argArray[5],
+			];
 			const wrap = new CancelableWrapper<ServerMove>({
-				player: plr,
-				pos: [argArray[0], argArray[1], argArray[2]],
-				rot: [argArray[3], argArray[4]],
-				setback: argArray[5]
+				player: thisArg,
+				pos,
+				rot,
+				setback,
 			});
 			Bus.emit("serverMove", wrap);
-			if (!wrap.canceled) Reflect.apply(target, plr, argArray);
+			const plr = wrap.data.player ?? thisArg;
+			[pos, rot, setback] = [wrap.data.pos, wrap.data.rot, wrap.data.setback];
+			if (!wrap.canceled) Reflect.apply(target, plr, [...pos, ...rot, setback]);
 		},
 	});
 	prototype.sendPlayerDataToServer = createProxy(origSendPos, {
