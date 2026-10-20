@@ -7,7 +7,6 @@ import sendPosSilently from "@/utils/movement/sendPos";
 import { CancelableWrapper } from "@vape/core/index";
 import { ServerMove } from "@/events";
 import { Vector3 } from "three";
-import THREE from "@/utils/refs/three";
 
 export default class TeleportTest extends Mod {
 	public name = "TeleportTest";
@@ -21,7 +20,6 @@ export default class TeleportTest extends Mod {
 		const distance = pVec.distanceTo(player.pos);
 		if (distance >= 3) return;
 		player.setPosition(pVec);
-		this.toggleSilently();
 	}
 
 	@Bus.Subscribe("gameTick")
