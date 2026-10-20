@@ -1,5 +1,5 @@
-import { CancelableWrapper } from "@vape/core/index";
-import createProxy from "@vape/core/utils/helpers/proxy";
+import { CancelableWrapper } from "@vape/core/src/index";
+import createProxy from "@vape/core/src/utils/helpers/proxy";
 import { Entity } from "@wq2/waybackhq-types/src/entity/entity";
 import { EntityLivingBase } from "@wq2/waybackhq-types/src/entity/entityliving";
 import { DecodedVelocity, Session } from "@wq2/waybackhq-types/src/net/session";

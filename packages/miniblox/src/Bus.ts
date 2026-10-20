@@ -1,6 +1,6 @@
 import type ClientEvents from "./event/Events";
 
-import { setBusInstance } from "@vape/core/Bus";
+import { setBusInstance } from "@vape/core/src/Bus";
 
 import EventBus from "./event/Bus";
 

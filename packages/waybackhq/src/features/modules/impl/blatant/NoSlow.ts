@@ -1,7 +1,7 @@
 import type { ItemStack } from "@wq2/waybackhq-types/src/item/items";
 
-import Category from "@vape/core/features/modules/api/Category";
-import Mod from "@vape/core/features/modules/api/Module";
+import Category from "@vape/core/src/features/modules/api/Category";
+import Mod from "@vape/core/src/features/modules/api/Module";
 
 import Bus from "@/Bus";
 import Refs from "@/hooks/game";

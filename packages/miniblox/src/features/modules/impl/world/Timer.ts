@@ -1,7 +1,7 @@
 import type { ClientEntityPlayer } from "@wq2/miniblox-sdk";
 
-import Category from "@vape/core/features/modules/api/Category";
-import Mod from "@vape/core/features/modules/api/Module";
+import Category from "@vape/core/src/features/modules/api/Category";
+import Mod from "@vape/core/src/features/modules/api/Module";
 
 import Miniblox from "@/utils/refs/miniblox";
 

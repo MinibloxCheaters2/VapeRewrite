@@ -1,6 +1,6 @@
-import { Cancelable } from "@vape/core/index";
+import { Cancelable } from "@vape/core/src/index";
 import { showNotification } from "@vape/ui-api";
-import createProxy from "@vape/core/utils/helpers/proxy";
+import createProxy from "@vape/core/src/utils/helpers/proxy";
 
 import Bus from "@/Bus";
 import Refs, { anyReady } from "@/utils/refs/game";

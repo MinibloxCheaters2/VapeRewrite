@@ -1,4 +1,4 @@
-import dispatcher from "@vape/core/features/commands/api/CommandDispatcher";
+import dispatcher from "@vape/core/src/features/commands/api/CommandDispatcher";
 import { argument, literal, StringArgumentType } from "@wq2/brigadier-ts";
 
 import PacketRefs from "@/utils/network/packetRefs";

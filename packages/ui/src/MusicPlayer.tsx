@@ -7,7 +7,7 @@ import { createSignal, For, Show } from "solid-js";
 import { render } from "@solidjs/web";
 
 import { guiVisible } from "./guiState";
-import shadowWrapper from "@vape/core/host/shadowWrapper";
+import shadowWrapper from "@vape/core/src/host/shadowWrapper";
 
 const JAMENDO_API_KEY = "0c5e9d9e";
 

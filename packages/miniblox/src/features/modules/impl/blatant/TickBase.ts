@@ -1,7 +1,7 @@
-import type Cancelable from "@vape/core/event/Cancelable";
+import type Cancelable from "@vape/core/src/event/Cancelable";
 
-import Category from "@vape/core/features/modules/api/Category";
-import Mod from "@vape/core/features/modules/api/Module";
+import Category from "@vape/core/src/features/modules/api/Category";
+import Mod from "@vape/core/src/features/modules/api/Module";
 
 import { Subscribe } from "@/event/Bus";
 import Miniblox from "@/utils/refs/miniblox";

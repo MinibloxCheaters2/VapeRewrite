@@ -4,9 +4,9 @@
  * @module
  */
 
-import { expose } from "@vape/core/exposed";
-import initOrR from "@vape/core/utils/helpers/initOrR";
-import { reverseMapping, type Mapping } from "@vape/core/utils/helpers/remapProxy";
+import { expose } from "@vape/core/src/exposed";
+import initOrR from "@vape/core/src/utils/helpers/initOrR";
+import { reverseMapping, type Mapping } from "@vape/core/src/utils/helpers/remapProxy";
 
 import gameRefs from "../refs/game";
 import { Game, Player, World } from "../types/unknown";

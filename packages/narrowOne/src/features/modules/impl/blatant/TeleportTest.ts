@@ -1,10 +1,10 @@
-import Category from "@vape/core/features/modules/api/Category";
-import Mod from "@vape/core/features/modules/api/Module";
+import Category from "@vape/core/src/features/modules/api/Category";
+import Mod from "@vape/core/src/features/modules/api/Module";
 
 import Bus from "@/Bus";
 import game from "@/utils/refs/game";
 import sendPosSilently from "@/utils/movement/sendPos";
-import { CancelableWrapper } from "@vape/core/index";
+import { CancelableWrapper } from "@vape/core/src/index";
 import { ServerMove } from "@/events";
 import { Vector3 } from "three";
 

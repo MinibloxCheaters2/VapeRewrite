@@ -1,19 +1,19 @@
-import type BaseHudElement from "@vape/core/features/hud/api/BaseHudElement";
+import type BaseHudElement from "@vape/core/src/features/hud/api/BaseHudElement";
 
 import { createSignal, For, Show } from "solid-js";
 import { render } from "@solidjs/web";
 
-import { getName, type ModeLike } from "@vape/core/features/config/Settings";
-import HudManager from "@vape/core/features/hud/api/HudManager";
-import JSXHudElement from "@vape/core/features/hud/api/JSXHudElement";
-import { dragHandleAttrName } from "@vape/core/utils/mapping/names";
+import { getName, type ModeLike } from "@vape/core/src/features/config/Settings";
+import HudManager from "@vape/core/src/features/hud/api/HudManager";
+import JSXHudElement from "@vape/core/src/features/hud/api/JSXHudElement";
+import { dragHandleAttrName } from "@vape/core/src/utils/mapping/names";
 import {
 	ColorSliderComponent,
 	DropdownComponent,
 	SliderComponent,
 	ToggleComponent,
 } from "./components";
-import shadowWrapper from "@vape/core/host/shadowWrapper";
+import shadowWrapper from "@vape/core/src/host/shadowWrapper";
 
 // HUD Manager Panel (horizontal bar at bottom)
 function HudManagerPanel() {

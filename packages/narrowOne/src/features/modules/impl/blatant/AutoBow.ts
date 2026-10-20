@@ -1,4 +1,4 @@
-import { Category, Mod } from "@vape/core/index";
+import { Category, Mod } from "@vape/core/src/index";
 import { Vector3 } from "three";
 
 import Bus from "@/Bus";

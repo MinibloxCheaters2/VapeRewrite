@@ -1,9 +1,9 @@
-import type CancelableWrapper from "@vape/core/event/CancelableWrapper";
+import type CancelableWrapper from "@vape/core/src/event/CancelableWrapper";
 import type { C2SPacket, ItemStack } from "@wq2/miniblox-sdk";
 
-import Category from "@vape/core/features/modules/api/Category";
-import Mod from "@vape/core/features/modules/api/Module";
-import waitTicks from "@vape/core/utils/time/wait";
+import Category from "@vape/core/src/features/modules/api/Category";
+import Mod from "@vape/core/src/features/modules/api/Module";
+import waitTicks from "@vape/core/src/utils/time/wait";
 
 import { SubscribeAsync } from "@/event/Bus";
 import { isC2S } from "@/utils";

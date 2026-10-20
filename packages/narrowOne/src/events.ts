@@ -1,8 +1,8 @@
 import type { Quaternion, Vector3 } from "three";
 
-import type Cancelable from "@vape/core/event/Cancelable";
-import type { CancelableWrapper } from "@vape/core/index";
-import type { ArrayVec2, ArrayVec3 } from "@vape/core/utils/math/vec";
+import type Cancelable from "@vape/core/src/event/Cancelable";
+import type { CancelableWrapper } from "@vape/core/src/index";
+import type { ArrayVec2, ArrayVec3 } from "@vape/core/src/utils/math/vec";
 import type { Flag, Player } from "@wq2/narrow-one-types";
 
 export interface PosData {

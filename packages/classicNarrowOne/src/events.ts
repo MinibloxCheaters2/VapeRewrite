@@ -1,4 +1,4 @@
-import Cancelable from "@vape/core/event/Cancelable";
+import Cancelable from "@vape/core/src/event/Cancelable";
 
 type ClientEvents = {
 	gameTick: void;

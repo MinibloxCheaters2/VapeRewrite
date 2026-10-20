@@ -3,8 +3,6 @@
 	"compilerOptions": {
 		"paths": {
 			"@/*": ["./src/*"],
-			"@vape/core/*": ["../core/src/*"],
-			"@vape/core": ["../core/src"],
 			"@vape/ui-api/*": ["../ui-api/src/*"],
 			"@vape/ui-api": ["../ui-api/src"]
 		}

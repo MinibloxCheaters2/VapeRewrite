@@ -1,5 +1,5 @@
 import Refs from "@/utils/refs/game";
-import HudElement from "@vape/core/features/hud/api/JSXHudElement";
+import HudElement from "@vape/core/src/features/hud/api/JSXHudElement";
 import { createSignal } from "solid-js";
 
 export default class SpeedHud extends HudElement {

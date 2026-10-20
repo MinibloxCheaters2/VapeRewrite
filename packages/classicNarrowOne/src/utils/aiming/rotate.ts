@@ -3,9 +3,9 @@
  * @module
  */
 
-import type CancelableWrapper from "@vape/core/event/CancelableWrapper";
+import type CancelableWrapper from "@vape/core/src/event/CancelableWrapper";
 
-import { Priority } from "@vape/core/index";
+import { Priority } from "@vape/core/src/index";
 
 import Bus from "@/Bus";
 import { PosData } from "@/events";

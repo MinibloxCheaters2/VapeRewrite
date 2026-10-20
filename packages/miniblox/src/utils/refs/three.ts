@@ -1,7 +1,7 @@
 import type { Vector3 } from "three";
 
-import { expose } from "@vape/core/exposed";
-import logger from "@vape/core/utils/logging/loggers";
+import { expose } from "@vape/core/src/exposed";
+import logger from "@vape/core/src/utils/logging/loggers";
 
 import { gameScript, gameScriptReady } from "@/hooks/gameScript";
 

@@ -1,7 +1,7 @@
 import { Player } from "@wq2/narrow-one-types";
 
 import THREE from "../refs/three";
-import { expose } from "@vape/core/exposed";
+import { expose } from "@vape/core/src/exposed";
 
 interface CalculateMoveSpeedOpts {
 	/** allows the player to walk on "unwalkable" colliders */

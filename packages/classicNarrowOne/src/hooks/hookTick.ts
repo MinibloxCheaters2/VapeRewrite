@@ -1,8 +1,8 @@
 import game from "@/utils/refs/game";
 import Bus from "@/Bus";
 import { showNotification } from "@vape/ui-api";
-import { Cancelable } from "@vape/core/index";
-import createProxy from "@vape/core/utils/helpers/proxy";
+import { Cancelable } from "@vape/core/src/index";
+import createProxy from "@vape/core/src/utils/helpers/proxy";
 import { ready } from "./hookOnJoin";
 
 let origGameLoop, origPlayerLoop;

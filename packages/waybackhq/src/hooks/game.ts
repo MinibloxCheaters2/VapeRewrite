@@ -3,8 +3,8 @@ import type { Game } from "@wq2/waybackhq-types/src/game";
 import type { Session } from "@wq2/waybackhq-types/src/net/session";
 import type { World } from "@wq2/waybackhq-types/src/world/world";
 
-import { expose } from "@vape/core/exposed";
-// import logger from "@vape/core/utils/logging/loggers";
+import { expose } from "@vape/core/src/exposed";
+// import logger from "@vape/core/src/utils/logging/loggers";
 
 const uiCtx = import("@wq2/waybackhq-types/src/ui/context");
 let _game: Game;

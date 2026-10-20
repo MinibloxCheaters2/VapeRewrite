@@ -1,7 +1,7 @@
-import "@vape/core/meta.js?userscript-metadata";
+import "@vape/core/src/meta.js?userscript-metadata";
 import "./meta.js?userscript-metadata";
-import "@vape/core/types/vm.d.ts";
-import "@vape/core/exposed";
+import "@vape/core/src/types/vm.d.ts";
+import "@vape/core/src/exposed";
 import "./hooks";
 import "./utils/refs";
 import "./utils/network/WasmTest";
@@ -12,7 +12,7 @@ import "./features/commands/CommandManager";
 import "./utils/network/packetQueueManager";
 import "./utils/aiming/rotate";
 import "./features/modules/registry";
-import "@vape/core/features/binds/handler";
+import "@vape/core/src/features/binds/handler";
 import "./utils/movement/ServerFallDistance";
 import { initApp } from "@vape/ui";
 

@@ -1,5 +1,5 @@
-import HudElement from "@vape/core/features/hud/api/JSXHudElement";
-import shadowWrapper from "@vape/core/host/shadowWrapper";
+import HudElement from "@vape/core/src/features/hud/api/JSXHudElement";
+import shadowWrapper from "@vape/core/src/host/shadowWrapper";
 import { createSignal } from "solid-js";
 
 export default class KeystrokesHud extends HudElement {

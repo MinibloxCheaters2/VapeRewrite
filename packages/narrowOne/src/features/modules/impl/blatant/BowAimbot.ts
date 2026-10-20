@@ -1,4 +1,4 @@
-import { Category, Mod } from "@vape/core/index";
+import { Category, Mod } from "@vape/core/src/index";
 
 import { solveNarrowAim, bowSpeed, bowStrength, hasClearShot, speedAtElevation } from "@/utils/aiming/projectileAim";
 import canAttack from "@/utils/combat/teams";

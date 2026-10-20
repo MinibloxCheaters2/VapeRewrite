@@ -1,6 +1,6 @@
-import { CHECK_UNMATCHED_DUMPS } from "@vape/core/debugControls";
-import { expose } from "@vape/core/exposed";
-import { MAIN_LOGGER as logger } from "@vape/core/utils/logging/loggers";
+import { CHECK_UNMATCHED_DUMPS } from "@vape/core/src/debugControls";
+import { expose } from "@vape/core/src/exposed";
+import { MAIN_LOGGER as logger } from "@vape/core/src/utils/logging/loggers";
 
 import DUMP_REGEXES, { type DumpKey } from "./dump";
 

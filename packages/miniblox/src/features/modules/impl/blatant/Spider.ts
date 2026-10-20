@@ -1,5 +1,5 @@
-import Category from "@vape/core/features/modules/api/Category";
-import Mod from "@vape/core/features/modules/api/Module";
+import Category from "@vape/core/src/features/modules/api/Category";
+import Mod from "@vape/core/src/features/modules/api/Module";
 
 // idk if this works lmao
 import { Subscribe } from "@/event/Bus";

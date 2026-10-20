@@ -1,4 +1,4 @@
-import type { Tagged } from "@vape/core/features/config/Settings";
+import type { Tagged } from "@vape/core/src/features/config/Settings";
 
 import { Subscribe } from "@/event/Bus";
 import Miniblox from "@/utils/refs/miniblox";

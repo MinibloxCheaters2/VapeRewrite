@@ -1,8 +1,8 @@
 import "./api";
-import "@vape/core/host/shadowWrapper";
-import { loadBinds } from "@vape/core/features/binds/storage";
-import { initConfig } from "@vape/core/features/config/configs";
-import shadowWrapper from "@vape/core/host/shadowWrapper";
+import "@vape/core/src/host/shadowWrapper";
+import { loadBinds } from "@vape/core/src/features/binds/storage";
+import { initConfig } from "@vape/core/src/features/config/configs";
+import shadowWrapper from "@vape/core/src/host/shadowWrapper";
 
 import { initFriendsPanel } from "./FriendsPanel";
 import { initHudGUI } from "./HudGUI";

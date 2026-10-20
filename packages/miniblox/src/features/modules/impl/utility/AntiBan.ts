@@ -1,6 +1,6 @@
-import Category from "@vape/core/features/modules/api/Category";
-import Mod from "@vape/core/features/modules/api/Module";
-import logger from "@vape/core/utils/logging/loggers";
+import Category from "@vape/core/src/features/modules/api/Category";
+import Mod from "@vape/core/src/features/modules/api/Module";
+import logger from "@vape/core/src/utils/logging/loggers";
 
 import randomUsername from "@/utils/helpers/username";
 

@@ -3,11 +3,11 @@
  * This only works if vector accidentally leaks entity IDs of vanished players in certain packets.
  */
 
-import type CancelableWrapper from "@vape/core/event/CancelableWrapper";
+import type CancelableWrapper from "@vape/core/src/event/CancelableWrapper";
 import type { S2CPacket } from "@wq2/miniblox-sdk";
 
-import Category from "@vape/core/features/modules/api/Category";
-import Mod from "@vape/core/features/modules/api/Module";
+import Category from "@vape/core/src/features/modules/api/Category";
+import Mod from "@vape/core/src/features/modules/api/Module";
 
 import { Subscribe } from "@/event/Bus";
 import { S2CData } from "@/event/Events";

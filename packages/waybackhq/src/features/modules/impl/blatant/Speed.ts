@@ -1,6 +1,6 @@
-import { SliderSetting } from "@vape/core/features/config/Settings";
-import Category from "@vape/core/features/modules/api/Category";
-import Mod from "@vape/core/features/modules/api/Module";
+import { SliderSetting } from "@vape/core/src/features/config/Settings";
+import Category from "@vape/core/src/features/modules/api/Category";
+import Mod from "@vape/core/src/features/modules/api/Module";
 
 import Bus from "@/Bus";
 import Refs from "@/hooks/game";

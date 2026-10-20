@@ -1,5 +1,5 @@
-import dispatcher from "@vape/core/features/commands/api/CommandDispatcher";
-import ModuleManager from "@vape/core/features/modules/api/ModuleManager";
+import dispatcher from "@vape/core/src/features/commands/api/CommandDispatcher";
+import ModuleManager from "@vape/core/src/features/modules/api/ModuleManager";
 import { literal } from "@wq2/brigadier-ts";
 
 dispatcher.register(

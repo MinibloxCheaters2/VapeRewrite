@@ -1,7 +1,7 @@
 import Bus from "@/Bus";
 import Refs from "@/hooks/game";
-import Category from "@vape/core/features/modules/api/Category"
-import Mod from "@vape/core/features/modules/api/Module"
+import Category from "@vape/core/src/features/modules/api/Category"
+import Mod from "@vape/core/src/features/modules/api/Module"
 
 export default class Sprint extends Mod {
 	name = "Sprint";

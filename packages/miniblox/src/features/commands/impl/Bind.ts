@@ -1,11 +1,11 @@
-import type Mod from "@vape/core/features/modules/api/Module";
+import type Mod from "@vape/core/src/features/modules/api/Module";
 
-import dispatcher from "@vape/core/features/commands/api/CommandDispatcher";
+import dispatcher from "@vape/core/src/features/commands/api/CommandDispatcher";
 import { argument, literal, StringArgumentType } from "@wq2/brigadier-ts";
 
 import Miniblox from "@/utils/refs/miniblox";
 
-import ModuleArgumentType from "@vape/core/features/commands/api/brigadier/ModuleArgumentType";
+import ModuleArgumentType from "@vape/core/src/features/commands/api/brigadier/ModuleArgumentType";
 
 dispatcher.register(
 	literal("bind").then(

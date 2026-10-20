@@ -1,4 +1,4 @@
-import { create } from "@vape/core/features/modules/api/ModuleManager";
+import { create } from "@vape/core/src/features/modules/api/ModuleManager";
 
 import ArrowPhase from "./features/modules/impl/blatant/ArrowPhase";
 import { BowAimbot } from "./features/modules/impl/blatant/BowAimbot";

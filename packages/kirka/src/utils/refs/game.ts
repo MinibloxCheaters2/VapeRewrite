@@ -1,8 +1,8 @@
-import { expose } from "@vape/core/exposed";
+import { expose } from "@vape/core/src/exposed";
 
 import VueStore from "./vueStore";
 import { Game, Player } from "../types/unknown";
-import remapObj from "@vape/core/utils/helpers/remapProxy";
+import remapObj from "@vape/core/src/utils/helpers/remapProxy";
 import mappings from "../mappings/mappings";
 
 let rawGame, game;

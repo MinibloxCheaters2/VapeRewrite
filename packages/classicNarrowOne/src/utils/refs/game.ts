@@ -1,4 +1,4 @@
-import { expose } from "@vape/core/exposed";
+import { expose } from "@vape/core/src/exposed";
 
 function getImport() {
 	return performance.getEntriesByType("resource").find((x) => {

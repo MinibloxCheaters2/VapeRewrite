@@ -13,10 +13,10 @@
  * @module
  */
 
-import { expose } from "@vape/core/exposed";
+import { expose } from "@vape/core/src/exposed";
 // import DetectionDebugger from "@/features/modules/impl/utility/DetectionDebugger";
 import { showNotification } from "@vape/ui-api";
-import createProxy from "@vape/core/utils/helpers/proxy";
+import createProxy from "@vape/core/src/utils/helpers/proxy";
 
 import { origArrayFrom } from "./gameHook";
 import { Main } from "@wq2/narrow-one-types/src/game";

@@ -1,4 +1,4 @@
-import { create } from "@vape/core/features/modules/api/ModuleManager";
+import { create } from "@vape/core/src/features/modules/api/ModuleManager";
 
 // blatant
 import Blink from "./impl/blatant/Blink";

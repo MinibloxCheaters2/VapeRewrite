@@ -1,4 +1,4 @@
-import { setBusInstance } from "@vape/core/Bus";
+import { setBusInstance } from "@vape/core/src/Bus";
 import EventBus from "@wq2/event-bus";
 
 import ClientEvents from "./events";
