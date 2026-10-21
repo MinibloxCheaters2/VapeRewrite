@@ -7,7 +7,8 @@
 		"TheM1ddleM1n"
 	],
 	"workspaces": [
-		"packages/*"
+		"packages/*",
+		"games/*"
 	],
 	"license": "AGPL-3.0-only",
 	"private": true,

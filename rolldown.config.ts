@@ -30,8 +30,9 @@ function defineGame(
 	name: string,
 	plugins?: RolldownPlugin[],
 ): RolldownOptions {
+	const FOLDER = `games/${name}`;
 	return {
-		input: `packages/${name}/src/index.ts`,
+		input: `${FOLDER}/src/index.ts`,
 		platform: "browser",
 		moduleTypes: {
 			".css": "text",
@@ -104,7 +105,7 @@ function defineGame(
 			},
 			sourcemap: "inline",
 		},
-		tsconfig: `packages/${name}/tsconfig.json`
+		tsconfig: `${FOLDER}/tsconfig.json`
 	};
 }
 
