@@ -8,3 +8,5 @@ d8a3afe851c7a11e3eec31fcfb81d34115748f21
 de0f15d9ff98e68189ffab1f46e275572b1cd795
 # `@vape/` -> `@vape-rewrite/`
 42459a586a6c9149311f57e9c4d635f86dfcda1f
+# move all game source code to games/ folder
+9625a6d07030ddbbdfa6f707b3352118a3d33170
