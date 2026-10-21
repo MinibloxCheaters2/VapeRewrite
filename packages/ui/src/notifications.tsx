@@ -1,9 +1,9 @@
 import { createSignal, For, onSettled } from "solid-js";
 import { render } from "@solidjs/web";
 
-import getResourceURL from "@vape/core/src/utils/helpers/cachedResourceURL";
-import { notificationsEnabled } from "@vape/core/src/features/settings/globalSettings";
-import shadowWrapper from "@vape/core/src/host/shadowWrapper";
+import { getResourceURL } from "@vape/core";
+import { notificationsEnabled } from "@vape/core";
+import { shadowWrapper } from "@vape/core";
 
 type NotificationType = "info" | "warning" | "alert";
 

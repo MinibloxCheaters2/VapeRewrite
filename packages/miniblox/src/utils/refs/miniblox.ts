@@ -1,8 +1,8 @@
-import { expose } from "@vape/core/src/exposed";
-import initOrR from "@vape/core/src/utils/helpers/initOrR";
-import remapObj from "@vape/core/src/utils/helpers/remapProxy";
-import { getInheritanceChain } from "@vape/core/src/utils/helpers/tree";
-import logger from "@vape/core/src/utils/logging/loggers";
+import { expose } from "@vape/core";
+import { initOrR } from "@vape/core";
+import { remapObj } from "@vape/core";
+import { getInheritanceChain } from "@vape/core";
+import { logger } from "@vape/core";
 import {
 	AllBlocks,
 	BlockPos,

@@ -5,7 +5,7 @@
 
 import { gameObj, ready as gameReady } from "@/hooks/gameHook";
 import { main, ready as mainReady } from "@/hooks/mainHook";
-import { expose } from "@vape/core/src/exposed";
+import { expose } from "@vape/core";
 import type { Game, GameManager, NetworkManager, OnlineGame, Player } from "@wq2/narrow-one-types/src/game";
 
 export const anyReady = Promise.race([gameReady, mainReady]);

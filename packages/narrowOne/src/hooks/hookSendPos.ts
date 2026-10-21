@@ -1,7 +1,7 @@
-import { CancelableWrapper } from "@vape/core/src/index";
+import { CancelableWrapper } from "@vape/core";
 import { showNotification } from "@vape/ui-api";
-import createProxy from "@vape/core/src/utils/helpers/proxy";
-import { ArrayVec2, ArrayVec3 } from "@vape/core/src/utils/math/vec";
+import { createProxy } from "@vape/core";
+import { ArrayVec2, ArrayVec3 } from "@vape/core";
 import { Player } from "@wq2/narrow-one-types";
 
 import Bus from "@/Bus";

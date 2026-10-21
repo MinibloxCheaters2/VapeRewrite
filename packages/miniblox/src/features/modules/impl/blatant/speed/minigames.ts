@@ -1,7 +1,7 @@
 import type Speed from "./index";
 
-import CancelableWrapper from "@vape/core/src/event/CancelableWrapper";
-import SubModule from "@vape/core/src/features/config/SubModule";
+import { CancelableWrapper } from "@vape/core";
+import { SubModule } from "@vape/core";
 import { C2SPacket } from "@wq2/miniblox-sdk";
 
 import { Priority, Subscribe } from "@/event/Bus";

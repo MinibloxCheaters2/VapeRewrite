@@ -11,15 +11,15 @@
  * @module
  */
 
-import Category from "@vape/core/src/features/modules/api/Category";
-import Mod from "@vape/core/src/features/modules/api/Module";
-import { CancelableWrapper } from "@vape/core/src/index";
+import { Category } from "@vape/core";
+import { Mod } from "@vape/core";
+import { CancelableWrapper } from "@vape/core";
 
 import Bus from "@/Bus";
 import { PosData } from "@/events";
 import sendPosSilently from "@/utils/movement/sendPos";
 import Refs from "@/utils/refs/game";
-import { ArrayVec2 } from "@vape/core/src/utils/math/vec";
+import { ArrayVec2 } from "@vape/core";
 import { Vector3 } from "three";
 
 export default class Disabler extends Mod {

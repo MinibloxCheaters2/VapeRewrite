@@ -1,8 +1,8 @@
-import type CancelableWrapper from "@vape/core/src/event/CancelableWrapper";
+import type { CancelableWrapper } from "@vape/core";
 import type { C2SPacket } from "@wq2/miniblox-sdk";
 
-import Category from "@vape/core/src/features/modules/api/Category";
-import Mod from "@vape/core/src/features/modules/api/Module";
+import { Category } from "@vape/core";
+import { Mod } from "@vape/core";
 
 import { Subscribe } from "@/event/Bus";
 import { S2CData } from "@/event/Events";

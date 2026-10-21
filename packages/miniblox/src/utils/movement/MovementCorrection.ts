@@ -1,4 +1,4 @@
-import type { Tagged } from "@vape/core/src/features/config/Settings";
+import type { Tagged } from "@vape/core";
 import type { SPacketPlayerInput } from "@wq2/miniblox-sdk";
 
 import RotationManager from "../aiming/rotate";

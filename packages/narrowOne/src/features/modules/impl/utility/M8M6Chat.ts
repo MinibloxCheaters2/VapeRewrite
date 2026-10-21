@@ -1,6 +1,6 @@
-import Category from "@vape/core/src/features/modules/api/Category";
-import Mod from "@vape/core/src/features/modules/api/Module";
-import createProxy from "@vape/core/src/utils/helpers/proxy";
+import { Category } from "@vape/core";
+import { Mod } from "@vape/core";
+import { createProxy } from "@vape/core";
 
 import gameRefs, { anyReady } from "@/utils/refs/game";
 import { showNotification } from "@vape/ui-api";

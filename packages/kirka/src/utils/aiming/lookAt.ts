@@ -5,7 +5,7 @@
 
 (() => {})();
 
-import { SimpleVec3 } from "@vape/core/src/utils/math/vec";
+import { SimpleVec3 } from "@vape/core";
 import gameRefs from "../refs/game";
 const yawMax = Math.PI * 2; // if it's above this, move down to 0
 /*export function lookAt({ x, y, z }: SimpleVec3, returnValues = false) {

@@ -1,6 +1,6 @@
-import { CancelableWrapper, expose } from "@vape/core/src/index";
+import { CancelableWrapper, expose } from "@vape/core";
 import { showNotification } from "@vape/ui-api";
-import createProxy from "@vape/core/src/utils/helpers/proxy";
+import { createProxy } from "@vape/core";
 
 import Bus from "@/Bus";
 import game, { anyReady } from "@/utils/refs/game";

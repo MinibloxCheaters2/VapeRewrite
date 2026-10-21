@@ -1,4 +1,4 @@
-import HudElement from "@vape/core/src/features/hud/api/JSXHudElement";
+import { JSXHudElement as HudElement } from "@vape/core";
 import { createSignal } from "solid-js";
 
 export default class SpeedHud extends HudElement {

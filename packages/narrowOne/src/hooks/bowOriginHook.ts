@@ -1,5 +1,5 @@
-import { CancelableWrapper } from "@vape/core/src/index";
-import createProxy from "@vape/core/src/utils/helpers/proxy";
+import { CancelableWrapper } from "@vape/core";
+import { createProxy } from "@vape/core";
 import { Vector3 } from "three";
 
 import Bus from "@/Bus";

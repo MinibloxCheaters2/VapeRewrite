@@ -1,4 +1,4 @@
-import { create } from "@vape/core/src/features/modules/api/ModuleManager";
+import { createModManager as create } from "@vape/core";
 import Test from "./features/modules/impl/utility/Test";
 
 create(

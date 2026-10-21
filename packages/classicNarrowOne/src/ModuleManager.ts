@@ -1,4 +1,4 @@
-import { create } from "@vape/core/src/features/modules/api/ModuleManager";
+import { createModManager as create } from "@vape/core";
 
 import Fly from "./features/modules/impl/blatant/fly/Fly";
 import Phase from "./features/modules/impl/blatant/Phase";

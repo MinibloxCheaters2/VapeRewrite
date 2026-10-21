@@ -1,6 +1,6 @@
 import game, { anyReady } from "@/utils/refs/game";
 import RotationManager from "@/utils/aiming/rotate";
-import createProxy from "@vape/core/src/utils/helpers/proxy";
+import { createProxy } from "@vape/core";
 
 let skeletonProto: any = null;
 

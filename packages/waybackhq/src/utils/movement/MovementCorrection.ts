@@ -1,4 +1,4 @@
-import type { Tagged } from "@vape/core/src/features/config/Settings";
+import type { Tagged } from "@vape/core";
 
 
 

@@ -1,6 +1,6 @@
 // TODO: support queueing S2C packets?
 
-import type CancelableWrapper from "@vape/core/src/event/CancelableWrapper";
+import type { CancelableWrapper } from "@vape/core";
 import type { AnyPacket, C2SPacket, PBFloatVector3 } from "@wq2/miniblox-sdk";
 import type { Material, Mesh } from "three";
 

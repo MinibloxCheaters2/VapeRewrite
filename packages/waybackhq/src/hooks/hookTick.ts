@@ -1,7 +1,7 @@
 import type { ClientPlayer } from "@wq2/waybackhq-types/src/client/clientplayer";
 
-import Cancelable from "@vape/core/src/event/Cancelable";
-import logger from "@vape/core/src/utils/logging/loggers";
+import { Cancelable } from "@vape/core";
+import { logger } from "@vape/core";
 import { Entity } from "@wq2/waybackhq-types/src/entity/entity";
 import { Game } from "@wq2/waybackhq-types/src/game";
 
@@ -9,7 +9,7 @@ import Bus from "@/Bus";
 import { mod as CPlr, ready as cplrReady } from "@/utils/wrappers/clientplayer";
 
 import Refs, { ready } from "./game";
-import createProxy from "@vape/core/src/utils/helpers/proxy";
+import { createProxy } from "@vape/core";
 
 let origGameTick: Game["runTick"];
 let origOnUpdate: Entity["onUpdate"];

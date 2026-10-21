@@ -3,7 +3,7 @@ import { PlayerMovement, SPacketPlayerInput } from "@wq2/miniblox-sdk";
 import RotationManager from "@/utils/aiming/rotate";
 import MovementCorrection, { doMovementCorrection, doSilentMovementCorrection, getEffectiveMode } from "@/utils/movement/MovementCorrection";
 import Miniblox from "@/utils/refs/miniblox";
-import createProxy from "@vape/core/src/utils/helpers/proxy";
+import { createProxy } from "@vape/core";
 import waitUntilReady from "@/utils/helpers/waitUntilReady";
 import { gameScriptReady } from "./gameScript";
 

@@ -1,6 +1,6 @@
-import type LegitModule from "@vape/core/src/features/modules/api/LegitModule";
+import type { LegitModule } from "@vape/core";
 
-import LegitModuleManager from "@vape/core/src/features/modules/api/LegitModuleManager";
+import { LegitModuleManager } from "@vape/core";
 
 export function register<T extends LegitModule>(mod: T): T {
 	LegitModuleManager.add(mod);

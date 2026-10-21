@@ -1,6 +1,6 @@
 import type { Entity, EntityLivingBase } from "@wq2/miniblox-sdk";
 
-import { teamsByServerEnabled } from "@vape/core/src/features/settings/globalSettings";
+import { teamsByServerEnabled } from "@vape/core";
 
 import Miniblox from "../refs/miniblox";
 

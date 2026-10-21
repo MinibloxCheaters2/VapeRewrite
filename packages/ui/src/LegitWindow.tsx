@@ -1,11 +1,11 @@
-import type { AnySetting } from "@vape/core/src/features/config/Settings";
-import type LegitModule from "@vape/core/src/features/modules/api/LegitModule";
+import type { AnySetting } from "@vape/core";
+import type { LegitModule } from "@vape/core";
 
 import { createSignal, For, Match, Show, Switch } from "solid-js";
 
-import LegitModuleManager from "@vape/core/src/features/modules/api/LegitModuleManager";
-import getResourceURL from "@vape/core/src/utils/helpers/cachedResourceURL";
-import { dragHandleAttrName } from "@vape/core/src/utils/mapping/names";
+import { LegitModuleManager } from "@vape/core";
+import { getResourceURL } from "@vape/core";
+import { dragHandleAttrName } from "@vape/core";
 import {
 	ColorSliderComponent,
 	DropdownComponent,
@@ -416,7 +416,7 @@ function LegitSettingRenderer(props: { setting: AnySetting }) {
 		<Switch>
 			<Match when={props.setting.type === "toggle"}>
 				{(() => {
-					const s = props.setting as import("@vape/core/src/features/config/Settings").ToggleSetting;
+					const s = props.setting as import("@vape/core").ToggleSetting;
 					return (
 						<ToggleComponent name={s.name} enabled={s.value()} onChange={(v) => s.setValue(v)} />
 					);
@@ -424,7 +424,7 @@ function LegitSettingRenderer(props: { setting: AnySetting }) {
 			</Match>
 			<Match when={props.setting.type === "slider"}>
 				{(() => {
-					const s = props.setting as import("@vape/core/src/features/config/Settings").SliderSetting;
+					const s = props.setting as import("@vape/core").SliderSetting;
 					return (
 						<SliderComponent
 							name={s.name}
@@ -439,7 +439,7 @@ function LegitSettingRenderer(props: { setting: AnySetting }) {
 			</Match>
 			<Match when={props.setting.type === "dropdown"}>
 				{(() => {
-					const s = props.setting as import("@vape/core/src/features/config/Settings").DropdownSetting<import("@vape/core/features/config/Settings").ModeLike>;
+					const s = props.setting as import("@vape/core").DropdownSetting<import("@vape/core").ModeLike>;
 					return (
 						<DropdownComponent
 							name={s.name}
@@ -452,7 +452,7 @@ function LegitSettingRenderer(props: { setting: AnySetting }) {
 			</Match>
 			<Match when={props.setting.type === "textbox"}>
 				{(() => {
-					const s = props.setting as import("@vape/core/src/features/config/Settings").TextBoxSetting;
+					const s = props.setting as import("@vape/core").TextBoxSetting;
 					return (
 						<TextBoxComponent
 							name={s.name}
@@ -465,7 +465,7 @@ function LegitSettingRenderer(props: { setting: AnySetting }) {
 			</Match>
 			<Match when={props.setting.type === "colorslider"}>
 				{(() => {
-					const s = props.setting as import("@vape/core/src/features/config/Settings").ColorSliderSetting;
+					const s = props.setting as import("@vape/core").ColorSliderSetting;
 					return (
 						<ColorSliderComponent
 							name={s.name}

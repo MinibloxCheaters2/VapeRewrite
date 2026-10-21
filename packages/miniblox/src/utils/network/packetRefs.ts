@@ -8,7 +8,7 @@ import { discoveredPackets } from "@/hooks/PacketHook";
 
 import Miniblox from "../refs/miniblox";
 import { packets as dummyPackets } from "./WasmTest";
-import createProxy from "@vape/core/src/utils/helpers/proxy";
+import { createProxy } from "@vape/core";
 
 export type CPacketMap = typeof CPACKET_MAP;
 export type SPacketMap = typeof SPACKET_MAP;

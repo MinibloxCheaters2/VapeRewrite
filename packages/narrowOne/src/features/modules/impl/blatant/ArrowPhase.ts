@@ -1,8 +1,8 @@
-import Category from "@vape/core/src/features/modules/api/Category";
-import Mod from "@vape/core/src/features/modules/api/Module";
+import { Category } from "@vape/core";
+import { Mod } from "@vape/core";
 
 import Refs from "@/utils/refs/game";
-import createProxy from "@vape/core/src/utils/helpers/proxy";
+import { createProxy } from "@vape/core";
 
 let orig, patchedProto;
 

@@ -1,5 +1,5 @@
-import { expose } from "@vape/core/src/exposed";
-import initOrR from "@vape/core/src/utils/helpers/initOrR";
+import { expose } from "@vape/core";
+import { initOrR } from "@vape/core";
 
 // oxlint-disable-next-line no-unassigned-vars
 let _store;

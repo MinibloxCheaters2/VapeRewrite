@@ -1,5 +1,5 @@
-import Cancelable from "@vape/core/src/event/Cancelable";
-import CancelableWrapper from "@vape/core/src/event/CancelableWrapper";
+import { Cancelable } from "@vape/core";
+import { CancelableWrapper } from "@vape/core";
 import { TeleportTarget } from "@wq2/waybackhq-types/src/net/session";
 
 import { AnyPacket } from "./hooks/packetHook";

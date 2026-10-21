@@ -1,8 +1,8 @@
 import type { BlockPos, EnumFacing } from "@wq2/miniblox-sdk";
 import type { Vector3 } from "three";
 
-import Category from "@vape/core/src/features/modules/api/Category";
-import Mod from "@vape/core/src/features/modules/api/Module";
+import { Category } from "@vape/core";
+import { Mod } from "@vape/core";
 
 import { Subscribe } from "@/event/Bus";
 import RotationManager, { RotationPlan } from "@/utils/aiming/rotate";

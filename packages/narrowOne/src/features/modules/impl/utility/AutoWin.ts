@@ -4,9 +4,9 @@
  */
 import type { Vector3 } from "three";
 
-import Category from "@vape/core/src/features/modules/api/Category";
-import Mod from "@vape/core/src/features/modules/api/Module";
-import { CancelableWrapper } from "@vape/core/src/index";
+import { Category } from "@vape/core";
+import { Mod } from "@vape/core";
+import { CancelableWrapper } from "@vape/core";
 import { showNotification } from "@vape/ui-api";
 import { Flag, Player } from "@wq2/narrow-one-types";
 

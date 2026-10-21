@@ -1,7 +1,7 @@
 import type { ItemSlot } from "../ItemSlot";
 import type { ItemStack } from "@wq2/miniblox-sdk";
 
-import remapObj from "@vape/core/src/utils/helpers/remapProxy";
+import { remapObj } from "@vape/core";
 
 import mappings from "../../mapping/mappings";
 import Miniblox from "../../refs/miniblox";

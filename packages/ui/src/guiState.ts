@@ -1,11 +1,11 @@
 import { createEffect, createSignal } from "solid-js";
 
-import { addBind } from "@vape/core/src/features/binds/handler";
-import { toggleGUI } from "@vape/core/src/features/gui/visibility";
-import logger from "@vape/core/src/utils/logging/loggers";
-import { siteKey } from "@vape/core/src/utils/siteKey";
+import { addBind } from "@vape/core";
+import { toggleGUI } from "@vape/core";
+import { logger } from "@vape/core";
+import { siteKey } from "@vape/core";
 
-export { guiVisible, setGuiVisible } from "@vape/core/src/features/gui/visibility";
+export { guiVisible, setGuiVisible } from "@vape/core";
 
 function readStoredJSON<T>(key: string, fallback: T): T {
 	try {

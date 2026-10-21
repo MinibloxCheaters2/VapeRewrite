@@ -1,5 +1,5 @@
-import HudElement from "@vape/core/src/features/hud/api/JSXHudElement";
-import shadowWrapper from "@vape/core/src/host/shadowWrapper";
+import { JSXHudElement as HudElement } from "@vape/core";
+import { shadowWrapper } from "@vape/core";
 import { createSignal } from "solid-js";
 
 export default class CPSHud extends HudElement {

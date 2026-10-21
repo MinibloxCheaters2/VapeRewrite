@@ -1,7 +1,7 @@
 /**
  * @todo figure this out
  */
-import { expose } from "@vape/core/src/exposed";
+import { expose } from "@vape/core";
 
 type ThreeModule = typeof import("three");
 type ThreeExport = keyof ThreeModule;

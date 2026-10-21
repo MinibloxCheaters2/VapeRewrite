@@ -1,7 +1,7 @@
 import { Vector3 } from "three";
 
 import gameRefs, { anyReady } from "@/utils/refs/game";
-import createProxy from "@vape/core/src/utils/helpers/proxy";
+import { createProxy } from "@vape/core";
 import Bus from "@/Bus";
 
 let hooked: boolean;

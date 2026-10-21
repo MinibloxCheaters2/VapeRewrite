@@ -1,4 +1,4 @@
-import createProxy from "@vape/core/src/utils/helpers/proxy";
+import { createProxy } from "@vape/core";
 
 const orig = (unsafeWindow as typeof window).WebSocket;
 (unsafeWindow as typeof window).WebSocket = createProxy(orig, {

@@ -6,9 +6,9 @@
 import type { CancelableWrapper } from "@/event/Bus";
 import type { C2SPacket } from "@wq2/miniblox-sdk";
 
-import { COMMAND_PREFIX } from "@vape/core/src/Client";
-import dispatcher from "@vape/core/src/features/commands/api/CommandDispatcher";
-import logger from "@vape/core/src/utils/logging/loggers";
+import { COMMAND_PREFIX } from "@vape/core";
+import { CommandDispatcher as dispatcher } from "@vape/core";
+import { logger } from "@vape/core";
 
 import Bus from "@/Bus";
 import { Priority, Subscribe } from "@/event/Bus";

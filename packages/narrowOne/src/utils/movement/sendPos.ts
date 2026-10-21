@@ -1,4 +1,4 @@
-import type { ArrayVec3, ArrayVec2 } from "@vape/core/src/utils/math/vec";
+import type { ArrayVec3, ArrayVec2 } from "@vape/core";
 
 import game from "../refs/game";
 import { origSendPos } from "@/hooks/hookSendPos";

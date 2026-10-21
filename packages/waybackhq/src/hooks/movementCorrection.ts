@@ -1,7 +1,7 @@
 import type { Entity } from "@wq2/waybackhq-types/src/entity/entity";
 
-import { Priority } from "@vape/core/src/event/Bus";
-import createProxy from "@vape/core/src/utils/helpers/proxy";
+import { Priority } from "@vape/core";
+import { createProxy } from "@vape/core";
 import { ClientPlayer } from "@wq2/waybackhq-types/src/client/clientplayer";
 import { Game } from "@wq2/waybackhq-types/src/game";
 

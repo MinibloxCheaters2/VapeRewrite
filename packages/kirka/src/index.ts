@@ -4,9 +4,8 @@ import "./meta.js?userscript-metadata";
 import "./ModuleManager";
 import "./Bus";
 import "./utils/refs/game";
-import "@vape/core/src/exposed";
+import "@vape/core";
 import "./hooks/init";
-import "@vape/core/src/features/binds/handler";
 import { initApp } from "@vape/ui";
 
 import { initHudSystem } from "@/features/hud";

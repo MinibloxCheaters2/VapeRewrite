@@ -1,4 +1,4 @@
-import dispatcher from "@vape/core/src/features/commands/api/CommandDispatcher";
+import { CommandDispatcher as dispatcher } from "@vape/core";
 import { argument, FloatArgumentType, literal } from "@wq2/brigadier-ts";
 
 import Miniblox from "@/utils/refs/miniblox";

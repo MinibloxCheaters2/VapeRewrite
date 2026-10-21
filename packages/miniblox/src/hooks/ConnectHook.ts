@@ -4,7 +4,7 @@ import Bus from "@/Bus";
 import Miniblox from "@/utils/refs/miniblox";
 
 import { hookReceivePacket } from "./PacketHook";
-import createProxy from "@vape/core/src/utils/helpers/proxy";
+import { createProxy } from "@vape/core";
 import waitUntilReady from "@/utils/helpers/waitUntilReady";
 
 let orig: (typeof ClientSocket)["connect"] | undefined;

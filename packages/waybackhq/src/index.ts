@@ -3,11 +3,10 @@ import "@vape/core/src/types/vm.d.ts";
 import "./meta.js?userscript-metadata";
 import "./ModuleManager";
 import "./Bus";
-import "@vape/core/src/exposed";
+import "@vape/core";
 import "./hooks/init";
 import "./utils/network/packetQueueManager";
 import "./utils/aiming/rotate";
-import "@vape/core/src/features/binds/handler";
 import { initApp } from "@vape/ui";
 
 import { initHudSystem } from "@/features/hud";

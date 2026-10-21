@@ -1,14 +1,14 @@
 import type { ClientSocket as ClientSocketT, Message } from "@wq2/miniblox-sdk";
 
-import CancelableWrapper from "@vape/core/src/event/CancelableWrapper";
-// import { expose } from "@vape/core/src/exposed";
-import { MAIN_LOGGER as logger } from "@vape/core/src/utils/logging/loggers";
+import { CancelableWrapper } from "@vape/core";
+// import { expose } from "@vape/core";
+import { MAIN_LOGGER as logger } from "@vape/core";
 
 import Bus from "@/Bus";
 import { S2CData } from "@/event/Events";
 import waitUntilReady from "@/utils/helpers/waitUntilReady";
 import Miniblox from "@/utils/refs/miniblox";
-import createProxy from "@vape/core/src/utils/helpers/proxy";
+import { createProxy } from "@vape/core";
 
 let _Message: Message<object> & {
 	prototype: {

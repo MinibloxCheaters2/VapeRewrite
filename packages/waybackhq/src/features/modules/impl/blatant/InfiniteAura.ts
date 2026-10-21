@@ -2,8 +2,8 @@
  * Only works on servers with AntiCheat off
  * @module
  */
-import Category from "@vape/core/src/features/modules/api/Category";
-import Mod from "@vape/core/src/features/modules/api/Module";
+import { Category } from "@vape/core";
+import { Mod } from "@vape/core";
 import { EntityLivingBase } from "@wq2/waybackhq-types/src/entity/entityliving";
 
 import Bus from "@/Bus";
