@@ -1,8 +1,8 @@
 import mappings from "@/utils/mappings/mappings";
 import gameRefs from "@/utils/refs/game";
-import { Category } from "@vape/core"
-import { Mod } from "@vape/core"
-import { remapObj } from "@vape/core";
+import { Category } from "@vape-rewrite/core"
+import { Mod } from "@vape-rewrite/core"
+import { remapObj } from "@vape-rewrite/core";
 
 export default class Test extends Mod {
 	name = "Test";

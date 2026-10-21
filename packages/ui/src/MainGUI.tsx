@@ -1,16 +1,16 @@
-import type { BaseHudElement as HudElement } from "@vape/core";
-import type { Mod } from "@vape/core";
+import type { BaseHudElement as HudElement } from "@vape-rewrite/core";
+import type { Mod } from "@vape-rewrite/core";
 
 import { render } from "@solidjs/web";
 import { createEffect, createSignal, For, Show } from "solid-js";
 
-import { REAL_CLIENT_NAME } from "@vape/core";
-import { loadedConfig } from "@vape/core";
-import { HudManager } from "@vape/core";
-import { Category, CategoryInfo } from "@vape/core";
-import { ModuleManager } from "@vape/core";
-import { getResourceURL } from "@vape/core";
-import { dragHandleAttrName } from "@vape/core";
+import { REAL_CLIENT_NAME } from "@vape-rewrite/core";
+import { loadedConfig } from "@vape-rewrite/core";
+import { HudManager } from "@vape-rewrite/core";
+import { Category, CategoryInfo } from "@vape-rewrite/core";
+import { ModuleManager } from "@vape-rewrite/core";
+import { getResourceURL } from "@vape-rewrite/core";
+import { dragHandleAttrName } from "@vape-rewrite/core";
 import { DropdownComponent, SliderComponent, ToggleComponent } from "./components";
 import {
 	blurBackground,
@@ -41,7 +41,7 @@ import {
 	teamsByServerEnabled,
 	toggleAlertEnabled,
 	useTeamColor,
-} from "@vape/core";
+} from "@vape-rewrite/core";
 import {
 	categoryWindows,
 	guiVisible,
@@ -56,7 +56,7 @@ import {
 import { LegitWindow } from "./LegitWindow";
 import { CategoryWindow } from "./newClickGUI";
 import { setProfilesPanelVisible } from "./ProfilesPanel";
-import { shadowWrapper } from "@vape/core";
+import { shadowWrapper } from "@vape-rewrite/core";
 
 function hsvToRgbString(h: number, s: number, v: number): string {
 	const i = Math.floor(h * 6);

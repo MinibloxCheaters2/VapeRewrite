@@ -7,11 +7,11 @@
  * @module
  */
 
-import { Category } from "@vape/core";
-import { Mod } from "@vape/core";
-import { showNotification } from "@vape/ui-api";
-import { createProxy } from "@vape/core";
-import { Logger } from "@vape/core";
+import { Category } from "@vape-rewrite/core";
+import { Mod } from "@vape-rewrite/core";
+import { showNotification } from "@vape-rewrite/ui-api";
+import { createProxy } from "@vape-rewrite/core";
+import { Logger } from "@vape-rewrite/core";
 // mainHook also hooks `Function`,
 // we want to call its proxy in case it initializes before us.
 import { origFunction as realOrigFunction } from "@/hooks/mainHook";

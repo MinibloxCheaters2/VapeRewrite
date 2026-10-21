@@ -1,5 +1,5 @@
 import game, { ready as mReady } from "@/utils/refs/game";
-import { createProxy } from "@vape/core";
+import { createProxy } from "@vape-rewrite/core";
 
 let resolveFn: () => void;
 export const ready = new Promise<void>((res) => {

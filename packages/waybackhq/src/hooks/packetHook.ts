@@ -1,10 +1,10 @@
 import type { Connection } from "@wq2/waybackhq-types/src/net/connection";
 
-import { CancelableWrapper } from "@vape/core";
+import { CancelableWrapper } from "@vape-rewrite/core";
 import { PACKET } from "@wq2/waybackhq-types/src/net/protocol";
 
 import Bus from "@/Bus";
-import { createProxy } from "@vape/core";
+import { createProxy } from "@vape-rewrite/core";
 
 const connectionPromise = import("@wq2/waybackhq-types/src/net/connection").then(
 	(x) => x.Connection,

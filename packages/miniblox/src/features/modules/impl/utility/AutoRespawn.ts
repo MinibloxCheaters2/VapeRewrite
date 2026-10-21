@@ -1,5 +1,5 @@
-import { Category } from "@vape/core";
-import { Mod } from "@vape/core";
+import { Category } from "@vape-rewrite/core";
+import { Mod } from "@vape-rewrite/core";
 
 export default class AutoRespawn extends Mod {
 	public name = "AutoRespawn";

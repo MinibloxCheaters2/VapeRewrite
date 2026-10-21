@@ -1,4 +1,4 @@
-import { createModManager as create } from "@vape/core";
+import { createModManager as create } from "@vape-rewrite/core";
 
 import ArrowPhase from "./features/modules/impl/blatant/ArrowPhase";
 import { BowAimbot } from "./features/modules/impl/blatant/BowAimbot";

@@ -7,7 +7,7 @@ import type { Chat, ChatData, ChatLog } from "@wq2/miniblox-sdk";
 
 import Bus from "@/Bus";
 import Miniblox from "@/utils/refs/miniblox";
-import { createProxy } from "@vape/core";
+import { createProxy } from "@vape-rewrite/core";
 
 const idSymbol = Symbol();
 

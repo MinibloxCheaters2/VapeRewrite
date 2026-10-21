@@ -6,7 +6,7 @@ import Bus from "@/Bus";
 import RotationManager from "@/utils/aiming/rotate";
 
 import Refs, { ready } from "./game";
-import { createProxy } from "@vape/core";
+import { createProxy } from "@vape-rewrite/core";
 
 let origSetRotationAngles: PlayerModel["setRotationAngles"];
 

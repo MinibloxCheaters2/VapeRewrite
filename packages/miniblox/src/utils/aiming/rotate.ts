@@ -3,7 +3,7 @@
  * @module
  */
 
-import type { CancelableWrapper } from "@vape/core";
+import type { CancelableWrapper } from "@vape-rewrite/core";
 import type { C2SPacket } from "@wq2/miniblox-sdk";
 
 import Bus from "@/Bus";

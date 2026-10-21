@@ -3,7 +3,7 @@
  * @module
  */
 
-import { Logger } from "@vape/core";
+import { Logger } from "@vape-rewrite/core";
 
 import Bus from "@/Bus";
 import { Subscribe } from "@/event/Bus";

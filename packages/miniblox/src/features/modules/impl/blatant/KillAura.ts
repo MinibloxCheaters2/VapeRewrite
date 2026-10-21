@@ -1,8 +1,8 @@
 import type { EntityLivingBase, World } from "@wq2/miniblox-sdk";
 
-import { Category } from "@vape/core";
-import { Mod } from "@vape/core";
-import { deg2rad } from "@vape/core";
+import { Category } from "@vape-rewrite/core";
+import { Mod } from "@vape-rewrite/core";
+import { deg2rad } from "@vape-rewrite/core";
 
 import { Subscribe } from "@/event/Bus";
 import RotationManager, { RotationPlan } from "@/utils/aiming/rotate";

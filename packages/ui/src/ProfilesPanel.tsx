@@ -1,11 +1,11 @@
 import { createEffect, createSignal, For, Show } from "solid-js";
 import { render } from "@solidjs/web";
 
-import { listConfigs, loadConfig, loadedConfig, saveConfig } from "@vape/core";
-import { getResourceURL } from "@vape/core";
-import { dragHandleAttrName } from "@vape/core";
+import { listConfigs, loadConfig, loadedConfig, saveConfig } from "@vape-rewrite/core";
+import { getResourceURL } from "@vape-rewrite/core";
+import { dragHandleAttrName } from "@vape-rewrite/core";
 import { guiVisible } from "./guiState";
-import { shadowWrapper } from "@vape/core";
+import { shadowWrapper } from "@vape-rewrite/core";
 
 export const [profilesPanelVisible, setProfilesPanelVisible] = createSignal(false);
 

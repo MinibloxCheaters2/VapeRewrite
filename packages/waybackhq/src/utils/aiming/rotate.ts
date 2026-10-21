@@ -3,9 +3,9 @@
  * @module
  */
 
-import type { CancelableWrapper } from "@vape/core";
+import type { CancelableWrapper } from "@vape-rewrite/core";
 
-import { Priority } from "@vape/core";
+import { Priority } from "@vape-rewrite/core";
 
 import Bus from "@/Bus";
 import Refs from "@/hooks/game";

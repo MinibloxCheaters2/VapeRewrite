@@ -1,4 +1,4 @@
-import type { ArrayVec3, ArrayVec2 } from "@vape/core";
+import type { ArrayVec3, ArrayVec2 } from "@vape-rewrite/core";
 
 import game from "../refs/game";
 import { origSendPos } from "@/hooks/hookSendPos";

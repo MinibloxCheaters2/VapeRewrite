@@ -8,8 +8,8 @@ import {
 	Show,
 } from "solid-js";
 
-import { getResourceURL } from "@vape/core";
-import { dragHandleAttrName } from "@vape/core";
+import { getResourceURL } from "@vape-rewrite/core";
+import { dragHandleAttrName } from "@vape-rewrite/core";
 import { JSX } from "@solidjs/web/jsx-runtime";
 
 export interface CategoryListPanelProps {

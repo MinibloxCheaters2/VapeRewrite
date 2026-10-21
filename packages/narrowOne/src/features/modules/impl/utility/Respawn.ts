@@ -1,7 +1,7 @@
 import gameRefs from "@/utils/refs/game";
-import { Category } from "@vape/core"
-import { Mod } from "@vape/core"
-import { showNotification } from "@vape/ui-api";
+import { Category } from "@vape-rewrite/core"
+import { Mod } from "@vape-rewrite/core"
+import { showNotification } from "@vape-rewrite/ui-api";
 import { Player } from "@wq2/narrow-one-types";
 
 export default class Respawn extends Mod {

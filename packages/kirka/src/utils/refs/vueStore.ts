@@ -1,5 +1,5 @@
-import { expose } from "@vape/core";
-import { initOrR } from "@vape/core";
+import { expose } from "@vape-rewrite/core";
+import { initOrR } from "@vape-rewrite/core";
 
 // oxlint-disable-next-line no-unassigned-vars
 let _store;

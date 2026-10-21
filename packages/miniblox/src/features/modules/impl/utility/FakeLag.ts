@@ -1,9 +1,9 @@
 import type { C2SPacket, Entity } from "@wq2/miniblox-sdk";
 
-import { Category } from "@vape/core";
-import { Mod } from "@vape/core";
-import { SimpleVec3 } from "@vape/core";
-import { getRandomArbitrary } from "@vape/core";
+import { Category } from "@vape-rewrite/core";
+import { Mod } from "@vape-rewrite/core";
+import { SimpleVec3 } from "@vape-rewrite/core";
+import { getRandomArbitrary } from "@vape-rewrite/core";
 
 import { Subscribe } from "@/event/Bus";
 import { isC2S } from "@/utils";

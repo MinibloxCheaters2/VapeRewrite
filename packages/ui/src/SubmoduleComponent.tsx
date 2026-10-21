@@ -1,8 +1,8 @@
-import type { AnySetting, SubmoduleItem } from "@vape/core";
+import type { AnySetting, SubmoduleItem } from "@vape-rewrite/core";
 
 import { createSignal, For, Show } from "solid-js";
 
-import { getResourceURL } from "@vape/core";
+import { getResourceURL } from "@vape-rewrite/core";
 import {
 	ColorSliderComponent,
 	DropdownComponent,

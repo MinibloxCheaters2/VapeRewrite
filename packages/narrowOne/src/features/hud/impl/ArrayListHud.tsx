@@ -1,8 +1,8 @@
-import { REAL_CLIENT_NAME } from "@vape/core";
-import { JSXHudElement as HudElement } from "@vape/core";
-import { ModuleManager } from "@vape/core";
-import { rainbowMode, rainbowSpeed, rainbowUpdateRate } from "@vape/core";
-import { getResourceURL } from "@vape/core";
+import { REAL_CLIENT_NAME } from "@vape-rewrite/core";
+import { JSXHudElement as HudElement } from "@vape-rewrite/core";
+import { ModuleManager } from "@vape-rewrite/core";
+import { rainbowMode, rainbowSpeed, rainbowUpdateRate } from "@vape-rewrite/core";
+import { getResourceURL } from "@vape-rewrite/core";
 import { createSignal, For } from "solid-js";
 
 function hsvToRgb(h: number, s: number, v: number, o = 1): string {

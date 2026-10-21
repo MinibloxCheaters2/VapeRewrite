@@ -1,11 +1,11 @@
-import type { Mod } from "@vape/core";
+import type { Mod } from "@vape-rewrite/core";
 
 import { createEffect, createSignal, For, onCleanup, onSettled, Show } from "solid-js";
 
-import { Category, type CategoryInfo } from "@vape/core";
-import { ModuleManager, P } from "@vape/core";
-import { getResourceURL } from "@vape/core";
-import { dragHandleAttrName } from "@vape/core";
+import { Category, type CategoryInfo } from "@vape-rewrite/core";
+import { ModuleManager, P } from "@vape-rewrite/core";
+import { getResourceURL } from "@vape-rewrite/core";
+import { dragHandleAttrName } from "@vape-rewrite/core";
 import {
 	ColorSliderComponent,
 	DropdownComponent,

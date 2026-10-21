@@ -1,7 +1,7 @@
 import { ready as sessionReady, session } from "@/utils/wrappers/session";
 
 // import { ready as gameReady } from "./game";
-import { createProxy } from "@vape/core";
+import { createProxy } from "@vape-rewrite/core";
 
 export async function hookNewSession() {
 	await sessionReady;

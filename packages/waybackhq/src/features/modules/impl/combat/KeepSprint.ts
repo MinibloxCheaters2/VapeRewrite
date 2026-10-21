@@ -1,10 +1,10 @@
-import { Category } from "@vape/core";
-import { Mod } from "@vape/core";
+import { Category } from "@vape-rewrite/core";
+import { Mod } from "@vape-rewrite/core";
 import { EntityPlayer } from "@wq2/waybackhq-types/src/entity/player";
 
 import Bus from "@/Bus";
 import Refs from "@/hooks/game";
-import { createProxy } from "@vape/core";
+import { createProxy } from "@vape-rewrite/core";
 
 let origAttack: EntityPlayer["attackTargetEntityWithCurrentItem"];
 

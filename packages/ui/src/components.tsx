@@ -1,8 +1,8 @@
 import { createSignal, For, Show } from "solid-js";
 
-import { getName, type ModeLike } from "@vape/core";
-import { getResourceURL } from "@vape/core";
-import { shadowWrapper } from "@vape/core";
+import { getName, type ModeLike } from "@vape-rewrite/core";
+import { getResourceURL } from "@vape-rewrite/core";
+import { shadowWrapper } from "@vape-rewrite/core";
 
 // Toggle component
 export function ToggleComponent(props: {

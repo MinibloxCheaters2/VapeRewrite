@@ -1,11 +1,11 @@
-import "@vape/core/meta.js?userscript-metadata";
-import "@vape/core/src/types/vm.d.ts";
+import "@vape-rewrite/core/meta.js?userscript-metadata";
+import "@vape-rewrite/core/src/types/vm.d.ts";
 import "./meta.js?userscript-metadata";
 import "./ModuleManager";
 import "./Bus";
-import "@vape/core";
+import "@vape-rewrite/core";
 import "./hooks/init";
-import { initApp } from "@vape/ui";
+import { initApp } from "@vape-rewrite/ui";
 
 import { initHudSystem } from "@/features/hud";
 initApp();

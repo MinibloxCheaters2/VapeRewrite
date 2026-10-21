@@ -1,4 +1,4 @@
-import type { Tagged } from "@vape/core";
+import type { Tagged } from "@vape-rewrite/core";
 
 
 

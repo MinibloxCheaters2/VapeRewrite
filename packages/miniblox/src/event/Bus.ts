@@ -1,14 +1,14 @@
-export { Priority } from "@vape/core";
-export { EventBus as default, EventBus } from "@vape/core";
+export { Priority } from "@vape-rewrite/core";
+export { EventBus as default, EventBus } from "@vape-rewrite/core";
 
 import type ClientEvents from "./Events";
 
 import {
 	Subscribe as CoreSubscribe,
 	SubscribeAsync as CoreSubscribeAsync,
-} from "@vape/core";
-export type { Cancelable } from "@vape/core";
-export type { CancelableWrapper } from "@vape/core";
+} from "@vape-rewrite/core";
+export type { Cancelable } from "@vape-rewrite/core";
+export type { CancelableWrapper } from "@vape-rewrite/core";
 
 /**
  * Typed Subscribe decorator — constrains K to keyof ClientEvents.

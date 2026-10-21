@@ -1,4 +1,4 @@
-import { Category, Mod } from "@vape/core";
+import { Category, Mod } from "@vape-rewrite/core";
 import { Vector3 } from "three";
 
 import Bus from "@/Bus";

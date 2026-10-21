@@ -1,9 +1,9 @@
-import { Category } from "@vape/core";
-import { Mod } from "@vape/core";
-import { createProxy } from "@vape/core";
+import { Category } from "@vape-rewrite/core";
+import { Mod } from "@vape-rewrite/core";
+import { createProxy } from "@vape-rewrite/core";
 
 import gameRefs, { anyReady } from "@/utils/refs/game";
-import { showNotification } from "@vape/ui-api";
+import { showNotification } from "@vape-rewrite/ui-api";
 import type { Chat } from "@wq2/narrow-one-types/src/game";
 
 let origProto: Chat, origUpdateVisibility: () => void;

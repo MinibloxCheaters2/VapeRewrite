@@ -1,4 +1,4 @@
-import { JSXHudElement as HudElement } from "@vape/core";
+import { JSXHudElement as HudElement } from "@vape-rewrite/core";
 import { createSignal } from "solid-js";
 
 import Miniblox from "@/utils/refs/miniblox";

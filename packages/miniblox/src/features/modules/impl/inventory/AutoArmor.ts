@@ -1,5 +1,5 @@
-import { Category } from "@vape/core";
-import { Mod } from "@vape/core";
+import { Category } from "@vape-rewrite/core";
+import { Mod } from "@vape-rewrite/core";
 import { SlotActionType } from "@wq2/miniblox-sdk";
 
 import { Priority, Subscribe } from "@/event/Bus";

@@ -1,7 +1,7 @@
 import { Show } from "solid-js";
 import { render } from "@solidjs/web";
 
-import { getResourceURL } from "@vape/core";
+import { getResourceURL } from "@vape-rewrite/core";
 import CategoryListPanel from "./CategoryListPanel";
 import { ColorSliderComponent, ToggleComponent } from "./components";
 import {
@@ -19,7 +19,7 @@ import {
 	setRecolorVisuals,
 	setUseFriends,
 	useFriends,
-} from "@vape/core";
+} from "@vape-rewrite/core";
 import {
 	friendsPanelPosition,
 	friendsPanelVisible,
@@ -27,7 +27,7 @@ import {
 	setFriendsPanelPosition,
 	setFriendsPanelVisible,
 } from "./guiState";
-import { shadowWrapper } from "@vape/core";
+import { shadowWrapper } from "@vape-rewrite/core";
 
 function FriendsPanelContent() {
 	const addItem = (val: string) => {

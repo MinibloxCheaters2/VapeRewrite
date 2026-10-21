@@ -1,6 +1,6 @@
 import type ClientEvents from "./event/Events";
 
-import { setBusInstance } from "@vape/core";
+import { setBusInstance } from "@vape-rewrite/core";
 
 import EventBus from "./event/Bus";
 

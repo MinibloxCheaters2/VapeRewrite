@@ -1,7 +1,7 @@
 import "./api";
-import { loadBinds } from "@vape/core";
-import { initConfig } from "@vape/core";
-import { shadowWrapper } from "@vape/core";
+import { loadBinds } from "@vape-rewrite/core";
+import { initConfig } from "@vape-rewrite/core";
+import { shadowWrapper } from "@vape-rewrite/core";
 
 import { initFriendsPanel } from "./FriendsPanel";
 import { initHudGUI } from "./HudGUI";

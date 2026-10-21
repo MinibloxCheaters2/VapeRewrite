@@ -4,7 +4,7 @@
  * @module
  */
 
-import { SimpleVec3 } from "@vape/core";
+import { SimpleVec3 } from "@vape-rewrite/core";
 import { Entity } from "@wq2/waybackhq-types/src/entity/entity";
 
 import { mod as MathHelper } from "@/utils/wrappers/mathhelper";

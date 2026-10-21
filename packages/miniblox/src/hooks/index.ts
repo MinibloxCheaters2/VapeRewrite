@@ -1,2 +1,2 @@
-import "@vape/core/src/hooks/hide";
+import "@vape-rewrite/core/src/hooks/hide";
 import "./gameScript";

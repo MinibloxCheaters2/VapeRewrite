@@ -1,4 +1,4 @@
-import { createModManager as create } from "@vape/core";
+import { createModManager as create } from "@vape-rewrite/core";
 
 // blatant
 import Blink from "./impl/blatant/Blink";

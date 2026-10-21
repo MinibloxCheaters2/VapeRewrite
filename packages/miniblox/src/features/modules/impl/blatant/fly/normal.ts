@@ -1,7 +1,7 @@
 import type Fly from "./index";
-import type { SliderSetting } from "@vape/core";
+import type { SliderSetting } from "@vape-rewrite/core";
 
-import { SubModule } from "@vape/core";
+import { SubModule } from "@vape-rewrite/core";
 
 import { Subscribe } from "@/event/Bus";
 import isKeyDown from "@/utils/input/key";

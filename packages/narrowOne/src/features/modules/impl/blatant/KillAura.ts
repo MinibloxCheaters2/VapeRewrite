@@ -3,8 +3,8 @@ import { lookAtPlayer } from "@/utils/aiming/lookAt";
 import RotationManager, { RotationPlan } from "@/utils/aiming/rotate";
 import canAttack from "@/utils/combat/teams";
 import game from "@/utils/refs/game";
-import { Category } from "@vape/core";
-import { Mod } from "@vape/core";
+import { Category } from "@vape-rewrite/core";
+import { Mod } from "@vape-rewrite/core";
 
 export default class KillAura extends Mod {
 	name = "KillAura";

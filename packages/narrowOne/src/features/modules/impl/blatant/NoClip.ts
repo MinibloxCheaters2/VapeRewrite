@@ -1,5 +1,5 @@
 import game from "@/utils/refs/game";
-import { Category, Mod } from "@vape/core";
+import { Category, Mod } from "@vape-rewrite/core";
 
 export default class NoClip extends Mod {
 	name = "NoClip";

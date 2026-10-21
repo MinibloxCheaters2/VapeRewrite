@@ -1,5 +1,5 @@
-import type { Cancelable } from "@vape/core";
-import type { CancelableWrapper } from "@vape/core";
+import type { Cancelable } from "@vape-rewrite/core";
+import type { CancelableWrapper } from "@vape-rewrite/core";
 import type { PacketOutcome } from "@/utils/network/packetQueueManager";
 import type { C2SPacket, S2CPacket } from "@wq2/miniblox-sdk";
 

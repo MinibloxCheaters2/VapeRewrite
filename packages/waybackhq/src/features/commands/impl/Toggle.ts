@@ -1,11 +1,11 @@
-import type { Mod } from "@vape/core";
+import type { Mod } from "@vape-rewrite/core";
 
-import { CommandDispatcher as dispatcher } from "@vape/core";
+import { CommandDispatcher as dispatcher } from "@vape-rewrite/core";
 import { argument, literal } from "@wq2/brigadier-ts";
 
 // import Miniblox from "@/utils/refs/miniblox";
 
-import { ModuleArgumentType } from "@vape/core";
+import { ModuleArgumentType } from "@vape-rewrite/core";
 
 dispatcher.register(
 	literal("toggle").then(

@@ -6,7 +6,7 @@
  * @module
  */
 
-import { createProxy } from "@vape/core";
+import { createProxy } from "@vape-rewrite/core";
 import { OnlineGame } from "@wq2/narrow-one-types/src/game";
 
 /** used in mainHook.ts to remove the `Array.from` hook */

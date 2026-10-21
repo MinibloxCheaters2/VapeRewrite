@@ -1,5 +1,5 @@
-import { CommandDispatcher as dispatcher } from "@vape/core";
-import { ModuleManager } from "@vape/core";
+import { CommandDispatcher as dispatcher } from "@vape-rewrite/core";
+import { ModuleManager } from "@vape-rewrite/core";
 import { literal } from "@wq2/brigadier-ts";
 
 import Miniblox from "@/utils/refs/miniblox";

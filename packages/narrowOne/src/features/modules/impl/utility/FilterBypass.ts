@@ -1,4 +1,4 @@
-import { Category, Mod } from "@vape/core";
+import { Category, Mod } from "@vape-rewrite/core";
 
 export default class FilterBypass extends Mod {
 	name = "FilterBypass";

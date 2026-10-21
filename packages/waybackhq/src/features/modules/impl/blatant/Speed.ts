@@ -1,6 +1,6 @@
-import { SliderSetting } from "@vape/core";
-import { Category } from "@vape/core";
-import { Mod } from "@vape/core";
+import { SliderSetting } from "@vape-rewrite/core";
+import { Category } from "@vape-rewrite/core";
+import { Mod } from "@vape-rewrite/core";
 
 import Bus from "@/Bus";
 import Refs from "@/hooks/game";

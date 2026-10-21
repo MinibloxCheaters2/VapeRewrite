@@ -1,4 +1,4 @@
-import { expose } from "@vape/core";
+import { expose } from "@vape-rewrite/core";
 
 type ThreeModule = typeof import("three");
 type ThreeExport = keyof ThreeModule;

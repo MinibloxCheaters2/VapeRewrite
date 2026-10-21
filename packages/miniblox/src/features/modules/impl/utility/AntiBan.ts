@@ -1,6 +1,6 @@
-import { Category } from "@vape/core";
-import { Mod } from "@vape/core";
-import { logger } from "@vape/core";
+import { Category } from "@vape-rewrite/core";
+import { Mod } from "@vape-rewrite/core";
+import { logger } from "@vape-rewrite/core";
 
 import randomUsername from "@/utils/helpers/username";
 

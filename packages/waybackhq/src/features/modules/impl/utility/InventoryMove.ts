@@ -1,9 +1,9 @@
-import { Category } from "@vape/core";
-import { Mod } from "@vape/core";
+import { Category } from "@vape-rewrite/core";
+import { Mod } from "@vape-rewrite/core";
 import { Game } from "@wq2/waybackhq-types/src/game";
 
 import Refs, { ready } from "@/hooks/game";
-import { createProxy } from "@vape/core";
+import { createProxy } from "@vape-rewrite/core";
 
 let orig: Game["updateLocalInput"];
 

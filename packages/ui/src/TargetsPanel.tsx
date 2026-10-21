@@ -1,7 +1,7 @@
 import { createSignal, Show } from "solid-js";
 import { render } from "@solidjs/web";
 
-import { getResourceURL } from "@vape/core";
+import { getResourceURL } from "@vape-rewrite/core";
 import CategoryListPanel from "./CategoryListPanel";
 import { ToggleComponent } from "./components";
 import {
@@ -17,7 +17,7 @@ import {
 	targetPlayersEnabled,
 	targetsEnabled,
 	targetsList,
-} from "@vape/core";
+} from "@vape-rewrite/core";
 import {
 	guiVisible,
 	setTargetsPanelPosition,
@@ -25,7 +25,7 @@ import {
 	targetsPanelPosition,
 	targetsPanelVisible,
 } from "./guiState";
-import { shadowWrapper } from "@vape/core";
+import { shadowWrapper } from "@vape-rewrite/core";
 
 function TargetSubButton(props: {
 	label: string;

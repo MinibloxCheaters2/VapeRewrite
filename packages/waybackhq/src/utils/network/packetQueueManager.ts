@@ -2,7 +2,7 @@
 
 import type { Material, Mesh } from "three";
 
-import { CancelableWrapper, Priority } from "@vape/core";
+import { CancelableWrapper, Priority } from "@vape-rewrite/core";
 
 import Refs from "@/hooks/game";
 import { AnyPacket } from "@/hooks/packetHook";
@@ -12,7 +12,7 @@ import { mod as THREE } from "@/utils/wrappers/three";
 import Bus from "../../Bus";
 
 import { sendSilently } from "./packetUtil";
-import { SimpleVec3 } from "@vape/core";
+import { SimpleVec3 } from "@vape-rewrite/core";
 import getPosFromPacket from "./getPos";
 
 export class PacketRecord<T> {

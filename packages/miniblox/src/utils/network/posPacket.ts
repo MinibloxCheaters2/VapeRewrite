@@ -1,6 +1,6 @@
 import type { C2SPacket, SPacketPlayerInput, SPacketPlayerPosLook } from "@wq2/miniblox-sdk";
 
-import { SimpleVec3 } from "@vape/core";
+import { SimpleVec3 } from "@vape-rewrite/core";
 
 import { isC2S } from "./PacketUtil";
 

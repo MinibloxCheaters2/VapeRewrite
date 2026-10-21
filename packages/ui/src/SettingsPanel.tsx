@@ -1,10 +1,10 @@
 import { createSignal, Show } from "solid-js";
 import { render } from "@solidjs/web";
 
-import { getResourceURL } from "@vape/core";
-import { dragHandleAttrName } from "@vape/core";
+import { getResourceURL } from "@vape-rewrite/core";
+import { dragHandleAttrName } from "@vape-rewrite/core";
 import { guiVisible } from "./guiState";
-import { shadowWrapper } from "@vape/core";
+import { shadowWrapper } from "@vape-rewrite/core";
 
 export const [settingsPanelVisible, setSettingsPanelVisible] = createSignal(false);
 

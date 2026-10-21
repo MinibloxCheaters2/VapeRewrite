@@ -1,4 +1,4 @@
-import { createModManager as create } from "@vape/core";
+import { createModManager as create } from "@vape-rewrite/core";
 
 import Derp from "./features/modules/impl/blatant/Derp";
 import Fly from "./features/modules/impl/blatant/fly";

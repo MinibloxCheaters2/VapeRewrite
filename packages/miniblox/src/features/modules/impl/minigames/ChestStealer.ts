@@ -1,8 +1,8 @@
-import type { CancelableWrapper } from "@vape/core";
+import type { CancelableWrapper } from "@vape-rewrite/core";
 
-import { Category } from "@vape/core";
-import { Mod } from "@vape/core";
-import { getRandomArbitrary } from "@vape/core";
+import { Category } from "@vape-rewrite/core";
+import { Mod } from "@vape-rewrite/core";
+import { getRandomArbitrary } from "@vape-rewrite/core";
 import { SlotActionType } from "@wq2/miniblox-sdk";
 
 import { Subscribe } from "@/event/Bus";

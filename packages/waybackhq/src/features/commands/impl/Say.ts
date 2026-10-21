@@ -1,4 +1,4 @@
-import { CommandDispatcher as dispatcher } from "@vape/core";
+import { CommandDispatcher as dispatcher } from "@vape-rewrite/core";
 import { argument, literal, StringArgumentType } from "@wq2/brigadier-ts";
 
 import PacketRefs from "@/utils/network/packetRefs";

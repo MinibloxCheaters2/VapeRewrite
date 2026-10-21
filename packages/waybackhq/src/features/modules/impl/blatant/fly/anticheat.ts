@@ -1,7 +1,7 @@
 import type Fly from "./index";
-import type { SliderSetting } from "@vape/core";
+import type { SliderSetting } from "@vape-rewrite/core";
 
-import { SubModule } from "@vape/core";
+import { SubModule } from "@vape-rewrite/core";
 
 import Bus from "@/Bus";
 import Refs from "@/hooks/game";

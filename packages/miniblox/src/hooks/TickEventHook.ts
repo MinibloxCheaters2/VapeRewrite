@@ -1,10 +1,10 @@
 import type { Game, PlayerMovement } from "@wq2/miniblox-sdk";
 
-import { Cancelable } from "@vape/core";
+import { Cancelable } from "@vape-rewrite/core";
 
 import Bus from "@/Bus";
 import Miniblox from "@/utils/refs/miniblox";
-import { createProxy } from "@vape/core";
+import { createProxy } from "@vape-rewrite/core";
 import waitUntilReady from "@/utils/helpers/waitUntilReady";
 
 let origGameTick: Game["fixedUpdate"];

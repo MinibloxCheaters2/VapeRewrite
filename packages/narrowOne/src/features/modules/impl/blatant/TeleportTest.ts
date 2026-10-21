@@ -1,10 +1,10 @@
-import { Category } from "@vape/core";
-import { Mod } from "@vape/core";
+import { Category } from "@vape-rewrite/core";
+import { Mod } from "@vape-rewrite/core";
 
 import Bus from "@/Bus";
 import game from "@/utils/refs/game";
 import sendPosSilently from "@/utils/movement/sendPos";
-import { CancelableWrapper } from "@vape/core";
+import { CancelableWrapper } from "@vape-rewrite/core";
 import { ServerMove } from "@/events";
 import { Vector3 } from "three";
 

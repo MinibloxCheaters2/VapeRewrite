@@ -1,6 +1,6 @@
 import { AnyPacket } from "@/hooks/packetHook";
 import { mod } from "../wrappers/protocol";
-import { SimpleVec3 } from "@vape/core";
+import { SimpleVec3 } from "@vape-rewrite/core";
 
 export default function getPosFromPacket(packet: AnyPacket) {
 	const [id] = packet;

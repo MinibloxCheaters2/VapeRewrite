@@ -1,7 +1,7 @@
 import Bus from "@/Bus";
 import Refs from "@/hooks/game";
-import { Category } from "@vape/core"
-import { Mod } from "@vape/core"
+import { Category } from "@vape-rewrite/core"
+import { Mod } from "@vape-rewrite/core"
 
 export default class Sprint extends Mod {
 	name = "Sprint";

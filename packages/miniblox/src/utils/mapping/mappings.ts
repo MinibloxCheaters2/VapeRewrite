@@ -1,11 +1,11 @@
-import type { Mapping } from "@vape/core";
+import type { Mapping } from "@vape-rewrite/core";
 /**
  * Contains various mappings for objects. These are used in the auto-remapping proxy, so you don't have to think about using dumps ever again!
  * @module
  */
 import type { DumpKey } from "@/hooks/dump";
 
-import { initOrR } from "@vape/core";
+import { initOrR } from "@vape-rewrite/core";
 
 import { MATCHED_DUMPS } from "@/hooks/gameScript";
 

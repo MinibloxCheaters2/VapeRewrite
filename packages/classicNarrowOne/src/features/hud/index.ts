@@ -1,4 +1,4 @@
-import { HudManager } from "@vape/core";
+import { HudManager } from "@vape-rewrite/core";
 
 import ArrayListHud from "./impl/ArrayListHud";
 import SpeedHud from "./impl/SpeedHud";
@@ -9,7 +9,7 @@ export function initHudSystem() {
 	HudManager.registerHudType(SpeedHud);
 }
 
-export { BaseHudElement } from "@vape/core";
-export { CanvasHudElement } from "@vape/core";
-export { JSXHudElement } from "@vape/core";
+export { BaseHudElement } from "@vape-rewrite/core";
+export { CanvasHudElement } from "@vape-rewrite/core";
+export { JSXHudElement } from "@vape-rewrite/core";
 export { HudManager };
