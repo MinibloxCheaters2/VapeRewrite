@@ -1,6 +1,6 @@
 import "@vape-rewrite/core/meta.js?userscript-metadata";
 import "./meta.js?userscript-metadata";
-import "@vape-rewrite/core/src/types/vm.d.ts";
+import "@vape-rewrite/core/types/vm.d.ts";
 import "@vape-rewrite/core";
 import "./hooks";
 import "./utils/refs";
