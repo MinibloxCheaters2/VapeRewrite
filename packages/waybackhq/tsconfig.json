@@ -2,8 +2,7 @@
 	"extends": "../../tsconfig.json",
 	"compilerOptions": {
 		"paths": {
-			"@/*": ["./src/*"],
-			"@wq2/waybackhq-types/*": ["./src/*"]
+			"@/*": ["./src/*"]
 		}
 	},
 	"include": ["src/**/*"]
