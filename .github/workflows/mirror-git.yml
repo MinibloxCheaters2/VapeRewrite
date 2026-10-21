@@ -24,6 +24,6 @@ jobs:
           CODEBERG_USER: ${{ secrets.CODEBERG_USERNAME }}
           CODEBERG_TOKEN: ${{ secrets.CODEBERG_TOKEN }}
         run: |
-          URL="https://${CODEBERG_USER}:${CODEBERG_TOKEN}@codeberg.org/Miniblox/VapeRewrite.git"
+          URL="https://${CODEBERG_USER}:${CODEBERG_TOKEN}@codeberg.org/VapeRewrite/VapeRewrite.git"
           git push "$URL" --all
           git push "$URL" --tags
